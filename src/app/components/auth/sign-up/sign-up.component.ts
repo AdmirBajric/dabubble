@@ -5,6 +5,7 @@ import {
   Output,
   Renderer2,
   ElementRef,
+  inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -13,7 +14,13 @@ import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LogoComponent } from '../../shared/logo/logo.component';
 import { User } from '../../../models/user.class';
-import { DataService } from '../../../data.service';
+import { DataService } from '../../../services/data.service';
+import { Firestore } from '@angular/fire/firestore';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from '@angular/fire/auth';
 
 @Component({
   selector: 'app-sign-up',
@@ -53,7 +60,10 @@ export class SignUpComponent {
   hoveredColor = '#eceefe';
   btnHoverColor = '#797ef3';
 
-  user: User = new User({});
+  emailExist: boolean = false;
+
+  user = new User();
+  firestore: Firestore = inject(Firestore);
 
   constructor(
     private router: Router,
@@ -95,8 +105,7 @@ export class SignUpComponent {
     this.user.fullName = this.createFullName(this.user.fullName);
     this.user.email = this.user.email.toLowerCase();
     const userToSend = this.user;
-    this.dataService.changeUser(userToSend);
-    this.router.navigate(['/select-avatar']);
+    this.registerUser(userToSend);
   }
 
   createFullName(fullName: string) {
@@ -109,6 +118,7 @@ export class SignUpComponent {
   }
 
   onValidityChanged(field: string, isValid: boolean) {
+    this.emailExist = false;
     switch (field) {
       case 'name':
         this.nameValid = isValid;
@@ -136,5 +146,23 @@ export class SignUpComponent {
       this.passwordValid &&
       this.position === 1
     );
+  }
+
+  registerUser(userToSend: any) {
+    if (this.user && this.user.email && this.user.password) {
+      const auth = getAuth();
+      createUserWithEmailAndPassword(auth, this.user.email, this.user.password)
+        .then((data) => {
+          sendEmailVerification(data.user);
+          this.dataService.changeUser(userToSend);
+          this.dataService.setCreatedUser(data.user);
+          this.router.navigate(['/select-avatar']);
+        })
+        .catch((error) => {
+          if (error.code === 'auth/email-already-in-use') {
+            this.emailExist = true;
+          }
+        });
+    }
   }
 }
