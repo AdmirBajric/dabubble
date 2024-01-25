@@ -13,7 +13,7 @@ import { CreateChannelComponent } from '../create-channel/create-channel.compone
 import { MessageComponent } from "../message/message.component";
 import { Message, Reaction, Room } from '../models/collection.class';
 import { User } from '../models/user.class';
-import { SearchbarComponent } from "../searchbar/searchbar.component";
+import { SearchbarComponent } from "../components/shared/searchbar/searchbar.component";
 import { MessageInputComponent } from "../message-input/message-input.component";
 
 @Component({
