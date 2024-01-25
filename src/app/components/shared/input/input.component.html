@@ -13,6 +13,9 @@
     [formControl]="formControl"
   />
 </div>
+<mat-error class="input-error" *ngIf="additionalData">
+  Email is already in use.
+</mat-error>
 <mat-error
   class="input-error"
   *ngIf="

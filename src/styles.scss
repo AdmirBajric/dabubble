@@ -1,5 +1,6 @@
 @import "app/colors.scss";
 @import "app/mixins.scss";
+@import "@ctrl/ngx-emoji-mart/picker";
 
 $font-family-nunito: Nunito;
 $font-family-figtree: Figtree;
@@ -40,7 +41,7 @@ button {
 a {
   text-decoration: none;
 }
-// ############# General stylings ############# 
+// ############# General stylings #############
 .purple {
   color: $purple-1;
   font-weight: bold;

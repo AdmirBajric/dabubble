@@ -31,6 +31,7 @@ export class InputComponent {
   @Input() pattern: string = '';
   @Input() img: string = '';
   @Input() placeholder: string = '';
+  @Input() additionalData: boolean = false;
   @Input() formControl: FormControl = new FormControl('', [
     Validators.required,
     this.patternValidator(),

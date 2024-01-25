@@ -1,0 +1,16 @@
+<div id="emoji">
+  <emoji-mart
+    [emojiSize]="16"
+    [sheetSize]="16"
+    [darkMode]="false"
+    [totalFrequentLines]="0"
+    [enableSearch]="false"
+    (emojiClick)="addEmoji($event)"
+    [style]="{
+      position: 'absolute',
+      top: '50%',
+      right: '50%',
+      transform: 'translate(50%, -50%)'
+    }"
+  ></emoji-mart>
+</div>

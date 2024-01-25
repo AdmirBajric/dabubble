@@ -18,7 +18,16 @@
 
       <div class="select-avatar-main-content">
         <div class="select-avatar-content-profile-img">
-          <img *ngIf="!spinnerActive" [src]="personImg" alt="Person img" />
+          <ng-container *ngIf="!hidePersonImg">
+            <img *ngIf="!spinnerActive" [src]="personImg" alt="Person img" />
+          </ng-container>
+          <ng-container *ngIf="!spinnerActive">
+            <img
+              *ngIf="previewImageUrl"
+              [src]="previewImageUrl"
+              alt="Selected Image"
+            />
+          </ng-container>
           <mat-spinner
             *ngIf="spinnerActive"
             class="register-spinner"
@@ -48,8 +57,13 @@
           <p *ngIf="showParagraph">Or you can</p>
           <p *ngIf="!showParagraph">eigenes Bild verwenden</p>
 
-          <input class="upload-hidden" type="file" id="actual-btn" />
-          <label class="upload" for="actual-btn">
+          <input
+            class="upload-hidden"
+            type="file"
+            id="actual-btn"
+            (change)="onFileSelected($event)"
+          />
+          <label class="upload" for="actual-btn" (click)="uploadImage()">
             {{ isGerman ? "Datei hochladen" : "Upload foto" }}</label
           >
         </div>

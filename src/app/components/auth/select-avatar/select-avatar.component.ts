@@ -1,11 +1,20 @@
-import { Component, HostListener, Renderer2, ElementRef } from '@angular/core';
-import { DataService } from '../../../data.service';
-import { User } from '../../../models/user.class'; //
+import {
+  Component,
+  HostListener,
+  Renderer2,
+  ElementRef,
+  inject,
+} from '@angular/core';
+import { DataService } from '../../../services/data.service';
 import { LogoComponent } from '../../shared/logo/logo.component';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Firestore, collection, addDoc } from '@angular/fire/firestore';
+import { getApp } from 'firebase/app';
+import { getStorage } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
 
 @Component({
   selector: 'app-select-avatar',
@@ -21,15 +30,18 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   styleUrl: './select-avatar.component.scss',
 })
 export class SelectAvatarComponent {
-  user: User | null = null;
-  selectedFile: File | null = null;
+  user: any;
+  createdUser: any;
   fullName: string = '';
   personImg = '../../assets/img/person.svg';
   showParagraph: boolean = true;
   windowWidth: number = 0;
   isGerman: boolean = false;
   spinnerActive: boolean = false;
+  hidePersonImg: boolean = false;
   imgSelected: boolean = false;
+  selectedFile: File | null = null;
+  downloadURL: string | null = null;
   avatars = [
     '../../assets/img/avatar1.svg',
     '../../assets/img/avatar2.svg',
@@ -39,11 +51,54 @@ export class SelectAvatarComponent {
     '../../assets/img/avatar6.svg',
   ];
 
+  firestore: Firestore = inject(Firestore);
+  previewImageUrl: any;
+
   constructor(
     private dataService: DataService,
     private renderer: Renderer2,
-    private el: ElementRef
+    private el: ElementRef,
+    private router: Router
   ) {}
+
+  onFileSelected(event: any) {
+    this.imgSelected = true;
+    this.selectedFile = event.target.files?.[0] || null;
+
+    if (this.selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.previewImageUrl = e.target.result;
+        this.hidePersonImg = true;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
+  }
+
+  async uploadImage() {
+    if (!this.selectedFile) {
+      return;
+    }
+
+    const filename = this.user.id + '_' + this.selectedFile.name;
+
+    const firebaseApp = getApp();
+    const storage = getStorage(firebaseApp, 'gs://dabubble-cee4e.appspot.com');
+    const storageRef = ref(storage, 'images/' + filename);
+
+    uploadBytes(storageRef, this.selectedFile)
+      .then(async (snapshot) => {
+        const downloadURL = await getDownloadURL(storageRef);
+
+        if (this.user) {
+          this.user.avatar = downloadURL;
+          await this.saveToFirestore();
+        }
+      })
+      .catch((error) => {
+        console.error('Error uploading file:', error);
+      });
+  }
 
   ngOnInit(): void {
     this.checkWindowSize();
@@ -51,6 +106,15 @@ export class SelectAvatarComponent {
       this.user = user;
       this.fullName = user ? user.fullName : 'Test User';
     });
+
+    this.dataService.newCreatedUser.subscribe((createdUser) => {
+      this.user.id = createdUser.uid;
+      this.createdUser = createdUser;
+    });
+
+    if (this.fullName === 'Test User') {
+      this.router.navigate(['/sign-up']);
+    }
   }
 
   @HostListener('window:resize', ['$event'])
@@ -79,20 +143,31 @@ export class SelectAvatarComponent {
   imageClicked(index: number) {
     this.imgSelected = true;
     this.personImg = this.avatars[index];
-    let avatar = this.personImg.split('../../assets/img/')[1];
+    let avatar = this.personImg.split('../../')[1];
+
     if (this.user) {
-      this.user.avatar = avatar;
+      this.user.avatar = `https://gruppe-873.developerakademie.net/angular-projects/dabubble/${avatar}`;
     }
   }
 
-  registerUser() {
-    // Check if avatar or image has been uploaded (this.user.avatar) not undefined and then send this.user to database and redirect to home component.
+  async registerUser() {
     if (this.user) {
       if (this.user != undefined) {
         this.spinnerActive = true;
-        // Send this.user to database and redirect to home if success.
-        // Set spinner to false
+        await this.uploadImage();
       }
+    }
+  }
+
+  async saveToFirestore() {
+    try {
+      const itemCollection = collection(this.firestore, 'users');
+      const newDocRef = await addDoc(itemCollection, this.user.toJSON());
+      if (newDocRef.id) {
+        this.router.navigate(['/verify-email']);
+      }
+    } catch (error) {
+      console.error('Error adding document: ', error);
     }
   }
 }
