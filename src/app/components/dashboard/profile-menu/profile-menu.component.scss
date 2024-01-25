@@ -1,0 +1,54 @@
+@import "./../../../colors.scss";
+@import "./../../../mixins.scss";
+
+#profile-menu-container {
+  width: 34.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2rem;
+  position: absolute;
+  right: 2rem;
+
+  .profile-menu-name {
+    p {
+      @include fonts-styles(3.2rem, 700);
+      line-height: normal;
+    }
+  }
+
+  .profile-menu-img {
+    width: 7rem;
+    height: 7rem;
+    position: relative;
+
+    img {
+      width: 7rem;
+      height: 7rem;
+    }
+
+    mat-icon {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+  }
+
+  .profile-menu-navbar {
+    mat-icon {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .online,
+  .userActive {
+    color: $online-green;
+  }
+
+  .offline,
+  .userOffline {
+    color: $text-gray;
+  }
+}

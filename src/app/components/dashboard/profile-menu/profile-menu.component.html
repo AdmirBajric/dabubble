@@ -1,0 +1,28 @@
+<div id="profile-menu-container">
+  <ng-container *ngIf="!mobileView">
+    <div class="profile-menu-name">
+      <p>{{ fullName }}</p>
+    </div>
+
+    <div class="profile-menu-img">
+      <img src="{{ img }}" alt="Profile image" />
+      <mat-icon [ngClass]="{ online: isActiveUser, offline: !isActiveUser }"
+        >circle</mat-icon
+      >
+    </div>
+
+    <div class="profile-menu-navbar">
+      <mat-icon (click)="openDesktopDialog()">expand_more</mat-icon>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="mobileView">
+    <div
+      style="justify-self: flex-end"
+      (click)="openBottomSheet()"
+      class="profile-menu-img"
+    >
+      <img src="{{ img }}" alt="Profile image" />
+    </div>
+  </ng-container>
+</div>

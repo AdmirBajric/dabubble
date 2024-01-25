@@ -18,7 +18,7 @@ import { ProfileEditComponent } from '../profile-edit/profile-edit.component';
 })
 export class ProfileViewComponent {
   isActiveUser: boolean = true;
-  ifUserAcc: boolean = false;
+  ifUserAcc: boolean = true;
   userImg: string = '../../assets/img/person.svg';
   userFullName: string = 'Sofia Müller';
   userEmail: string = 'email@gmail.com';
