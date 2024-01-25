@@ -8,6 +8,8 @@ import { SendMailPwComponent } from './components/auth/send-mail-pw/send-mail-pw
 import { ResetPwComponent } from './components/auth/reset-pw/reset-pw.component';
 import { WorkspaceComponent } from './components/dashboard/workspace/workspace.component';
 import { ForTestComponent } from './for-test/for-test.component';
+import { EmojiPickerComponent } from './components/emoji-picker/emoji-picker.component';
+import { CreateChannelComponent } from './create-channel/create-channel.component';
 import { EmojisComponent } from './components/shared/emojis/emojis.component';
 import { VerifyEmailComponent } from './components/auth/verify-email/verify-email.component';
 import { VerificationSuccessComponent } from './components/auth/verification-success/verification-success.component';
@@ -22,6 +24,8 @@ export const routes: Routes = [
   { path: 'impressum', component: ImpressumComponent },
   { path: 'workspace', component: WorkspaceComponent },
   { path: 'for-testing', component: ForTestComponent },
+  { path: 'emoji-picker', component: EmojiPickerComponent },
+  {path: 'create-channel', component: CreateChannelComponent},
   { path: 'emoji', component: EmojisComponent },
   { path: 'verify-email', component: VerifyEmailComponent },
   { path: 'verification-success', component: VerificationSuccessComponent },

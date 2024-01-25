@@ -1,0 +1,36 @@
+.message-field {
+    background-color: white;
+    resize: none;
+    border: none;
+    width: 100%;
+    height: 2rem;
+
+    &:focus {
+        border: none;
+        outline: none;
+    }
+    
+    &::placeholder {
+        color: rgba(0,0,0,0.3);
+    }
+}
+
+.inputComp {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    min-width: 100%;
+    max-width: 100%;
+    height: 4rem;
+    padding: 1.5rem;
+    border: 0.1rem solid rgba(178,181,219,0.8);
+    border-radius: 2rem;
+    background-color: white;
+}
+
+.channel-edition-img-tag {
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+  }

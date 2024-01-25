@@ -1,0 +1,26 @@
+<input class="input" type="text" placeholder="Code learning durchsuchen" (keyup)="search()" (ngModel)="searchTerm">
+
+<div class="searchResults" *ngIf="searchTerm">
+    <h2>Mitglieder</h2>
+    <ul>
+        <li *ngFor="let user of filteredUserArray" (click)="selectUserSearchfield(user.fullName)">
+            <img class="imgHeadline" src="{{user.avatar}}" alt="Profile Image">
+            <p>{{ user.fullName }}</p>
+        </li>
+        <li
+            *ngIf="searchTerm && filteredUserArray && filteredUserArray.length === 0 && searchTerm.length >= 1">
+            Kein Mitglied gefunden
+        </li>
+    </ul>
+    <h2>Channels</h2>
+    <ul>
+        <li *ngFor="let channel of filteredChannelsArray"
+            (click)="selectChannelSearchfield(channel.channelName)">
+            <p style="padding-bottom: 0.8rem;">#{{ channel.channelName }}</p>
+        </li>
+        <li
+            *ngIf="searchTerm && filteredChannelsArray && filteredChannelsArray.length === 0 && searchTerm.length >= 1">
+            Kein Kanal gefunden
+        </li>
+    </ul>
+</div>

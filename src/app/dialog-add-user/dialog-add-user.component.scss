@@ -1,0 +1,189 @@
+@import "../colors.scss";
+@import "../mixins.scss";
+
+::ng-deep .mat-mdc-dialog-container,
+::ng-deep .mdc-dialog__surface {
+  border-radius: 3rem !important;
+  border-top-left-radius: 0rem !important;
+  box-shadow: none !important;
+}
+
+.cdk-overlay-pane {
+  overflow: auto;
+  &::-webkit-scrollbar {
+    width: 0rem;
+  }
+}
+
+.dialog-input {
+    width: 100%;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.user-Show {
+  height: 15rem;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 6rem;
+  margin-left: 3rem;
+  border: 1px solid $light-purple-lines;
+  border-top: none;
+  border-end-end-radius: 2rem;
+  border-end-start-radius: 2rem;
+
+  div {
+    display: flex;
+    align-items: center;
+    margin: 2rem;
+    margin-bottom: 0;
+  }
+
+  img {
+    height: 4rem;
+    width: 4rem;
+  }
+
+  span {
+    margin-left: 1rem;
+  }
+}
+
+#channel-edition {
+  width: 87.2rem;
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+
+  .channel-edition-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    .channel-edition-name {
+      width: 100%;
+      display: block;
+      align-items: center;
+      gap: 1.5rem;
+
+      mat-card-title {
+        @include fonts-styles(2.4rem, 700);
+        line-height: normal;
+        margin-bottom: 10px;
+      }
+    }
+
+    .channel-edition-img-close {
+      width: 4rem;
+      height: 4rem;
+      padding: 0.8rem;
+      cursor: pointer;
+
+      &:hover {
+        color: $purple-3;
+        border-radius: 2rem;
+        background: $bg-color;
+      }
+    }
+  }
+
+  mat-card-content {
+    width: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    }
+
+  mat-card-actions {
+    width: 100%;
+    height: 4.9rem;
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      padding: 1.2rem 2.5rem;
+      border-radius: 2.5rem;
+      color: $white;
+      @include fonts-styles(1.8rem, 700);
+      line-height: normal;
+    }
+
+    .channel-create {
+        background: $purple-1;
+        margin-left: 2rem;
+      }
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  .cdk-overlay-pane {
+    max-width: 100% !important;
+  }
+
+  .mat-mdc-dialog-container,
+  .mdc-dialog__surface {
+    width: 100% !important;
+    border-radius: 0rem !important;
+  }
+
+  #channel-edition {
+    width: 100vw !important;
+  }
+
+  .channel-edition-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: $white;
+    padding: 2rem 4.5rem !important;
+    box-shadow: 0rem 0.2rem 1rem 0rem rgba(0, 0, 0, 0.08);
+  }
+
+  mat-card-content,
+  .first-container {
+    margin-top: 6rem !important;
+  }
+
+  #channel-edition mat-card-actions {
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 12rem !important;
+
+    .channel-create {
+      width: 95% !important;
+      margin-left: 0 !important;
+    }
+
+    .channel-create {
+      &:hover {
+        background-color: $purple-2;
+      }
+    }
+  }
+
+.icon {
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  color: $purple-1 !important;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $bg-color;
+    border-radius: 2rem;
+  }
+}
+}
