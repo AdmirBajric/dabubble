@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { HeaderComponent } from "../shared/header/header.component";
 import { MessageComponent } from "../../message/message.component";
 import { WorkspaceComponent } from "./workspace/workspace.component";
 import { UserProfileNavComponent } from "../profile/user-profile-nav/user-profile-nav.component";
@@ -13,7 +12,6 @@ import { ThreadComponent } from "../chat/thread/thread.component";
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss',
     imports: [
-        HeaderComponent,
         WorkspaceComponent,
         MessageComponent,
         UserProfileNavComponent,
