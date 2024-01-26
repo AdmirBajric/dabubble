@@ -20,7 +20,7 @@
                 @if (showChannels) {
                 <ng-container *ngFor="let channel of user.channels">
                     <app-channel-list-item [channels]="channel"></app-channel-list-item></ng-container>
-                <button class="btn-create-channel">
+                <button (click)="openCreateChannel()" class="btn-create-channel">
                     <img src="./../../assets/img/add_border.svg" alt="add">
                     <a class="link-create">Channel hinzufügen</a></button>
                 }
