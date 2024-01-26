@@ -25,7 +25,6 @@ import { ButtonWorkspaceComponent } from "./button-workspace/button-workspace.co
 export class DashboardComponent {
     workspaceStatus: boolean = true
     handleWorkspaceToggle(isOpen: boolean){
-        console.log(isOpen);
         this.workspaceStatus = isOpen;
     }
 }
