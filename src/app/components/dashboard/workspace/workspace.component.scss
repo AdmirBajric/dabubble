@@ -142,7 +142,7 @@ h2 {
 }
 
 button {
-    &.btn-write-dm {
+    &.mobile-btn-write-dm {
         background-color: $purple-1;
         border-radius: 50%;
         border: unset;
@@ -157,6 +157,10 @@ button {
 
         &:active {
             background-color: $purple-2;
+        }
+
+        @media only screen and (min-width: 1100px) {
+            display: none;
         }
     }
 }

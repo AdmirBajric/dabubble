@@ -10,14 +10,15 @@ import { CommonModule } from '@angular/common';
   styleUrl: './button-workspace.component.scss'
 })
 export class ButtonWorkspaceComponent {
-  @Input() isOpen!: boolean;
-  @Output() toggle = new EventEmitter<void>();
+  isOpen: boolean = true;
+  @Output() toggle = new EventEmitter<boolean>();
 
   get buttonText(): string {
     return this.isOpen ? 'Workspace-Menü schließen' : 'Workspace-Menü öffnen';
   }
 
   toggleWorkspace() {
-    this.toggle.emit();
+    this.isOpen = !this.isOpen;
+    this.toggle.emit(this.isOpen);
   }
 }
