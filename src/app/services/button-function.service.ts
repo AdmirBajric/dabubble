@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProfileViewComponent } from '../components/profile/profile-view/profile-view.component';
 import { ChannelEditComponent } from '../components/chat/channel/channel-edit/channel-edit.component';
-import { CreateChannelComponent } from '../create-channel/create-channel.component';
+import { CreateChannelComponent } from '../components/shared/dialogs/create-channel/create-channel.component';
 
 @Injectable({
   providedIn: 'root'
