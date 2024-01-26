@@ -4,7 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogInputComponent } from '../dialog-input/dialog-input.component';
 import { DialogAddUserComponent } from '../dialog-add-user/dialog-add-user.component';
-import { User } from '../models/user.class';
+import { User } from '../../../../models/user.class';
 
 @Component({
     selector: 'app-create-channel',

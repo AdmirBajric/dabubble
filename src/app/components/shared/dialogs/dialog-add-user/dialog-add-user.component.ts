@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { User } from '../models/user.class';
+import { User } from '../../../../models/user.class';
 
 @Component({
   selector: 'app-dialog-add-user',
