@@ -1,0 +1,15 @@
+<div id="profile-dialog-container">
+  <div class="profile-dialog">
+    <div
+      [ngClass]="{ active: profileDialogOpen }"
+      (click)="openProfileDialog()"
+      class="profile-dialog-profile"
+    >
+      <p [ngClass]="{ active: profileDialogOpen }">Profil</p>
+    </div>
+
+    <div  [ngClass]="{ active: logOutActive }" (click)="logOut()" class="profile-dialog-log-out">
+      <p  [ngClass]="{ active: logOutActive }">Log out</p>
+    </div>
+  </div>
+</div>

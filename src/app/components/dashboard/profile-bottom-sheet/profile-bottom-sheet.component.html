@@ -1,0 +1,27 @@
+<div id="bottom-sheet-container">
+  <img
+    class="img-responsive"
+    src="../../../../assets/img/rectangle.svg"
+    alt="Rectangle image"
+  />
+
+  <div class="bottom-sheet">
+    <div
+      [ngClass]="{ active: profileDialogOpen }"
+      (click)="openProfileDialog()"
+      class="bottom-sheet-profile"
+    >
+      <mat-icon>account_circle</mat-icon>
+      <p [ngClass]="{ active: profileDialogOpen }">Profil</p>
+    </div>
+
+    <div
+      [ngClass]="{ active: logOutActive }"
+      (click)="logOut()"
+      class="bottom-sheet-log-out"
+    >
+      <mat-icon>logout</mat-icon>
+      <p [ngClass]="{ active: logOutActive }">Log out</p>
+    </div>
+  </div>
+</div>

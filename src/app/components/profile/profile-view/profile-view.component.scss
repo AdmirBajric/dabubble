@@ -2,10 +2,6 @@
 @import "../../../mixins.scss";
 
 @media only screen and (max-width: 1100px) {
-  #profile-view-card {
-    padding: 4rem 2rem !important;
-  }
-
   .profile-view-card-header {
     width: 35.8rem !important;
   }
@@ -79,6 +75,7 @@
 
   mat-card-content {
     width: 42rem;
+    padding: 0 !important;
 
     .content-img {
       width: 100%;
@@ -152,7 +149,8 @@
         color: $purple-1;
         width: 3rem;
         height: 3rem;
-        @include flex-center();
+        display: flex;
+        align-items: center;
       }
 
       p {

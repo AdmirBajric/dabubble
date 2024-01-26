@@ -1,0 +1,72 @@
+@import "../../../colors.scss";
+@import "../../../mixins.scss";
+
+@media only screen and (min-width: 1100px) {
+  app-logo {
+    position: absolute !important;
+    top: 7.5rem;
+    left: 7.5rem;
+    z-index: 2;
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  .verification-success-container {
+    width: 37.5rem !important;
+    height: 51rem !important;
+    flex-direction: column !important;
+  }
+
+  .verification-success-content {
+    height: 55rem !important;
+
+    h2 {
+      margin-top: 2rem !important;
+    }
+  }
+}
+
+#verification-success-main-container {
+  width: 100%;
+  height: 100vh;
+  @include flex-center();
+  flex-direction: column;
+
+  .verification-success-container {
+    width: 60rem;
+    @include flex-direction-column();
+    align-items: center;
+
+    .verification-success-content {
+      width: 100%;
+      height: 41rem;
+      padding: 3rem;
+      border-radius: 1.875rem;
+      background: $white;
+      box-shadow: $box-shadow;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-top: 3rem;
+
+      .verification-success-img {
+        width: 2.8rem;
+        height: 2.8rem;
+        position: absolute;
+        top: 3rem;
+        left: 3rem;
+      }
+
+      h2 {
+        font-size: 2.6rem;
+        color: $purple-1;
+        text-align: center;
+      }
+
+      p {
+        margin-top: 4rem;
+        @include fonts-styles(2rem, 500);
+      }
+    }
+  }
+}

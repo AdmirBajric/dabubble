@@ -14,6 +14,7 @@ import { EmojisComponent } from './components/shared/emojis/emojis.component';
 import { VerifyEmailComponent } from './components/auth/verify-email/verify-email.component';
 import { VerificationSuccessComponent } from './components/auth/verification-success/verification-success.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ProfileMenuComponent } from './components/dashboard/profile-menu/profile-menu.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -31,4 +32,5 @@ export const routes: Routes = [
   { path: 'verify-email', component: VerifyEmailComponent },
   { path: 'verification-success', component: VerificationSuccessComponent },
   { path: 'dashboard', component: DashboardComponent },
+  { path: 'profile', component: ProfileMenuComponent },
 ];

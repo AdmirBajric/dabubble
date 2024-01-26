@@ -1,0 +1,56 @@
+@import "./../../../colors.scss";
+@import "./../../../mixins.scss";
+
+::ng-deep .mat-mdc-dialog-container,
+::ng-deep .mdc-dialog__surface {
+  border-radius: 3rem 0rem 3rem 3rem !important;
+  background: $white !important;
+  box-shadow: 0rem 0.6rem 1rem 0rem rgba(0, 0, 0, 0.2) !important;
+}
+
+#profile-dialog-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem;
+
+  .profile-dialog {
+    gap: 1.5rem;
+
+    .profile-dialog-profile {
+      margin-bottom: 1rem;
+    }
+
+    .profile-dialog-profile,
+    .profile-dialog-log-out {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 3rem;
+      gap: 1.5rem;
+
+      &:hover {
+        cursor: pointer;
+        background-color: $bg-color;
+        border-radius: 2rem;
+      }
+
+      mat-icon {
+        width: 3rem;
+        height: 3rem;
+        font-size: 3rem;
+      }
+
+      p {
+        @include fonts-styles(2rem, 600);
+        line-height: normal;
+      }
+    }
+  }
+}
+
+.active {
+  border-radius: 10rem;
+  background: $bg-color;
+  color: $purple-1;
+}
