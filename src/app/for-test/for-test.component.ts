@@ -14,7 +14,7 @@ import { MessageComponent } from "../components/chat/message/message.component";
 import { Message, Reaction, Room } from '../models/collection.class';
 import { User } from '../models/user.class';
 import { SearchbarComponent } from "../components/shared/searchbar/searchbar.component";
-import { MessageInputComponent } from "../message-input/message-input.component";
+import { MessageInputComponent } from "../components/shared/message-input/message-input.component";
 
 @Component({
     selector: 'app-for-test',
@@ -47,7 +47,7 @@ export class ForTestComponent {
       isOnline: true,
       },
 
-    message: "Hallo ich bin eine testnachricht",
+    message: "Hallo ich bin die erste testnachricht",
     receiver: {
       fullName: 'Julius Marecek',
       email: "",
@@ -66,8 +66,8 @@ export class ForTestComponent {
         avatar: '../../assets/img/avatar1.svg',
         isOnline: true,
         },
-        message: "Hallo ich bin eine testnachricht",
-        created_at: "2024-01-12T10:00:00",
+        message: "Hallo ich bin die Antwort auf deine erste testnachricht",
+        created_at: "2024-01-12T10:01:00",
         reaction: [{}],
     }],
     reaction: [{}],
@@ -81,7 +81,7 @@ export class ForTestComponent {
         isOnline: true,
         },
   
-      message: "Hallo ich bin eine testnachricht",
+      message: "Hallo ich bin eine zweite testnachricht an Admir",
       receiver: {
         fullName: 'Admir Bajric',
         email: "",
@@ -90,7 +90,7 @@ export class ForTestComponent {
         isOnline: true,
         },
   
-      created_at: "2024-01-12T10:00:00",
+      created_at: "2024-01-12T10:02:00",
       room: "",
       answers: [{
         sender: {
@@ -100,8 +100,8 @@ export class ForTestComponent {
           avatar: '../../assets/img/avatar1.svg',
           isOnline: true,
           },
-          message: "Hallo ich bin eine testnachricht",
-          created_at: "2024-01-12T10:00:00",
+          message: "Hallo ich bin die Antwort auf deine zweite testnachricht",
+          created_at: "2024-01-12T10:03:00",
           reaction: [{}],
       }],
       reaction: [{}],

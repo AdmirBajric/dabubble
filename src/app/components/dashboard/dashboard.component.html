@@ -2,12 +2,20 @@
     <div class="logo"><app-logo></app-logo></div>
 
     <div class="searchbar"><app-searchbar></app-searchbar></div>
-    
+
     <div class="profile-nav"><app-user-profile-nav></app-user-profile-nav></div>
 
     <div class="sidenav"><app-workspace [isOpen]="workspaceStatus"></app-workspace></div>
 
-    <!-- <div class="chat"><app-message></app-message></div> -->
+    <div class="chat">
+        <div *ngFor="let message of messages; let i = index;">
+            <app-message [message]="message"></app-message>
+        </div>
+        <div class="chat-input">
+            <app-message-input></app-message-input>
+        </div>
+
+    </div>
 
     <div class="threads"><app-thread></app-thread></div>
 

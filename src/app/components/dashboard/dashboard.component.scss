@@ -8,7 +8,7 @@
         "nav chat thread"
         "nav chat thread";
     grid-template-columns: 32rem 1fr 1fr;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto auto;
     // grid-template-areas: 
     // "logo search search user" 
     // "nav chat chat thread"
@@ -45,9 +45,21 @@
 }
 
 .chat {
+    height: 67rem; // same as workspace
+    background-color: white;
     grid-area: chat;
+    padding: 4rem;
+    position: relative;
+    border-radius: 30px;
+
+    .chat-input{
+        position: absolute;
+        bottom: 4rem;
+        left: 4rem;
+        right: 4rem;
+    }
 }
 
 .threads {
-    grid-area: threads;
+    grid-area: thread;
 }
