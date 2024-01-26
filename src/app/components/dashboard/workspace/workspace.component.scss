@@ -7,9 +7,9 @@ body {
 }
 
 .main {
-    height: 100vh;
-    width: 100%;
-    @include flexbox(flex, unset, center, center); // must be styled in dashboard eventually
+    // height: 100vh;
+    // width: 100%;
+    // @include flexbox(flex, unset, center, center); // must be styled in dashboard eventually
     position: relative;
 }
 
@@ -28,16 +28,20 @@ h2 {
 
 .workspace-wrapper {
     position: relative;
+    height: 67rem;
+    width: 32rem;
     background-color: white !important;
-    height: calc(100vh - 8rem);
+    // height: calc(100vh - 8rem);
     overflow: hidden;
     gap: 2rem;
-    @include flexbox(flex, column, unset, stretch);
+    @include flexbox(flex, column, unset, unset);
     flex-basis: 26rem;
     flex-grow: 0.5;
     flex-shrink: 0.5;
     align-self: center;
-    padding: 2rem 2rem 2rem 6rem; // this is for desktop
+    padding: 1rem;
+
+    // padding: 2rem 2rem 2rem 6rem; // this is for desktop
     &.show {
         animation: slide-out 225ms forwards;
     }
@@ -45,10 +49,11 @@ h2 {
     &.hide {
         animation: slide-in 225ms forwards;
     }
-    @media only screen and (min-width: 960px) {
-        border-radius: 30px;
-        max-width: 50rem;
-    }
+
+    // @media only screen and (min-width: 960px) {
+    border-radius: 30px;
+    max-width: 50rem;
+    // }
 }
 
 .drawer-container {
@@ -142,8 +147,8 @@ button {
         border-radius: 50%;
         border: unset;
         position: absolute;
-        right: 3rem;
-        bottom: 3rem;
+        right: 2rem;
+        bottom: 1rem;
         @include flexbox(flex, unset, center, center);
         height: 7rem;
         width: 7rem;
@@ -187,7 +192,7 @@ button {
 //             }
 //         }
 //     }
-    
+
 //     // @media only screen and (max-width: 959px) {
 //     //     display: none;
 //     // }
