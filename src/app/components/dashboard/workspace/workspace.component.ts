@@ -4,6 +4,7 @@ import { Router, RouterModule } from "@angular/router";
 import { WorkspaceHeaderComponent } from './workspace-header/workspace-header.component';
 import { ChannelListItemComponent } from './channel-list-item/channel-list-item.component';
 import { DirectMessageListItemComponent } from './direct-message-list-item/direct-message-list-item.component';
+import { ButtonFunctionService } from "../../../services/button-function.service";
 
 @Component({
   selector: 'app-workspace',
@@ -28,10 +29,15 @@ export class WorkspaceComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private btnService: ButtonFunctionService,
     renderer: Renderer2,) {
     this.screenWidth = window.innerWidth;
     // ###### is this best practice here? ####
     this.checkImageFlag();
+  }
+
+  openCreateChannel(){
+    this.btnService.openCreateChannel();
   }
 
   @HostListener('window:resize', ['$event'])
