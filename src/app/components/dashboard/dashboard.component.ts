@@ -27,9 +27,21 @@ import { MessageInputComponent } from "../shared/message-input/message-input.com
     ]
 })
 export class DashboardComponent {
-    workspaceStatus: boolean = true
+    workspaceIsOpen: boolean = true;
+    gridAreaRegulation: string = 'nct';
     handleWorkspaceToggle(isOpen: boolean) {
-        this.workspaceStatus = isOpen;
+        this.workspaceIsOpen = isOpen;
+        this.handleGridAreaToggle(isOpen);
+    }
+
+    handleGridAreaToggle(isOpen: boolean){
+        if (isOpen === true) {
+            this.gridAreaRegulation = 'nct';
+            console.log(this.gridAreaRegulation);
+        } else {
+            this.gridAreaRegulation = 'cct'
+            console.log(this.gridAreaRegulation);
+        }
     }
 
     messages: any[] = [

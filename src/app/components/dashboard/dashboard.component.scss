@@ -2,20 +2,25 @@
 @import "../../mixins.scss";
 
 .db-main {
-    display: grid;
-    grid-template-areas:
+    &.grid-template-nct {
+        grid-template-areas:
         "logo search user"
-        "nav chat thread"
         "nav chat thread";
+    }
+    &.grid-template-cct {
+        grid-template-areas:
+        "logo search user"
+        "chat chat thread";
+    }
+    &.grid-template-ccc {
+        grid-template-areas:
+        "logo search user"
+        "chat chat chat";
+    }
+    display: grid;
     grid-template-columns: 32rem 1fr 1fr;
     grid-template-rows: auto auto;
-    // grid-template-areas: 
-    // "logo search search user" 
-    // "nav chat chat thread"
-    // "nav chat chat thread";
-    // grid-template-columns: 1fr 3fr 1fr;
-    // grid-template-rows: auto 1fr 1fr;
-    row-gap: 2rem;
+    row-gap: 1rem;
     column-gap: 2rem;
     height: 100vh;
     padding: 2rem 4rem;
