@@ -13,6 +13,7 @@ import { CreateChannelComponent } from './create-channel/create-channel.componen
 import { EmojisComponent } from './components/shared/emojis/emojis.component';
 import { VerifyEmailComponent } from './components/auth/verify-email/verify-email.component';
 import { VerificationSuccessComponent } from './components/auth/verification-success/verification-success.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -29,4 +30,5 @@ export const routes: Routes = [
   { path: 'emoji', component: EmojisComponent },
   { path: 'verify-email', component: VerifyEmailComponent },
   { path: 'verification-success', component: VerificationSuccessComponent },
+  { path: 'dashboard', component: DashboardComponent },
 ];

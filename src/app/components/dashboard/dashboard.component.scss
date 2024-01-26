@@ -1,0 +1,39 @@
+@import "../../colors.scss";
+@import "../../mixins.scss";
+
+.db-main {
+    display: grid;
+    grid-template-areas: 
+    "logo search search user" 
+    "nav chat chat thread"
+    "nav chat chat thread";
+    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-rows: auto 1fr 1fr;
+    row-gap: 2rem;
+    height: 100vh;
+    padding: 2rem 4rem;
+}
+
+.logo {
+    grid-area: logo;
+}
+
+.searchbar {
+    grid-area: search;
+}
+
+.profile-nav {
+    grid-area: user;
+}
+
+.sidenav {
+    grid-area: nav;
+}
+
+.chat {
+    grid-area: chat;
+}
+
+.threads {
+    grid-area: threads;
+}
