@@ -61,6 +61,7 @@ export class SignUpComponent {
   btnHoverColor = '#797ef3';
 
   emailExist: boolean = false;
+  accCreated: boolean = false;
 
   user = new User();
   firestore: Firestore = inject(Firestore);
@@ -156,7 +157,11 @@ export class SignUpComponent {
           sendEmailVerification(data.user);
           this.dataService.changeUser(userToSend);
           this.dataService.setCreatedUser(data.user);
-          this.router.navigate(['/select-avatar']);
+          this.accCreated = true;
+
+          setTimeout(() => {
+            this.router.navigate(['/select-avatar']);
+          }, 4000);
         })
         .catch((error) => {
           if (error.code === 'auth/email-already-in-use') {

@@ -15,6 +15,7 @@ import { Firestore, collection, addDoc } from '@angular/fire/firestore';
 import { getApp } from 'firebase/app';
 import { getStorage } from 'firebase/storage';
 import { ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
+import { getAuth, signOut } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-select-avatar',
@@ -76,28 +77,42 @@ export class SelectAvatarComponent {
   }
 
   async uploadImage() {
-    if (!this.selectedFile) {
-      return;
-    }
+    if (this.selectedFile !== null) {
+      const filename = this.user.id + '_' + this.selectedFile.name;
 
-    const filename = this.user.id + '_' + this.selectedFile.name;
+      const firebaseApp = getApp();
+      const storage = getStorage(
+        firebaseApp,
+        'gs://dabubble-cee4e.appspot.com'
+      );
+      const storageRef = ref(storage, 'images/' + filename);
 
-    const firebaseApp = getApp();
-    const storage = getStorage(firebaseApp, 'gs://dabubble-cee4e.appspot.com');
-    const storageRef = ref(storage, 'images/' + filename);
+      uploadBytes(storageRef, this.selectedFile)
+        .then(async (snapshot) => {
+          const downloadURL = await getDownloadURL(storageRef);
 
-    uploadBytes(storageRef, this.selectedFile)
-      .then(async (snapshot) => {
-        const downloadURL = await getDownloadURL(storageRef);
+          if (this.user) {
+            this.user.avatar = downloadURL;
+            await this.saveToFirestore();
+
+            this.signOutUser();
+          }
+        })
+        .catch((error) => {
+          console.error('Error uploading file:', error);
+        });
+    } else {
+      if (this.imgSelected) {
+        let avatar = this.personImg.split('../../')[1];
 
         if (this.user) {
-          this.user.avatar = downloadURL;
+          this.user.avatar = `https://gruppe-873.developerakademie.net/angular-projects/dabubble/${avatar}`;
           await this.saveToFirestore();
+
+          this.signOutUser();
         }
-      })
-      .catch((error) => {
-        console.error('Error uploading file:', error);
-      });
+      }
+    }
   }
 
   ngOnInit(): void {
@@ -169,5 +184,17 @@ export class SelectAvatarComponent {
     } catch (error) {
       console.error('Error adding document: ', error);
     }
+  }
+
+  signOutUser() {
+    const auth = getAuth();
+
+    signOut(auth)
+      .then(() => {
+        console.log('Benutzer abgemeldet');
+      })
+      .catch((error) => {
+        console.error('Fehler beim Abmelden des Benutzers', error);
+      });
   }
 }

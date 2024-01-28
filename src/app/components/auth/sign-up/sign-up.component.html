@@ -50,7 +50,7 @@
           [(ngModel)]="user.password"
           name="password"
           ngDefaultControl
-          pattern="^[A-Za-z\d]{4,}$"
+          pattern="^[A-Za-z\d]{6,}$"
           inputType="password"
           img="../../assets/img/lock.svg"
           placeholder="Passwort"
@@ -92,6 +92,9 @@
           Weiter
         </button>
       </form>
+      <div [ngClass]="{ 'acc-opacity': accCreated }" class="acc-created">
+        <p>Konto erfolgreich erstellt!</p>
+      </div>
     </mat-card>
   </div>
   <div class="legalContentContainer">

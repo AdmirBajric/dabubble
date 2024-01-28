@@ -1,18 +1,34 @@
 <div id="start-screen">
   <ng-container *ngIf="showDesktop">
-    <img [ngClass]="{ 'logo-big': logoBig }" class="on-start-logo" src="../../assets/img/logo-desktop.svg"
-      alt="Logo big" />
+    <img
+      [ngClass]="{ 'logo-big': logoBig }"
+      class="on-start-logo"
+      src="../../assets/img/logo-desktop.svg"
+      alt="Logo big"
+    />
   </ng-container>
 
-  <div [ngClass]="{
+  <div
+    [ngClass]="{
       'desktop-animation': desktopAnimation,
       'mobile-animation': mobileAnimation
-    }" [style.width.rem]="show ? 70 : 21" class="animation-container">
+    }"
+    [style.width.rem]="show ? 70 : 21"
+    class="animation-container"
+  >
     <div [style.width.rem]="show ? 40 : 31" class="animation-left-container">
-      <img [style.width.rem]="show ? 19 : 6" src="../../assets/img/logo.svg" alt="Logo big image" />
+      <img
+        [style.width.rem]="show ? 19 : 6"
+        src="../../assets/img/logo.svg"
+        alt="Logo big image"
+      />
     </div>
     <div [style.width.rem]="show ? 83 : 79" class="animation-right-container">
-      <img [style.width.rem]="show ? 43 : 15" src="../../assets/img/logo-name.svg" alt="Logo name big" />
+      <img
+        [style.width.rem]="show ? 43 : 15"
+        src="../../assets/img/logo-name.svg"
+        alt="Logo name big"
+      />
     </div>
   </div>
 
@@ -24,22 +40,74 @@
     <div class="card-container">
       <mat-card class="card-content">
         <h1 class="purple">Anmeldung</h1>
-        <span class="text-center">Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der
-          Arbeit verwendest.</span>
+        <span class="text-center"
+          >Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der
+          Arbeit verwendest.</span
+        >
 
-        <form class="login-form d-flex flex-column align-center" action="">
-          <app-input placeholder="beispielname@email.com" inputType="email" img="../../assets/img/mail.svg"></app-input>
+        <form class="login-form d-flex flex-column align-center">
+          <app-input
+            required
+            [(ngModel)]="userEmail"
+            name="userEmail"
+            ngDefaultControl
+            type="text"
+            pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+            placeholder="beispielname@email.com"
+            inputType="email"
+            img="../../assets/img/mail.svg"
+          ></app-input>
 
-          <app-input placeholder="Passwort" img="../../assets/img/lock.svg" inputType="password">
+          <app-input
+            required
+            [(ngModel)]="userPassword"
+            name="userPassword"
+            ngDefaultControl
+            type="password"
+            pattern="^[A-Za-z\d]{6,}$"
+            placeholder="Passwort"
+            img="../../assets/img/lock.svg"
+            inputType="password"
+          >
           </app-input>
 
-          <span class="action-forgot-pw text-center purple2" routerLink="/send-mail-pw">Passwort vergessen</span>
+          <span
+            class="action-forgot-pw text-center purple2"
+            routerLink="/send-mail-pw"
+            >Passwort vergessen</span
+          >
+
+          <div class="divider-container">
+            <div class="divider"></div>
+            <p>ODER</p>
+            <div class="divider"></div>
+          </div>
+
+          <div (click)="signInWithGoogle()" class="google-log-in">
+            <img
+              src="../../../../assets/img/google-desktop.svg"
+              alt="Google image"
+            />
+            <p>Anmelden mit Google</p>
+          </div>
 
           <div class="form-btn-container">
-            <button>Anmelden</button>
-            <button>Gäste-Login</button>
+            <button (click)="signIn()">Anmelden</button>
+            <button (click)="guestLogIn()">Gäste-Login</button>
           </div>
+
+          <ng-container *ngIf="errorMessage">
+            <div class="error-message">
+              <p>Invalid email or password.</p>
+            </div>
+          </ng-container>
         </form>
+        <div
+          [ngClass]="{ 'login-opacity': loginSuccess }"
+          class="login-success"
+        >
+          <p>Login erfolgreich</p>
+        </div>
       </mat-card>
     </div>
     <div class="go-2-registration">

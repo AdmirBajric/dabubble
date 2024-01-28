@@ -37,7 +37,7 @@
 
   .form-btn-container {
     justify-content: center !important;
-    margin-top: 3rem;
+    margin-top: 2rem;
     gap: 2rem !important;
   }
 
@@ -80,7 +80,7 @@
 
 @media only screen and (min-width: 1100px) and (min-height: 800px) {
   .card-content {
-    height: 63.9rem !important;
+    height: 69rem !important;
   }
 
   .legalContentContainer {
@@ -121,7 +121,19 @@
   @include flex-center();
   position: relative;
   @include animation(changeBackground, 0.5s, 2.4s, 1);
-  overflow: hidden;
+
+  /* Optional: Hide scrollbars */
+  #start-screen::-webkit-scrollbar {
+    width: 0.5em;
+  }
+
+  #start-screen::-webkit-scrollbar-thumb {
+    background-color: #3498db;
+  }
+
+  #start-screen::-webkit-scrollbar-track {
+    background: #2c3e50;
+  }
 
   .logo-big {
     z-index: -1;
@@ -285,13 +297,14 @@ h1 {
   @include animation(showLoginContainer, 0.5s, 2.4s, 1);
 
   .card-content {
-    height: 45rem;
+    height: 56rem;
     margin-top: 2rem;
     padding: 1.25rem;
     justify-content: space-evenly;
     @include flex-center;
     width: 37rem;
     border-radius: 1.875rem;
+    position: relative;
 
     h1 {
       color: $purple-1;
@@ -306,6 +319,49 @@ h1 {
   .login-form {
     gap: 2rem;
     @include flex-direction-column();
+
+    .divider-container {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .divider {
+        width: 40%;
+        height: 0.1rem;
+        background-color: $light-purple-lines;
+      }
+
+      p {
+        @include fonts-styles(1.8rem, 400);
+        line-height: normal;
+        margin-left: 1rem;
+        margin-right: 1rem;
+      }
+    }
+
+    .google-log-in {
+      width: 100%;
+      padding: 1.1rem 3.2rem;
+      border-radius: 10rem;
+      background: $bg-color;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      cursor: pointer;
+      margin-top: 1rem;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+
+      p {
+        color: $purple-1;
+        @include fonts-styles(1.8rem, 400);
+        line-height: 120%;
+      }
+    }
   }
 
   .action-forgot-pw {
@@ -325,7 +381,6 @@ h1 {
     padding: 1.2rem 2.5rem;
     border-radius: 2.5rem;
     line-height: normal;
-    margin-bottom: 3rem;
     display: flex;
     @include fonts-styles(1.8rem, 700);
   }
@@ -378,5 +433,46 @@ h1 {
 @keyframes showLoginContainer {
   100% {
     opacity: 1;
+  }
+}
+
+.login-success {
+  width: 47rem;
+  position: absolute;
+  bottom: 29rem;
+  right: 7rem;
+  padding: 3rem;
+  @include flex-center();
+  gap: 2rem;
+  border-radius: 3rem 3rem 0rem 3rem;
+  background: $purple-1;
+  box-shadow: 0rem 0.6rem 1rem 0rem rgba(0, 0, 0, 0.2);
+  color: $white;
+  opacity: 0;
+  transition: opacity 2s ease;
+  z-index: -1;
+
+  p {
+    @include fonts-styles(3rem, 700);
+    line-height: normal;
+  }
+}
+
+.login-opacity {
+  opacity: 1;
+  z-index: 2;
+}
+
+.error-message {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  p {
+    color: $rosa-error;
+    @include fonts-styles(1.4rem, 400);
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: 0.1rem;
   }
 }

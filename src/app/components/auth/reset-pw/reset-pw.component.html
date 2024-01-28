@@ -1,28 +1,59 @@
 <div class="main">
-    <ng-container class="logo">
-        <app-logo></app-logo>
-    </ng-container>
+  <ng-container class="logo">
+    <app-logo></app-logo>
+  </ng-container>
 
-    <div class="reset-pw-main-wrapper">
-        <mat-card class="card-container">
-            <mat-card-header class="card-header">
-                <h1 class="purple text-center">Passwort <br> zurücksetzen</h1>
-            </mat-card-header>
+  <div class="reset-pw-main-wrapper">
+    <mat-card class="card-container">
+      <mat-card-header class="card-header">
+        <h1 class="purple text-center">
+          Passwort <br />
+          zurücksetzen
+        </h1>
+      </mat-card-header>
 
-            <form action="?" (ngSubmit)="resetPW()" [formGroup]="resetPwForm">
-                <div class="input-container">
-                    <app-input formControlName="password" inputType="password" placeholder="Neues Passwort"></app-input>
-                    <app-input formControlName="passwordConfirm" inputType="password"
-                        placeholder="Neues Kennwort bestätigen"></app-input>
-                        <ng-container class="error" *ngIf="resetPwForm.errors?.['passwordMismatch']">Die Passwörter stimmen nicht überein.</ng-container>
-                </div>
-                <div class="btn-container">
-                    <button type="submit">Passwort ändern</button>
-                </div>
-            </form>
-
-        </mat-card>
-    </div>
+      <form>
+        <div class="input-container">
+          <app-input
+            [(ngModel)]="password"
+            (ngModelChange)="onInputChange($event)"
+            ngDefaultControl
+            name="password"
+            pattern="^[A-Za-z\d]{6,}$"
+            inputType="password"
+            placeholder="Neues Passwort"
+            (validityChanged)="onValidityChanged('password', $event)"
+          ></app-input>
+          <app-input
+            [(ngModel)]="confirmPassword"
+            (ngModelChange)="onInputChange($event)"
+            ngDefaultControl
+            name="passwordConfirm"
+            pattern="^[A-Za-z\d]{6,}$"
+            inputType="password"
+            placeholder="Neues Kennwort bestätigen"
+            (validityChanged)="onValidityChanged('password', $event)"
+          ></app-input>
+          <ng-container *ngIf="ifPasswordsMatch()"
+            ><p class="error">Die Passwörter stimmen nicht überein.</p>
+          </ng-container>
+        </div>
+        <div (click)="resetPW()" class="btn-container">
+          <button
+            [ngClass]="{
+              bcg: passwordsNotMatch,
+              active: !passwordsNotMatch
+            }"
+            [disabled]="!passwordsNotMatch"
+            type="submit"
+          >
+            Passwort ändern
+          </button>
+        </div>
+      </form>
+      <div [ngClass]="{ 'pw-opacity': pwReset }" class="pw-reset">
+        <p>Anmelden</p>
+      </div>
+    </mat-card>
+  </div>
 </div>
-
-<!-- [disabled]="!resetPwForm.valid" -->

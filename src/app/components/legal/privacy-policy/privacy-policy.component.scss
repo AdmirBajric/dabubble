@@ -1,22 +1,22 @@
 @import "./../../../colors.scss";
 @import "./../../../mixins.scss";
 
-
 @media only screen and (min-width: 1100px) {
+  app-logo {
+    position: absolute !important;
+    top: 7.5rem;
+    left: 7.5rem;
+    z-index: 2;
+  }
+}
+
+@media only screen and (max-width: 1100px) {
   .privacy-policy-container {
-    width: 60.6rem !important;
-    flex-direction: row !important;
+    width: 90% !important;
+  }
 
-    app-logo {
-      position: absolute !important;
-      top: 7.5rem;
-      left: 7.5rem;
-      z-index: 2;
-    }
-
-    .privacy-policy-content {
-      height: 45rem !important;
-    }
+  .privacy-policy-img {
+    margin-right: 0rem !important;
   }
 }
 
@@ -24,12 +24,19 @@
   width: 100%;
   height: 100vh;
   @include flex-center();
-  flex-direction: column;
+  overflow-y: scroll;
+  position: absolute;
+  scrollbar-width: thin;
+  scrollbar-color: $purple-1;
+  scroll-behavior: smooth;
+  word-wrap: break-word;
 
   .privacy-policy-container {
-    width: 50rem;
+    width: 80%;
+    height: 100%;
     @include flex-direction-column();
     align-items: center;
+    margin-top: 30rem;
 
     .privacy-policy-content {
       width: 100%;
@@ -41,23 +48,24 @@
       flex-direction: column;
       justify-content: center;
 
-      .privacy-policy-img {
-        width: 2.8rem;
-        height: 2.8rem;
-        position: absolute;
-        top: 3rem;
-        left: 3rem;
+      #privacy-policy-header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
 
       h2 {
         margin-top: 2rem;
         font-size: 4.6rem;
         color: $purple-1;
+        line-height: normal;
       }
 
       h3 {
         font-size: 3.2rem;
         color: $purple-1;
+        line-height: normal;
       }
 
       p {
@@ -65,5 +73,105 @@
         font-size: 2rem;
       }
     }
+  }
+}
+
+#privacy-policy-header {
+  width: 100%;
+  height: 7.3rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#privacy-policy-header h2 {
+  font-size: 6.1rem;
+  font-style: normal;
+  line-height: 120%;
+}
+
+#privacy-policy-main {
+  width: 100%;
+  margin-top: 4.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.privacy-policy-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+}
+
+.privacy-policy-content {
+  font-size: 1.6rem;
+  font-style: normal;
+  line-height: 150%;
+  margin-top: 3rem;
+}
+
+#status {
+  margin-bottom: 3rem;
+}
+
+#relevant-legal-bases-title,
+#safety-measures-title,
+#transfer-of-personal-data-title,
+#international-data-transfers-title,
+#rights-of-data-subjects-title,
+#use-of-cookies-title,
+#provision-of-online-offerings-title,
+#contact-and-inquiry-management-title {
+  margin-bottom: 1.5rem;
+}
+
+#responsible,
+#overview,
+#species,
+#data-subjects,
+#purposes-of-processing,
+#relevant-legal-bases,
+#safety-measures,
+#transfer-of-personal-data,
+#international-data-transfers,
+#rights-of-data-subjects,
+#use-of-cookies,
+#provision-of-online-offerings,
+#contact-and-inquiry-management {
+  margin-bottom: 4rem;
+}
+
+#privacy-policy-main-container::-webkit-scrollbar {
+  width: 0.5rem !important;
+}
+
+#privacy-policy-main-container::-webkit-scrollbar-thumb {
+  background-color: $purple-1 !important;
+}
+
+#privacy-policy-main-container::-webkit-scrollbar-track {
+  background-color: #eee !important;
+}
+
+ul {
+  margin-top: 1rem;
+}
+
+li {
+  font-size: 2rem;
+}
+
+.privacy-policy-img {
+  margin-right: 7rem;
+}
+
+.seal {
+  a {
+    color: $purple-1;
   }
 }

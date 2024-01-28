@@ -1,30 +1,58 @@
 <div class="main">
-    <ng-container class="logo">
-        <app-logo></app-logo>
-    </ng-container>
+  <ng-container class="logo">
+    <app-logo></app-logo>
+  </ng-container>
 
-    <div class="reset-pw-main-wrapper">
+  <div class="reset-pw-main-wrapper">
+    <mat-card class="card-container">
+      <img
+        class="arrow-back"
+        routerLink="/"
+        src="../../assets/img/arrow_back.svg"
+        alt="Arrow back img"
+      />
+      <mat-card-header class="card-header">
+        <h1 class="purple text-center">
+          Passwort <br />
+          zurücksetzen
+        </h1>
+        <p class="text-center">Bitte geben Sie Ihre E-Mail-Adresse ein.</p>
+      </mat-card-header>
 
-        <mat-card class="card-container">
-            <img class="arrow-back" routerLink="/" src="../../assets/img/arrow_back.svg" alt="Arrow back img" />
-            <mat-card-header class="card-header">
-                <h1 class="purple text-center">Passwort <br> zurücksetzen</h1>
-                <p class="text-center">Bitte geben Sie Ihre E-Mail-Adresse ein.</p>
-            </mat-card-header>
-
-            <form action="?" (ngSubmit)="sendMail()" [formGroup]="emailForm">
-                <div class="input-container">
-                    <app-input inputType="email" img="../../assets/img/mail.svg" placeholder="beispielname@email.com"></app-input>
-                    <!-- <input type="email" formControlName="email"> -->
-                </div>
-                <span class="text-center">Wir senden Ihnen eine E-Mail, über die Sie Ihr Passwort ändern können.</span>
-                <div class="btn-container">
-                    <button [disabled]="!emailForm.valid" type="submit">E-Mail senden</button>
-                </div>
-            </form>
-            
-        </mat-card>
-
+      <form>
+        <div class="input-container">
+          <app-input
+            [(ngModel)]="email"
+            ngDefaultControl
+            name="email"
+            inputType="email"
+            pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+            img="../../assets/img/mail.svg"
+            placeholder="beispielname@email.com"
+            (validityChanged)="onValidityChanged('email', $event)"
+          ></app-input>
+        </div>
+        <span class="text-center"
+          >Wir senden Ihnen eine E-Mail, über die Sie Ihr Passwort ändern
+          können.</span
+        >
+        <div class="btn-container">
+          <button
+            [ngClass]="{
+              bcg: isFormValid(),
+              active: !isFormValid()
+            }"
+            [disabled]="!isFormValid()"
+            (click)="sendMail()"
+          >
+            E-Mail senden
+          </button>
+        </div>
+      </form>
+    </mat-card>
+    <div [ngClass]="{'msg-opacity': emailSend }" class="email-send-message">
+      <mat-icon>send</mat-icon>
+      <p>E-Mail gesendet</p>
     </div>
-
+  </div>
 </div>

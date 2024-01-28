@@ -89,7 +89,7 @@ export class InputComponent {
         case 'email':
           return '*Diese E-Mail-Adresse ist leider ungültig.';
         case 'password':
-          return '*Bitte geben Sie ein Passwort ein.';
+          return '*Mindestens 6 Zeichen erforderlich.';
         default:
           return '*Invalid input.';
       }

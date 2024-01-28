@@ -210,3 +210,30 @@
 .checkbox-active {
   display: none !important;
 }
+
+.acc-created {
+  width: 47rem;
+  position: absolute;
+  bottom: 28rem;
+  right: 7rem;
+  padding: 3rem;
+  @include flex-center();
+  gap: 2rem;
+  border-radius: 3rem 3rem 0rem 3rem;
+  background: $purple-1;
+  box-shadow: 0rem 0.6rem 1rem 0rem rgba(0, 0, 0, 0.2);
+  color: $white;
+  opacity: 0;
+  transition: opacity 2s ease;
+  z-index: -1;
+
+  p {
+    @include fonts-styles(3rem, 700);
+    line-height: normal;
+  }
+}
+
+.acc-opacity {
+  opacity: 1;
+  z-index: 1;
+}

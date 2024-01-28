@@ -2,8 +2,8 @@
 @import "app/mixins.scss";
 @import "@ctrl/ngx-emoji-mart/picker";
 
-$font-family-nunito: Nunito;
-$font-family-figtree: Figtree;
+$font-family-nunito: "Nunito Sans", sans-serif;
+$font-family-figtree: "Figtree", sans-serif;
 
 *,
 *::after,
