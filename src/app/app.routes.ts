@@ -15,6 +15,7 @@ import { VerifyEmailComponent } from './components/auth/verify-email/verify-emai
 import { VerificationSuccessComponent } from './components/auth/verification-success/verification-success.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileMenuComponent } from './components/dashboard/profile-menu/profile-menu.component';
+import { ThreadComponent } from './components/chat/thread/thread.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -33,4 +34,5 @@ export const routes: Routes = [
   { path: 'verification-success', component: VerificationSuccessComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'profile', component: ProfileMenuComponent },
+  { path: 'thread', component: ThreadComponent },
 ];

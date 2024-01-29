@@ -7,11 +7,20 @@
     align-items: center;
     gap: 1.5rem;
     background: transparent;
-    padding: 1rem 0 1rem 0;
+    padding: 1rem 1rem 1rem 1rem;
+    border-radius: 35px;
+    color: black;
+    transition: all 225ms;
+
+    &:hover {
+        background-color: $bg-color;
+        cursor: pointer;
+        color: $purple-1;
+        font-weight: bold;
+    }
 
     a {
         @include fonts-styles(17px, 400);
-        color: black;
         &.link-create{
             color: $purple-3;
         }

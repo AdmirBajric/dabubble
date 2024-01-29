@@ -23,13 +23,18 @@
         "nav chat chat";
     }
     display: grid;
-    grid-template-columns: 32rem 1fr 1fr;
+    grid-template-columns: 32rem 3fr 1fr;
     grid-template-rows: 10rem 70rem;
     row-gap: 1rem;
     column-gap: 2rem;
     height: 100vh;
     padding: 2rem 4rem;
     position: relative;
+
+    @media only screen and (min-width: 1100px) and (min-height: 1100px) {
+        // grid-template-rows: 10rem auto;
+        grid-template-columns: 26rem 3fr 1fr;
+    }
 }
 
 .btn-toggle {
