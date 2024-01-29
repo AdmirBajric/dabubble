@@ -9,6 +9,7 @@ import { ThreadComponent } from "../chat/thread/thread.component";
 import { ButtonWorkspaceComponent } from "./button-workspace/button-workspace.component";
 import { MessageInputComponent } from "../shared/message-input/message-input.component";
 import { ProfileMenuComponent } from "./profile-menu/profile-menu.component";
+import { ChatHeaderComponent } from "../shared/chat-header/chat-header.component";
 
 @Component({
     selector: 'app-dashboard',
@@ -25,27 +26,28 @@ import { ProfileMenuComponent } from "./profile-menu/profile-menu.component";
         ThreadComponent,
         ButtonWorkspaceComponent,
         MessageInputComponent,
-        ProfileMenuComponent
+        ProfileMenuComponent,
+        ChatHeaderComponent
     ]
 })
 export class DashboardComponent implements OnInit {
     workspaceIsOpen: boolean = true;
     threadIsOpen: boolean = true;
     gridAreaRegulation: string = 'nct';
-    selectedMessageForThread: any [] = [];
-
+    selectedMessageForThread: any[] = [];
+    selectedRoomName: string = 'Entwicklerteam'
     ngOnInit(): void {
         this.handleGridAreaToggle();
     }
 
-    handleThread(answers: any[]){
+    handleThread(answers: any[]) {
         this.selectedMessageForThread = answers;
         console.log('dasboard:', answers);
         this.threadIsOpen = true;
         this.handleGridAreaToggle();
     }
 
-    closeThread(){
+    closeThread() {
         this.threadIsOpen = false;
         this.handleGridAreaToggle();
     }
@@ -56,14 +58,14 @@ export class DashboardComponent implements OnInit {
         this.handleGridAreaToggle();
     }
 
-    handleGridAreaToggle(){
+    handleGridAreaToggle() {
         if (this.workspaceIsOpen && this.threadIsOpen === true) {
             this.gridAreaRegulation = 'nct';
             // console.log(this.gridAreaRegulation);
         } else if (!this.workspaceIsOpen && this.threadIsOpen) {
             this.gridAreaRegulation = 'cct'
             // console.log(this.gridAreaRegulation);
-        } else if (!this.workspaceIsOpen && !this.threadIsOpen){
+        } else if (!this.workspaceIsOpen && !this.threadIsOpen) {
             this.gridAreaRegulation = 'ccc';
         } else if (this.workspaceIsOpen && !this.threadIsOpen) {
             this.gridAreaRegulation = 'ncc';

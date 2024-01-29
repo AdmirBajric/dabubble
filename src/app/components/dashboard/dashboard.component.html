@@ -8,6 +8,8 @@
     <div class="sidenav"><app-workspace [isOpen]="workspaceIsOpen"></app-workspace></div>
 
     <div class="chat">
+        <app-chat-header [roomName]="selectedRoomName"></app-chat-header>
+      
         <div *ngFor="let message of messages; let i = index;">
             <app-message [message]="message" (showThread)="handleThread($event)"></app-message>
         </div>

@@ -1,0 +1,6 @@
+@import "../../../colors.scss";
+@import "../../../mixins.scss";
+.wrapper {
+    @include flexbox(flex, unset, space-between, center);
+    height: 5rem;
+}
