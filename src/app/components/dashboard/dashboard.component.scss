@@ -17,6 +17,11 @@
         "logo search user"
         "chat chat chat";
     }
+    &.grid-template-ncc {
+        grid-template-areas:
+        "logo search user"
+        "nav chat chat";
+    }
     display: grid;
     grid-template-columns: 32rem 1fr 1fr;
     grid-template-rows: auto auto;
@@ -41,7 +46,7 @@
     grid-area: search;
 }
 
-.profile-nav {
+.profile-menu {
     grid-area: user;
 }
 
@@ -54,18 +59,21 @@
     height: 67rem; // same as workspace
     background-color: white;
     grid-area: chat;
-    padding: 4rem;
+    padding: 2rem;
     position: relative;
     border-radius: 30px;
 
     .chat-input{
         position: absolute;
-        bottom: 4rem;
-        left: 4rem;
-        right: 4rem;
+        bottom: 2rem;
+        left: 2rem;
+        right: 2rem;
     }
 }
 
 .threads {
     grid-area: thread;
+    background-color: white;
+    height: 67rem;
+    border-radius: 30px;
 }

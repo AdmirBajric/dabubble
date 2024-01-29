@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { MessageComponent } from "../chat/message/message.component";
 import { WorkspaceComponent } from "./workspace/workspace.component";
@@ -8,6 +8,7 @@ import { SearchbarComponent } from "../shared/searchbar/searchbar.component";
 import { ThreadComponent } from "../chat/thread/thread.component";
 import { ButtonWorkspaceComponent } from "./button-workspace/button-workspace.component";
 import { MessageInputComponent } from "../shared/message-input/message-input.component";
+import { ProfileMenuComponent } from "./profile-menu/profile-menu.component";
 
 @Component({
     selector: 'app-dashboard',
@@ -23,24 +24,49 @@ import { MessageInputComponent } from "../shared/message-input/message-input.com
         SearchbarComponent,
         ThreadComponent,
         ButtonWorkspaceComponent,
-        MessageInputComponent
+        MessageInputComponent,
+        ProfileMenuComponent
     ]
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
     workspaceIsOpen: boolean = true;
+    threadIsOpen: boolean = true;
     gridAreaRegulation: string = 'nct';
-    handleWorkspaceToggle(isOpen: boolean) {
-        this.workspaceIsOpen = isOpen;
-        this.handleGridAreaToggle(isOpen);
+    selectedMessageForThread: any [] = [];
+
+    ngOnInit(): void {
+        this.handleGridAreaToggle();
     }
 
-    handleGridAreaToggle(isOpen: boolean){
-        if (isOpen === true) {
+    handleThread(answers: any[]){
+        this.selectedMessageForThread = answers;
+        console.log('dasboard:', answers);
+        this.threadIsOpen = true;
+        this.handleGridAreaToggle();
+    }
+
+    closeThread(){
+        this.threadIsOpen = false;
+        this.handleGridAreaToggle();
+    }
+
+    handleWorkspaceToggle(isOpen: boolean) {
+        // console.log(isOpen);
+        this.workspaceIsOpen = isOpen;
+        this.handleGridAreaToggle();
+    }
+
+    handleGridAreaToggle(){
+        if (this.workspaceIsOpen && this.threadIsOpen === true) {
             this.gridAreaRegulation = 'nct';
-            console.log(this.gridAreaRegulation);
-        } else {
+            // console.log(this.gridAreaRegulation);
+        } else if (!this.workspaceIsOpen && this.threadIsOpen) {
             this.gridAreaRegulation = 'cct'
-            console.log(this.gridAreaRegulation);
+            // console.log(this.gridAreaRegulation);
+        } else if (!this.workspaceIsOpen && !this.threadIsOpen){
+            this.gridAreaRegulation = 'ccc';
+        } else if (this.workspaceIsOpen && !this.threadIsOpen) {
+            this.gridAreaRegulation = 'ncc';
         }
     }
 
