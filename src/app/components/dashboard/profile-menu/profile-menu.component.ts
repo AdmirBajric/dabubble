@@ -10,6 +10,7 @@ import {
   MatBottomSheet,
   MatBottomSheetModule,
 } from '@angular/material/bottom-sheet';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-profile-menu',
@@ -37,7 +38,8 @@ export class ProfileMenuComponent {
     private el: ElementRef,
     private renderer: Renderer2,
     public dialog: MatDialog,
-    private _bottomSheet: MatBottomSheet
+    private _bottomSheet: MatBottomSheet,
+    public router: Router
   ) {}
 
   @HostListener('window:resize', ['$event'])
