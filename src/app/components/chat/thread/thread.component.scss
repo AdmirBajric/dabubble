@@ -6,6 +6,7 @@
     position: relative;
     gap: 1rem;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.08);
+    height: 6rem;
 
     button {
         position: absolute;
@@ -21,21 +22,24 @@
 
     span {
         color: $purple-2;
+        @include fonts-styles(14px, normal);
     }
 }
 
 .wrapper {
     background-color: white;
-    padding: 2rem 2rem;
+    padding: 0rem 2rem;
     position: relative;
-    height: 67rem;
-    border-radius: 30px
-}
 
-// .divider {
-//     height: 2px;
-//     width: 100%;
-// }
+    @media only screen and (max-width: 1099px) {
+        height: calc(100vh - 9rem);
+    }
+
+    @media only screen and (min-width: 1100px) {
+        height: 70rem;
+        border-radius: 30px
+    }
+}
 
 .container {
     @include flexbox(flex, unset, unset, flex-start);

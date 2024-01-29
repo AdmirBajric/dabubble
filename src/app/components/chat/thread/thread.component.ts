@@ -1,22 +1,61 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, Renderer2 } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { EmojisComponent } from "../../shared/emojis/emojis.component";
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
 import { MessageInputComponent } from "../../shared/message-input/message-input.component";
+import { WorkspaceHeaderComponent } from "../../dashboard/workspace/workspace-header/workspace-header.component";
+import { Router } from "@angular/router";
 @Component({
     selector: 'app-thread',
     standalone: true,
     templateUrl: './thread.component.html',
     styleUrl: './thread.component.scss',
-    imports: [CommonModule, EmojisComponent, PickerModule, MessageInputComponent]
+    imports: [CommonModule, EmojisComponent, PickerModule, MessageInputComponent, WorkspaceHeaderComponent]
 })
 export class ThreadComponent implements OnInit {
   @Input() threadData!: any;
   @Output() closeThread = new EventEmitter<any[]>();
+
   loggedUser = "Julius Marecek";
   answersCount!: number;
+  mobileView!: boolean;
+  windowWidth!: number;
+  renderer: any = Renderer2;
+  el: any = ElementRef;
+  
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.checkWindowSize();
+  }
 
-  exitThread(){
+  constructor(
+    renderer: Renderer2,
+    el: ElementRef,
+    public router: Router
+    ) {
+      this.renderer = renderer;
+      this.el = el;
+      const screenWidth = window.innerWidth;
+
+      if (screenWidth <= 1100) {
+        this.mobileView = true;
+      } else {
+        this.mobileView = false;
+      }
+     }
+
+  private checkWindowSize(): void {
+    this.windowWidth = this.renderer.parentNode(
+      this.el.nativeElement
+    ).ownerDocument.defaultView.innerWidth;
+    if (this.windowWidth <= 1100) {
+      this.mobileView = true;
+    } else {
+      this.mobileView = false;
+    }
+  }
+
+  exitThread() {
     this.closeThread.emit();
   }
 
