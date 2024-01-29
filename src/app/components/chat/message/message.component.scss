@@ -33,6 +33,10 @@ img {
 
 .answerCount {
     margin-right: 2rem;
+    color: $purple-2;
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 .messageLine {
