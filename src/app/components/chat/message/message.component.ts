@@ -1,18 +1,18 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgIf } from '@angular/common';
+import { ProfileViewComponent } from "../../profile/profile-view/profile-view.component";
 
 @Component({
-  selector: 'app-message',
-  standalone: true,
-  imports: [NgIf],
-  templateUrl: './message.component.html',
-  styleUrl: './message.component.scss'
+    selector: 'app-message',
+    standalone: true,
+    templateUrl: './message.component.html',
+    styleUrl: './message.component.scss',
+    imports: [NgIf, ProfileViewComponent]
 })
 export class MessageComponent implements OnInit {
   ngOnInit(): void {
     this.TimeToStringAnswer();
   }
-
   loggedUser = "Julius Marecek"
   @Input() message: any;
   @Output() showThread = new EventEmitter<any[]>();

@@ -126,6 +126,7 @@ h2 {
     gap: 1.5rem;
     margin-left: 2.2rem;
     background: transparent;
+    padding: 0 1rem;
 
     a {
         @include fonts-styles(17px, 400);
