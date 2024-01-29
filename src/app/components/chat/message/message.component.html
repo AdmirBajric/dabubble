@@ -28,7 +28,7 @@
             <div class="messageLine own">{{message.message}}</div>
 
             <div class="lastLine">
-                <span class="answerCount">{{answersCount}} Antworten</span>
+                <span class="answerCount" (click)="showAnswersinThread(message.message)">{{answersCount}} Antworten</span>
                 <span class="time">Letzte Antwort {{lastAnswerTime}} Uhr</span>
             </div>
         </div>
