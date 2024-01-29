@@ -2,18 +2,33 @@
 @import "./../../../mixins.scss";
 
 #profile-menu-container {
-  width: 34.2rem;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 2rem;
-  position: absolute;
-  right: 2rem;
+
+  &.absolute {
+    position: absolute;
+    width: 29rem;
+  }
+
+  &.no-absolute {
+    position: unset;
+  }
+
+  @media only screen and (min-width: 1100px) and (min-height: 1100px) {
+    width: unset;
+    gap: 1rem;
+  }
 
   .profile-menu-name {
     p {
       @include fonts-styles(3.2rem, 700);
       line-height: normal;
+
+      @media only screen and (min-width: 100px) and (min-height: 1100px) {
+        @include fonts-styles(2.2rem, bold);
+      }
     }
   }
 
@@ -22,9 +37,20 @@
     height: 7rem;
     position: relative;
 
+    &.flex {
+      @include flexbox(flex, unset, flex-end, center);
+    }
+
     img {
-      width: 7rem;
-      height: 7rem;
+      &.big {
+        width: 7rem;
+        height: 7rem;
+      }
+
+      &.big {
+        width: 5rem;
+        height: 5rem;
+      }
     }
 
     mat-icon {

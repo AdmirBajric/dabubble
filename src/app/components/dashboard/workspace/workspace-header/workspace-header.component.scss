@@ -2,14 +2,28 @@
 @import "../../../../mixins.scss";
 
 .ws-header-container {
-    @include flexbox (flex, unset, unset, center);
-    margin-left: 1rem;
     position: relative;
+    
+    &.justify-unset {
+        margin-left: 1rem;
+        @include flexbox (flex, unset, unset, center);
+    }
 
     .ws-header-logo {
         @include flexbox (flex, unset, unset, center);
         gap: 2rem;
     }
+
+    &.bg-mobile-thread {
+        background-color: $bg-color;
+        @include flexbox(flex, unset, space-between, center);
+        padding: 1rem 2rem;
+    }
+}
+
+.mobile-thread {
+    @include flexbox(flex, unset, unset, center);
+    gap: 1rem;
 }
 
 button {
@@ -24,5 +38,16 @@ button {
     &:hover {
         background: $bg-color;
 
+    }
+}
+
+@media only screen and (min-width: 1100px) and (min-height: 1100px){
+    .ws-header-logo {
+        gap: 1rem;
+
+        img {
+            height: 5rem;
+            width: 5rem;
+        }
     }
 }

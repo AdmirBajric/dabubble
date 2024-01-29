@@ -1,12 +1,11 @@
-@import "../colors.scss";
-@import "../mixins.scss";
-
+@import "../../../colors.scss";
+@import "../../../mixins.scss";
 
 img {
     width: 3.5rem;
     height: 3.5rem;
-    margin-right: 1rem;
-    margin-left: 1rem;
+    // margin-right: 1rem;
+    // margin-left: 1rem;
 }
 
 .white {
@@ -16,7 +15,8 @@ img {
 .flex {
     display: flex;
     width: 100%;
-    padding: 2rem;
+    gap: 1rem;
+    // padding: 2rem;
 }
 
 .reverse {
@@ -34,6 +34,11 @@ img {
 
 .answerCount {
     margin-right: 2rem;
+    color: $purple-2;
+
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 .messageLine {
@@ -57,7 +62,6 @@ img {
 .firstLine {
     display: flex;
     width: 100%;
-    justify-content: space-around;
 }
 
 .lastLine {

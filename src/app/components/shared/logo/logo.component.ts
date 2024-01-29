@@ -1,9 +1,10 @@
 import { Component, HostListener } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
+import { RouteService } from "../../../services/route.service";
 @Component({
   selector: 'app-logo',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './logo.component.html',
   styleUrl: './logo.component.scss',
 })
@@ -13,6 +14,11 @@ export class LogoComponent {
     '../../assets/img/logo-mobile.svg',
     '../../assets/img/logo-desktop.svg',
   ];
+
+  constructor(private routeService: RouteService) { }
+  isActiveRoute(route: string): boolean {
+    return this.routeService.checkRoute(route);
+  }
 
   windowWidth: number = 0;
 

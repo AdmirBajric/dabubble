@@ -8,12 +8,16 @@ import { SendMailPwComponent } from './components/auth/send-mail-pw/send-mail-pw
 import { ResetPwComponent } from './components/auth/reset-pw/reset-pw.component';
 import { WorkspaceComponent } from './components/dashboard/workspace/workspace.component';
 import { ForTestComponent } from './for-test/for-test.component';
-import { CreateChannelComponent } from './create-channel/create-channel.component';
+import { AuthGuard } from '../app/guards/auth.guard';
+import { TestSignOutComponent } from './test-sign-out/test-sign-out.component';
+import { EmojiPickerComponent } from './components/emoji-picker/emoji-picker.component';
+import { CreateChannelComponent } from './components/shared/dialogs/create-channel/create-channel.component';
 import { EmojisComponent } from './components/shared/emojis/emojis.component';
 import { VerifyEmailComponent } from './components/auth/verify-email/verify-email.component';
 import { VerificationSuccessComponent } from './components/auth/verification-success/verification-success.component';
-import { AuthGuard } from '../app/guards/auth.guard';
-import { TestSignOutComponent } from './test-sign-out/test-sign-out.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ProfileMenuComponent } from './components/dashboard/profile-menu/profile-menu.component';
+import { ThreadComponent } from './components/chat/thread/thread.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -42,4 +46,7 @@ export const routes: Routes = [
   { path: 'for-testing', component: ForTestComponent },
   { path: 'emoji', component: EmojisComponent },
   { path: 'sign-out', component: TestSignOutComponent },
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'profile', component: ProfileMenuComponent },
+  { path: 'thread', component: ThreadComponent },
 ];

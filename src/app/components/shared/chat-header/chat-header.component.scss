@@ -1,0 +1,20 @@
+@import "../../../colors.scss";
+@import "../../../mixins.scss";
+.wrapper {
+    @include flexbox(flex, unset, space-between, center);
+    height: 5rem;
+
+    .header-left {
+        @include flexbox(flex, unset, unset, center);
+        gap: 2rem;
+        border-radius: 100px;
+        padding: 1rem 1rem;
+        transition: all 225ms;
+
+        &:hover {
+            background-color: $bg-color;
+            color: $purple-3;
+            cursor: pointer;
+        }
+    }
+}

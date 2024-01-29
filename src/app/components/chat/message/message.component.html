@@ -1,0 +1,36 @@
+<div class="chat white">
+    <div class="flex" *ngIf="message.sender.fullName != loggedUser">
+        <img src="{{message.sender.avatar}}" alt="">
+        <div>
+            <div class="firstLine">
+                <span class="mr-2"><b>{{message.sender.fullName}}</b></span>
+                <span class="time">{{getTimeFromString(message.created_at)}} Uhr</span>
+            </div>
+
+            <div class="messageLine">{{message.message}}</div>
+
+            <div class="lastLine">
+                <span class="answerCount" (click)="showAnswersinThread(message)">{{answersCount}}
+                    Antworten</span>
+                <span class="time">Letzte Antwort {{lastAnswerTime}} Uhr</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex reverse" *ngIf="message.sender.fullName == loggedUser">
+        <img src="{{message.sender.avatar}}" alt="" class="userImg">
+        <div>
+            <div class="firstLine reverse">
+                <span class="mr-2"><b>{{message.sender.fullName}}</b></span>
+                <span class="time">{{getTimeFromString(message.created_at)}} Uhr</span>
+            </div>
+
+            <div class="messageLine own">{{message.message}}</div>
+
+            <div class="lastLine">
+                <span class="answerCount" (click)="showAnswersinThread(message.message)">{{answersCount}} Antworten</span>
+                <span class="time">Letzte Antwort {{lastAnswerTime}} Uhr</span>
+            </div>
+        </div>
+    </div>
+</div>

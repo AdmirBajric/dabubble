@@ -1,4 +1,4 @@
-<div id="profile-menu-container">
+<div [ngClass]="router.url === '/thread' ? 'no-absolute' : 'absolute'" id="profile-menu-container">
   <ng-container *ngIf="!mobileView">
     <div class="profile-menu-name">
       <p>{{ fullName }}</p>
@@ -18,11 +18,14 @@
 
   <ng-container *ngIf="mobileView">
     <div
+      [class.flex]="router.url === '/thread'"
       style="justify-self: flex-end"
       (click)="openBottomSheet()"
       class="profile-menu-img"
     >
-      <img src="{{ img }}" alt="Profile image" />
+      <img 
+        [ngClass]="router.url === '/thread' ? 'small' : 'big'"
+        src="{{ img }}" alt="Profile image" />
     </div>
   </ng-container>
 </div>

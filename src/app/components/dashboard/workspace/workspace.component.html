@@ -13,14 +13,14 @@
                             Channels
                         </h2>
                     </span>
-                    <button routerLink="/"><img src='{{ "./../../assets/img/add_" + imageFlag + ".svg"}}'
+                    <button (click)="openCreateChannel()"><img src='{{ "./../../assets/img/add_" + imageFlag + ".svg"}}'
                             alt="adding channel"></button>
                 </div>
 
                 @if (showChannels) {
                 <ng-container *ngFor="let channel of user.channels">
                     <app-channel-list-item [channels]="channel"></app-channel-list-item></ng-container>
-                <button class="btn-create-channel">
+                <button (click)="openCreateChannel()" class="btn-create-channel">
                     <img src="./../../assets/img/add_border.svg" alt="add">
                     <a class="link-create">Channel hinzufügen</a></button>
                 }
@@ -48,7 +48,7 @@
             }
         </div>
 
-        <button class="btn-write-dm">
+        <button class="mobile-btn-write-dm">
             <img src="./../../assets/img/workspace_2_mobile_write_dm_square.svg" alt="write message">
         </button>
 

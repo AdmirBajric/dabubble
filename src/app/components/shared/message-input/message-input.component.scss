@@ -1,3 +1,6 @@
+@import "../../../colors.scss";
+@import "../../../mixins.scss";
+
 .message-field {
     background-color: white;
     resize: none;
@@ -9,9 +12,9 @@
         border: none;
         outline: none;
     }
-    
+
     &::placeholder {
-        color: rgba(0,0,0,0.3);
+        color: rgba(0, 0, 0, 0.3);
     }
 }
 
@@ -28,24 +31,30 @@
     max-width: 100%;
     height: fit-content;
     padding: 1.5rem;
-    border: 0.1rem solid rgba(178,181,219,0.8);
+    border: 0.1rem solid rgba(178, 181, 219, 0.8);
     border-radius: 2rem;
     background-color: white;
+    transition: all 225ms;
+
+    &:hover {
+        cursor: pointer;
+        border: 0.1rem solid $purple-1;
+    }
 
     .input-btn {
         background-color: transparent;
         color: black;
         box-shadow: none;
         border-radius: 0;
-        margin: 0.2rem;    
+        margin: 0.2rem;
     }
 
     .send {
-        color: rgba(68,77,242,1);
+        color: rgba(68, 77, 242, 1);
     }
 
     .add {
-        border-right: 0.1rem solid rgba(178,181,219,0.8);
+        border-right: 0.1rem solid rgba(178, 181, 219, 0.8);
     }
 
 }
