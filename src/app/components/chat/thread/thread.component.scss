@@ -1,0 +1,137 @@
+@import "../../../colors.scss";
+@import "../../../mixins.scss";
+
+.header {
+    @include flexbox(flex, unset, unset, center);
+    position: relative;
+    gap: 1rem;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.08);
+
+    button {
+        position: absolute;
+        border-radius: 50%;
+        padding: 1rem 1rem 1rem 1rem;
+        right: -1rem;
+        background: transparent;
+
+        &:hover {
+            background: $bg-color;
+        }
+    }
+
+    span {
+        color: $purple-2;
+    }
+}
+
+.wrapper {
+    background-color: white;
+    padding: 2rem 2rem;
+    position: relative;
+    height: 67rem;
+    border-radius: 30px
+}
+
+// .divider {
+//     height: 2px;
+//     width: 100%;
+// }
+
+.container {
+    @include flexbox(flex, unset, unset, flex-start);
+    width: 100%;
+    gap: 2rem;
+    margin-top: 4rem;
+
+    &.reverse {
+        @include flexbox(flex, row-reverse, unset, flex-start);
+    }
+}
+
+.message {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    &.reverse {
+        align-items: end
+    }
+
+    .messageLine {
+        @include fonts-styles(12px, normal);
+        background-color: #eceefe;
+        padding: 1rem;
+        border-radius: 0 1.5rem 1.5rem 1.5rem;
+        // border-radius: 1rem;
+        border-start-start-radius: 0;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+
+        &.user {
+            background-color: $purple-2;
+            color: white;
+            border-radius: 1.5rem 0 1.5rem 1.5rem;
+        }
+    }
+}
+
+.firstLine {
+    @include flexbox(flex, unset, unset, center);
+    gap: 1rem;
+
+    .sender-name {
+        @include fonts-styles(12px, bold)
+    }
+
+    &.reverse {
+        flex-direction: row-reverse;
+    }
+}
+
+.answers-divider {
+    color: $light-purple-lines;
+    @include flexbox(flex, unset, unset, center);
+    gap: 2rem;
+
+    .answers-count {
+        @include flexbox(flex, unset, unset, center);
+        gap: 1rem;
+    }
+
+    .stroke {
+        height: 1px;
+        width: 100%;
+        background-color: $light-purple-lines;
+        display: flex;
+    }
+}
+
+.reactions-container {
+    @include flexbox(flex, unset, unset, center);
+    gap: 1rem;
+
+    .reactions {
+        border-radius: 20px;
+        border: 1px solid $light-purple-lines;
+        padding: 0.5rem 1rem;
+        @include flexbox(flex, unset, unset, center);
+        gap: 1rem;
+
+        span {
+            @include fonts-styles(10px, normal)
+        }
+    }
+
+    button {
+        background-color: transparent;
+        @include flexbox(flex, unset, unset, center);
+    }
+}
+
+.input {
+    position: absolute;
+    padding: 2rem 2rem;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
