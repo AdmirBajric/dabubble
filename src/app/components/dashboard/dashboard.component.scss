@@ -24,7 +24,7 @@
     }
     display: grid;
     grid-template-columns: 32rem 1fr 1fr;
-    grid-template-rows: auto auto;
+    grid-template-rows: 10rem 70rem;
     row-gap: 1rem;
     column-gap: 2rem;
     height: 100vh;
@@ -51,12 +51,12 @@
 }
 
 .sidenav {
-    height: 67rem; // same as workspace
+    // height: 67rem; // same as workspace
     grid-area: nav;
 }
 
 .chat {
-    height: 67rem; // same as workspace
+    // height: 67rem; // same as workspace
     background-color: white;
     grid-area: chat;
     padding: 2rem;
@@ -74,6 +74,6 @@
 .threads {
     grid-area: thread;
     background-color: white;
-    height: 67rem;
+    // height: 67rem;
     border-radius: 30px;
 }
