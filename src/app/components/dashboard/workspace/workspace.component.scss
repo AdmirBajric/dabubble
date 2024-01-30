@@ -62,7 +62,7 @@ h2 {
 
     .drawer {
         width: 100%;
-        gap: 3rem;
+        gap: 1rem;
         display: grid;
         position: relative;
 
@@ -113,10 +113,12 @@ h2 {
 
 .btn-create-channel {
     @include flexbox(flex, unset, unset, center);
-    gap: 1.5rem;
-    margin-left: 5rem;
+    margin-left: 3.5rem;
+    padding: 2rem;
     background: transparent;
-    padding: 0 1rem;
+    border-radius: 3rem;
+    gap: 1.5rem;
+    width: 24rem;
 
     a {
         @include fonts-styles(17px, 400);
@@ -125,6 +127,10 @@ h2 {
         &.link-create {
             color: $purple-3;
         }
+    }
+
+    &:hover{
+        background-color: $bg-color;
     }
 }
 
