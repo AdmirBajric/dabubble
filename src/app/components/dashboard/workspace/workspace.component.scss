@@ -15,12 +15,10 @@ h2 {
     &:hover {
         cursor: pointer;
     }
+}
 
-    &.color-effect {
-        &:hover {
-            color: $purple-2;
-        }
-    }
+.margin-top {
+    margin-top: 1.2rem;
 }
 
 .workspace-wrapper {
@@ -36,6 +34,7 @@ h2 {
     flex-shrink: 0.5;
     align-self: center;
     padding: 1rem;
+
     &.show {
         animation: slide-out 225ms forwards;
     }
@@ -48,6 +47,7 @@ h2 {
         height: calc(100vh - 15rem);
         width: 26rem;
     }
+
     border-radius: 30px;
     max-width: 50rem;
 }
@@ -64,6 +64,7 @@ h2 {
         width: 100%;
         gap: 3rem;
         display: grid;
+        position: relative;
 
         &.fixed {
             position: fixed;
@@ -71,10 +72,19 @@ h2 {
             min-width: 24rem;
             width: unset;
         }
+
+        button {
+            &.btn-small-create-channel {
+                @include flexbox(flex, unset, unset, center);
+                position: absolute;
+                right: 0;
+                border-radius: 50%;
+                background: transparent;
+            }
+        }
     }
 
     .drawer-header {
-        margin-top: 1.5rem;
         position: relative;
         @include flexbox(flex, unset, unset, center);
         gap: 3rem;
@@ -86,33 +96,13 @@ h2 {
 
         img {
             &.rotate {
-                transform: rotate(-90deg);
-            }
-
-            &.invert {
-                &:hover {
-                    fill: $purple-2;
-                }
+                transform: rotate(90deg);
             }
         }
 
         span {
             @include flexbox(flex, unset, unset, center);
             gap: 1.5rem;
-        }
-
-        button {
-            @include flexbox(flex, unset, unset, center);
-            position: absolute;
-            right: 0;
-            border-radius: 50%;
-            padding: 1rem;
-            background: transparent;
-            transition: all 225ms ease;
-
-            &:hover {
-                background: $bg-color;
-            }
         }
     }
 }
@@ -124,7 +114,7 @@ h2 {
 .btn-create-channel {
     @include flexbox(flex, unset, unset, center);
     gap: 1.5rem;
-    margin-left: 2.2rem;
+    margin-left: 5rem;
     background: transparent;
     padding: 0 1rem;
 

@@ -20,7 +20,8 @@
     </div>
 
     <div *ngIf="threadIsOpen" class="threads">
-        <app-thread (closeThread)="closeThread()" [threadData]="selectedMessageForThread"></app-thread>
+        <app-chat-header (closeThread)="closeThread()" [styleHeaderForThread]="activateThreadHeader" [roomName]="selectedRoomName"></app-chat-header>
+        <app-thread [threadData]="selectedMessageForThread"></app-thread>
     </div>
 
     <div class="btn-toggle">

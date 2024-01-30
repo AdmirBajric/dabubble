@@ -3,19 +3,25 @@
         <app-workspace-header></app-workspace-header>
         <div class="drawer-container">
             <div class="drawer">
-                <div class="drawer-header" (click)="showChannels = !showChannels">
-                    <img [class.rotate]="!showChannels"
-                        src="./../../assets/img/arrow_drop_down.svg" alt="drop down" [class.invert]="!showChannels">
+                <div
+                 class="drawer-header" (click)="showChannels = !showChannels" appHoverChange [elementsConfig]="[ 
+                    {imageSelector: '.arrow', defaultSrc : './../../assets/img/arrow_drop_down.svg', hoverSrc: './../../assets/img/arrow_down_hover.svg'},  
+                    {imageSelector: '.channels', defaultSrc : './../../assets/img/workspaces_0_channels.svg', hoverSrc: './../../assets/img/workspaces_0_channels_hover.svg'}, 
+                    {textSelector: 'h2', defaultColor : '#000000', hoverColor: '#797ef3'}  
+                    ]">
+                    <img class="arrow" [class.rotate]="showChannels" src="./../../assets/img/arrow_drop_down.svg"
+                        alt="drop down">
                     <span>
-                        <img src="./../../assets/img/workspaces_0_channels.svg" alt="channels"
-                            [class.invert]="!showChannels">
-                        <h2 [class.color-effect]="!showChannels">
-                            Channels
-                        </h2>
+                        <img class="channels" src="./../../assets/img/workspaces_0_channels.svg" alt="channels">
+                        <h2>Channels</h2>
                     </span>
-                    <button (click)="openCreateChannel()"><img src='{{ "./../../assets/img/add_" + imageFlag + ".svg"}}'
-                            alt="adding channel"></button>
                 </div>
+
+                <button class="btn-small-create-channel" appHoverChange [elementsConfig]=" [
+                        { imageSelector: 'img', defaultSrc: defaultImagePath, hoverSrc: hoverImagePath }] "
+                        (click)="openCreateChannel()">
+                    <img src='{{ "./../../assets/img/add_" + imageFlag + ".svg"}}' alt="adding channel">
+                </button>
 
                 @if (showChannels) {
                 <ng-container *ngFor="let channel of user.channels">
@@ -29,11 +35,16 @@
 
         <div class="drawer-container scroll">
             <div class="drawer fixed">
-                <div class="drawer-header" (click)="showDMs = !showDMs">
-                    <img [class.rotate]="!showDMs" src="./../../assets/img/arrow_drop_down.svg" alt="drop down">
+                <div appHoverChange [elementsConfig]="[ 
+                            {imageSelector: '.arrow', defaultSrc : './../../assets/img/arrow_drop_down.svg', hoverSrc: './../../assets/img/arrow_down_hover.svg'},  
+                            {imageSelector: '.dms', defaultSrc : './../../assets/img/workspaces_1_DM.svg', hoverSrc: './../../assets/img/workspaces_1_DM_hover.svg'},
+                            {textSelector: 'h2', defaultColor : '#000000', hoverColor: '#797ef3'}  
+                            ]" class="drawer-header margin-top" (click)="showDMs = !showDMs">
+                    <img class="arrow" [class.rotate]="showDMs" src="./../../assets/img/arrow_drop_down.svg"
+                        alt="drop down">
                     <span>
-                        <img src="./../../assets/img/workspaces_1_DM.svg" alt="account circle">
-                        <h2 [class.color-effect]="!showDMs">Direktnachrichten</h2>
+                        <img class="dms" src="./../../assets/img/workspaces_1_DM.svg" alt="account circle">
+                        <h2>Direktnachrichten</h2>
                     </span>
                 </div>
 
@@ -55,3 +66,6 @@
     </div>
 
 </div>
+
+
+<!-- [ngStyle]=" {'height': !showChannels ? '5rem' : ''} " -->
