@@ -3,18 +3,18 @@
   <div>
     <div class="flex between">
       <div>
-        <button mat-mini-fab class="input-btn add">
-          <mat-icon>add</mat-icon>
+        <button appHoverChange [elementsConfig]="[ { imageSelector: 'img', defaultSrc: '../../assets/img/add_message_input.svg', hoverSrc: '../../assets/img/add_message_input_hover.svg' } ]" class="input-btn add">
+          <img src="../../assets/img/add_message_input.svg" alt="add-file">
         </button>
-        <button mat-mini-fab class="input-btn">
-          <mat-icon>sentiment_satisfied</mat-icon>
+        <button appHoverChange [elementsConfig]="[ { imageSelector: 'img', defaultSrc: '../../assets/img/add_message_emoji.svg', hoverSrc: '../../assets/img/add_message_emoji_hover.svg' } ]" class="input-btn">
+          <img src="../../assets/img/add_message_emoji.svg" alt="add-emoji">
         </button>
-        <button mat-mini-fab class="input-btn">
-          <mat-icon>alternate_email</mat-icon>
+        <button appHoverChange [elementsConfig]="[ { imageSelector: 'img', defaultSrc: '../../assets/img/add_message_@.svg', hoverSrc: '../../assets/img/add_message_@_hover.svg' } ]" class="input-btn">
+          <img src="../../assets/img/add_message_@.svg" alt="@">
         </button>
       </div>
-      <button mat-mini-fab class="input-btn send">
-        <mat-icon>send</mat-icon>
+      <button appHoverChange [elementsConfig]="[ { imageSelector: 'img', defaultSrc: '../../assets/img/send_message.svg', hoverSrc: '../../assets/img/send_message_hover.svg' } ]" class="input-btn send">
+        <img src="../../assets/img/send_message.svg" alt="">
       </button>
     </div>
   </div>
