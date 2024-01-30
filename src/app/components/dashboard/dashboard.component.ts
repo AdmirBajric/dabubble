@@ -35,20 +35,23 @@ export class DashboardComponent implements OnInit {
     threadIsOpen: boolean = true;
     gridAreaRegulation: string = 'nct';
     selectedMessageForThread: any[] = [];
-    selectedRoomName: string = 'Entwicklerteam'
+    selectedRoomName: string = 'Entwicklerteam';
+    activateThreadHeader: boolean = true; // must be set to true, because the default grid style shows all 3 main components of dashboard
+
     ngOnInit(): void {
         this.handleGridAreaToggle();
     }
 
     handleThread(answers: any[]) {
         this.selectedMessageForThread = answers;
-        console.log('dasboard:', answers);
         this.threadIsOpen = true;
+        this.activateThreadHeader = true;
         this.handleGridAreaToggle();
     }
 
     closeThread() {
         this.threadIsOpen = false;
+        this.activateThreadHeader = false;
         this.handleGridAreaToggle();
     }
 

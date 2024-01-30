@@ -1,11 +1,15 @@
-<section class="wrapper">
-    <div (click)="openEditChannel()" class="header-left">
-        <span>#</span>
-        <h1> {{ roomName }} </h1>
-        <img src="../../../../assets/img/arrow_down_unfilled.svg" alt="drop down">
+<section [class.thread]="styleHeaderForThread" class="wrapper">
+    <div [ngClass]=" styleHeaderForThread ? 'thread-header' : 'header-left' " (click)=" styleHeaderForThread ? null : openEditChannel()">
+        <h1 *ngIf="styleHeaderForThread">Thread</h1>
+        <div class="name">
+            <span>#</span>
+            <h1> {{ roomName }} </h1>
+        </div>
+        <img *ngIf="!styleHeaderForThread" src="../../../../assets/img/arrow_down_unfilled.svg" alt="drop down">
+        <img (click)="exitThread()" *ngIf="styleHeaderForThread" src="../../../../assets/img/exit_X.svg" alt="exit">
     </div>
 
-    <div class="header-right">
+    <div *ngIf="!styleHeaderForThread" class="header-right">
         Channelmitglieder
     </div>
 </section>
