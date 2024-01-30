@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { MessageComponent } from "../chat/message/message.component";
 import { WorkspaceComponent } from "./workspace/workspace.component";
-import { UserProfileNavComponent } from "../profile/user-profile-nav/user-profile-nav.component";
 import { LogoComponent } from "../shared/logo/logo.component";
 import { SearchbarComponent } from "../shared/searchbar/searchbar.component";
 import { ThreadComponent } from "../chat/thread/thread.component";
@@ -20,7 +19,6 @@ import { ChatHeaderComponent } from "../shared/chat-header/chat-header.component
         CommonModule,
         WorkspaceComponent,
         MessageComponent,
-        UserProfileNavComponent,
         LogoComponent,
         SearchbarComponent,
         ThreadComponent,
