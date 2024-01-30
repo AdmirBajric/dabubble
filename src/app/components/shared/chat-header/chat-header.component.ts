@@ -2,11 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { ChannelEditComponent } from '../../chat/channel/channel-edit/channel-edit.component';
 import { ButtonFunctionService } from "../../../services/button-function.service";
-
+import { HoverChangeDirective } from "../../../directives/hover-change.directive";
 @Component({
   selector: 'app-chat-header',
   standalone: true,
-  imports: [ChannelEditComponent, CommonModule],
+  imports: [ChannelEditComponent, CommonModule, HoverChangeDirective],
   templateUrl: './chat-header.component.html',
   styleUrl: './chat-header.component.scss'
 })

@@ -5,7 +5,7 @@ import { WorkspaceHeaderComponent } from './workspace-header/workspace-header.co
 import { ChannelListItemComponent } from './channel-list-item/channel-list-item.component';
 import { DirectMessageListItemComponent } from './direct-message-list-item/direct-message-list-item.component';
 import { ButtonFunctionService } from "../../../services/button-function.service";
-
+import { HoverChangeDirective } from '../../../directives/hover-change.directive';
 @Component({
   selector: 'app-workspace',
   standalone: true,
@@ -16,7 +16,8 @@ import { ButtonFunctionService } from "../../../services/button-function.service
     CommonModule,
     DirectMessageListItemComponent,
     RouterModule,
-    WorkspaceHeaderComponent
+    WorkspaceHeaderComponent,
+    HoverChangeDirective
   ]
 })
 export class WorkspaceComponent implements OnInit {
@@ -45,6 +46,17 @@ export class WorkspaceComponent implements OnInit {
     this.screenWidth = window.innerWidth;
     // ###### i put the logic here, but there must be a slimmer way######
     this.checkImageFlag();
+  }
+
+  // ############################# for STYLES #############################  
+  // ######################################################################  
+
+  get defaultImagePath(){
+    return `./../../assets/img/add_${this.imageFlag}.svg`;
+  }
+
+  get hoverImagePath() {
+    return `./../../assets/img/add_${this.imageFlag}_hover.svg`;
   }
 
   checkImageFlag(){
