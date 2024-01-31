@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {
@@ -23,10 +23,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   templateUrl: './input.component.html',
   styleUrl: './input.component.scss',
 })
-export class InputComponent {
+export class InputComponent implements OnInit {
   constructor(public router: Router) {}
   isInputActive: boolean = false;
-
+  @Input() initialValue: string = '';
   @Input() inputType: string = 'text';
   @Input() pattern: string = '';
   @Input() img: string = '';
@@ -39,6 +39,10 @@ export class InputComponent {
 
   @Output() validityChanged: EventEmitter<boolean> =
     new EventEmitter<boolean>();
+
+  ngOnInit() {
+    this.formControl.setValue(this.initialValue);
+  }
 
   handleFocus() {
     this.isInputActive = true;

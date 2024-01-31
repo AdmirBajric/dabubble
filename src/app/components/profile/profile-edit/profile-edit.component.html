@@ -6,7 +6,7 @@
 
   <mat-card-content>
     <div class="content-img">
-      <img mat-card-image [src]="userImg" />
+      <img mat-card-image loading="lazy" [src]="userImg" />
     </div>
 
     <div class="content-user-info">
@@ -25,6 +25,7 @@
               pattern="^[A-Za-z]+ [A-Za-z]+$"
               inputType="text"
               [placeholder]="userFullName"
+              [initialValue]="userFullName"
               (validityChanged)="onValidityChanged('name', $event)"
             ></app-input>
           </div>
@@ -44,6 +45,7 @@
               pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
               inputType="email"
               [placeholder]="userEmail"
+              [initialValue]="userEmail"
               (validityChanged)="onValidityChanged('email', $event)"
             ></app-input>
           </div>
@@ -53,7 +55,7 @@
   </mat-card-content>
 
   <mat-card-actions>
-    <button class="abort"(click)="onNoClick()">Abbrechen</button>
+    <button class="abort" (click)="onNoClick()">Abbrechen</button>
     <button class="save" (click)="saveUser()">Speichern</button>
   </mat-card-actions>
 </mat-card>

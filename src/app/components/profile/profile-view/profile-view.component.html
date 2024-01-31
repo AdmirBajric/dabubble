@@ -6,17 +6,15 @@
 
   <mat-card-content>
     <div class="content-img">
-      <img mat-card-image [src]="userImg" />
+      <img mat-card-image loading="lazy" [src]="userImg" />
     </div>
 
     <div class="content-user-info">
       <div class="user-info">
         <p>{{ userFullName }}</p>
         <ng-container *ngIf="ifUserAcc">
-          <a (click)="editAccount($event)" *ngIf="!mobileView" routerLink=""
-            >Bearbeiten</a
-          >
-          <a (click)="editAccount($event)" *ngIf="mobileView" routerLink=""
+          <a (click)="editAccount(userId)" *ngIf="!mobileView">Bearbeiten</a>
+          <a (click)="editAccount(userId)" *ngIf="mobileView"
             ><mat-icon>edit</mat-icon></a
           >
         </ng-container>

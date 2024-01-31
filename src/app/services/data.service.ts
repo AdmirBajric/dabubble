@@ -10,6 +10,8 @@ export class DataService {
   currentUser = this.userSource.asObservable();
   private createdUserSource = new BehaviorSubject<any | null>(null);
   newCreatedUser = this.createdUserSource.asObservable();
+  private userIdSource = new BehaviorSubject<string | null>(null);
+  currentUserId = this.userIdSource.asObservable();
 
   changeUser(user: User): void {
     this.userSource.next(user);
@@ -17,5 +19,9 @@ export class DataService {
 
   setCreatedUser(createdUser: any): void {
     this.createdUserSource.next(createdUser);
+  }
+
+  sendUserId(userId: string): void {
+    this.userIdSource.next(userId);
   }
 }

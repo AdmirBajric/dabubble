@@ -177,7 +177,7 @@ export class SelectAvatarComponent {
   async saveToFirestore() {
     try {
       const itemCollection = collection(this.firestore, 'users');
-      const newDocRef = await addDoc(itemCollection, this.user.toJSON());
+      const newDocRef = await addDoc(itemCollection, this.user);
       if (newDocRef.id) {
         this.router.navigate(['/verify-email']);
       }

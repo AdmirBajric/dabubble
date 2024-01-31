@@ -1,4 +1,4 @@
-<div [ngClass]="router.url === '/thread' ? 'no-absolute' : 'absolute'" id="profile-menu-container">
+<div id="profile-menu-container">
   <ng-container *ngIf="!mobileView">
     <div class="profile-menu-name">
       <p>{{ fullName }}</p>
@@ -6,26 +6,19 @@
 
     <div class="profile-menu-img">
       <img src="{{ img }}" alt="Profile image" />
-      <mat-icon [ngClass]="{ online: isActiveUser, offline: !isActiveUser }"
+      <mat-icon [ngClass]="{ online: isUserOnline, offline: !isUserOnline }"
         >circle</mat-icon
       >
     </div>
 
     <div class="profile-menu-navbar">
-      <mat-icon (click)="openDesktopDialog()">expand_more</mat-icon>
+      <mat-icon (click)="openDesktopDialog(userId)">expand_more</mat-icon>
     </div>
   </ng-container>
 
   <ng-container *ngIf="mobileView">
-    <div
-      [class.flex]="router.url === '/thread'"
-      style="justify-self: flex-end"
-      (click)="openBottomSheet()"
-      class="profile-menu-img"
-    >
-      <img 
-        [ngClass]="router.url === '/thread' ? 'small' : 'big'"
-        src="{{ img }}" alt="Profile image" />
+    <div (click)="openBottomSheet()" class="profile-menu-img">
+      <img src="{{ img }}" alt="Profile image" />
     </div>
   </ng-container>
 </div>

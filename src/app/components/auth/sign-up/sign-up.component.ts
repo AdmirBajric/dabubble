@@ -105,7 +105,7 @@ export class SignUpComponent {
   navigateAndSendUser(): void {
     this.user.fullName = this.createFullName(this.user.fullName);
     this.user.email = this.user.email.toLowerCase();
-    const userToSend = this.user;
+    const { password, ...userToSend } = this.user;
     this.registerUser(userToSend);
   }
 
