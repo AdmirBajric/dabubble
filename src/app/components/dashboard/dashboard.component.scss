@@ -60,24 +60,12 @@
 }
 
 .chat {
-    // height: 67rem; // same as workspace
     background-color: white;
     grid-area: chat;
-    padding: 2rem;
     position: relative;
-    border-radius: 30px;
-
-    .chat-input{
-        position: absolute;
-        bottom: 2rem;
-        left: 2rem;
-        right: 2rem;
-    }
 }
 
 .threads {
     grid-area: thread;
     background-color: white;
-    // height: 67rem;
-    border-radius: 30px;
 }
