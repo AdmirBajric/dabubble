@@ -111,7 +111,7 @@ export class LoginComponent implements OnInit {
         .then((userCredential) => {
           this.errorMessage = false;
           const user = userCredential.user;
-          this.showSuccessAnimation('/sign-out');
+          this.showSuccessAnimation('/dashboard');
         })
         .catch((error) => {
           this.errorMessage = true;
@@ -126,7 +126,7 @@ export class LoginComponent implements OnInit {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        this.showSuccessAnimation('/sign-out');
+        this.showSuccessAnimation('/dashboard');
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -138,7 +138,7 @@ export class LoginComponent implements OnInit {
     this.errorMessage = false;
     signInWithPopup(this.auth, new GoogleAuthProvider())
       .then((user) => {
-        this.showSuccessAnimation('/sign-out');
+        this.showSuccessAnimation('/dashboard');
       })
       .catch((error) => {
         console.log(error);

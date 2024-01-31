@@ -1,4 +1,10 @@
-import { Component, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Renderer2,
+  OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   MatDialog,
@@ -8,6 +14,7 @@ import {
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { ProfileEditComponent } from '../profile-edit/profile-edit.component';
+import { DataService } from '../../../services/data.service';
 
 @Component({
   selector: 'app-profile-view',
@@ -16,15 +23,17 @@ import { ProfileEditComponent } from '../profile-edit/profile-edit.component';
   templateUrl: './profile-view.component.html',
   styleUrl: './profile-view.component.scss',
 })
-export class ProfileViewComponent {
+export class ProfileViewComponent implements OnInit {
   isActiveUser: boolean = true;
   ifUserAcc: boolean = true;
   userImg: string = '../../assets/img/person.svg';
-  userFullName: string = 'Sofia Müller';
-  userEmail: string = 'email@gmail.com';
+  userFullName: string = '';
+  userEmail: string = '';
+  userId: string = '';
   mobileView: boolean = false;
   windowWidth: number = 0;
   constructor(
+    private dataService: DataService,
     public dialog: MatDialog,
     private el: ElementRef,
     private renderer: Renderer2,
@@ -32,14 +41,27 @@ export class ProfileViewComponent {
   ) {}
 
   ngOnInit(): void {
+    this.dataService.currentUserId.subscribe((userId) => {
+      if (userId) {
+        this.showUserDetails(userId);
+      }
+    });
     this.checkWindowSize();
+  }
 
-    const user = localStorage.getItem('user');
-    if (user !== null) {
-      const newUser = JSON.parse(user);
-      this.userFullName = newUser.fullName;
-      this.userEmail = newUser.email;
-      this.ifUserAcc = true;
+  showUserDetails(userId: string) {
+    const allUsers = localStorage.getItem('users');
+    if (allUsers) {
+      const users = JSON.parse(allUsers);
+      users.forEach((user: any) => {
+        if (user.id === userId) {
+          this.userImg = user.avatar;
+          this.userFullName = user.fullName;
+          this.userEmail = user.email;
+          this.userId = user.id;
+          this.ifUserAcc = true;
+        }
+      });
     }
   }
 
@@ -68,8 +90,13 @@ export class ProfileViewComponent {
     this.dialogRef.close();
   }
 
-  editAccount(event: any) {
+  editAccount(userId: string) {
     this.onNoClick();
     this.dialog.open(ProfileEditComponent);
+    this.sendUserId(userId);
+  }
+
+  sendUserId(userId: string): void {
+    this.dataService.sendUserId(userId);
   }
 }

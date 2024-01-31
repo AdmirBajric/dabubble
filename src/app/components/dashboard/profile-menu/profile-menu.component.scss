@@ -1,56 +1,44 @@
 @import "./../../../colors.scss";
 @import "./../../../mixins.scss";
 
+@media only screen and (max-width: 1100px) {
+  .profile-menu-img {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+
+    img {
+      width: 5rem !important;
+      height: 5rem !important;
+      border-radius: 2.5rem !important;
+    }
+  }
+}
+
 #profile-menu-container {
+  width: 34.2rem;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 2rem;
 
-  &.absolute {
-    position: absolute;
-    width: 29rem;
-  }
-
-  &.no-absolute {
-    position: unset;
-  }
-
-  @media only screen and (min-width: 1100px) and (min-height: 1100px) {
-    width: unset;
-    gap: 1rem;
-  }
-
   .profile-menu-name {
     p {
       @include fonts-styles(3.2rem, 700);
       line-height: normal;
-
-      @media only screen and (min-width: 100px) and (min-height: 1100px) {
-        @include fonts-styles(2.2rem, bold);
-      }
     }
   }
 
   .profile-menu-img {
     width: 7rem;
     height: 7rem;
+    border-radius: 3.5rem;
     position: relative;
 
-    &.flex {
-      @include flexbox(flex, unset, flex-end, center);
-    }
-
     img {
-      &.big {
-        width: 7rem;
-        height: 7rem;
-      }
-
-      &.big {
-        width: 5rem;
-        height: 5rem;
-      }
+      width: 7rem;
+      height: 7rem;
+      border-radius: 3.5rem;
     }
 
     mat-icon {
