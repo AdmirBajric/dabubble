@@ -7,21 +7,22 @@
 
     <div class="sidenav"><app-workspace [isOpen]="workspaceIsOpen"></app-workspace></div>
 
-    <div class="chat">
-        <app-chat-header [roomName]="selectedRoomName"></app-chat-header>
+    <div class="chat border-radius-3">
+        <app-main-chat [roomName]="selectedRoomName" class="border-radius-3"></app-main-chat>
+        <!-- <app-chat-header [roomName]="selectedRoomName"></app-chat-header>
       
         <div *ngFor="let message of messages; let i = index;">
             <app-message [message]="message" (showThread)="handleThread($event)"></app-message>
         </div>
         <div class="chat-input">
             <app-message-input></app-message-input>
-        </div>
+        </div> -->
 
     </div>
 
-    <div *ngIf="threadIsOpen" class="threads">
+    <div *ngIf="threadIsOpen" class="threads border-radius-3">
         <app-chat-header (closeThread)="closeThread()" [styleHeaderForThread]="activateThreadHeader" [roomName]="selectedRoomName"></app-chat-header>
-        <app-thread [threadData]="selectedMessageForThread"></app-thread>
+        <app-thread [threadData]="selectedMessageForThread" class="border-radius-3"></app-thread>
     </div>
 
     <div class="btn-toggle">

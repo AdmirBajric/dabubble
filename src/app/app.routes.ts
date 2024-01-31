@@ -18,7 +18,7 @@ import { VerificationSuccessComponent } from './components/auth/verification-suc
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileMenuComponent } from './components/dashboard/profile-menu/profile-menu.component';
 import { ThreadComponent } from './components/chat/thread/thread.component';
-
+import { MainChatComponent } from "./components/chat/main-chat/main-chat.component";
 export const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'send-mail-pw', component: SendMailPwComponent },
@@ -49,4 +49,5 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'profile', component: ProfileMenuComponent },
   { path: 'thread', component: ThreadComponent },
+  { path: 'main-chat', component: MainChatComponent },
 ];
