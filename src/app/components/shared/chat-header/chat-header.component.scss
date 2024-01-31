@@ -1,15 +1,29 @@
 @import "../../../colors.scss";
 @import "../../../mixins.scss";
 
+h1 {
+    font-size: 2rem; // must be set to global styles
+}
+
+.header-divider {
+    width: 100%;
+    box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.08);
+    height: 3px;
+    border: 1px dotted red;
+}
+
 .wrapper {
     @include flexbox(flex, unset, space-between, center);
     height: 5rem;
+    background-color: white;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
 
     .header-left {
         @include flexbox(flex, unset, unset, center);
         gap: 2rem;
         border-radius: 100px;
-        padding: 1rem 1rem;
         transition: all 225ms;
 
         &:hover {
