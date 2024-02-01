@@ -16,7 +16,6 @@ export class NewMessageComponent {
     constructor(private routeService: RouteService) { }
 
     get isNotDashboard() {
-        console.log('hallo?');
         return !this.routeService.checkRoute('/dashboard');
     }
 }
