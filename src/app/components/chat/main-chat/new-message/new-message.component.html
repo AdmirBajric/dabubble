@@ -1,0 +1,12 @@
+<div class="wrapper wrapper-padding" [ngStyle]="{'height': isNotDashboard ? '100vh' : ''}" >
+    <section class="head">
+        <h1>Neue Nachricht</h1>
+        <div class="search">
+           <app-searchbar [showBorder]="true" [showLoupe]="false" [placeholder]="inputPlaceholder"></app-searchbar>
+        </div>
+    </section>
+    <section class="content"></section>
+    <section class="chat-input">
+        <app-message-input></app-message-input>
+    </section>
+</div>

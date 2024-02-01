@@ -1,0 +1,15 @@
+@import "../../../../mixins.scss";
+
+h1 {
+    font-size: 2.4rem;
+}
+
+.wrapper {
+    background-color: white;
+    position: relative;
+}
+
+.head {
+    @include flexbox(flex, column, unset, unset);
+    gap: 2rem;
+}
