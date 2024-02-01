@@ -7,9 +7,7 @@ import { ImpressumComponent } from './components/legal/impressum/impressum.compo
 import { SendMailPwComponent } from './components/auth/send-mail-pw/send-mail-pw.component';
 import { ResetPwComponent } from './components/auth/reset-pw/reset-pw.component';
 import { WorkspaceComponent } from './components/dashboard/workspace/workspace.component';
-import { ForTestComponent } from './for-test/for-test.component';
 import { AuthGuard } from '../app/guards/auth.guard';
-import { TestSignOutComponent } from './test-sign-out/test-sign-out.component';
 import { EmojiPickerComponent } from './components/emoji-picker/emoji-picker.component';
 import { CreateChannelComponent } from './components/shared/dialogs/create-channel/create-channel.component';
 import { EmojisComponent } from './components/shared/emojis/emojis.component';
@@ -43,9 +41,7 @@ export const routes: Routes = [
   },
   { path: 'privacy-policy', component: PrivacyPolicyComponent },
   { path: 'impressum', component: ImpressumComponent },
-  { path: 'for-testing', component: ForTestComponent },
   { path: 'emoji', component: EmojisComponent },
-  { path: 'sign-out', component: TestSignOutComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'profile', component: ProfileMenuComponent },
   { path: 'thread', component: ThreadComponent },

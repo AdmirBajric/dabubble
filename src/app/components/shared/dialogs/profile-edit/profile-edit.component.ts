@@ -9,9 +9,9 @@ import { CommonModule } from '@angular/common';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { InputComponent } from '../../shared/input/input.component';
+import { InputComponent } from '../../input/input.component';
 import { FormsModule } from '@angular/forms';
-import { DataService } from '../../../services/data.service';
+import { DataService } from '../../../../services/data.service';
 import { getAuth } from '@angular/fire/auth';
 import {
   Firestore,

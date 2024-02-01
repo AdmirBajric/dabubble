@@ -4,7 +4,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
-import { ProfileViewComponent } from '../../profile/profile-view/profile-view.component';
+import { ProfileViewComponent } from '../../shared/dialogs/profile-view/profile-view.component';
 import { Router } from '@angular/router';
 import { LogoutService } from '../../../services/logout.services';
 

@@ -14,7 +14,7 @@ import {
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { ProfileEditComponent } from '../profile-edit/profile-edit.component';
-import { DataService } from '../../../services/data.service';
+import { DataService } from '../../../../services/data.service';
 
 @Component({
   selector: 'app-profile-view',
