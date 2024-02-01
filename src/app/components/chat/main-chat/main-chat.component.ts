@@ -4,11 +4,12 @@ import { ChatHeaderComponent } from "../../shared/chat-header/chat-header.compon
 import { MessageInputComponent } from "../../shared/message-input/message-input.component";
 import { MessageComponent } from "../../chat/message/message.component";
 import { RouteService } from "../../../services/route.service";
-
+import { HoverChangeDirective } from "../../../directives/hover-change.directive";
+import { RouterLink } from "@angular/router";
 @Component({
     selector: 'app-main-chat',
     standalone: true,
-    imports: [ChatHeaderComponent, CommonModule, MessageComponent, MessageInputComponent],
+    imports: [ChatHeaderComponent, CommonModule, HoverChangeDirective, MessageComponent, MessageInputComponent, RouterLink],
     templateUrl: './main-chat.component.html',
     styleUrl: './main-chat.component.scss'
 })
