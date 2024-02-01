@@ -20,11 +20,11 @@
     </div>
 
     <div class="header-right">
-        <div class="desktop-view">
+        <div *ngIf="!styleHeaderForThread">
             Channelmitglieder-Avatar
             3
         </div>
-        <button class="btn-50" appHoverChange [elementsConfig]="[ { imageSelector: 'img', defaultSrc: '../../../../assets/img/add_member_black.svg',  hoverSrc: '../../../../assets/img/add_member_hover.svg'} ]">
+        <button *ngIf="!styleHeaderForThread" class="btn-50" appHoverChange [elementsConfig]="[ { imageSelector: 'img', defaultSrc: '../../../../assets/img/add_member_black.svg',  hoverSrc: '../../../../assets/img/add_member_hover.svg'} ]">
             <img src="../../../../assets/img/add_member_black.svg" alt="add-member">
         </button>
     </div>
