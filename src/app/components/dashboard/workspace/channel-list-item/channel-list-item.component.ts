@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { Router, RouterModule } from "@angular/router";
-
+import { HoverChangeDirective } from "../../../../directives/hover-change.directive";
 @Component({
   selector: 'app-channel-list-item',
   standalone: true,
   imports: [
+    HoverChangeDirective,
     RouterModule
   ],
   templateUrl: './channel-list-item.component.html',

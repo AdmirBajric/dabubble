@@ -12,7 +12,9 @@
     <div *ngIf="router.url === '/thread'">
         <app-profile-menu></app-profile-menu>
     </div>
-    <button *ngIf="router.url !== '/thread'">
+
+    <button *ngIf="router.url !== '/thread'" appHoverChange
+        [elementsConfig]=" [ { imageSelector: 'img', defaultSrc: './../../assets/img/workspace_4_desktop_write_square_black.svg', hoverSrc: './../../assets/img/workspace_4_desktop_write_square_black_hover.svg' } ] ">
         <img src="./../../assets/img/workspace_4_desktop_write_square_black.svg" alt="write message">
     </button>
 

@@ -1,4 +1,7 @@
-<div class="link-2-channels">
+<a appHoverChange [elementsConfig]="[
+    { imageSelector: 'img', defaultSrc: './../../assets/img/hash.svg', hoverSrc: './../../assets/img/hash_hover.svg' },
+    { textSelector: 'span', defaultColor: '#000000', hoverColor: '#535AF1' }
+    ]" [routerLink]="['/channel', channels.name]">
     <img src="./../../assets/img/hash.svg" alt="#">
-    <a [routerLink]="['/channel', channels.name]">{{ channels.name }}</a>
-</div>
+    <span>{{ channels.name }}</span>
+</a>

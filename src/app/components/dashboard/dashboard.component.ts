@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { MessageComponent } from "../chat/message/message.component";
 import { WorkspaceComponent } from "./workspace/workspace.component";
-import { UserProfileNavComponent } from "../profile/user-profile-nav/user-profile-nav.component";
 import { LogoComponent } from "../shared/logo/logo.component";
 import { SearchbarComponent } from "../shared/searchbar/searchbar.component";
 import { ThreadComponent } from "../chat/thread/thread.component";
@@ -20,7 +19,6 @@ import { ChatHeaderComponent } from "../shared/chat-header/chat-header.component
         CommonModule,
         WorkspaceComponent,
         MessageComponent,
-        UserProfileNavComponent,
         LogoComponent,
         SearchbarComponent,
         ThreadComponent,
@@ -35,20 +33,23 @@ export class DashboardComponent implements OnInit {
     threadIsOpen: boolean = true;
     gridAreaRegulation: string = 'nct';
     selectedMessageForThread: any[] = [];
-    selectedRoomName: string = 'Entwicklerteam'
+    selectedRoomName: string = 'Entwicklerteam';
+    activateThreadHeader: boolean = true; // must be set to true, because the default grid style shows all 3 main components of dashboard
+
     ngOnInit(): void {
         this.handleGridAreaToggle();
     }
 
     handleThread(answers: any[]) {
         this.selectedMessageForThread = answers;
-        console.log('dasboard:', answers);
         this.threadIsOpen = true;
+        this.activateThreadHeader = true;
         this.handleGridAreaToggle();
     }
 
     closeThread() {
         this.threadIsOpen = false;
+        this.activateThreadHeader = false;
         this.handleGridAreaToggle();
     }
 

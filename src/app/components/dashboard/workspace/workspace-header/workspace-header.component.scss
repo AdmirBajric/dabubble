@@ -30,14 +30,11 @@ button {
     @include flexbox (flex, unset, unset, center);
     position: absolute;
     right: 0;
-    border-radius: 50%;
-    padding: 1rem;
     background: transparent;
-    transition: all 225ms ease;
 
-    &:hover {
-        background: $bg-color;
-
+    img {
+        height: 4rem;
+        width: 4rem;
     }
 }
 

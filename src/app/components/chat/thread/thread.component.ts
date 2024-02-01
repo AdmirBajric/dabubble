@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, Renderer2 } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, Renderer2 } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { EmojisComponent } from "../../shared/emojis/emojis.component";
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
@@ -14,7 +14,6 @@ import { Router } from "@angular/router";
 })
 export class ThreadComponent implements OnInit {
   @Input() threadData!: any;
-  @Output() closeThread = new EventEmitter<any[]>();
 
   loggedUser = "Julius Marecek";
   answersCount!: number;
@@ -53,10 +52,6 @@ export class ThreadComponent implements OnInit {
     } else {
       this.mobileView = false;
     }
-  }
-
-  exitThread() {
-    this.closeThread.emit();
   }
 
   ngOnInit() {

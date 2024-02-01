@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HoverChangeDirective } from "../../../directives/hover-change.directive";
 
 
 @Component({
   selector: 'app-button-workspace',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, HoverChangeDirective],
   templateUrl: './button-workspace.component.html',
   styleUrl: './button-workspace.component.scss'
 })
