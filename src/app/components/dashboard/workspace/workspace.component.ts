@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, HostListener, Input, OnInit, Output, Renderer2 } from '@angular/core';
 import { Router, RouterModule } from "@angular/router";
 import { WorkspaceHeaderComponent } from './workspace-header/workspace-header.component';
 import { ChannelListItemComponent } from './channel-list-item/channel-list-item.component';
 import { DirectMessageListItemComponent } from './direct-message-list-item/direct-message-list-item.component';
 import { ButtonFunctionService } from "../../../services/button-function.service";
 import { HoverChangeDirective } from '../../../directives/hover-change.directive';
+import { EventEmitter } from '@angular/core';
 @Component({
   selector: 'app-workspace',
   standalone: true,
@@ -27,6 +28,12 @@ export class WorkspaceComponent implements OnInit {
   screenWidth: number;
   imageFlag!: string;
   @Input() isOpen: boolean = true;
+  // ********************** redirecting input event as output boolean to parent component
+  showChannelContent!: boolean;
+  @Output() openChannelChat = new EventEmitter<boolean>();
+  
+  showNewChat!: boolean;
+  @Output() openChatWriteNewMessage = new EventEmitter<boolean>();
 
   constructor(
     private router: Router,
@@ -37,7 +44,7 @@ export class WorkspaceComponent implements OnInit {
     this.checkImageFlag();
   }
 
-  openCreateChannel(){
+  openCreateChannel() {
     this.btnService.openCreateChannel();
   }
 
@@ -46,6 +53,16 @@ export class WorkspaceComponent implements OnInit {
     this.screenWidth = window.innerWidth;
     // ###### i put the logic here, but there must be a slimmer way######
     this.checkImageFlag();
+  }
+
+  showNewMessage() {
+    this.showNewChat = true;
+    this.openChatWriteNewMessage.emit(this.showNewChat);
+  }
+
+  showChannelChat() {
+    this.showChannelContent = true;
+    this.openChannelChat.emit(this.showChannelContent);
   }
 
   // ############################# for STYLES #############################  
