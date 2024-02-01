@@ -1,7 +1,7 @@
 <div class="db-main" [ngClass]="'grid-template-' + gridAreaRegulation">
     <div class="logo"><app-logo></app-logo></div>
 
-    <div class="searchbar"><app-searchbar></app-searchbar></div>
+    <div class="searchbar"><app-searchbar [showBorder]="false" [showLoupe]="true" [placeholder]="'Code learning durchsuchen'"></app-searchbar></div>
 
     <div class="profile-menu"><app-profile-menu></app-profile-menu></div>
 
@@ -9,15 +9,7 @@
 
     <div class="chat border-radius-3">
         <app-main-chat [roomName]="selectedRoomName" class="border-radius-3"></app-main-chat>
-        <!-- <app-chat-header [roomName]="selectedRoomName"></app-chat-header>
-      
-        <div *ngFor="let message of messages; let i = index;">
-            <app-message [message]="message" (showThread)="handleThread($event)"></app-message>
-        </div>
-        <div class="chat-input">
-            <app-message-input></app-message-input>
-        </div> -->
-
+        
     </div>
 
     <div *ngIf="threadIsOpen" class="threads border-radius-3">
