@@ -1,6 +1,17 @@
 @import "./../../../colors.scss";
 @import "./../../../mixins.scss";
 
+@media only screen and (max-height: 800px) {
+  #start-screen {
+    align-items: unset !important;
+  }
+
+  .login-container {
+    margin-top: 2rem !important;
+    margin-bottom: 2rem !important;
+  }
+}
+
 @media only screen and (min-width: 1100px) {
   #start-screen {
     align-items: flex-start !important;
@@ -19,6 +30,7 @@
       font-weight: normal !important;
       color: rgba(121, 126, 243, 0.7) !important;
       transition: color 225ms ease;
+      margin-bottom: 2rem !important;
 
       &:hover {
         color: rgba(121, 126, 243, 1) !important;
@@ -27,12 +39,11 @@
   }
 
   .card-content {
-    margin-top: 8rem !important;
     padding: 5rem !important;
-    height: 71.9rem !important;
+    height: 66rem !important;
     width: 60.6rem !important;
     justify-content: unset !important;
-    gap: 4rem;
+    gap: 4rem !important;
   }
 
   .form-btn-container {
@@ -51,11 +62,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 2rem;
-    position: absolute;
-    bottom: 7.5rem;
     opacity: 0;
     @include animation(showLoginContainer, 0.5s, 2.4s, 1);
+    margin-bottom: 3rem;
+    margin-top: 3rem;
 
     .impressum,
     .privacy-policy {
@@ -80,7 +90,7 @@
 
 @media only screen and (min-width: 1100px) and (min-height: 800px) {
   .card-content {
-    height: 69rem !important;
+    height: 66rem !important;
   }
 
   .legalContentContainer {
@@ -97,11 +107,28 @@
 }
 
 @media only screen and (max-width: 1099px) {
+  .login-success {
+    width: 34rem !important;
+    bottom: 28rem !important;
+    right: 1.8rem !important;
+    padding: 2rem !important;
+    p {
+      font-size: 2rem !important;
+    }
+  }
+
+  .main-login-container {
+    overflow: auto !important;
+    margin-top: 0rem !important;
+  }
+
   .legalContentContainer {
     display: none;
   }
 
   .card-content {
+    margin-top: 3rem !important;
+    margin-bottom: 0rem !important;
     h1 {
       font-size: 3.2rem !important;
       margin-bottom: 1.5rem !important;
@@ -121,8 +148,8 @@
   @include flex-center();
   position: relative;
   @include animation(changeBackground, 0.5s, 2.4s, 1);
+  overflow: auto;
 
-  /* Optional: Hide scrollbars */
   #start-screen::-webkit-scrollbar {
     width: 0.5em;
   }
@@ -287,86 +314,93 @@ h1 {
   height: 100vh;
 }
 
-.login-container {
-  opacity: 0;
-  gap: 8px;
-  margin-top: 7rem;
-  @include flex-center;
-  @include flex-direction-column;
-  justify-content: unset !important;
-  @include animation(showLoginContainer, 0.5s, 2.4s, 1);
+.main-login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 14rem;
 
-  .card-content {
-    height: 56rem;
-    margin-top: 2rem;
-    padding: 1.25rem;
-    justify-content: space-evenly;
-    @include flex-center;
-    width: 37rem;
-    border-radius: 1.875rem;
-    position: relative;
+  .login-container {
+    opacity: 0;
+    gap: 8px;
+    @include flex-direction-column;
+    justify-content: center;
+    align-items: center;
+    @include animation(showLoginContainer, 0.5s, 2.4s, 1);
 
-    h1 {
-      color: $purple-1;
-      @include fonts-styles(4.6rem, 700);
-    }
+    .card-container {
+      .card-content {
+        height: 56rem;
+        padding: 1.25rem;
+        justify-content: space-evenly;
+        @include flex-center;
+        width: 37rem;
+        border-radius: 1.875rem;
+        position: relative;
 
-    span {
-      @include fonts-styles(2rem, 400);
-    }
-  }
+        h1 {
+          color: $purple-1;
+          @include fonts-styles(4.6rem, 700);
+        }
 
-  .login-form {
-    gap: 2rem;
-    @include flex-direction-column();
-
-    .divider-container {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      .divider {
-        width: 40%;
-        height: 0.1rem;
-        background-color: $light-purple-lines;
-      }
-
-      p {
-        @include fonts-styles(1.8rem, 400);
-        line-height: normal;
-        margin-left: 1rem;
-        margin-right: 1rem;
+        span {
+          @include fonts-styles(2rem, 400);
+        }
       }
     }
 
-    .google-log-in {
-      width: 100%;
-      padding: 1.1rem 3.2rem;
-      border-radius: 10rem;
-      background: $bg-color;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    .login-form {
       gap: 2rem;
-      cursor: pointer;
-      margin-top: 1rem;
+      @include flex-direction-column();
 
-      &:hover {
-        transform: scale(1.05);
+      .divider-container {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .divider {
+          width: 40%;
+          height: 0.1rem;
+          background-color: $light-purple-lines;
+        }
+
+        p {
+          @include fonts-styles(1.8rem, 400);
+          line-height: normal;
+          margin-left: 1rem;
+          margin-right: 1rem;
+        }
       }
 
-      p {
-        color: $purple-1;
-        @include fonts-styles(1.8rem, 400);
-        line-height: 120%;
+      .google-log-in {
+        width: 100%;
+        padding: 1.1rem 3.2rem;
+        border-radius: 10rem;
+        background: $bg-color;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        cursor: pointer;
+        margin-top: 1rem;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+
+        p {
+          color: $purple-1;
+          @include fonts-styles(1.8rem, 400);
+          line-height: 120%;
+        }
       }
     }
-  }
 
-  .action-forgot-pw {
-    &:hover {
-      cursor: pointer;
+    .action-forgot-pw {
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
 }
@@ -412,7 +446,7 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  margin-top: 4rem;
+  margin-top: 2rem;
 
   p {
     font-size: 18px;
@@ -423,7 +457,6 @@ h1 {
     padding: 1.2rem 2.5rem;
     border-radius: 2.5rem;
     line-height: normal;
-    margin-bottom: 3rem;
     display: flex;
     @include fonts-styles(1.8rem, 700);
     color: $purple-1;

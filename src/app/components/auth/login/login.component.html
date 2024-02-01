@@ -32,91 +32,93 @@
     </div>
   </div>
 
-  <div class="login-container">
-    <ng-container *ngIf="showMobile">
-      <app-logo></app-logo>
-    </ng-container>
+  <div class="main-login-container">
+    <div class="login-container">
+      <ng-container *ngIf="showMobile">
+        <app-logo></app-logo>
+      </ng-container>
 
-    <div class="card-container">
-      <mat-card class="card-content">
-        <h1 class="purple">Anmeldung</h1>
-        <span class="text-center"
-          >Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der
-          Arbeit verwendest.</span
-        >
-
-        <form class="login-form d-flex flex-column align-center">
-          <app-input
-            required
-            [(ngModel)]="userEmail"
-            name="userEmail"
-            ngDefaultControl
-            type="text"
-            pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-            placeholder="beispielname@email.com"
-            inputType="email"
-            img="../../assets/img/mail.svg"
-          ></app-input>
-
-          <app-input
-            required
-            [(ngModel)]="userPassword"
-            name="userPassword"
-            ngDefaultControl
-            type="password"
-            pattern="^[A-Za-z\d]{6,}$"
-            placeholder="Passwort"
-            img="../../assets/img/lock.svg"
-            inputType="password"
-          >
-          </app-input>
-
-          <span
-            class="action-forgot-pw text-center purple2"
-            routerLink="/send-mail-pw"
-            >Passwort vergessen</span
+      <div class="card-container">
+        <mat-card class="card-content">
+          <h1 class="purple">Anmeldung</h1>
+          <span class="text-center"
+            >Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der
+            Arbeit verwendest.</span
           >
 
-          <div class="divider-container">
-            <div class="divider"></div>
-            <p>ODER</p>
-            <div class="divider"></div>
-          </div>
+          <form class="login-form d-flex flex-column align-center">
+            <app-input
+              required
+              [(ngModel)]="userEmail"
+              name="userEmail"
+              ngDefaultControl
+              type="text"
+              pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+              placeholder="beispielname@email.com"
+              inputType="email"
+              img="../../assets/img/mail.svg"
+            ></app-input>
 
-          <div (click)="signInWithGoogle()" class="google-log-in">
-            <img
-              src="../../../../assets/img/google-desktop.svg"
-              alt="Google image"
-            />
-            <p>Anmelden mit Google</p>
-          </div>
+            <app-input
+              required
+              [(ngModel)]="userPassword"
+              name="userPassword"
+              ngDefaultControl
+              type="password"
+              pattern="^[A-Za-z\d]{6,}$"
+              placeholder="Passwort"
+              img="../../assets/img/lock.svg"
+              inputType="password"
+            >
+            </app-input>
 
-          <div class="form-btn-container">
-            <button (click)="signIn()">Anmelden</button>
-            <button (click)="guestLogIn()">Gäste-Login</button>
-          </div>
+            <span
+              class="action-forgot-pw text-center purple2"
+              routerLink="/send-mail-pw"
+              >Passwort vergessen</span
+            >
 
-          <ng-container *ngIf="errorMessage">
-            <div class="error-message">
-              <p>Invalid email or password.</p>
+            <div class="divider-container">
+              <div class="divider"></div>
+              <p>ODER</p>
+              <div class="divider"></div>
             </div>
-          </ng-container>
-        </form>
-        <div
-          [ngClass]="{ 'login-opacity': loginSuccess }"
-          class="login-success"
-        >
-          <p>Login erfolgreich</p>
-        </div>
-      </mat-card>
+
+            <div (click)="signInWithGoogle()" class="google-log-in">
+              <img
+                src="../../../../assets/img/google-desktop.svg"
+                alt="Google image"
+              />
+              <p>Anmelden mit Google</p>
+            </div>
+
+            <div class="form-btn-container">
+              <button (click)="signIn()">Anmelden</button>
+              <button (click)="guestLogIn()">Gäste-Login</button>
+            </div>
+
+            <ng-container *ngIf="errorMessage">
+              <div class="error-message">
+                <p>Invalid email or password.</p>
+              </div>
+            </ng-container>
+          </form>
+          <div
+            [ngClass]="{ 'login-opacity': loginSuccess }"
+            class="login-success"
+          >
+            <p>Login erfolgreich</p>
+          </div>
+        </mat-card>
+      </div>
+      <div class="go-2-registration">
+        <p class="text-center">Neu bei DABubble?</p>
+        <button routerLink="/sign-up">Konto erstellen</button>
+      </div>
     </div>
-    <div class="go-2-registration">
-      <p class="text-center">Neu bei DABubble?</p>
-      <button routerLink="/sign-up">Konto erstellen</button>
+    <div class="legalContentContainer">
+      <a class="impressum" routerLink="/impressum">Impressum</a>
+      <a class="privacy-policy" routerLink="/privacy-policy">Datenschutz</a>
     </div>
-  </div>
-  <div class="legalContentContainer">
-    <a class="impressum" routerLink="/impressum">Impressum</a>
-    <a class="privacy-policy" routerLink="/privacy-policy">Datenschutz</a>
   </div>
 </div>

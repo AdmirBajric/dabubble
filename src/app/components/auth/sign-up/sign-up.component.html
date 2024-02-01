@@ -1,104 +1,106 @@
 <div id="sign-up-main-container">
-  <div class="sign-up-container">
-    <app-logo></app-logo>
+  <div class="main-sign-up-container">
+    <div class="sign-up-container">
+      <app-logo></app-logo>
 
-    <mat-card class="sign-up-content">
-      <div class="sign-up-content-header">
-        <div class="sign-up-content-header-title">
-          <img
-            routerLink=""
-            class="sign-up-content-header-img"
-            src="../../assets/img/arrow_back.svg"
-            alt="Arrow back img"
-          />
-          <h2 class="sign-up-content-header-des">Konto erstellen</h2>
+      <mat-card class="sign-up-content">
+        <div class="sign-up-content-header">
+          <div class="sign-up-content-header-title">
+            <img
+              routerLink=""
+              class="sign-up-content-header-img"
+              src="../../assets/img/arrow_back.svg"
+              alt="Arrow back img"
+            />
+            <h2 class="sign-up-content-header-des">Konto erstellen</h2>
+          </div>
+
+          <div class="sign-up-content-header-description">
+            <p>
+              Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues
+              DABubble-Konto.
+            </p>
+          </div>
         </div>
 
-        <div class="sign-up-content-header-description">
-          <p>
-            Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues
-            DABubble-Konto.
-          </p>
+        <form class="sign-up-content-form">
+          <app-input
+            [(ngModel)]="user.fullName"
+            name="fullName"
+            ngDefaultControl
+            pattern="^[A-Za-z]+ [A-Za-z]+$"
+            inputType="text"
+            img="../../assets/img/person_filled.svg"
+            placeholder="Name und Nachname"
+            (validityChanged)="onValidityChanged('name', $event)"
+          ></app-input>
+
+          <app-input
+            [(ngModel)]="user.email"
+            [additionalData]="emailExist"
+            name="email"
+            ngDefaultControl
+            pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+            inputType="email"
+            img="../../assets/img/mail.svg"
+            placeholder="beispielname@email.com"
+            (validityChanged)="onValidityChanged('email', $event)"
+          ></app-input>
+
+          <app-input
+            [(ngModel)]="user.password"
+            name="password"
+            ngDefaultControl
+            pattern="^[A-Za-z\d]{6,}$"
+            inputType="password"
+            img="../../assets/img/lock.svg"
+            placeholder="Passwort"
+            (validityChanged)="onValidityChanged('password', $event)"
+          ></app-input>
+
+          <div [ngClass]="{ 'checkbox-active': active }" class="checkbox">
+            <img
+              (click)="onCheckboxChange()"
+              [src]="images[position]"
+              alt="Checbox empty"
+            />
+            <p>
+              Ich stimme der
+              <a
+                [ngStyle]="{
+                  'background-color': isHovered ? hoveredColor : defaultColor,
+                  'border-radius': isHovered ? '1rem' : '0rem',
+                  padding: isHovered ? '0.5rem' : '0rem'
+                }"
+                (mouseover)="setHover(true)"
+                (mouseout)="setHover(false)"
+                routerLink="/privacy-policy"
+                >Datenschutzerklärung</a
+              >
+              zu.
+            </p>
+          </div>
+
+          <button
+            [ngClass]="{
+              bcg: isFormValid(),
+              active: !isFormValid()
+            }"
+            [disabled]="!isFormValid()"
+            (click)="navigateAndSendUser()"
+            class="sign-up-content-form-btn"
+          >
+            Weiter
+          </button>
+        </form>
+        <div [ngClass]="{ 'acc-opacity': accCreated }" class="acc-created">
+          <p>Konto erfolgreich erstellt!</p>
         </div>
+      </mat-card>
+      <div class="legalContentContainer">
+        <a class="impressum" routerLink="/impressum">Impressum</a>
+        <a class="privacy-policy" routerLink="/privacy-policy">Datenschutz</a>
       </div>
-
-      <form class="sign-up-content-form">
-        <app-input
-          [(ngModel)]="user.fullName"
-          name="fullName"
-          ngDefaultControl
-          pattern="^[A-Za-z]+ [A-Za-z]+$"
-          inputType="text"
-          img="../../assets/img/person_filled.svg"
-          placeholder="Name und Nachname"
-          (validityChanged)="onValidityChanged('name', $event)"
-        ></app-input>
-
-        <app-input
-          [(ngModel)]="user.email"
-          [additionalData]="emailExist"
-          name="email"
-          ngDefaultControl
-          pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-          inputType="email"
-          img="../../assets/img/mail.svg"
-          placeholder="beispielname@email.com"
-          (validityChanged)="onValidityChanged('email', $event)"
-        ></app-input>
-
-        <app-input
-          [(ngModel)]="user.password"
-          name="password"
-          ngDefaultControl
-          pattern="^[A-Za-z\d]{6,}$"
-          inputType="password"
-          img="../../assets/img/lock.svg"
-          placeholder="Passwort"
-          (validityChanged)="onValidityChanged('password', $event)"
-        ></app-input>
-
-        <div [ngClass]="{ 'checkbox-active': active }" class="checkbox">
-          <img
-            (click)="onCheckboxChange()"
-            [src]="images[position]"
-            alt="Checbox empty"
-          />
-          <p>
-            Ich stimme der
-            <a
-              [ngStyle]="{
-                'background-color': isHovered ? hoveredColor : defaultColor,
-                'border-radius': isHovered ? '1rem' : '0rem',
-                padding: isHovered ? '0.5rem' : '0rem'
-              }"
-              (mouseover)="setHover(true)"
-              (mouseout)="setHover(false)"
-              routerLink="/privacy-policy"
-              >Datenschutzerklärung</a
-            >
-            zu.
-          </p>
-        </div>
-
-        <button
-          [ngClass]="{
-            bcg: isFormValid(),
-            active: !isFormValid()
-          }"
-          [disabled]="!isFormValid()"
-          (click)="navigateAndSendUser()"
-          class="sign-up-content-form-btn"
-        >
-          Weiter
-        </button>
-      </form>
-      <div [ngClass]="{ 'acc-opacity': accCreated }" class="acc-created">
-        <p>Konto erfolgreich erstellt!</p>
-      </div>
-    </mat-card>
-  </div>
-  <div class="legalContentContainer">
-    <a class="impressum" routerLink="/impressum">Impressum</a>
-    <a class="privacy-policy" routerLink="/privacy-policy">Datenschutz</a>
+    </div>
   </div>
 </div>
