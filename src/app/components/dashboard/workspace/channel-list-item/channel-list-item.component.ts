@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router, RouterModule } from "@angular/router";
 import { HoverChangeDirective } from "../../../../directives/hover-change.directive";
 @Component({
@@ -18,5 +18,15 @@ export class ChannelListItemComponent {
     channels: Array<{ name: string }>,
     // directMessages: Array<any>;
   };
+
+  // ************* directing event as boolean to grandparent (/dashboard) through parent(/workspace)
+  openChannelChat!: boolean;
+  @Output() openChatChannel = new EventEmitter<boolean>();
+
   constructor(private router: Router){}
+
+  displayChannel(){
+    this.openChannelChat = true;
+    this.openChatChannel.emit(this.openChannelChat);
+  }
 }
