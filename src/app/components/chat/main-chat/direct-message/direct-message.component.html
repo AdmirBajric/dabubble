@@ -1,0 +1,26 @@
+<div *ngFor="let item of chat" class="wrapper wrapper-padding border-radius-3"
+    [ngStyle]="{'height': isNotDashboard ? '100vh' : '97%'}">
+    <section class="head">
+        <img class="avatar" [src]="item.member.avatar" alt="member">
+        <h1>{{ item.member.fullName}}</h1>
+    </section>
+    <section class="content">
+        <!-- <app-message [message]="item.message"></app-message> -->
+        <ng-container *ngIf="chatEmpty">
+            <div class="member-info">
+                <img class="avatar" [src]="item.member.avatar" alt="member">
+                <h1>{{ item.member.fullName}}</h1>
+            </div>
+
+            <div>
+                Diese Unterhaltung findet nur zwischen <br>
+                <span>&#64; {{item.member.fullName}}</span> und dir statt. 
+            </div>
+
+        </ng-container>
+    </section>
+    <section class="chat-input">
+        <app-message-input></app-message-input>
+    </section>
+</div>
+<!-- [ngStyle]="{'height': isNotDashboard ? '100vh' : '97%'}"  -->
