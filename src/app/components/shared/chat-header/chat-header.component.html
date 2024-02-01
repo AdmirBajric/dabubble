@@ -7,8 +7,9 @@
 
         <h1 *ngIf="styleHeaderForThread">Thread</h1>
         <div class="name">
-            <img class="hash" src="../../../../assets/img/hash.svg" alt="#">
-            <h1> {{ roomName }} </h1>
+            <img *ngIf="!styleHeaderForThread" class="hash" src="../../../../assets/img/hash.svg" alt="#">
+            <img *ngIf="styleHeaderForThread" class="small" src="../../../../assets/img/hash_hover.svg" alt="#">
+            <h1 [ngStyle]="{'font-size': styleHeaderForThread ? '1.3rem' : '2rem' }"> {{ roomName }} </h1>
         </div>
 
         <img class="arrow" *ngIf="!styleHeaderForThread" src="../../../../assets/img/arrow_down_unfilled_chatHeader.svg" alt="drop down">
@@ -20,7 +21,7 @@
     </div>
 
     <div class="header-right">
-        <div *ngIf="!styleHeaderForThread">
+        <div class="desktop-view" *ngIf="!styleHeaderForThread">
             Channelmitglieder-Avatar
             3
         </div>
