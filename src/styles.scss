@@ -106,6 +106,14 @@ a {
   }
 }
 
+.mobile-view {
+  display: block;
+
+  @media only screen and (min-width: 1100px) {
+    display: none;
+  }
+}
+
 .btn-50{
   border-radius: 50%;
 }
