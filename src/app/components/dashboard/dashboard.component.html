@@ -5,10 +5,14 @@
 
     <div class="profile-menu"><app-profile-menu></app-profile-menu></div>
 
-    <div class="sidenav"><app-workspace [isOpen]="workspaceIsOpen"></app-workspace></div>
+    <div class="sidenav">
+        <app-workspace [isOpen]="workspaceIsOpen" (openChatWriteNewMessage)="openNewMessage()" (openChannelChat)="openChatofChannel()">
+        </app-workspace>
+    </div>
 
     <div class="chat border-radius-3">
-        <app-main-chat [roomName]="selectedRoomName" class="border-radius-3"></app-main-chat>
+        <app-main-chat [roomName]="selectedRoomName" *ngIf="showMessages" class="border-radius-3"></app-main-chat>
+        <app-new-message *ngIf="writeNewMessage" class="border-radius-3"></app-new-message>
         
     </div>
 

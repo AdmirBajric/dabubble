@@ -10,6 +10,7 @@ import { MessageInputComponent } from "../shared/message-input/message-input.com
 import { ProfileMenuComponent } from "./profile-menu/profile-menu.component";
 import { ChatHeaderComponent } from "../shared/chat-header/chat-header.component";
 import { MainChatComponent } from "../chat/main-chat/main-chat.component";
+import { NewMessageComponent } from "../chat/main-chat/new-message/new-message.component";
 
 @Component({
     selector: 'app-dashboard',
@@ -27,7 +28,8 @@ import { MainChatComponent } from "../chat/main-chat/main-chat.component";
         MessageInputComponent,
         ProfileMenuComponent,
         ChatHeaderComponent,
-        MainChatComponent
+        MainChatComponent,
+        NewMessageComponent
     ]
 })
 export class DashboardComponent implements OnInit {
@@ -37,6 +39,8 @@ export class DashboardComponent implements OnInit {
     selectedMessageForThread: any[] = [];
     selectedRoomName: string = 'Entwicklerteam';
     activateThreadHeader: boolean = true; // must be set to true, because the default grid style shows all 3 main components of dashboard
+    showMessages: boolean = true; // default
+    writeNewMessage: boolean = false // default
 
     ngOnInit(): void {
         this.handleGridAreaToggle();
@@ -73,6 +77,18 @@ export class DashboardComponent implements OnInit {
         } else if (this.workspaceIsOpen && !this.threadIsOpen) {
             this.gridAreaRegulation = 'ncc';
         }
+    }
+
+    openNewMessage(){
+        // toggling does not help because it's a one way way
+        this.showMessages = false; 
+        this.writeNewMessage = true;
+    }
+
+    openChatofChannel(){
+        // we need to get id of channel, so the correct content can be displayed
+        this.showMessages = true;
+        this.writeNewMessage = false;
     }
 
     // messages: any[] = [
