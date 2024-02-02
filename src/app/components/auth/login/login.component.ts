@@ -50,9 +50,13 @@ export class LoginComponent implements OnInit {
     this.renderer = renderer;
     this.el = el;
 
-    const screenWidth = window.innerWidth;
+    let screenWidth;
 
-    if (screenWidth <= 1100) {
+    if (typeof window !== 'undefined') {
+      screenWidth = window.innerWidth;
+    }
+
+    if (screenWidth! <= 1100) {
       this.show = false;
       this.mobileAnimation = true;
       this.showDesktop = false;
