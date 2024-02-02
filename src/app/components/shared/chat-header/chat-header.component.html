@@ -28,7 +28,7 @@
 
             <div class="channel-members desktop-view" appHoverChange [elementsConfig]="[ 
                 { textSelector: '.members-count', defaultColor: '#000000', hoverColor: '#797ef3'}
-                ]">
+                ]" (click)="showMembers(r.members)">
                 <div class="channel-avatars">
                     <ng-container *ngFor="let members of r.members; let i = index">
                         <span *ngIf="i < 3" [ngStyle]="{'left': getLeftPositioning(i)}" class="avatar">

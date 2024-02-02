@@ -3,6 +3,8 @@ import { CommonModule } from "@angular/common";
 import { ChannelEditComponent } from '../../chat/channel/channel-edit/channel-edit.component';
 import { ButtonFunctionService } from "../../../services/button-function.service";
 import { HoverChangeDirective } from "../../../directives/hover-change.directive";
+import { MatDialog } from '@angular/material/dialog';
+import { DialogShowMembersComponent } from '../dialogs/dialog-show-members/dialog-show-members.component';
 // import { Room } from '../../../models/collection.class'; must wait for correction of room interface (members!) to bind in.
 // That's why I use DUMMY INTERFACE here: #######################################################################
 interface Room {
@@ -30,7 +32,7 @@ export class ChatHeaderComponent implements OnInit {
   @Output() closeThread = new EventEmitter<any[]>();
   // @Input() room!: Room;
   room!: Room[];
-  constructor(private btnService: ButtonFunctionService,) {
+  constructor(private btnService: ButtonFunctionService, private dialog: MatDialog) {
     // ############################################ DUMMY DATA BEGIN ###################
     this.room = [
       {
@@ -72,6 +74,9 @@ export class ChatHeaderComponent implements OnInit {
     return this.room[0].members.length
   }
 
+  showMembers(members: Member[]){
+    this.btnService.showChannelMembers(members); // there is always only one room in this component.
+  }
   
   /**
    * Calculates left positioning of avatar images according to i. 
