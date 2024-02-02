@@ -3,7 +3,17 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProfileViewComponent } from '../components/profile/profile-view/profile-view.component';
 import { ChannelEditComponent } from '../components/chat/channel/channel-edit/channel-edit.component';
 import { CreateChannelComponent } from '../components/shared/dialogs/create-channel/create-channel.component';
+import { DialogShowMembersComponent } from '../components/shared/dialogs/dialog-show-members/dialog-show-members.component';
+import { DialogAddUserComponent } from '../components/shared/dialogs/dialog-add-user/dialog-add-user.component';
 
+
+// ################################# DUMMY DATA TO TYPE MEMBER ###############
+interface Member {
+  fullName: string;
+  avatar: string;
+  email: string;
+  isOnline: boolean;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -26,4 +36,29 @@ export class ButtonFunctionService {
       autoFocus: false,
     });
   }
+  
+  /**
+   * Opening a dialog with a list of all channel members.
+   * @param {Member[]} members
+   */
+  showChannelMembers(members: Member[]){
+    this.dialog.open(DialogShowMembersComponent, {
+      data: members
+    })
+  }
+  
+  /**
+   * Opens dialog with all necessary details of member. Member can be user or contacts of user.
+   * @param {Member[]} user
+   */
+  openProfile(user: Member[]){
+    this.dialog.open(ProfileViewComponent, {
+      data: user
+    })
+  }
+
+  // *********************************************************** Wir brauchen die Komponente noch!
+  // addUser(){
+  
+  // }
 }
