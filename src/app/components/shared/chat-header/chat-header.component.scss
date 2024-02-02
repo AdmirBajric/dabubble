@@ -78,3 +78,39 @@ h1 {
     @include flexbox(flex, unset, unset, center);
     gap: 0.5rem;
 }
+
+.channel-members {
+    @include flexbox(flex, unset, unset, center);
+    width: 14rem;
+    position: relative;
+    border-radius: 3rem;
+    // padding: 1rem 2rem 1rem 1rem; **** for larger screens than 1400px
+    padding: 0rem 1rem 0rem 1rem;
+    &:hover{
+        background-color: $bg-color;
+        cursor: pointer;
+    }
+
+    .members-count {
+        position: absolute;
+        right: 1rem;
+        @include fonts-styles(1.4rem, bold);
+    }
+}
+
+.channel-avatars{
+    position: relative;
+    width: 10rem;
+    height: 4rem; // must be same as images of avatars
+
+    .avatar{
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        img {
+            height: 4rem;
+            border: 0.2rem solid white;
+            border-radius: 50%;
+        }
+    }
+}
