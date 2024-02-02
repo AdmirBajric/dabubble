@@ -1,0 +1,119 @@
+@import "../../../../colors.scss";
+@import "../../../../mixins.scss";
+
+.title {
+    @include fonts-styles(2rem, bold);
+}
+
+.dialog-members {
+    width: 44rem;
+    height: 45rem;
+    display: flex;
+    gap: 2rem;
+    padding: 2rem 2rem 1rem 2rem;
+    border-radius: 30px, 0px, 30px, 30px;
+    overflow: hidden;
+}
+
+.close-img {
+
+    &:hover {
+        background-color: $bg-color;
+        color: $purple-3;
+        cursor: pointer;
+    }
+}
+
+.head {
+    @include flexbox(flex, unset, space-between, center);
+}
+
+.content {
+    max-height: 27rem;
+    position: absolute;
+    width: 38rem;
+    top: 10rem;
+    overflow: scroll;
+    overflow-x: hidden;
+
+    ul {
+        list-style: none;
+
+        li {
+            @include fonts-styles(1.6rem, normal);
+        }
+    }
+}
+
+.member-wrapper {
+    @include flexbox(flex, unset, unset, center);
+    gap: 2rem;
+    margin-bottom: 1rem;
+    width: 27rem;
+    border-radius: 5rem;
+    padding: 1rem 2rem 1rem 2rem;
+
+    &:hover {
+        background-color: $bg-color;
+        cursor: pointer;
+    }
+}
+
+.avatar {
+    width: 7rem;
+    height: 7rem;
+    border-radius: 3.5rem;
+    position: relative;
+
+    img {
+        height: 6rem;
+    }
+
+    .icon {
+        height: 1;
+        position: absolute;
+        bottom: 0.5rem;
+        /* height: 1.4rem; */
+        right: 0.5rem;
+    }
+}
+
+.dialog-footer {
+    position: absolute;
+    bottom: 2rem;
+    right: 0;
+    background-color: white;
+    left: 4rem;
+    @include flexbox(flex, unset, unset, center);
+
+    button {
+        background: transparent;
+        @include flexbox(flex, unset, unset, center);
+        gap: 2rem;
+        width: 27rem;
+        border-radius: 3rem;
+        padding: 0.5rem;
+        padding-left: 1rem;
+
+        img {
+            width: 4rem;
+            height: 4rem;
+        }
+
+        &:hover {
+            cursor: pointer;
+            background-color: $bg-color;
+        }
+    }
+
+}
+
+
+// ************************* kann auch global definiert werden, da auch in DM's, profile-view verwendet*****
+.online {
+    color: $online-green;
+}
+
+.offline {
+    color: $text-gray;
+}
