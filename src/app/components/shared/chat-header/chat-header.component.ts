@@ -15,16 +15,15 @@ export class ChatHeaderComponent implements OnInit {
   @Input() styleHeaderForThread!: boolean;
   @Output() closeThread = new EventEmitter<any[]>();
 
-  constructor(private btnService: ButtonFunctionService,){
+  constructor(private btnService: ButtonFunctionService,) {
   }
-  ngOnInit(){
+  ngOnInit() {
   }
 
-  openEditChannel(){
+  openEditChannel() {
     this.btnService.openChannelDialog();
   }
 
-  
   exitThread() {
     this.closeThread.emit();
   }

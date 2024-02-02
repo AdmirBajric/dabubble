@@ -1,3 +1,5 @@
+@import "../../../colors.scss";
+
 .input {
     width: 100%;
     height: 7rem;
@@ -7,15 +9,27 @@
     outline: none;
     text-indent: 2rem;
     font-size: 1.8rem;
-    background-image: url('../../../../assets/img/search.svg');
-    background-repeat: no-repeat;
-    background-position: 95%;
-    border: 1px solid white;
     transition: border ease-in-out 200ms;
 
-    &:hover {
-        border: 1px solid #797EF3;
+    &.hover {
+        &:hover {
+            border: 1px solid #797EF3;
+        }
+    }
 
+    // only displayed in /dashboard and NOT in /new-message
+    &.background-image {
+        background-image: url('../../../../assets/img/search.svg');
+        background-repeat: no-repeat;
+        background-position: 95%;
+    }
+
+    &.border-white {
+        border: 1px solid white;
+    }
+
+    &.border-light {
+        border: 1px solid $light-purple-lines;
     }
 }
 

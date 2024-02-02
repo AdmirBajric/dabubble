@@ -1,18 +1,33 @@
 <section [class.thread]="styleHeaderForThread" class="wrapper">
-    <div [ngClass]=" styleHeaderForThread ? 'thread-header' : 'header-left' " (click)=" styleHeaderForThread ? null : openEditChannel()"
-            appHoverChange [elementsConfig]="[ { imageSelector: '.arrow', defaultSrc: '../../../../assets/img/arrow_down_unfilled_chatHeader.svg', hoverSrc: '../../../../assets/img/arrow_down_unfilled_chatHeader_hover.svg' } ]">
+
+    <div [ngClass]=" styleHeaderForThread ? 'thread-header' : 'header-left' " (click)=" styleHeaderForThread ? null : openEditChannel()" 
+        appHoverChange [elementsConfig]="[  
+        { imageSelector: '.arrow', defaultSrc: '../../../../assets/img/arrow_down_unfilled_chatHeader.svg', hoverSrc: '../../../../assets/img/arrow_down_unfilled_chatHeader_hover.svg' },
+        { imageSelector: '.hash', defaultSrc: '../../../../assets/img/hash.svg', hoverSrc: '../../../../assets/img/hash_hover.svg' }]">
+
         <h1 *ngIf="styleHeaderForThread">Thread</h1>
         <div class="name">
-            <span>#</span>
-            <h1> {{ roomName }} </h1>
+            <img *ngIf="!styleHeaderForThread" class="hash" src="../../../../assets/img/hash.svg" alt="#">
+            <img *ngIf="styleHeaderForThread" class="small" src="../../../../assets/img/hash_hover.svg" alt="#">
+            <h1 [ngStyle]="{'font-size': styleHeaderForThread ? '1.3rem' : '2rem' }"> {{ roomName }} </h1>
         </div>
+
         <img class="arrow" *ngIf="!styleHeaderForThread" src="../../../../assets/img/arrow_down_unfilled_chatHeader.svg" alt="drop down">
-        <button appHoverChange [elementsConfig]="[ { imageSelector: 'img', defaultSrc: '../../../../assets/img/exit_X.svg', hoverSrc: '../../../../assets/img/exit_X_hover.svg' } ]" *ngIf="styleHeaderForThread" (click)="exitThread()">
-            <img src="../../../../assets/img/exit_X.svg" alt="exit">
+
+        <button *ngIf="styleHeaderForThread" (click)="exitThread()" appHoverChange [elementsConfig]="[ { imageSelector: '.X', defaultSrc: '../../../../assets/img/exit_X.svg', hoverSrc: '../../../../assets/img/exit_X_hover.svg' }]" >
+            <img class="X" src="../../../../assets/img/exit_X.svg" alt="exit">
         </button>
+
     </div>
 
-    <div *ngIf="!styleHeaderForThread" class="header-right">
-        Channelmitglieder
+    <div class="header-right">
+        <div class="desktop-view" *ngIf="!styleHeaderForThread">
+            Channelmitglieder-Avatar
+            3
+        </div>
+        <button *ngIf="!styleHeaderForThread" class="btn-50" appHoverChange [elementsConfig]="[ { imageSelector: 'img', defaultSrc: '../../../../assets/img/add_member_black.svg',  hoverSrc: '../../../../assets/img/add_member_hover.svg'} ]">
+            <img src="../../../../assets/img/add_member_black.svg" alt="add-member">
+        </button>
     </div>
 </section>
+<div class="header-divider"></div>

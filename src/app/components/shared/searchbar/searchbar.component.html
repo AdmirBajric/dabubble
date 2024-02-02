@@ -1,4 +1,4 @@
-<input class="input" type="text" placeholder="Code learning durchsuchen" (keyup)="search()" (ngModel)="searchTerm">
+<input [class.background-image]="showLoupe" [ngClass]="showBorder ? 'border-light' : 'border-white'" class="input hover" type="text" placeholder="{{placeholder}}" (keyup)="search()" (ngModel)="searchTerm">
 
 <div class="searchResults" *ngIf="searchTerm">
     <h2>Mitglieder</h2>

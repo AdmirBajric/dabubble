@@ -1,0 +1,52 @@
+@import "../../../colors.scss";
+@import "../../../mixins.scss";
+
+.wrapper {
+    position: relative;
+    background-color: white;
+}
+
+.info-desktop {
+    position: absolute;
+    top: 2rem;
+    bottom: 2rem;
+    right: 2rem;
+    left: 2rem;
+    @include flexbox(flex, unset, center, center);
+
+    h1 {
+        @include fonts-styles(2rem, bold);
+        color: $purple-1;
+    }
+
+    div {
+        width: 50rem;
+        height: 50rem;
+        background-color: white;
+        @include flexbox(flex, column, center, center);
+        gap: 2rem;
+    }
+
+    a {
+        @include fonts-styles(1.8rem, bold);
+        border-radius: 3rem;
+        transition: all 225ms;
+        padding: 3rem;
+
+        &:hover {
+            cursor: pointer;
+            background-color: $bg-color;
+        }
+
+    }
+
+    @media only screen and (max-width: 1099px) {
+        display: none;
+    }
+}
+
+.no-mobile {
+    @media only screen and (min-width: 1100px) {
+        display: none;
+    }
+}

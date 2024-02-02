@@ -1,4 +1,5 @@
-<div [ngClass]="router.url === '/thread' ? 'bg-mobile-thread' : 'justify-unset'" class="ws-header-container">
+<!-- ******************************************* the logo (h1 + img) can be reused for mobile view header in /thred, /main-chat, /new-message *******************************************  -->
+<div [ngClass]="router.url === '/thread' ? 'bg-mobile-thread' : 'justify-unset'" class="ws-header-container"> 
     <section [ngClass]="{'mobile-thread' : router.url === '/thread'}">
         <ng-container *ngIf="router.url === '/thread'">
             <img src="../../../../../assets/img/arrow_down.svg" alt="exit">
@@ -14,8 +15,9 @@
     </div>
 
     <button *ngIf="router.url !== '/thread'" appHoverChange
-        [elementsConfig]=" [ { imageSelector: 'img', defaultSrc: './../../assets/img/workspace_4_desktop_write_square_black.svg', hoverSrc: './../../assets/img/workspace_4_desktop_write_square_black_hover.svg' } ] ">
-        <img src="./../../assets/img/workspace_4_desktop_write_square_black.svg" alt="write message">
+        [elementsConfig]=" [ { imageSelector: 'img', defaultSrc: './../../assets/img/workspace_4_desktop_write_square_black.svg', hoverSrc: './../../assets/img/workspace_4_desktop_write_square_black_hover.svg'}]"
+        (click)="writeNewMessage()">
+        <img src="./../../assets/img/workspace_4_desktop_write_square_black.svg" alt="write new message">
     </button>
 
 </div>

@@ -9,6 +9,8 @@ import { ButtonWorkspaceComponent } from "./button-workspace/button-workspace.co
 import { MessageInputComponent } from "../shared/message-input/message-input.component";
 import { ProfileMenuComponent } from "./profile-menu/profile-menu.component";
 import { ChatHeaderComponent } from "../shared/chat-header/chat-header.component";
+import { MainChatComponent } from "../chat/main-chat/main-chat.component";
+import { NewMessageComponent } from "../chat/main-chat/new-message/new-message.component";
 
 @Component({
     selector: 'app-dashboard',
@@ -25,7 +27,9 @@ import { ChatHeaderComponent } from "../shared/chat-header/chat-header.component
         ButtonWorkspaceComponent,
         MessageInputComponent,
         ProfileMenuComponent,
-        ChatHeaderComponent
+        ChatHeaderComponent,
+        MainChatComponent,
+        NewMessageComponent
     ]
 })
 export class DashboardComponent implements OnInit {
@@ -35,6 +39,8 @@ export class DashboardComponent implements OnInit {
     selectedMessageForThread: any[] = [];
     selectedRoomName: string = 'Entwicklerteam';
     activateThreadHeader: boolean = true; // must be set to true, because the default grid style shows all 3 main components of dashboard
+    showMessages: boolean = true; // default
+    writeNewMessage: boolean = false // default
 
     ngOnInit(): void {
         this.handleGridAreaToggle();
@@ -73,75 +79,87 @@ export class DashboardComponent implements OnInit {
         }
     }
 
-    messages: any[] = [
-        {
-            sender: {
-                fullName: 'Admir Bajric',
-                email: "",
-                password: "",
-                avatar: '../../assets/img/avatar1.svg',
-                isOnline: true,
-            },
+    openNewMessage(){
+        // toggling does not help because it's a one way way
+        this.showMessages = false; 
+        this.writeNewMessage = true;
+    }
 
-            message: "Hallo ich bin die erste testnachricht",
-            receiver: {
-                fullName: 'Julius Marecek',
-                email: "",
-                password: "",
-                avatar: '../../assets/img/avatar1.svg',
-                isOnline: true,
-            },
+    openChatofChannel(){
+        // we need to get id of channel, so the correct content can be displayed
+        this.showMessages = true;
+        this.writeNewMessage = false;
+    }
 
-            created_at: "2024-01-12T10:00:00",
-            room: "",
-            answers: [{
-                sender: {
-                    fullName: 'Julius Marecek',
-                    email: "",
-                    password: "",
-                    avatar: '../../assets/img/avatar1.svg',
-                    isOnline: true,
-                },
-                message: "Hallo ich bin die Antwort auf deine erste testnachricht",
-                created_at: "2024-01-12T10:01:00",
-                reaction: [{}],
-            }],
-            reaction: [{}],
-        },
-        {
-            sender: {
-                fullName: 'Julius Marecek',
-                email: "",
-                password: "",
-                avatar: '../../assets/img/avatar1.svg',
-                isOnline: true,
-            },
+    // messages: any[] = [
+    //     {
+    //         sender: {
+    //             fullName: 'Admir Bajric',
+    //             email: "",
+    //             password: "",
+    //             avatar: '../../assets/img/avatar1.svg',
+    //             isOnline: true,
+    //         },
 
-            message: "Hallo ich bin eine zweite testnachricht an Admir",
-            receiver: {
-                fullName: 'Admir Bajric',
-                email: "",
-                password: "",
-                avatar: '../../assets/img/avatar1.svg',
-                isOnline: true,
-            },
+    //         message: "Hallo ich bin die erste testnachricht",
+    //         receiver: {
+    //             fullName: 'Julius Marecek',
+    //             email: "",
+    //             password: "",
+    //             avatar: '../../assets/img/avatar1.svg',
+    //             isOnline: true,
+    //         },
 
-            created_at: "2024-01-12T10:02:00",
-            room: "",
-            answers: [{
-                sender: {
-                    fullName: 'Julius Marecek',
-                    email: "",
-                    password: "",
-                    avatar: '../../assets/img/avatar1.svg',
-                    isOnline: true,
-                },
-                message: "Hallo ich bin die Antwort auf deine zweite testnachricht",
-                created_at: "2024-01-12T10:03:00",
-                reaction: [{}],
-            }],
-            reaction: [{}],
-        },
-    ];
+    //         created_at: "2024-01-12T10:00:00",
+    //         room: "",
+    //         answers: [{
+    //             sender: {
+    //                 fullName: 'Julius Marecek',
+    //                 email: "",
+    //                 password: "",
+    //                 avatar: '../../assets/img/avatar1.svg',
+    //                 isOnline: true,
+    //             },
+    //             message: "Hallo ich bin die Antwort auf deine erste testnachricht",
+    //             created_at: "2024-01-12T10:01:00",
+    //             reaction: [{}],
+    //         }],
+    //         reaction: [{}],
+    //     },
+    //     {
+    //         sender: {
+    //             fullName: 'Julius Marecek',
+    //             email: "",
+    //             password: "",
+    //             avatar: '../../assets/img/avatar1.svg',
+    //             isOnline: true,
+    //         },
+
+    //         message: "Hallo ich bin eine zweite testnachricht an Admir",
+    //         receiver: {
+    //             fullName: 'Admir Bajric',
+    //             email: "",
+    //             password: "",
+    //             avatar: '../../assets/img/avatar1.svg',
+    //             isOnline: true,
+    //         },
+
+    //         created_at: "2024-01-12T10:02:00",
+    //         room: "",
+    //         answers: [{
+    //             sender: {
+    //                 fullName: 'Julius Marecek',
+    //                 email: "",
+    //                 password: "",
+    //                 avatar: '../../assets/img/avatar1.svg',
+    //                 isOnline: true,
+    //             },
+    //             message: "Hallo ich bin die Antwort auf deine zweite testnachricht",
+    //             created_at: "2024-01-12T10:03:00",
+    //             reaction: [{}],
+    //         }],
+    //         reaction: [{}],
+    //     },
+    // ];
 
 }

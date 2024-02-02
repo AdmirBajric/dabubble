@@ -1,6 +1,6 @@
 <div *ngIf="isOpen" class="main">
     <div class="workspace-wrapper">
-        <app-workspace-header></app-workspace-header>
+        <app-workspace-header (openChatWriteNewMessage)="showNewMessage()"></app-workspace-header>
         <div class="drawer-container">
             <div class="drawer">
                 <div
@@ -25,7 +25,9 @@
 
                 @if (showChannels) {
                 <ng-container *ngFor="let channel of user.channels">
-                    <app-channel-list-item [channels]="channel"></app-channel-list-item></ng-container>
+                    <app-channel-list-item [channels]="channel" (openChatChannel)="showChannelChat()"></app-channel-list-item>
+                </ng-container>
+
                 <button (click)="openCreateChannel()" class="btn-create-channel">
                     <img src="./../../assets/img/add_border.svg" alt="add">
                     <a class="link-create">Channel hinzufügen</a></button>
@@ -60,7 +62,7 @@
         </div>
 
         <button class="mobile-btn-write-dm">
-            <img src="./../../assets/img/workspace_2_mobile_write_dm_square.svg" alt="write message">
+            <img src="../../../../assets/img/workspace_2_mobile_write_dm_square.svg" alt="write message">
         </button>
 
     </div>
