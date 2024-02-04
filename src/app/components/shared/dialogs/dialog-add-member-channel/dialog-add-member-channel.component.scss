@@ -1,0 +1,65 @@
+@import "../../../../colors.scss";
+@import "../../../../mixins.scss";
+
+::ng-deep .mat-mdc-dialog-container,
+::ng-deep .mdc-dialog__surface {
+    border-radius: 3rem 0rem 3rem 3rem !important;
+    background: $white !important;
+    box-shadow: 0rem 0.6rem 1rem 0rem rgba(0, 0, 0, 0.2) !important;
+    height: 30rem;
+    width: 51rem;
+}
+
+.card {
+    padding: 2rem;
+    height: 100%;
+}
+
+.head {
+    display: flex;
+    position: relative;
+
+    .title {
+        @include fonts-styles(2.4rem, bold);
+        margin-bottom: 0.5rem;
+    }
+
+    .icon {
+        position: absolute;
+        right: 0;
+
+        &:hover {
+            background-color: $bg-color;
+            color: $purple-3;
+            cursor: pointer;
+        }
+    }
+}
+
+.content {
+    padding: unset !important;
+    @include flexbox(flex, column, unset, unset);
+    gap: 2rem;
+    margin-top: 3rem;
+    
+    .btn-container {
+        @include flexbox(flex, unset, flex-end, unset);
+    }
+
+    button {
+        height: 4.9rem;
+        width: 14.7rem;
+        background-color: $text-gray;
+        color: white;
+        font-size: 1.8rem; // needs to go in global styles
+
+        &.ready {
+            background-color: $purple-1;
+        }
+    }
+}
+
+span {
+    font-size: 1.8rem; // needs to go in global styles
+    color: $purple-2;
+}
