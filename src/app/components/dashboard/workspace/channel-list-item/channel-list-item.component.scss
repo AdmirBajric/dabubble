@@ -1,22 +1,23 @@
 @import "../../../../colors.scss";
 @import "../../../../mixins.scss";
 
-a{
-    margin-left: 3.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    background: transparent;
-    width: 20rem;
-    padding: 2rem;
-    border-radius: 3rem;
-    span {
-        @include fonts-styles(17px, 400);
-        color: black;
-    }
+a {
+  margin-left: 3.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: transparent;
+  width: 20rem;
+  padding: 2rem;
+  border-radius: 3rem;
+  cursor: pointer;
+  span {
+    @include fonts-styles(17px, 400);
+    color: black;
+  }
 
-    &:hover {
-        color: $purple-3;
-        background-color: $bg-color;
-    }
+  &:hover {
+    color: $purple-3;
+    background-color: $bg-color;
+  }
 }

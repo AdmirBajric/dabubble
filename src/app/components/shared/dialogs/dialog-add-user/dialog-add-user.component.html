@@ -1,32 +1,69 @@
 <mat-card id="channel-edition">
-    <mat-card-header class="channel-edition-header">
-      <div class="channel-edition-name">
-        <mat-card-title>Leute hinzufügen</mat-card-title>
-      </div>
-      <mat-icon class="channel-edition-img-close" (click)="onNoClick()">close</mat-icon>
-    </mat-card-header>
-      
-    <ng-container>
-      <mat-card-content>
-        <mat-radio-group (change)="onChange()" [(ngModel)]="choosen" class="block">
-            <mat-radio-button value="all">Alle Mitglieder von {{ChannelName}} hinzufügen</mat-radio-button>
-            <mat-radio-button value="choose">Bestimmte Leute hinzufügen</mat-radio-button>
-          </mat-radio-group>
+  <mat-card-header class="channel-edition-header">
+    <div class="channel-edition-name">
+      <mat-card-title>Leute hinzufügen</mat-card-title>
+    </div>
+    <mat-icon class="channel-edition-img-close" (click)="onNoClick()"
+      >close</mat-icon
+    >
+  </mat-card-header>
 
-          <app-dialog-input class="dialog-input" [Tag]="false" [placeholder]="Description" *ngIf="showInput" #searchUser onkeyup="searchInUsers()"></app-dialog-input>
-          <div class="user-Show" *ngIf="search">
-            <div *ngFor="let user of filteredUsers; let i = index;" >
-                <img src="{{user.img}}" alt="">
-                <span>{{user.fullName}}</span>
-            </div>
-          </div>
-      </mat-card-content>
-    </ng-container>
-  
-    <mat-card-actions>
-      <button class="channel-create" (click)="createChannel()" [disabled]="!checked">
-        Erstellen
-      </button>
-    </mat-card-actions>
-  </mat-card>
-  
+  <mat-card-content>
+    <mat-radio-group (change)="onChange()" [(ngModel)]="choosen" class="block">
+      <mat-radio-button value="all"
+        >Alle Mitglieder von {{ officeTeam }} hinzufügen</mat-radio-button
+      >
+      <mat-radio-button value="choose"
+        >Bestimmte Leute hinzufügen</mat-radio-button
+      >
+    </mat-radio-group>
+
+    <app-dialog-input
+      [value]="userInputValue"
+      [(ngModel)]="userInputValue"
+      name="userInputValue"
+      ngDefaultControl
+      class="dialog-input"
+      [Tag]="false"
+      [placeholder]="placeholder"
+      *ngIf="showInput"
+      #searchUser
+      (input)="searchInUsers()"
+      (click)="searchInUsers()"
+    ></app-dialog-input>
+
+    <mat-expansion-panel [expanded]="filteredUsers.length > 0 && inputOnSearch">
+      <div
+        (click)="selectedUser(user.id); $event.stopPropagation()"
+        class="users-show"
+        *ngFor="let user of filteredUsers; let i = index"
+      >
+        <img src="{{ user.avatar }}" alt="" />
+        <p>{{ user.fullName }}</p>
+      </div>
+    </mat-expansion-panel>
+
+    <div class="selectedUsers" *ngIf="chosenUsers.length > 0">
+      <div class="selectedUser" *ngFor="let user of chosenUsers; let i = index">
+        <img src="{{ user.avatar }}" alt="" />
+        <p>{{ user.fullName }}</p>
+        <mat-icon
+          (click)="removeMember(user.id)"
+          #tooltip="matTooltip"
+          matTooltip="Remove member"
+          >close</mat-icon
+        >
+      </div>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button
+      class="channel-create"
+      (click)="createChannel()"
+      [disabled]="!checked"
+    >
+      Erstellen
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ForTestComponent } from './for-test.component';
+import { ReadDataComponent } from './read-data.component';
 
-describe('ForTestComponent', () => {
-  let component: ForTestComponent;
-  let fixture: ComponentFixture<ForTestComponent>;
+describe('ReadDataComponent', () => {
+  let component: ReadDataComponent;
+  let fixture: ComponentFixture<ReadDataComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ForTestComponent]
+      imports: [ReadDataComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(ForTestComponent);
+    fixture = TestBed.createComponent(ReadDataComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
