@@ -1,37 +1,60 @@
 import { Component, ElementRef } from '@angular/core';
-import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogInputComponent } from '../dialog-input/dialog-input.component';
 import { DialogAddUserComponent } from '../dialog-add-user/dialog-add-user.component';
-import { User } from '../../../../models/user.class';
+import { DataService } from '../../../../services/data.service';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-create-channel',
-    standalone: true,
-    templateUrl: './create-channel.component.html',
-    styleUrl: './create-channel.component.scss',
-    imports: [MatDialogModule, MatCardModule, MatIconModule, DialogInputComponent]
+  selector: 'app-create-channel',
+  standalone: true,
+  templateUrl: './create-channel.component.html',
+  styleUrl: './create-channel.component.scss',
+  imports: [
+    MatDialogModule,
+    MatCardModule,
+    MatIconModule,
+    DialogInputComponent,
+    FormsModule,
+    CommonModule,
+  ],
 })
 export class CreateChannelComponent {
-
-  ChannelName :string = "z.B Kooperationsprojekte";
-  Description :string = "Dein Text hier";
-  user! :User[];
+  channelName: string = '';
+  description: string = '';
+  placeholderName: string = 'z.B Kooperationsprojekte';
+  placeholderDescription: string = 'Dein Text hier';
 
   constructor(
+    private dataService: DataService,
     public dialog: MatDialog,
-    private elementRef: ElementRef,
-    public dialogRef: MatDialogRef<CreateChannelComponent>,
+    public dialogRef: MatDialogRef<CreateChannelComponent>
   ) {}
-  
 
   onNoClick() {
     this.dialogRef.close();
   }
 
+  sendChannelInformation(): void {
+    const channelName = `${this.channelName[0].toUpperCase()}${this.channelName
+      .slice(1)
+      .toLowerCase()}`;
+    const description = `${this.description[0].toUpperCase()}${this.description
+      .slice(1)
+      .toLowerCase()}`;
+    this.dataService.sendChannelInfo(channelName, description);
+  }
+
   createChannel() {
     this.dialogRef.close();
+    this.sendChannelInformation();
     this.dialog.open(DialogAddUserComponent, {
       autoFocus: false,
     });

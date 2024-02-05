@@ -2,24 +2,50 @@
   <mat-card-header class="channel-edition-header">
     <div class="channel-edition-name">
       <mat-card-title>Channel erstellen</mat-card-title>
-      <h2>Channels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein.<br>
-        #marketing zum Beispiel</h2>
+      <h2>
+        Channels dienen deinem Team zur Kommunikation. Am besten sollten sie
+        themenbezogen sein.<br />
+        #marketing zum Beispiel
+      </h2>
     </div>
-    <mat-icon class="channel-edition-img-close" (click)="onNoClick()">close</mat-icon>
+    <mat-icon class="channel-edition-img-close" (click)="onNoClick()"
+      >close</mat-icon
+    >
   </mat-card-header>
-    
+
   <ng-container>
     <mat-card-content>
-        <h2>Channel-Name</h2>
-        <app-dialog-input class="dialog-input" [Tag]="true" [placeholder]="ChannelName"></app-dialog-input>
+      <h2>Channel-Name</h2>
+      <app-dialog-input
+        class="dialog-input"
+        [Tag]="true"
+        name="channelName"
+        ngDefaultControl
+        [(ngModel)]="channelName"
+        [placeholder]="placeholderName"
+      ></app-dialog-input>
 
-        <div class="description"><h2>Beschreibung</h2><h3>(optional)</h3></div>
-        <app-dialog-input class="dialog-input" [Tag]="false" [placeholder]="Description"></app-dialog-input>
+      <div class="description">
+        <h2>Beschreibung</h2>
+        <h3>(optional)</h3>
+      </div>
+      <app-dialog-input
+        class="dialog-input"
+        [Tag]="false"
+        name="description"
+        ngDefaultControl
+        [(ngModel)]="description"
+        [placeholder]="placeholderDescription"
+      ></app-dialog-input>
     </mat-card-content>
   </ng-container>
 
   <mat-card-actions>
-    <button class="channel-create" (click)="createChannel()">
+    <button
+      [disabled]="channelName.length === 0 || description.length === 0"
+      class="channel-create"
+      (click)="createChannel()"
+    >
       Erstellen
     </button>
   </mat-card-actions>

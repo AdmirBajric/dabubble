@@ -2,160 +2,159 @@
 @import "./../../../mixins.scss";
 
 body {
-    height: unset !important;
-    background-color: white !important;
+  height: unset !important;
+  background-color: white !important;
 }
 
 .main {
-    position: relative;
+  position: relative;
 }
 
 h2 {
-
-    &:hover {
-        cursor: pointer;
-    }
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .margin-top {
-    margin-top: 1.2rem;
+  margin-top: 1.2rem;
 }
 
 .workspace-wrapper {
-    position: relative;
-    height: 70rem; // same as row in dashboard.component
-    width: 32rem;
-    background-color: white !important;
-    overflow: hidden;
-    gap: 2rem;
-    @include flexbox(flex, column, unset, unset);
-    flex-basis: 26rem;
-    flex-grow: 0.5;
-    flex-shrink: 0.5;
-    align-self: center;
-    padding: 1rem;
+  position: relative;
+  height: 70rem; // same as row in dashboard.component
+  width: 32rem;
+  background-color: white !important;
+  overflow: hidden;
+  gap: 2rem;
+  @include flexbox(flex, column, unset, unset);
+  flex-basis: 26rem;
+  flex-grow: 0.5;
+  flex-shrink: 0.5;
+  align-self: center;
+  padding: 1rem;
 
-    &.show {
-        animation: slide-out 225ms forwards;
-    }
+  &.show {
+    animation: slide-out 225ms forwards;
+  }
 
-    &.hide {
-        animation: slide-in 225ms forwards;
-    }
+  &.hide {
+    animation: slide-in 225ms forwards;
+  }
 
-    @media only screen and (min-width: 1100px) and (min-height: 1099px) {
-        height: calc(100vh - 15rem);
-        width: 26rem;
-    }
+  @media only screen and (min-width: 1100px) and (min-height: 1099px) {
+    height: calc(100vh - 15rem);
+    width: 26rem;
+  }
 
-    border-radius: 30px;
-    max-width: 50rem;
+  border-radius: 30px;
+  max-width: 50rem;
 }
 
 .drawer-container {
+  width: 100%;
+
+  &.scroll {
+    overflow: scroll;
+    overflow-x: hidden;
+  }
+
+  .drawer {
+    width: 100%;
+    gap: 1rem;
+    display: grid;
+    position: relative;
+
+    &.fixed {
+      position: fixed;
+      background-color: white;
+      min-width: 24rem;
+      width: unset;
+    }
+
+    button {
+      &.btn-small-create-channel {
+        @include flexbox(flex, unset, unset, center);
+        position: absolute;
+        right: 0;
+        border-radius: 50%;
+        background: transparent;
+      }
+    }
+  }
+
+  .drawer-header {
+    position: relative;
+    @include flexbox(flex, unset, unset, center);
+    gap: 3rem;
     width: 100%;
 
-    &.scroll {
-        overflow: scroll;
-        overflow-x: hidden;
+    &:nth-of-type(2n) {
+      position: fixed;
     }
 
-    .drawer {
-        width: 100%;
-        gap: 1rem;
-        display: grid;
-        position: relative;
-
-        &.fixed {
-            position: fixed;
-            background-color: white;
-            min-width: 24rem;
-            width: unset;
-        }
-
-        button {
-            &.btn-small-create-channel {
-                @include flexbox(flex, unset, unset, center);
-                position: absolute;
-                right: 0;
-                border-radius: 50%;
-                background: transparent;
-            }
-        }
+    img {
+      &.rotate {
+        transform: rotate(90deg);
+      }
     }
 
-    .drawer-header {
-        position: relative;
-        @include flexbox(flex, unset, unset, center);
-        gap: 3rem;
-        width: 100%;
-
-        &:nth-of-type(2n) {
-            position: fixed;
-        }
-
-        img {
-            &.rotate {
-                transform: rotate(90deg);
-            }
-        }
-
-        span {
-            @include flexbox(flex, unset, unset, center);
-            gap: 1.5rem;
-        }
+    span {
+      @include flexbox(flex, unset, unset, center);
+      gap: 1.5rem;
     }
+  }
 }
 
 .dm-list-container {
-    margin-top: 6rem;
+  margin-top: 6rem;
 }
 
 .btn-create-channel {
-    @include flexbox(flex, unset, unset, center);
-    margin-left: 3.5rem;
-    padding: 2rem;
-    background: transparent;
-    border-radius: 3rem;
-    gap: 1.5rem;
-    width: 24rem;
+  @include flexbox(flex, unset, unset, center);
+  margin-left: 3.5rem;
+  padding: 2rem;
+  background: transparent;
+  border-radius: 3rem;
+  gap: 1.5rem;
+  width: 24rem;
 
-    a {
-        @include fonts-styles(17px, 400);
-        color: black;
+  a {
+    @include fonts-styles(17px, 400);
+    color: black;
 
-        &.link-create {
-            color: $purple-3;
-        }
+    &.link-create {
+      color: $purple-3;
     }
+  }
 
-    &:hover{
-        background-color: $bg-color;
-    }
+  &:hover {
+    background-color: $bg-color;
+  }
 }
 
 button {
-    &.mobile-btn-write-dm {
-        background-color: $purple-1;
-        border-radius: 50%;
-        border: unset;
-        position: absolute;
-        right: 2rem;
-        bottom: 1rem;
-        @include flexbox(flex, unset, center, center);
-        height: 7rem;
-        width: 7rem;
-        padding: 3.5rem;
-        box-shadow: 0px 6px 10px 0px rgba(0, 0, 0, 0.20);
+  &.mobile-btn-write-dm {
+    background-color: $purple-1;
+    border-radius: 50%;
+    border: unset;
+    position: absolute;
+    right: 2rem;
+    bottom: 1rem;
+    @include flexbox(flex, unset, center, center);
+    height: 7rem;
+    width: 7rem;
+    padding: 3.5rem;
+    box-shadow: 0px 6px 10px 0px rgba(0, 0, 0, 0.2);
 
-        &:active {
-            background-color: $purple-2;
-        }
-
-        @media only screen and (min-width: 1100px) {
-            display: none;
-        }
+    &:active {
+      background-color: $purple-2;
     }
+
+    @media only screen and (min-width: 1100px) {
+      display: none;
+    }
+  }
 }
 
 // // ##kann man das auch anders machen? ##
