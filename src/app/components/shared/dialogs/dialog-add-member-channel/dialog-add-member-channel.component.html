@@ -13,18 +13,26 @@
             [placeholder]="'Name eingeben'" (userListForAddingChannel)="receiveUserList($event)"
             (inputChange)="onSearchInputChange($event)"></app-searchbar>
         <ng-container *ngIf="(!isSearchbarEmpty) && (userListForAddingChannel$ | async) as userList">
-            <div class="members-list">
+            <app-user-list [users]="userList" (selectedUser)="userSelectionChange($event)"></app-user-list>
+        </ng-container>
+
+        <ng-container *ngIf="selectedUsers.length > 0">
+            <section class="selection-list">
                 <ul>
-                    <li *ngFor="let item of userList">
-                        <img [src]="item.avatar" alt="">
-                        <span> {{item.fullName}} </span>
+                    <li class="selected-item border-radius-3" *ngFor="let selected of selectedUsers">
+                        <div class="selected-avatar">
+                            <img [src]="selected.avatar" alt="avatar">
+                            <mat-icon [ngClass]="{ online: selected.online, offline: !selected.offline }" class="icon">circle</mat-icon>
+                        </div>
+                        <span class="selected-name">{{selected.fullName}}</span>
+                        <img class="img-x" src="../../../../../assets/img/exit_X.svg" alt="delete" (click)="removeUserFromSelection(selected)">
                     </li>
                 </ul>
-            </div>
+            </section>
         </ng-container>
 
         <div class="btn-container">
-            <button [class.ready]="availableUserChoosen" class="border-radius-3">Hinzufügen</button>
+            <button [disabled]="!selectedUsers" class="border-radius-3">Hinzufügen</button>
         </div>
     </mat-card-content>
 </mat-card>

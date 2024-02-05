@@ -8,27 +8,30 @@ import { InputComponent } from "../../input/input.component";
 import { SearchbarComponent } from "../../searchbar/searchbar.component";
 import { Observable, of } from 'rxjs';
 import { NgIf, CommonModule } from '@angular/common';
+import { ButtonFunctionService } from '../../../../services/button-function.service';
+import { DialogUserListComponent } from "./user-list/user-list.component";
 
 @Component({
-  selector: 'app-dialog-add-member-channel',
-  standalone: true,
-  templateUrl: './dialog-add-member-channel.component.html',
-  styleUrl: './dialog-add-member-channel.component.scss',
-  imports: [
-    CommonModule,
-    HoverChangeDirective,
-    MatCardModule,
-    MatDialogModule,
-    MatIconModule,
-    NgIf,
-    InputComponent,
-    SearchbarComponent
-  ]
+    selector: 'app-dialog-add-member-channel',
+    standalone: true,
+    templateUrl: './dialog-add-member-channel.component.html',
+    styleUrl: './dialog-add-member-channel.component.scss',
+    imports: [
+        CommonModule,
+        HoverChangeDirective,
+        MatCardModule,
+        MatDialogModule,
+        MatIconModule,
+        NgIf,
+        InputComponent,
+        SearchbarComponent,
+        DialogUserListComponent
+    ]
 })
 export class DialogAddMemberChannelComponent {
   availableUserChoosen: boolean = false;                                       /**** boolean for button mocking abled state */
   isSearchbarEmpty: boolean = true;                                            /** boolean to regulate display of search results */
-
+  selectedUsers: any[] = [];
   /**
    * An Observable property respresenting a list of users for adding to a specific channel.
    * Initialized with an empty array as the default value.
@@ -70,5 +73,30 @@ export class DialogAddMemberChannelComponent {
    */
   onSearchInputChange(isEmpty: boolean) {
     this.isSearchbarEmpty = isEmpty;
+  }
+
+  userSelectionChange(user: any[]){
+    const index = this.selectedUsers.findIndex(selectedUser => selectedUser === user);
+    if (index === -1) {
+      // Wenn der Benutzer nicht in der Liste ist, fügen Sie ihn hinzu
+      this.selectedUsers.push(user);
+    } else {
+      // Wenn der Benutzer bereits in der Liste ist, entfernen Sie ihn
+      this.selectedUsers.splice(index, 1);
+    }
+    // console.log('add-member component:', this.selectedUsers);
+    
+  }
+
+  removeUserFromSelection(userToDelete: any[]){
+    console.log('VOR löschung', this.selectedUsers);
+    
+    const index = this.selectedUsers.indexOf(userToDelete);
+
+    if (index !== -1){
+      this.selectedUsers.splice(index, 1);
+    console.log('AFTER deletion:', this.selectedUsers);
+
+    }
   }
 }
