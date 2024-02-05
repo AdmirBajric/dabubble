@@ -67,6 +67,10 @@
         &:enabled {
             background-color: $purple-1;
         }
+
+        &:disabled{
+            cursor: not-allowed;
+        }
     }
 }
 

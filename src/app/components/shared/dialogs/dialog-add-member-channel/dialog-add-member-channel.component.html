@@ -32,7 +32,7 @@
         </ng-container>
 
         <div class="btn-container">
-            <button [disabled]="!selectedUsers" class="border-radius-3">Hinzufügen</button>
+            <button [disabled]="selectedUsers.length === 0" class="border-radius-3">Hinzufügen</button>
         </div>
     </mat-card-content>
 </mat-card>
