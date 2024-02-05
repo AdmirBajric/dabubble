@@ -9,7 +9,20 @@
     </mat-card-header>
 
     <mat-card-content class="content">
-        <app-searchbar [showBorder]="true" [placeholder]="'Name eingeben'"></app-searchbar>
+        <app-searchbar [potentialMembersSearch]="true" [globalSearch]="false" [showBorder]="true"
+            [placeholder]="'Name eingeben'" (userListForAddingChannel)="receiveUserList($event)"
+            (inputChange)="onSearchInputChange($event)"></app-searchbar>
+        <ng-container *ngIf="(!isSearchbarEmpty) && (userListForAddingChannel$ | async) as userList">
+            <div class="members-list">
+                <ul>
+                    <li *ngFor="let item of userList">
+                        <img [src]="item.avatar" alt="">
+                        <span> {{item.fullName}} </span>
+                    </li>
+                </ul>
+            </div>
+        </ng-container>
+
         <div class="btn-container">
             <button [class.ready]="availableUserChoosen" class="border-radius-3">Hinzufügen</button>
         </div>
