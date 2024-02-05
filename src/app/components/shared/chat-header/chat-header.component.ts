@@ -38,6 +38,7 @@ export class ChatHeaderComponent implements OnInit {
       {
         name: 'Entwicklerteam',
         description: 'Ein Channel, in dem wir uns über alles zu Developement austauschen',
+        // id: number = 89213489284
         members: [
           {
             fullName: 'Max Mustermann',
@@ -78,6 +79,9 @@ export class ChatHeaderComponent implements OnInit {
     this.btnService.showChannelMembers(members); // there is always only one room in this component.
   }
   
+  addMember(room: Room[]){
+    this.btnService.addMember(room);
+  }
   /**
    * Calculates left positioning of avatar images according to i. 
    * The max display of avatars shown is three (i < 3).

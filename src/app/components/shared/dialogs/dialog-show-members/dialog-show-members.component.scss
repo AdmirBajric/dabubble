@@ -1,6 +1,13 @@
 @import "../../../../colors.scss";
 @import "../../../../mixins.scss";
 
+::ng-deep .mat-mdc-dialog-container,
+::ng-deep .mdc-dialog__surface {
+  border-radius: 3rem 0rem 3rem 3rem !important;
+  background: $white !important;
+  box-shadow: 0rem 0.6rem 1rem 0rem rgba(0, 0, 0, 0.2) !important;
+}
+
 .title {
     @include fonts-styles(2rem, bold);
 }
@@ -51,11 +58,16 @@
     margin-bottom: 1rem;
     width: 27rem;
     border-radius: 5rem;
-    padding: 1rem 2rem 1rem 2rem;
+    padding: 1rem 2rem 0rem 2rem;
 
     &:hover {
         background-color: $bg-color;
         cursor: pointer;
+    }
+
+    .member {
+        @include flexbox(flex, unset, unset, center);
+        gap: 1.5rem;
     }
 }
 
@@ -70,10 +82,9 @@
     }
 
     .icon {
-        height: 1;
+        // height: 1rem;
         position: absolute;
         bottom: 0.5rem;
-        /* height: 1.4rem; */
         right: 0.5rem;
     }
 }

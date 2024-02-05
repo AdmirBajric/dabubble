@@ -41,12 +41,10 @@
 
             <button class="btn-50" appHoverChange
                 [elementsConfig]="[ { imageSelector: 'img', defaultSrc: '../../../../assets/img/add_member_black.svg',  
-                hoverSrc: '../../../../assets/img/add_member_hover.svg'} ]">
+                hoverSrc: '../../../../assets/img/add_member_hover.svg'} ]" (click)="addMember(room)">
                 <img src="../../../../assets/img/add_member_black.svg" alt="add-member">
             </button>
 
         </div>
     </ng-container>
 </section>
-
-<div class="header-divider"></div>

@@ -10,13 +10,6 @@ h1 {
     width: 2rem;
 }
 
-.header-divider {
-    width: 100%;
-    box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.08);
-    height: 3px;
-    border: 1px dotted red;
-}
-
 .header-right {
     @include flexbox(flex, unset, unset, center);
     gap: 2rem;
@@ -24,9 +17,11 @@ h1 {
 
 .wrapper {
     @include flexbox(flex, unset, space-between, center);
-    height: 5rem;
+    height: 7rem;
+    box-shadow: 0 6px 6px -2px #00000014;
     background-color: white;
-    margin: 2rem 0;
+    padding: 2rem 0;
+    margin-bottom: 1rem;
 
     .header-left {
         @include flexbox(flex, unset, unset, center);

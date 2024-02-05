@@ -5,7 +5,8 @@ import { ChannelEditComponent } from '../components/chat/channel/channel-edit/ch
 import { CreateChannelComponent } from '../components/shared/dialogs/create-channel/create-channel.component';
 import { DialogShowMembersComponent } from '../components/shared/dialogs/dialog-show-members/dialog-show-members.component';
 import { DialogAddUserComponent } from '../components/shared/dialogs/dialog-add-user/dialog-add-user.component';
-
+import { DialogAddMemberChannelComponent } from '../components/shared/dialogs/dialog-add-member-channel/dialog-add-member-channel.component';
+// import { Room } from '../models/collection.class';
 
 // ################################# DUMMY DATA TO TYPE MEMBER ###############
 interface Member {
@@ -14,6 +15,15 @@ interface Member {
   email: string;
   isOnline: boolean;
 }
+
+interface Room {
+  name: string;
+  description: string;
+  members: Member[];
+}
+
+// ################################# DUMMY DATA END ################################
+
 @Injectable({
   providedIn: 'root'
 })
@@ -57,8 +67,17 @@ export class ButtonFunctionService {
     })
   }
 
-  // *********************************************************** Wir brauchen die Komponente noch!
-  // addUser(){
-  
+
+  /****************************************************adding member to channel with firestore ID */
+  addMember(room: Room[]){
+  this.dialog.open(DialogAddMemberChannelComponent, {
+    data: room
+  });
+  }
+
+  // userListDialog(userList: Member[]){
+  //   this.dialog.open(DialogUserListComponent, {
+  //     data: userList
+  //   })
   // }
 }
