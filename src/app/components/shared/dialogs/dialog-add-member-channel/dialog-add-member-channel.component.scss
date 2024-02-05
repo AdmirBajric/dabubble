@@ -10,6 +10,13 @@
     width: 51rem;
 }
 
+::ng-deep .cdk-global-overlay-wrapper {
+    top: 15rem;
+    left: 50rem;
+    // align-items: unset !important;
+    display: block !important;
+}
+
 .card {
     padding: 2rem;
     height: 100%;
@@ -41,7 +48,7 @@
     @include flexbox(flex, column, unset, unset);
     gap: 2rem;
     margin-top: 3rem;
-    
+
     .btn-container {
         @include flexbox(flex, unset, flex-end, unset);
     }
