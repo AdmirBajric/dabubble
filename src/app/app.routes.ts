@@ -19,6 +19,7 @@ import { ThreadComponent } from './components/chat/thread/thread.component';
 import { MainChatComponent } from './components/chat/main-chat/main-chat.component';
 import { NewMessageComponent } from './components/chat/main-chat/new-message/new-message.component';
 import { DirectMessageComponent } from './components/chat/main-chat/direct-message/direct-message.component';
+import { ReadDataComponent } from './read-data/read-data.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -51,4 +52,5 @@ export const routes: Routes = [
   { path: 'main-chat', component: MainChatComponent },
   { path: 'new-message', component: NewMessageComponent },
   { path: 'direct-message', component: DirectMessageComponent },
+  { path: 'read-data', component: ReadDataComponent },
 ];
