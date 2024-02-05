@@ -1,0 +1,84 @@
+@import "../../../../../colors.scss" ;
+@import "../../../../../mixins.scss" ;
+
+.error-wrapper {
+    color: red;
+    @include fonts-styles(1.2rem, bold);
+    border: 0.1rem solid red;
+    overflow: hidden;
+    height: 10rem;
+    width: 24rem;
+    padding-left: 2rem;
+    padding-top: 3rem;
+}
+
+.container {
+    border-radius: 0 2rem 2rem 2rem;
+    box-shadow: 0rem 0.6rem 1rem 0rem rgba(0, 0, 0, 0.2);
+    background-color: white;
+    position: fixed;
+    top: 33rem;
+    left: 54rem;
+    z-index: 99;
+}
+
+.list-wrapper {
+    padding: 0.5rem 0.2rem 0.5rem 0.2rem;
+    width: fit-content;
+    border: 0.1rem solid $light-purple-lines;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 18rem;
+}
+
+.member{
+    gap: 1rem;
+    margin-bottom: 1rem;
+    width: max-content;
+    border-radius: 5rem;
+    padding: 1rem 2rem 1rem 2rem;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+        background-color: $bg-color;
+        cursor: pointer;
+    }
+}
+
+.avatar {
+    width: 6rem;
+    height: 5rem;
+    border-radius: 3.5rem;
+    position: relative;
+
+    .icon {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        @include flexbox(flex, unset, center, center);
+        border: 0.2rem solid $bg-color;
+        border-radius: 50%;
+    }
+}
+// this file is repeating code that is written in dialog-show-members.component.sccs ********* can be styled generally if time :) 
+// ************************* kann auch global definiert werden, da auch in DM's, profile-view verwendet*****
+.online {
+    color: $online-green;
+}
+
+.offline {
+    color: $text-gray;
+}
+
+ul {
+    list-style: none;
+
+    li {
+        @include fonts-styles(1.6rem, normal);
+    }
+}
+
+.display-none {
+    display: none;
+}

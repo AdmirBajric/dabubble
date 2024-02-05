@@ -1,0 +1,18 @@
+<!-- ****************************************************** this list is used in: dialog-add-member-channel.component *********** -->
+<div class="error-wrapper container" *ngIf="!users">
+    <div class="info">
+        <span>Kein Kontakt gefunden.</span>
+    </div>
+</div>
+<div *ngIf="users && users.length > 0" class="list-wrapper container scroll">
+    <ul>
+        <li *ngFor="let user of users" class="member" (click)="selectUserForChannel(user)"
+            appHoverChange [elementsConfig]="[{ textSelector: 'span', defaultColor: '#000000', hoverColor: '#535AF1'}]">
+            <div class="avatar">
+                <img [src]="user.avatar" alt="pic">
+                <mat-icon [ngClass]="{ online: user.online, offline: !user.offline }" class="icon">circle</mat-icon>
+            </div>
+            <span>{{user.fullName}}</span>
+        </li>
+    </ul>
+</div>
