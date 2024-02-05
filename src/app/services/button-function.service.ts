@@ -74,4 +74,10 @@ export class ButtonFunctionService {
     data: room
   });
   }
+
+  // userListDialog(userList: Member[]){
+  //   this.dialog.open(DialogUserListComponent, {
+  //     data: userList
+  //   })
+  // }
 }
