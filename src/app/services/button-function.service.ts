@@ -20,6 +20,7 @@ interface Room {
   name: string;
   description: string;
   members: Member[];
+  id: number;
 }
 
 // ################################# DUMMY DATA END ################################
@@ -51,9 +52,9 @@ export class ButtonFunctionService {
    * Opening a dialog with a list of all channel members.
    * @param {Member[]} members
    */
-  showChannelMembers(members: Member[]){
+  showChannelMembers(channel: Room[]){
     this.dialog.open(DialogShowMembersComponent, {
-      data: members
+      data: channel
     })
   }
   
