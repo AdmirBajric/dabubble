@@ -11,6 +11,7 @@ interface Room {
   name: string;
   description: string;
   members: Member[];
+  id: number;
 }
 interface Member {
   fullName: string;
@@ -38,7 +39,7 @@ export class ChatHeaderComponent implements OnInit {
       {
         name: 'Entwicklerteam',
         description: 'Ein Channel, in dem wir uns über alles zu Developement austauschen',
-        // id: number = 89213489284
+        id: 200,
         members: [
           {
             fullName: 'Max Mustermann',
@@ -75,8 +76,8 @@ export class ChatHeaderComponent implements OnInit {
     return this.room[0].members.length
   }
 
-  showMembers(members: Member[]){
-    this.btnService.showChannelMembers(members); // there is always only one room in this component.
+  showMembers(r: Room[]){
+    this.btnService.showChannelMembers(r); // passing the whole channel Object because id, members is necessary
   }
   
   addMember(room: Room[]){
