@@ -1,0 +1,36 @@
+@import "../../../colors.scss";
+@import "../../../mixins.scss";
+
+.actions-container {
+    background-color: white;
+    height: 5rem;
+    // width: 21rem;
+    position: absolute; //container of parent element is relativ
+    top: -2rem; //must be half of height
+    border-radius: 2.5rem 2.5rem 0 2.5rem;
+    @include flexbox(flex, unset, center, center);
+    gap: 0.5rem;
+    border: 0.1rem solid $light-purple-lines;
+    right: 1.6rem;
+
+    @media only screen and (min-width: 768px) {
+        right: 3.2rem;
+    }
+
+    &.user-reaction {
+        left: 1.6rem;
+        width: 24rem;
+
+        @media only screen and (min-width: 768px) {
+            left: 3.2rem;
+        }
+    }
+}
+
+button {
+    background: transparent;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
