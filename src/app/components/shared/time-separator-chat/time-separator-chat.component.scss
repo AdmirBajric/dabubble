@@ -1,0 +1,23 @@
+@import "../../../colors.scss";
+@import "../../../mixins.scss";
+
+.date-wrapper {
+    @include flexbox(flex, unset, unset, center);
+    width: 100%;
+    margin: 2rem 0;
+
+    .line {
+        height: 0.1rem;
+        width: 100%;
+        background-color: $light-purple-lines;
+    }
+
+    .text {
+        @include flexbox(flex, unset, center, center);
+        border: 0.1rem solid $light-purple-lines;
+        height: 3rem;
+        min-width: fit-content;
+        padding: 1.5rem;
+        font-size: 1.2rem
+    }
+}
