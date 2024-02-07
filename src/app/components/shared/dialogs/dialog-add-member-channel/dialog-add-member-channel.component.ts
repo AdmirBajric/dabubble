@@ -55,6 +55,7 @@ export class DialogAddMemberChannelComponent implements OnInit{
   ngOnInit(): void {
       console.log(this.room);
   }
+  
   closeDialog() {
     this.dialogRef.close();
   }
@@ -77,29 +78,42 @@ export class DialogAddMemberChannelComponent implements OnInit{
   onSearchInputChange(isEmpty: boolean) {
     this.isSearchbarEmpty = isEmpty;
   }
-
+  
+  /**
+   * Handles changes in user selection emitted as an event from child component: user-list.
+   * - checks if the given user is already in the array of 'selectedUsers'.
+   *      - if no: pushes user to the array
+   *      - if yes: deletes user from the array
+   * @param {any[]} user
+   */
   userSelectionChange(user: any[]){
     const index = this.selectedUsers.findIndex(selectedUser => selectedUser === user);
     if (index === -1) {
-      // Wenn der Benutzer nicht in der Liste ist, fügen Sie ihn hinzu
       this.selectedUsers.push(user);
     } else {
-      // Wenn der Benutzer bereits in der Liste ist, entfernen Sie ihn
       this.selectedUsers.splice(index, 1);
     }
-    // console.log('add-member component:', this.selectedUsers);
-    
   }
 
+  /**
+ * Removes a user from the current selection.
+ * 
+ * This function is used to remove a specific user from the `selectedUsers` array. It first logs the state of 
+ * `selectedUsers` prior to any operation. Then, it locates the index of the user to delete within the array.
+ * If the user is found (i.e., the index is not -1), the user is removed from the array. After the deletion,
+ * it logs the updated state of `selectedUsers`.
+ * 
+  
+  /**
+   * Removes a user from the array 'selectedUsers'
+   * - gets index of the user in the array
+   * - deletes the user in the array
+   * @param {any[]} userToDelete
+   */
   removeUserFromSelection(userToDelete: any[]){
-    console.log('VOR löschung', this.selectedUsers);
-    
     const index = this.selectedUsers.indexOf(userToDelete);
-
     if (index !== -1){
       this.selectedUsers.splice(index, 1);
-    console.log('AFTER deletion:', this.selectedUsers);
-
     }
   }
 }
