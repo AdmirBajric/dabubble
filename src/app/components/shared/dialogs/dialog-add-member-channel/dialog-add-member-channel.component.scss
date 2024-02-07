@@ -20,6 +20,10 @@
     display: block !important;
 }
 
+::ng-deep .cdk-overlay-pane {
+    position: absolute !important;
+}
+
 .card {
     padding: 2rem;
     height: 100%;
@@ -112,13 +116,17 @@
     .ul>* {
         flex: 1 1 160px;
     }
-
-    //################ #########   TEST END!
-
-
+}
+// ********************************************* CAN BE SET IN GLOBAL STYLES****************
+span {
+    font-size: 1.8rem;
+    color: $purple-2;
 }
 
-span {
-    font-size: 1.8rem; // needs to go in global styles
-    color: $purple-2;
+.online {
+    color: $online-green;
+}
+
+.offline {
+    color: $text-gray;
 }
