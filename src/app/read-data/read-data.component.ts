@@ -31,7 +31,9 @@ export class ReadDataComponent implements OnInit {
       onSnapshot(itemCollection, (querySnapshot) => {
         querySnapshot.forEach((doc) => {
           const data = doc.data();
+          const channelId = doc.id;
           console.log(data);
+          console.log(channelId);
         });
       });
     } catch (error) {

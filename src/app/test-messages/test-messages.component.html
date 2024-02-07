@@ -1,0 +1,71 @@
+<label class="message-main">Schreibe eine Nachricht</label>
+<div class="main-container">
+  <input [(ngModel)]="text" type="text" placeholder="Your message" />
+  <button (click)="addMessage()">Create message</button>
+</div>
+
+<label class="comment-main"
+  >Kommentiere diese Nachricht oder hinterlasse einen emoji</label
+>
+<div class="messages">
+  <p class="message">{{ textFromServer }}</p>
+  <div class="message-reactions">
+    <mat-icon (click)="addReactionToMainMessage('mainMessage')"
+      >add_reaction</mat-icon
+    >
+
+    <div>
+      <input
+        [(ngModel)]="comment"
+        type="text"
+        placeholder="Kommentiere diese Nachricht..."
+      />
+      <button (click)="commentMessage()">Kommentiere</button>
+    </div>
+
+    <div class="show-reactions-on-main-message">
+      <p *ngFor="let emoji of emojis; index">{{ emoji }}</p>
+    </div>
+  </div>
+  <div>
+    <emoji-mart
+      (emojiClick)="addEmoji($event, 'mainMessage')"
+      *ngIf="active"
+      title="Pick your emoji…"
+      emoji="point_up"
+    ></emoji-mart>
+  </div>
+</div>
+
+<label class="reaction-on-comment">Kommentare auf die Nachricht</label>
+<div *ngIf="comments.length > 0" class="comments">
+  <div *ngFor="let comment of comments" class="comment">
+    <div class="comment-container">
+      <div class="comment-text">
+        <p class="comment-text-first-child">{{ comment.text }}</p>
+        <p>{{ comment.timestamp }}</p>
+      </div>
+
+      <div class="comment-reactions">
+        <p *ngFor="let reaction of comment.reactions">{{ reaction.emoji }}</p>
+      </div>
+    </div>
+
+    <div>
+      <mat-icon
+        (click)="
+          addReactionToMainMessage('onComment'); setActiveComment(comment.id)
+        "
+        >add_reaction</mat-icon
+      >
+      <div>
+        <emoji-mart
+          (emojiClick)="addEmoji($event, comment.id)"
+          *ngIf="activeCommentId === comment.id"
+          title="Pick your emoji…"
+          emoji="point_up"
+        ></emoji-mart>
+      </div>
+    </div>
+  </div>
+</div>

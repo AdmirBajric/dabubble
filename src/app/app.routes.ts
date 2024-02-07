@@ -20,6 +20,7 @@ import { MainChatComponent } from './components/chat/main-chat/main-chat.compone
 import { NewMessageComponent } from './components/chat/main-chat/new-message/new-message.component';
 import { DirectMessageComponent } from './components/chat/main-chat/direct-message/direct-message.component';
 import { ReadDataComponent } from './read-data/read-data.component';
+import { TestMessagesComponent } from './test-messages/test-messages.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -53,4 +54,5 @@ export const routes: Routes = [
   { path: 'new-message', component: NewMessageComponent },
   { path: 'direct-message', component: DirectMessageComponent },
   { path: 'read-data', component: ReadDataComponent },
+  { path: 'test-messages', component: TestMessagesComponent },
 ];

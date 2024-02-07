@@ -64,6 +64,7 @@
         @if (showChannels) {
         <ng-container *ngFor="let channel of channels">
           <app-channel-list-item
+            id="{{ channel.id }}"
             [channels]="channel"
             (openChatChannel)="showChannelChat()"
           ></app-channel-list-item>

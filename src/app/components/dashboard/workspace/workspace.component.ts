@@ -40,6 +40,7 @@ export class WorkspaceComponent implements OnInit {
   imageFlag!: string;
   user: any;
   channels: any[] = [];
+  channelId: string = '';
   @Input() isOpen: boolean = true;
   // ********************** redirecting input event as output boolean to parent component
   showChannelContent!: boolean;
@@ -64,6 +65,7 @@ export class WorkspaceComponent implements OnInit {
         this.channels = [];
         querySnapshot.forEach((doc) => {
           const data = doc.data();
+          data['id'] = doc.id;
           this.channels.push(data);
         });
       });
