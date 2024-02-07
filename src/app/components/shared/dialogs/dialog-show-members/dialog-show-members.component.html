@@ -6,7 +6,7 @@
 
     <mat-card-content class="content scroll">
         <ul>
-            <span class="member-wrapper" *ngFor="let m of members; let i = index">
+            <span class="member-wrapper" *ngFor="let m of room.members; let i = index">
                 <div class="member" (click)="showMemberProfile(m)" appHoverChange [elementsConfig]="[{ textSelector: 'li', defaultColor: '#000000', hoverColor: '#535AF1'}]">
                     <div class="avatar">
                         <img [src]="m.avatar" alt="">
@@ -19,7 +19,7 @@
     </mat-card-content>
 
     <div class="dialog-footer">
-        <button appHoverChange [elementsConfig]="[
+        <button (click)="openDialogAddingMember()" appHoverChange [elementsConfig]="[
             { imageSelector: 'img', defaultSrc: '../../../../../assets/img/add_member_black.svg', hoverSrc: '../../../../../assets/img/add_member_hover.svg' },
             { textSelector: 'span', defaultColor: '#000000', hoverColor: '#535AF1' }
             ]" >
