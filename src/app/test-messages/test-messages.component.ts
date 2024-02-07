@@ -31,13 +31,19 @@ export class TestMessagesComponent implements OnInit {
   user!: any;
   text: string = '';
   textFromServer: string = '';
+  editedMessage: string = '';
+  editedComment: string = '';
   active: boolean = false;
   activeComment: boolean = false;
   comment: string = '';
   messageId: string = '';
+  commentId: string = '';
   emojis: string[] = [];
   comments: any[] = [];
   activeCommentId: string | null = null;
+  editContainerOpen: boolean = false;
+  editMessageBtnShow: boolean = false;
+  editCommentContainerShow: boolean = false;
 
   constructor() {}
 
@@ -48,6 +54,46 @@ export class TestMessagesComponent implements OnInit {
         this.user = JSON.parse(user);
       }
     }
+  }
+
+  async updateMessage(id: string) {
+    const documentRef = doc(collection(this.firestore, 'messages'), id);
+    const docSnapshot = await getDoc(documentRef);
+
+    if (docSnapshot.exists()) {
+      await updateDoc(documentRef, {
+        text: this.editedMessage,
+      });
+    }
+
+    this.editContainerOpen = false;
+    this.showMessage();
+  }
+
+  async updateComment(id: string) {
+    const documentRef = doc(collection(this.firestore, 'comments'), id);
+    const docSnapshot = await getDoc(documentRef);
+
+    if (docSnapshot.exists()) {
+      await updateDoc(documentRef, {
+        text: this.editedComment,
+      });
+    }
+
+    this.editCommentContainerShow = false;
+    this.showComments();
+  }
+
+  editCommentOpenContainer() {
+    this.editCommentContainerShow = true;
+  }
+
+  closeEditContainer() {
+    this.editContainerOpen = false;
+  }
+
+  showEditContainer() {
+    this.editContainerOpen = true;
   }
 
   // Create new message on Channel
@@ -86,6 +132,8 @@ export class TestMessagesComponent implements OnInit {
         if (docSnapshot.exists()) {
           const documentData = docSnapshot.data();
           this.textFromServer = documentData['text'];
+          this.editedMessage = documentData['text'];
+          this.editMessageBtnShow = true;
         } else {
           console.error('Document not found');
         }
@@ -145,6 +193,7 @@ export class TestMessagesComponent implements OnInit {
   }
 
   async saveReactionComments(reactionJSON: any, from: string): Promise<void> {
+    // from is ID
     const documentRef = doc(collection(this.firestore, 'comments'), from);
     const docSnapshot = await getDoc(documentRef);
     if (docSnapshot.exists()) {
@@ -191,7 +240,9 @@ export class TestMessagesComponent implements OnInit {
       const commentCollection = collection(this.firestore, 'comments');
 
       addDoc(commentCollection, commentJSON)
-        .then((data) => {})
+        .then((data) => {
+          this.commentId = data.id;
+        })
         .catch((err) => {});
 
       this.showComments();
@@ -214,7 +265,7 @@ export class TestMessagesComponent implements OnInit {
       let commentData = doc.data();
       commentData['id'] = doc.id;
       this.comments.push(commentData);
-      console.log(commentData);
+      this.editedComment = commentData['text'];
     });
   }
 }
