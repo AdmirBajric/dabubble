@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -28,7 +28,7 @@ import { DialogUserListComponent } from "./user-list/user-list.component";
         DialogUserListComponent
     ]
 })
-export class DialogAddMemberChannelComponent {
+export class DialogAddMemberChannelComponent implements OnInit{
   availableUserChoosen: boolean = false;                                       /**** boolean for button mocking abled state */
   isSearchbarEmpty: boolean = true;                                            /** boolean to regulate display of search results */
   selectedUsers: any[] = [];
@@ -50,8 +50,11 @@ export class DialogAddMemberChannelComponent {
     @Inject(MAT_DIALOG_DATA) public data: any) {
   }
   // sets data that is given by parent element /chat-header of specific channel as room to be red in HTML
-  room = this.data;
-
+  room = this.data[0];
+  
+  ngOnInit(): void {
+      console.log(this.room);
+  }
   closeDialog() {
     this.dialogRef.close();
   }
