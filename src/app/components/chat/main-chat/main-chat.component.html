@@ -1,8 +1,13 @@
-<section [ngStyle]="{'height': isNotDashboard ? '100vh' : '97%'}" [class.no-mobile]="isNotDashboard" class="wrapper wrapper-padding border-radius-3">
+<section [ngStyle]="{'height': isNotDashboard ? '100vh' : '97%'}" [class.no-mobile]="isNotDashboard"
+    class="wrapper wrapper-padding border-radius-3">
     <app-chat-header [roomName]="roomNameHeader"></app-chat-header>
-    
+
     <div *ngFor="let message of messages; let i = index;">
-        <app-message [message]="message" ></app-message>
+        <ng-container  *ngIf="i === 0 || isDifferentDay(messages[i - 1].created_at, message.created_at)">
+            <app-time-separator-chat
+                [timestamp]="message.created_at"></app-time-separator-chat>
+        </ng-container>
+        <app-message [message]="message"></app-message>
     </div>
     <div class="chat-input">
         <app-message-input></app-message-input>
@@ -17,5 +22,3 @@
         <a [routerLink]="['/dashboard']" routerLinkActive="router-link-active" >zum Dashboard</a>
     </div>
 </section>
-
-<!-- (showThread)="handleThread($event)" muss im eventservice eingebaut werden -->
