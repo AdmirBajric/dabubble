@@ -1,4 +1,4 @@
-<section [class.thread]="styleHeaderForThread" class="wrapper" *ngFor="let r of room">
+<section [class.thread]="styleHeaderForThread" class="wrapper wrapper-padding" *ngFor="let r of room">
 
     <div [ngClass]=" styleHeaderForThread ? 'thread-header' : 'header-left' "
         (click)=" styleHeaderForThread ? null : openEditChannel()" appHoverChange

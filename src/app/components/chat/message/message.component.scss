@@ -10,6 +10,16 @@ img {
 
 .chat {
     position: relative;
+
+    &:hover{
+        background-color: $bg-color;
+        cursor: pointer;
+    }
+
+    &:hover .messageLine{
+        background-color: white;
+        color: black;
+    }
 }
 
 .white {
@@ -20,7 +30,7 @@ img {
     display: flex;
     width: 100%;
     gap: 1rem;
-    // padding: 2rem;
+    padding: 1rem 0;
 }
 
 .reverse {
