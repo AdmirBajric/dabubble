@@ -1,5 +1,10 @@
 <div class="chat white">
-    <div class="flex" *ngIf="message.sender.fullName != loggedUser">
+    <div class="flex" *ngIf="message.sender.fullName != loggedUser" (mouseover)="showActions = true"
+        (mouseleave)="showActions = false">
+        <ng-container *ngIf="showActions">
+            <app-message-hover-actions *ngIf="message" [isYou]="false" [currentMessage]="message.message"></app-message-hover-actions>
+        </ng-container>
+
         <img src="{{message.sender.avatar}}" alt="">
         <div>
             <div class="firstLine">
@@ -17,7 +22,12 @@
         </div>
     </div>
 
-    <div class="flex reverse" *ngIf="message.sender.fullName == loggedUser">
+    <div class="flex reverse" *ngIf="message.sender.fullName == loggedUser" (mouseover)="showActions = true"
+        (mouseleave)="showActions = false">
+        <ng-container *ngIf="showActions">
+            <app-message-hover-actions [isYou]="true" [currentMessage]="message"></app-message-hover-actions>
+        </ng-container>
+
         <img src="{{message.sender.avatar}}" alt="" class="userImg">
         <div>
             <div class="firstLine reverse">
@@ -28,7 +38,8 @@
             <div class="messageLine own">{{message.message}}</div>
 
             <div class="lastLine">
-                <span class="answerCount" (click)="showAnswersinThread(message.message)">{{answersCount}} Antworten</span>
+                <span class="answerCount" (click)="showAnswersinThread(message.message)">{{answersCount}}
+                    Antworten</span>
                 <span class="time">Letzte Antwort {{lastAnswerTime}} Uhr</span>
             </div>
         </div>

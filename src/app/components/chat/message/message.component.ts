@@ -1,13 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { ProfileViewComponent } from "../../profile/profile-view/profile-view.component";
+import { MessageHoverActionsComponent } from '../../shared/message-hover-actions/message-hover-actions.component';
 
 @Component({
     selector: 'app-message',
     standalone: true,
     templateUrl: './message.component.html',
     styleUrl: './message.component.scss',
-    imports: [NgIf, ProfileViewComponent]
+    imports: [MessageHoverActionsComponent, NgIf, ProfileViewComponent]
 })
 export class MessageComponent implements OnInit {
   ngOnInit(): void {
@@ -18,6 +19,7 @@ export class MessageComponent implements OnInit {
   @Output() showThread = new EventEmitter<any[]>();
   answersCount!: number;
   lastAnswerTime!: string;
+  showActions: boolean = false;
 
   getTimeFromString(dateTimeString: string): string {
     const dateObject = new Date(dateTimeString);
