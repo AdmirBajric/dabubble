@@ -1,13 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { ProfileViewComponent } from "../../profile/profile-view/profile-view.component";
+import { MessageHoverActionsComponent } from '../../shared/message-hover-actions/message-hover-actions.component';
+import { Message } from '../../../models/message.class';
+import { FormsModule } from '@angular/forms';
+import { HoverChangeDirective } from '../../../directives/hover-change.directive';
 
 @Component({
     selector: 'app-message',
     standalone: true,
     templateUrl: './message.component.html',
     styleUrl: './message.component.scss',
-    imports: [NgIf, ProfileViewComponent]
+    imports: [FormsModule, HoverChangeDirective, MessageHoverActionsComponent, NgIf, ProfileViewComponent]
 })
 export class MessageComponent implements OnInit {
   ngOnInit(): void {
@@ -18,7 +22,9 @@ export class MessageComponent implements OnInit {
   @Output() showThread = new EventEmitter<any[]>();
   answersCount!: number;
   lastAnswerTime!: string;
-
+  showActions: boolean = false;
+  openMessageEdit: boolean = false;
+  saveOriginalMessage!: string;
   getTimeFromString(dateTimeString: string): string {
     const dateObject = new Date(dateTimeString);
 
@@ -45,8 +51,30 @@ export class MessageComponent implements OnInit {
   }
 
   showAnswersinThread(answers: any[]) {
-    // console.log('message.component', answers);
     this.showThread.emit(answers);
+  }
+
+  editMessage(m: Message){
+    this.handlingMessageHoverActions();
+    this.saveOriginalMessage = m.text;
+    this.openMessageEdit = true;
+  }
+
+  handlingMessageHoverActions(){
+    this.showActions = false;
+  }
+
+  saveEditedMessage(){
+
+  }
+
+  cancelMessageEditing(){
+    this.openMessageEdit = false;
+    this.message.text = this.saveOriginalMessage;
+  }
+
+  addEmoji(){
+
   }
 
 }
