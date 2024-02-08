@@ -1,33 +1,45 @@
-<div class="actions-container" [class.user-reaction]="isYou" >
+<div class="actions-container" [class.user-reaction]="isYou">
 
-    <button appHoverChange [elementsConfig]="
+    <button appHoverChange
+        [elementsConfig]="
         [{ imageSelector: 'img', defaultSrc: '../../../../assets/img/add_emoji_check.svg', hoverSrc: '../../../../assets/img/add_emoji_check_hover.svg' }]">
-        
+
         <img src="../../../../assets/img/add_emoji_check.svg" alt="ok">
     </button>
 
-    <button appHoverChange [elementsConfig]="
+    <button appHoverChange
+        [elementsConfig]="
         [{imageSelector: 'img', defaultSrc: '../../../../assets/img/add_emoji_handsUP.svg', hoverSrc: '../../../../assets/img/add_emoji_handsUP_hover.svg'}]">
-        
+
         <img src="../../../../assets/img/add_emoji_handsUP.svg" alt="bravo">
     </button>
 
-    <button appHoverChange [elementsConfig]="
+    <button appHoverChange
+        [elementsConfig]="
         [{imageSelector: 'img', defaultSrc: '../../../../assets/img/add_emoji.svg', hoverSrc: '../../../../assets/img/add_emoji_hover.svg'}]">
-        
+
         <img src="../../../../assets/img/add_emoji.svg" alt="add reaction">
     </button>
 
-    <button appHoverChange [elementsConfig]="
+    <button appHoverChange
+        [elementsConfig]="
         [{imageSelector: 'img', defaultSrc: '../../../../assets/img/add_answer.svg', hoverSrc: '../../../../assets/img/add_answer_hover.svg'}]">
-        
+
         <img src="../../../../assets/img/add_answer.svg" alt="">
     </button>
 
-    <button *ngIf="isYou" appHoverChange [elementsConfig]="
-        [{imageSelector: 'img', defaultSrc: '../../../../assets/img/edit_message.svg', hoverSrc: '../../../../assets/img/edit_message_hover.svg'}]">
-        
-        <img src="../../../../assets/img/edit_message.svg" alt="">
+    <button (click)="showToolTip = true" class="btn-edit-wrapper">
+        <div *ngIf="isYou" appHoverChange
+            [elementsConfig]="
+            [{imageSelector: 'img', defaultSrc: '../../../../assets/img/edit_message.svg', hoverSrc: '../../../../assets/img/edit_message_hover.svg'}]">
+
+            <img src="../../../../assets/img/edit_message.svg" alt="">
+        </div>
+        <ng-container *ngIf="showToolTip">
+            <div class="tooltip-edit">
+                <span (click)="openEditMessage($event)">Nachricht bearbeiten</span>
+            </div>
+        </ng-container>
     </button>
 
 </div>
