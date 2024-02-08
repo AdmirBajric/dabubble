@@ -15,7 +15,9 @@
                 <div class="messageLine">{{message.message}}</div>
                 <div class="lastLine">
                     <span class="answerCount" (click)="showAnswersinThread(message)">{{answersCount}}
-                        Antworten</span>
+                        <ng-container *ngIf="answersCount === 1; else multipleAnswers">Antwort</ng-container>
+                        <ng-template #multipleAnswers>Antworten</ng-template>
+                    </span>
                     <span class="time">Letzte Antwort {{lastAnswerTime}} Uhr</span>
                 </div>
             </div>
