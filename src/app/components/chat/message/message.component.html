@@ -1,5 +1,6 @@
 <div class="chat white wrapper-padding">
-    <section *ngIf="message.sender.fullName != loggedUser" (mouseover)="showActions = true" (mouseleave)="showActions = false">
+    <section *ngIf="message.sender.fullName != loggedUser" (mouseover)="showActions = true"
+        (mouseleave)="showActions = false">
         <ng-container *ngIf="showActions">
             <app-message-hover-actions *ngIf="message" [isYou]="false"
                 [currentMessage]="message.message"></app-message-hover-actions>
@@ -21,10 +22,30 @@
         </div>
     </section>
 
-    <section *ngIf="message.sender.fullName == loggedUser" (mouseover)="showActions = true" (mouseleave)="showActions = false">
-        <ng-container *ngIf=" showActions">
-        <app-message-hover-actions [isYou]="true" [currentMessage]="message"></app-message-hover-actions>
+    <section *ngIf="message.sender.fullName == loggedUser" (mouseover)="showActions = true"
+        (mouseleave)="showActions = false">
+        <ng-container *ngIf="showActions">
+            <app-message-hover-actions (editMessage)="editMessage(message)" [isYou]="true"
+                [currentMessage]="message"></app-message-hover-actions></ng-container>
+
+        <ng-container *ngIf="openMessageEdit">
+            <div class="edit-message-wrapper">
+                <textarea #messageEditInput [(ngModel)]="message.message" autocomplete="off"></textarea>
+                <div class="btn-edit-wrapper">
+                    <button (click)="addEmoji()" class="btn-50" appHoverChange
+                    [elementsConfig]="[{imageSelector: 'img', defaultSrc: '../../../../assets/img/add_emoji.svg', hoverSrc: '../../../../assets/img/add_emoji_hover.svg'}]">
+                        <img src="../../../../assets/img/add_emoji.svg" alt="emoji">
+                    </button>
+                    
+                    <div class="btn-edit-2">
+                        <button (click)="saveEditedMessage()" class="border-radius-3">Speichern</button>
+                        
+                        <button (click)="cancelMessageEditing()" class="border-radius-3">Abbrechen</button>
+                    </div>
+                </div>
+            </div>
         </ng-container>
+        
         <div class="flex reverse">
             <img src="{{message.sender.avatar}}" alt="" class="userImg">
             <div>

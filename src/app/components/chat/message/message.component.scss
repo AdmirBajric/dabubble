@@ -4,19 +4,17 @@
 img {
     width: 3.5rem;
     height: 3.5rem;
-    // margin-right: 1rem;
-    // margin-left: 1rem;
 }
 
 .chat {
     position: relative;
 
-    &:hover{
+    &:hover {
         background-color: $bg-color;
         cursor: pointer;
     }
 
-    &:hover .messageLine{
+    &:hover .messageLine {
         background-color: white;
         color: black;
     }
@@ -82,4 +80,62 @@ img {
     display: flex;
     width: 100%;
     justify-content: space-around;
+}
+
+button {
+    background: transparent;
+}
+
+.edit-message-wrapper {
+    background-color: white;
+    height: 100%;
+    left: 3.2rem;
+    right: 7rem;
+    position: absolute;
+    border: 0.1rem solid $light-purple-lines;
+    border-radius: 2rem;
+    padding: 1rem 1rem 0 1rem;
+
+    @include flexbox(flex, column, space-between, unset);
+
+    textarea {
+        width: 100%;
+        color: $text-gray;
+        overflow: auto;
+        resize: none;
+        height: 4rem;
+        border: none;
+
+        &:focus-visible{
+            outline: none;
+        }
+    }
+
+    .btn-edit-wrapper {
+        @include flexbox(flex, unset, space-between, center);
+    }
+
+    .btn-edit-2 {
+        @include flexbox(flex, unset, space-between, unset);
+        gap: 1rem;
+        width: 18rem;
+
+        button {
+            padding: 0 1rem 0 1rem;
+            height: 3rem;
+            &:hover {
+                font-weight: bold;
+            }
+
+            &:first-child {
+                border: 0.1rem solid $purple-2;
+                color: $purple-1;
+            }
+
+            &:nth-child(2) {
+                color: white;
+                background-color: $purple-1;
+            }
+        }
+    }
 }
