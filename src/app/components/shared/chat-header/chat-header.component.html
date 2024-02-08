@@ -39,11 +39,13 @@
                 <div class="members-count"> {{ countMembersRoom }} </div>
             </div>
 
-            <button class="btn-50" appHoverChange
-                [elementsConfig]="[ { imageSelector: 'img', defaultSrc: '../../../../assets/img/add_member_black.svg',  
-                hoverSrc: '../../../../assets/img/add_member_hover.svg'} ]" (click)="addMember(room)">
-                <img src="../../../../assets/img/add_member_black.svg" alt="add-member">
-            </button>
+            <div class="btn-wrapper">
+                <button class="btn-50" appHoverChange
+                    [elementsConfig]="[ { imageSelector: 'img', defaultSrc: '../../../../assets/img/add_member_black.svg',
+                    hoverSrc: '../../../../assets/img/add_member_hover.svg'} ]" (click)="addMember(room)">
+                    <img src="../../../../assets/img/add_member_black.svg" alt="add-member">
+                </button>
+            </div>
 
         </div>
     </ng-container>

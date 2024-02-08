@@ -15,6 +15,10 @@ h1 {
     gap: 2rem;
 }
 
+.btn-wrapper {
+    position: relative;
+}
+
 .wrapper {
     @include flexbox(flex, unset, space-between, center);
     height: 7rem;

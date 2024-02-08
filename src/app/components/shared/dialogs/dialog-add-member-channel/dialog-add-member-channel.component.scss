@@ -14,15 +14,15 @@
     box-shadow: none !important;
 }
 
-::ng-deep .cdk-global-overlay-wrapper {
-    top: 15rem;
-    left: 50rem;
-    display: block !important;
-}
+// ::ng-deep .cdk-global-overlay-wrapper {
+//     top: 15rem;
+//     left: 50rem;
+//     display: block !important;
+// }
 
-::ng-deep .cdk-overlay-pane {
-    position: absolute !important;
-}
+// ::ng-deep .cdk-overlay-pane {
+//     position: absolute !important;
+// }
 
 .card {
     padding: 2rem;

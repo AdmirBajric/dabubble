@@ -72,7 +72,8 @@ export class ButtonFunctionService {
   /****************************************************adding member to channel with firestore ID */
   addMember(room: Room[]){
   this.dialog.open(DialogAddMemberChannelComponent, {
-    data: room
+    data: room,
+    position: { top: '7.5rem', right: '2rem' }
   });
   }
 
