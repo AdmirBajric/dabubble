@@ -17,13 +17,6 @@ interface Member {
   isOnline: boolean;
 }
 
-interface Room {
-  name: string;
-  description: string;
-  members: Member[];
-  id: number;
-}
-
 // ################################# DUMMY DATA END ################################
 
 @Injectable({
