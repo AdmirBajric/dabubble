@@ -1,17 +1,18 @@
 <section [ngStyle]="{'height': isNotDashboard ? '100vh' : '97%'}" [class.no-mobile]="isNotDashboard"
     class="wrapper border-radius-3">
-    <app-chat-header *ngIf="showChannel" [roomName]="roomNameHeader"></app-chat-header>
-
-    <div *ngFor="let message of messages; let i = index;">
-        <ng-container  *ngIf="i === 0 || isDifferentDay(messages[i - 1].timestamp, message.timestamp)">
-            <app-time-separator-chat
-                [timestamp]="message.timestamp"></app-time-separator-chat>
-        </ng-container>
-        <app-message [message]="message" [showAnswers]="true"></app-message>
-    </div>
-    <div class="chat-input">
-        <app-message-input></app-message-input>
-    </div>
+    <ng-container *ngIf="showChannel">
+        <app-chat-header></app-chat-header>
+        <div *ngFor="let message of messages; let i = index;">
+            <ng-container  *ngIf="i === 0 || isDifferentDay(messages[i - 1].timestamp, message.timestamp)">
+                <app-time-separator-chat
+                    [timestamp]="message.timestamp"></app-time-separator-chat>
+            </ng-container>
+            <app-message [message]="message" [showAnswers]="true"></app-message>
+        </div>
+        <div class="chat-input">
+            <app-message-input></app-message-input>
+        </div>
+    </ng-container>
 </section>
 
 <section *ngIf="isNotDashboard" class="desktop-view info-desktop" appHoverImage >
