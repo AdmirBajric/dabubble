@@ -6,14 +6,22 @@ import { Message } from '../models/message.class';
   providedIn: 'root'
 })
 export class chatNavigationService {
-  private isThreadOpen$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private threadOpenStatus!: boolean;
+  private isThreadOpen$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  private currentMessage$ = new BehaviorSubject<any>(null); 
+  private channelOpenStatus!: boolean;
+  private isChannelOpen$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private currentChannel$ = new BehaviorSubject<any>(null);
+
+  private currentMessage$ = new BehaviorSubject<any>(null);
 
   constructor() {
     this.isThreadOpen$.subscribe((value) => {
       this.threadOpenStatus = value;
+    })
+
+    this.isChannelOpen$.subscribe((value) => {
+      this.channelOpenStatus = value;
     })
   }
 
@@ -22,10 +30,16 @@ export class chatNavigationService {
     this.isThreadOpen$.next(true);
   }
 
-  cloesThread(){
+  openChannel(channel: any[]) {
+    this.currentChannel$.next(channel);
+    this.isChannelOpen$.next(true);
+    console.log('nav service:', channel);
+  }
+
+  cloesThread() {
     this.isThreadOpen$.next(false);
   }
-  
+
   /**
    * Observable to be subsribed by components that need information about thread.component status.
    *
@@ -40,7 +54,15 @@ export class chatNavigationService {
     return this.threadOpenStatus;
   }
 
-  get currentMessage(){
+  get currentMessage() {
     return this.currentMessage$.asObservable();
+  }
+
+  get currentChannel() {
+    return this.currentChannel$.asObservable();
+  }
+
+  get channelStatus$() {
+    return this.isChannelOpen$.asObservable();
   }
 }
