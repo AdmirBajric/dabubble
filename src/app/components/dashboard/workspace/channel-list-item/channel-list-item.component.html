@@ -1,15 +1,11 @@
-<a
-  appHoverChange
-  [elementsConfig]="[
+<a appHoverChange [elementsConfig]="[
     {
       imageSelector: 'img',
       defaultSrc: './../../assets/img/hash.svg',
       hoverSrc: './../../assets/img/hash_hover.svg'
     },
     { textSelector: 'span', defaultColor: '#000000', hoverColor: '#535AF1' }
-  ]"
-  (click)="displayChannel()"
->
+  ]" (click)="displayChannel(channels)">
   <img src="./../../assets/img/hash.svg" alt="#" />
   <span>{{ channels.name }}</span>
 </a>

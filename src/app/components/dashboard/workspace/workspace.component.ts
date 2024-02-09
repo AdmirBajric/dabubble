@@ -17,6 +17,7 @@ import { ButtonFunctionService } from '../../../services/button-function.service
 import { HoverChangeDirective } from '../../../directives/hover-change.directive';
 import { EventEmitter } from '@angular/core';
 import { Firestore, collection, onSnapshot } from '@angular/fire/firestore';
+import { chatNavigationService } from '../../../services/chat-navigation.service';
 
 @Component({
   selector: 'app-workspace',
