@@ -1,7 +1,7 @@
 <label class="message-main">Schreibe eine Nachricht</label>
 <div class="main-container">
   <input [(ngModel)]="text" type="text" placeholder="Your message" />
-  <button (click)="addMessage()">Create message</button>
+  <button (click)="addMessage(true)">Create message</button>
 </div>
 
 <label class="comment-main"
@@ -24,6 +24,7 @@
       </button>
     </div>
   </div>
+
   <label>Message from Server</label>
   <div class="messages-from-server">
     <p class="message">{{ textFromServer }}</p>
@@ -31,11 +32,11 @@
       Edit message
     </button>
   </div>
+
   <div *ngIf="editMessageBtnShow" class="message-reactions">
     <mat-icon (click)="addReactionToMainMessage('mainMessage')"
       >add_reaction</mat-icon
     >
-
     <div>
       <input
         [(ngModel)]="comment"
@@ -44,11 +45,11 @@
       />
       <button (click)="commentMessage()">Comment</button>
     </div>
-
     <div class="show-reactions-on-main-message">
       <p *ngFor="let emoji of emojis; index">{{ emoji }}</p>
     </div>
   </div>
+
   <div>
     <emoji-mart
       (emojiClick)="addEmoji($event, 'mainMessage')"
@@ -70,7 +71,7 @@
           type="text"
           value="{{ comment.text }}"
         />
-        <button class="message-success" (click)="updateComment(commentId)">
+        <button class="message-success" (click)="updateComment(comment.id)">
           Save
         </button>
         <button class="message-danger" (click)="closeEditContainer()">
@@ -78,13 +79,14 @@
         </button>
       </div>
     </div>
+
     <div class="comment-container">
       <div class="comment-text">
         <div>
           <p class="comment-text-first-child">{{ comment.text }}</p>
           <p>{{ comment.timestamp }}</p>
+          <p *ngIf="comment.edited" class="edited-indicator">Edited</p>
         </div>
-
         <button (click)="editCommentOpenContainer()">Edit Comment</button>
       </div>
 
