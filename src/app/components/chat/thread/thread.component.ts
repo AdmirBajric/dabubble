@@ -73,7 +73,7 @@ export class ThreadComponent implements OnInit {
   ngOnInit() {
     this.subscribeThreadStatus();
     this.subscribeMessage();
-    console.log('THREAD', this.currentMessage);
+    // console.log('THREAD', this.currentMessage);
     this.countAnswers();
   }
 

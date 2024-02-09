@@ -27,7 +27,7 @@ export class ChannelListItemComponent implements OnInit {
     ) {}
 
   ngOnInit(): void {
-    console.log(this.channels);
+    // console.log(this.channels);
   }
 
   displayChannel(channels: any[]) {

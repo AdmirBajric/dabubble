@@ -27,7 +27,7 @@ export class MessageComponent implements OnInit {
   saveOriginalMessage!: string; // to reset the message text when editing is cancelled
 
   ngOnInit(): void {
-    console.log(this.showAnswers);
+    // console.log(this.showAnswers);s
     if (this.showAnswers) {
       // this.TimeToStringAnswer();
     }

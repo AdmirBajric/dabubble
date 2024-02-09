@@ -33,7 +33,6 @@ export class chatNavigationService {
   openChannel(channel: any[]) {
     this.currentChannel$.next(channel);
     this.isChannelOpen$.next(true);
-    console.log('nav service:', channel);
   }
 
   cloesThread() {

@@ -25,7 +25,6 @@ export class MessageHoverActionsComponent {
   }
 
   ngOnInit() {
-    console.log(this.currentMessage);
   }
 
   openEditMessage($event: MouseEvent) {

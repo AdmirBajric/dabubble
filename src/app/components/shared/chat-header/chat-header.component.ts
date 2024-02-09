@@ -39,7 +39,7 @@ export class ChatHeaderComponent implements OnInit {
 
   async ngOnInit() {
     await this.subscribeChannel();
-    console.log('CHAT HEADER', this.currentChannel);
+    // console.log('CHAT HEADER', this.currentChannel);
     
   }
 
@@ -56,12 +56,11 @@ export class ChatHeaderComponent implements OnInit {
 
   showMembers(channel: Channel) {
     this.btnService.showChannelMembers(channel); // passing the whole channel Object because id, members is necessary ID EXISTIERT NICHT IN CHANNEL.CLASS
-    console.log(this.currentChannel.id);
-    
+    // console.log(this.currentChannel.id);
   }
 
   addMember(channel: Channel) {
-    this.btnService.addMember(channel);
+    this.btnService.addMemberDialog(channel);
   }
   /**
    * Calculates left positioning of avatar images according to i. 
