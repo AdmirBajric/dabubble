@@ -50,10 +50,9 @@ export class DialogAddMemberChannelComponent implements OnInit{
     @Inject(MAT_DIALOG_DATA) public data: any) {
   }
   // sets data that is given by parent element /chat-header of specific channel as room to be red in HTML
-  room = this.data[0];
+  channel = this.data;
   
   ngOnInit(): void {
-      console.log(this.room);
   }
   
   closeDialog() {
