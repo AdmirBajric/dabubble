@@ -9,6 +9,9 @@ import { RouterLink } from "@angular/router";
 import { TimeSeparatorChatComponent } from "../../shared/time-separator-chat/time-separator-chat.component";
 import { Comment, Message } from '../../../models/message.class';
 import { User } from '../../../models/user.class';
+import { chatNavigationService } from '../../../services/chat-navigation.service';
+import { Subscription } from 'rxjs';
+import { Channel } from 'diagnostics_channel';
 
 @Component({
     selector: 'app-main-chat',
@@ -25,7 +28,14 @@ export class MainChatComponent implements OnInit {
     user2!: User;
     comment!: Comment[];
     messages!: Message[];
-    constructor(private routeService: RouteService) {
+    currentChannel!: Channel[];
+
+    private channelOpenStatusSubscription!: Subscription;
+    showChannel: boolean = false;
+
+    constructor(
+        private routeService: RouteService,
+        private navServie: chatNavigationService) {
     }
 
     get isNotDashboard() {
@@ -33,95 +43,28 @@ export class MainChatComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        // ####################################################################################################   DUMMY
-        // this.user1 = new User({
-        //     id: '1',
-        //     fullName: 'Admir Bajric',
-        //     email: 'admir@example.com',
-        //     avatar: '../../assets/img/avatar1.svg',
-        //     isOnline: true,
-        // })
-
-        // this.user2 = new User({
-        //     id: '1',
-        //     fullName: 'Selina Karlin',
-        //     email: 'admir@example.com',
-        //     avatar: '../../assets/img/avatar2.svg',
-        //     isOnline: true,
-        // })
-
-        // this.comment = this.createFakeComments();
-
-        // this.messages = [
-        //     new Message({
-        //       text: "Hallo, das ist die erste Fake-Nachricht.",
-        //       timestamp: new Date(),
-        //       creator: this.user1,
-        //       channelId: "channel1",
-        //       reactions: []  // Kann leer gelassen oder ganz weggelassen werden, da nicht benötigt
-        //     }),
-        //     new Message({
-        //       text: "Hier ist eine weitere interessante Nachricht.",
-        //       timestamp: new Date(),
-        //       creator: this.user2,
-        //       channelId: "channel1",
-        //       reactions: []  // Kann leer gelassen oder ganz weggelassen werden, da nicht benötigt
-        //     }),
-        //     new Message({
-        //       text: "Und das ist die dritte Nachricht im Bunde.",
-        //       timestamp: new Date(),
-        //       creator: this.user1,
-        //       channelId: "channel2",
-        //       reactions: []  // Kann leer gelassen oder ganz weggelassen werden, da nicht benötigt
-        //     })
-        //   ];
-
+        this.subscribeToCurrentChannel();
+        this.subscribeChannelStatus();
     }
 
-    // createFakeComments(): Comment[] {
-    //     const fakeCommentsData = [
-    //         {
-    //             text: "Das ist ein großartiger Beitrag!",
-    //             timestamp: new Date(),
-    //             creator: new User({
-    //                 fullName: 'Max Mustermann',
-    //                 email: 'max@example.com',
-    //                 avatar: '../../assets/img/avatar2.svg',
-    //                 isOnline: true,
-    //             }),
-    //             reactions: [],
-    //             messageId: "1",
-    //         },
-    //         {
-    //             text: "Interessanter Punkt, ich stimme zu.",
-    //             timestamp: new Date(),
-    //             creator: new User({
-    //                 fullName: 'Julia Müller',
-    //                 email: 'julia@example.com',
-    //                 avatar: '../../assets/img/avatar3.svg',
-    //                 isOnline: false,
-    //             }),
-    //             reactions: [],
-    //             messageId: "2",
-    //         },
-    //         {
-    //             text: "Könntest du dazu mehr Informationen bereitstellen?",
-    //             timestamp: new Date(),
-    //             creator: new User({
-    //                 fullName: 'Andreas Schmidt',
-    //                 email: 'andreas@example.com',
-    //                 avatar: '../../assets/img/avatar4.svg',
-    //                 isOnline: true,
-    //             }),
-    //             reactions: [],
-    //             messageId: "3",
-    //         }
-    //     ];
+    subscribeChannelStatus() {
+        this.channelOpenStatusSubscription = this.navServie.channelStatus$.subscribe(isOpen => {
+            this.showChannel = isOpen;
+        })
+    }
 
-    //     return fakeCommentsData.map(data => new Comment(data));
-    
+    subscribeToCurrentChannel() {
+        this.navServie.currentChannel.subscribe(channel => {
+            this.currentChannel = channel;
+        })
+    }
 
-    // ##################################################################################### DUMMY END!
+    ngOnDestroy() {
+        if (this.channelOpenStatusSubscription) {
+            this.channelOpenStatusSubscription.unsubscribe();
+        }
+    }
+
     /**
      * Compares the day, month & year of two given messagetimestamps. 
      * It returns true, if the two messages are sent on different days, 
