@@ -6,6 +6,7 @@ import { CreateChannelComponent } from '../components/shared/dialogs/create-chan
 import { DialogShowMembersComponent } from '../components/shared/dialogs/dialog-show-members/dialog-show-members.component';
 import { DialogAddUserComponent } from '../components/shared/dialogs/dialog-add-user/dialog-add-user.component';
 import { DialogAddMemberChannelComponent } from '../components/shared/dialogs/dialog-add-member-channel/dialog-add-member-channel.component';
+import { Channel } from '../models/channel.class';
 // import { Room } from '../models/collection.class';
 
 // ################################# DUMMY DATA TO TYPE MEMBER ###############
@@ -52,7 +53,7 @@ export class ButtonFunctionService {
    * Opening a dialog with a list of all channel members.
    * @param {Member[]} members
    */
-  showChannelMembers(channel: Room[]){
+  showChannelMembers(channel: Channel){
     this.dialog.open(DialogShowMembersComponent, {
       data: channel
     })
@@ -70,9 +71,9 @@ export class ButtonFunctionService {
 
 
   /****************************************************adding member to channel with firestore ID */
-  addMember(room: Room[]){
+  addMemberDialog(channel: Channel){
   this.dialog.open(DialogAddMemberChannelComponent, {
-    data: room,
+    data: channel,
     position: { top: '7.5rem', right: '2rem' }
   });
   }

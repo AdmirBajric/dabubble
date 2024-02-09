@@ -6,7 +6,7 @@
 
     <mat-card-content class="content scroll">
         <ul>
-            <span class="member-wrapper" *ngFor="let m of room.members; let i = index">
+            <span class="member-wrapper" *ngFor="let m of channel.members">
                 <div class="member" (click)="showMemberProfile(m)" appHoverChange [elementsConfig]="[{ textSelector: 'li', defaultColor: '#000000', hoverColor: '#535AF1'}]">
                     <div class="avatar">
                         <img [src]="m.avatar" alt="">
