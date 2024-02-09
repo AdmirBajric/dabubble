@@ -15,12 +15,6 @@ import { chatNavigationService } from '../../../services/chat-navigation.service
   imports: [FormsModule, HoverChangeDirective, MessageHoverActionsComponent, NgIf, ProfileViewComponent]
 })
 export class MessageComponent implements OnInit {
-  ngOnInit(): void {
-    if (this.showAnswers) {
-      this.TimeToStringAnswer();
-    }
-  }
-
   constructor(private navService: chatNavigationService) { }
   loggedUser = "Selina Karlin"
   @Input() message: any;
@@ -31,6 +25,14 @@ export class MessageComponent implements OnInit {
   showActions: boolean = false;
   openMessageEdit: boolean = false;
   saveOriginalMessage!: string; // to reset the message text when editing is cancelled
+
+  ngOnInit(): void {
+    console.log(this.showAnswers);
+    if (this.showAnswers) {
+      // this.TimeToStringAnswer();
+    }
+  }
+
   getTimeFromString(dateTimeString: string): string {
     const dateObject = new Date(dateTimeString);
 
@@ -52,7 +54,7 @@ export class MessageComponent implements OnInit {
 
   TimeToStringAnswer() {
     // this.countAnswers();
-    let time = this.message.answers[this.answersCount - 1].created_at;
+    let time = this.message.answers[this.answersCount - 1].timestamp;
     this.lastAnswerTime = this.getTimeFromString(time);
   }
 
