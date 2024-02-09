@@ -5,8 +5,10 @@ import { ButtonFunctionService } from "../../../services/button-function.service
 import { HoverChangeDirective } from "../../../directives/hover-change.directive";
 import { MatDialog } from '@angular/material/dialog';
 import { DialogShowMembersComponent } from '../dialogs/dialog-show-members/dialog-show-members.component';
+import { chatNavigationService } from '../../../services/chat-navigation.service';
 // import { Room } from '../../../models/collection.class'; must wait for correction of room interface (members!) to bind in.
 // That's why I use DUMMY INTERFACE here: #######################################################################
+
 interface Room {
   name: string;
   description: string;
@@ -33,7 +35,11 @@ export class ChatHeaderComponent implements OnInit {
   @Output() closeThread = new EventEmitter<any[]>();
   // @Input() room!: Room;
   room!: Room[];
-  constructor(private btnService: ButtonFunctionService, private dialog: MatDialog) {
+  constructor(
+    private btnService: ButtonFunctionService, 
+    private dialog: MatDialog, 
+    private navService: chatNavigationService
+    ) {
     // ############################################ DUMMY DATA BEGIN ###################
     this.room = [
       {
@@ -101,7 +107,8 @@ export class ChatHeaderComponent implements OnInit {
   }
 
   exitThread() {
-    this.closeThread.emit();
+    // this.closeThread.emit();
+    this.navService.cloesThread();
   }
 
 }

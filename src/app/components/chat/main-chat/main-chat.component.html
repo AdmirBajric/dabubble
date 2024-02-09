@@ -3,11 +3,11 @@
     <app-chat-header [roomName]="roomNameHeader"></app-chat-header>
 
     <div *ngFor="let message of messages; let i = index;">
-        <ng-container  *ngIf="i === 0 || isDifferentDay(messages[i - 1].created_at, message.created_at)">
+        <ng-container  *ngIf="i === 0 || isDifferentDay(messages[i - 1].timestamp, message.timestamp)">
             <app-time-separator-chat
-                [timestamp]="message.created_at"></app-time-separator-chat>
+                [timestamp]="message.timestamp"></app-time-separator-chat>
         </ng-container>
-        <app-message [message]="message"></app-message>
+        <app-message [message]="message" [showAnswers]="true"></app-message>
     </div>
     <div class="chat-input">
         <app-message-input></app-message-input>

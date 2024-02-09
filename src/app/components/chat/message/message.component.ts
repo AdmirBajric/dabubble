@@ -5,26 +5,32 @@ import { MessageHoverActionsComponent } from '../../shared/message-hover-actions
 import { Message } from '../../../models/message.class';
 import { FormsModule } from '@angular/forms';
 import { HoverChangeDirective } from '../../../directives/hover-change.directive';
+import { chatNavigationService } from '../../../services/chat-navigation.service';
 
 @Component({
-    selector: 'app-message',
-    standalone: true,
-    templateUrl: './message.component.html',
-    styleUrl: './message.component.scss',
-    imports: [FormsModule, HoverChangeDirective, MessageHoverActionsComponent, NgIf, ProfileViewComponent]
+  selector: 'app-message',
+  standalone: true,
+  templateUrl: './message.component.html',
+  styleUrl: './message.component.scss',
+  imports: [FormsModule, HoverChangeDirective, MessageHoverActionsComponent, NgIf, ProfileViewComponent]
 })
 export class MessageComponent implements OnInit {
   ngOnInit(): void {
-    this.TimeToStringAnswer();
+    if (this.showAnswers) {
+      this.TimeToStringAnswer();
+    }
   }
-  loggedUser = "Julius Marecek"
+
+  constructor(private navService: chatNavigationService) { }
+  loggedUser = "Selina Karlin"
   @Input() message: any;
-  @Output() showThread = new EventEmitter<any[]>();
+  @Input() showAnswers!: boolean;
+  // @Output() showThread = new EventEmitter<any[]>();
   answersCount!: number;
   lastAnswerTime!: string;
   showActions: boolean = false;
   openMessageEdit: boolean = false;
-  saveOriginalMessage!: string;
+  saveOriginalMessage!: string; // to reset the message text when editing is cancelled
   getTimeFromString(dateTimeString: string): string {
     const dateObject = new Date(dateTimeString);
 
@@ -40,40 +46,41 @@ export class MessageComponent implements OnInit {
     return zeitFormat;
   }
 
-  countAnswers() {
-    this.answersCount = this.message.answers.length;
-  }
+  // countAnswers() {
+  //   this.answersCount = this.comment.length;
+  // }
 
   TimeToStringAnswer() {
-    this.countAnswers();
+    // this.countAnswers();
     let time = this.message.answers[this.answersCount - 1].created_at;
     this.lastAnswerTime = this.getTimeFromString(time);
   }
 
-  showAnswersinThread(answers: any[]) {
-    this.showThread.emit(answers);
+  showAnswersinThread(m: any[]) {
+    // this.showThread.emit(answers); old way
+    this.navService.openThread(m);
   }
 
-  editMessage(m: Message){
+  editMessage(m: Message) {
     this.handlingMessageHoverActions();
     this.saveOriginalMessage = m.text;
     this.openMessageEdit = true;
   }
 
-  handlingMessageHoverActions(){
+  handlingMessageHoverActions() {
     this.showActions = false;
   }
 
-  saveEditedMessage(){
+  saveEditedMessage() {
 
   }
 
-  cancelMessageEditing(){
+  cancelMessageEditing() {
     this.openMessageEdit = false;
     this.message.text = this.saveOriginalMessage;
   }
 
-  addEmoji(){
+  addEmoji() {
 
   }
 

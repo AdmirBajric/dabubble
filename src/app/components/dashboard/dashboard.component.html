@@ -36,7 +36,6 @@
 
   <div *ngIf="threadIsOpen" class="threads border-radius-3">
     <app-chat-header
-      (closeThread)="closeThread()"
       [styleHeaderForThread]="activateThreadHeader"
       [roomName]="selectedRoomName"
     ></app-chat-header>

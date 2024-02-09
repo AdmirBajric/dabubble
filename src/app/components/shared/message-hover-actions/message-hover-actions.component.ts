@@ -2,11 +2,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { HoverChangeDirective } from '../../../directives/hover-change.directive';
 import { NgIf } from '@angular/common';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { chatNavigationService } from '../../../services/chat-navigation.service';
+import { Message } from '../../../models/message.class';
 
-interface Message {
-  id: string;
-  text: string;
-}
 @Component({
   selector: 'app-message-hover-actions',
   standalone: true,
@@ -16,11 +14,15 @@ interface Message {
 })
 export class MessageHoverActionsComponent {
   @Input() isYou!: boolean;
-  @Input() currentMessage!: Message;
+  @Input() currentMessage!: Message[];
   // @Output() editMessage = new EventEmitter<Message>();
   @Output() editMessage: EventEmitter<boolean> = new EventEmitter<boolean>();
   messageEditing!: boolean;
   showToolTip: boolean = false;
+
+  constructor(private navService: chatNavigationService) {
+
+  }
 
   ngOnInit() {
     console.log(this.currentMessage);
@@ -36,6 +38,10 @@ export class MessageHoverActionsComponent {
 
   handlingTooltip() {
     this.showToolTip = false;
+  }
+
+  openThread(){
+    this.navService.openThread(this.currentMessage);
   }
 
 }
