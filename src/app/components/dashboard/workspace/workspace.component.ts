@@ -16,7 +16,8 @@ import { DirectMessageListItemComponent } from './direct-message-list-item/direc
 import { ButtonFunctionService } from '../../../services/button-function.service';
 import { HoverChangeDirective } from '../../../directives/hover-change.directive';
 import { EventEmitter } from '@angular/core';
-import { Firestore, collection, onSnapshot } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
+import { FirebaseService } from '../../../services/firebase.service';
 
 @Component({
   selector: 'app-workspace',
@@ -38,7 +39,8 @@ export class WorkspaceComponent implements OnInit {
   showDMs: boolean = false;
   screenWidth: number = 0;
   imageFlag!: string;
-  user: any[] = [];
+  user: any;
+  users: any[] = [];
   channels: any[] = [];
   channelId: string = '';
   @Input() isOpen: boolean = true;
@@ -52,42 +54,98 @@ export class WorkspaceComponent implements OnInit {
   constructor(
     private el: ElementRef,
     private btnService: ButtonFunctionService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private firebaseService: FirebaseService
   ) {
     this.checkWindowSize();
     this.checkImageFlag();
   }
 
   ngOnInit() {
-    try {
-      const itemCollection = collection(this.firestore, 'channels');
-      onSnapshot(itemCollection, (querySnapshot) => {
-        this.channels = [];
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          data['id'] = doc.id;
-          this.channels.push(data);
-        });
-      });
-    } catch (error) {
-      console.error('Error adding document: ', error);
+    const loggedInUser =
+      typeof localStorage !== 'undefined'
+        ? localStorage.getItem('loggedInUser')
+        : null;
+    if (loggedInUser) {
+      const parsedUser = JSON.parse(loggedInUser);
+      this.user = parsedUser;
     }
-    this.showUser();
   }
 
-  // Zum testen
-  showUser() {
-    const users = [
-      {
-        fullName: 'Admir Bajric',
-        avatar:
-          'https://gruppe-873.developerakademie.net/angular-projects/dabubble/assets/img/avatar3.svg',
-      },
-    ];
+  async openDirectMsgs(): Promise<any[]> {
+    this.showDMs = !this.showDMs;
 
-    users.forEach((user) => {
-      this.user.push(user);
-    });
+    try {
+      const creatorQuery = {
+        field: 'creator.id',
+        operator: '==',
+        value: this.user.id,
+      };
+
+      const recipientQuery = {
+        field: 'recipient.id',
+        operator: '==',
+        value: this.user.id,
+      };
+
+      const creatorSnapshot = await this.firebaseService.queryDocuments(
+        'messages',
+        creatorQuery.field,
+        creatorQuery.operator,
+        creatorQuery.value
+      );
+      const recipientSnapshot = await this.firebaseService.queryDocuments(
+        'messages',
+        recipientQuery.field,
+        recipientQuery.operator,
+        recipientQuery.value
+      );
+
+      const uniqueUsers = new Set<string>();
+
+      creatorSnapshot.forEach((doc) => {
+        const data = doc.data();
+        const otherUserId = data['recipient'].id;
+        if (otherUserId !== this.user.id && !uniqueUsers.has(otherUserId)) {
+          this.users.push(data['recipient']);
+          uniqueUsers.add(otherUserId);
+        }
+      });
+
+      recipientSnapshot.forEach((doc) => {
+        const data = doc.data();
+        const otherUserId = data['creator'].id;
+        if (otherUserId !== this.user.id && !uniqueUsers.has(otherUserId)) {
+          this.users.push(data['creator']);
+          uniqueUsers.add(otherUserId);
+        }
+      });
+
+      return this.users;
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+      throw error;
+    }
+  }
+
+  sendData(userId: string) {
+    console.log(userId);
+  }
+
+  openChannels() {
+    try {
+      this.firebaseService
+        .getAllChannels()
+        .then((channels) => {
+          this.channels = channels;
+        })
+        .catch((error) => {
+          console.error('Error fetching channels:', error);
+        });
+    } catch (error) {
+      console.error('Error fetching channels:', error);
+    }
+    this.showChannels = !this.showChannels;
   }
 
   openCreateChannel() {
