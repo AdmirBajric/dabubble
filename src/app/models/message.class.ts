@@ -59,7 +59,7 @@ export class Message {
   timestamp: Date;
   creator: User;
   channelId?: string;
-  recipientId?: string;
+  recipient?: User;
   reactions: Reaction[];
   isChannelMessage: boolean;
   edited: boolean;
@@ -69,7 +69,7 @@ export class Message {
     this.timestamp = obj?.timestamp ? new Date(obj.timestamp) : new Date();
     this.creator = obj && obj.creator ? new User(obj.creator) : new User();
     this.channelId = obj?.channelId || '';
-    this.recipientId = obj?.recipientId || '';
+    this.recipient = obj && obj.recipient ? new User(obj.recipient) : undefined;
     this.reactions = (obj?.reactions || []).map(
       (reaction: any) => new Reaction(reaction)
     );
@@ -78,15 +78,20 @@ export class Message {
   }
 
   public toJSON() {
-    return {
+    const json: any = {
       text: this.text,
       timestamp: this.timestamp.toISOString(),
       creator: this.creator.toJSON(),
       channelId: this.channelId,
-      recipientId: this.recipientId,
       reactions: this.reactions.map((reaction) => reaction.toJSON()),
       isChannelMessage: this.isChannelMessage,
       edited: this.edited,
     };
+
+    if (this.recipient !== undefined) {
+      json.recipient = this.recipient.toJSON();
+    }
+
+    return json;
   }
 }

@@ -91,10 +91,9 @@ export class TestMessagesComponent implements OnInit {
       channelId: '8dGv7CQvxfHJhcH1vyiw',
       isChannelMessage: channel,
       reactions: [],
-      comments: [],
     });
 
-    this.showMessage();
+    console.log(message.toJSON());
 
     this.firebaseService
       .addDocument('messages', message.toJSON())
@@ -104,6 +103,8 @@ export class TestMessagesComponent implements OnInit {
       .catch((err: any) => {
         console.log(err);
       });
+
+    this.showMessage();
   }
 
   // Shows the message that was created
