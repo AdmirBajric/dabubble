@@ -1,28 +1,34 @@
 @import "../../../../colors.scss";
 @import "../../../../mixins.scss";
 
-.links-2-dm{
-    margin-left: 5rem;
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    background: transparent;
-    padding: 1rem 1rem 1rem 1rem;
-    border-radius: 35px;
-    color: black;
-    transition: all 225ms;
+.links-2-dm {
+  margin-left: 5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: transparent;
+  padding: 1rem 1rem 1rem 1rem;
+  border-radius: 35px;
+  color: black;
+  transition: all 225ms;
 
-    &:hover {
-        background-color: $bg-color;
-        cursor: pointer;
-        color: $purple-1;
-        font-weight: bold;
-    }
+  img {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 2rem;
+  }
 
-    a {
-        @include fonts-styles(17px, 400);
-        &.link-create{
-            color: $purple-3;
-        }
+  &:hover {
+    background-color: $bg-color;
+    cursor: pointer;
+    color: $purple-1;
+    font-weight: bold;
+  }
+
+  a {
+    @include fonts-styles(17px, 400);
+    &.link-create {
+      color: $purple-3;
     }
+  }
 }

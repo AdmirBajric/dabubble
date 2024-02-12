@@ -7,7 +7,7 @@
       <div class="drawer">
         <div
           class="drawer-header"
-          (click)="showChannels = !showChannels"
+          (click)="openChannels()"
           appHoverChange
           [elementsConfig]="[
             {
@@ -100,7 +100,7 @@
             }
           ]"
           class="drawer-header margin-top"
-          (click)="showDMs = !showDMs"
+          (click)="openDirectMsgs()"
         >
           <img
             class="arrow"
@@ -121,9 +121,11 @@
 
       @if (showDMs) {
       <div class="dm-list-container">
-        <ng-container *ngFor="let dm of user">
+        <ng-container *ngFor="let user of users">
           <app-direct-message-list-item
-            [user]="dm"
+            [user]="user"
+            id="{{ user.id }}" 
+            (click)="sendData(user.id)"
           ></app-direct-message-list-item>
         </ng-container>
       </div>

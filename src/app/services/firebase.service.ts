@@ -78,6 +78,19 @@ export class FirebaseService {
     return snapshot.docs.map((doc) => doc.data());
   }
 
+  async getAllChannels() {
+    if (!this.firestore) {
+      throw new Error('Firestore is not initialized.');
+    }
+    const channelsCollection = collection(this.firestore, 'channels');
+    const snapshot = await getDocs(channelsCollection);
+    return snapshot.docs.map((doc) => {
+      const data = doc.data();
+      data['id'] = doc.id;
+      return data;
+    });
+  }
+
   async searchMessages(
     channel: boolean,
     recipient: User,
