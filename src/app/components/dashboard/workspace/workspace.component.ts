@@ -38,7 +38,7 @@ export class WorkspaceComponent implements OnInit {
   showDMs: boolean = false;
   screenWidth: number = 0;
   imageFlag!: string;
-  user: any;
+  user: any[] = [];
   channels: any[] = [];
   channelId: string = '';
   @Input() isOpen: boolean = true;
@@ -72,6 +72,22 @@ export class WorkspaceComponent implements OnInit {
     } catch (error) {
       console.error('Error adding document: ', error);
     }
+    this.showUser();
+  }
+
+  // Zum testen
+  showUser() {
+    const users = [
+      {
+        fullName: 'Admir Bajric',
+        avatar:
+          'https://gruppe-873.developerakademie.net/angular-projects/dabubble/assets/img/avatar3.svg',
+      },
+    ];
+
+    users.forEach((user) => {
+      this.user.push(user);
+    });
   }
 
   openCreateChannel() {

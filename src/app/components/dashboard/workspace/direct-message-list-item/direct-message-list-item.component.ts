@@ -8,5 +8,5 @@ import { Component, Input } from '@angular/core';
   styleUrl: './direct-message-list-item.component.scss'
 })
 export class DirectMessageListItemComponent {
-  @Input() directMessages: any = [];
+  @Input() user: any = [];
 }

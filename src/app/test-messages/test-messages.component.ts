@@ -1,45 +1,38 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { User } from '../models/user.class';
+import { Component, OnInit } from '@angular/core';
 import { Message, Comment, Reaction } from '../models/message.class';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { MatIconModule } from '@angular/material/icon';
-import {
-  Firestore,
-  collection,
-  addDoc,
-  doc,
-  updateDoc,
-  arrayUnion,
-  getDoc,
-  query,
-  where,
-  getDocs,
-} from '@angular/fire/firestore';
+import { arrayUnion } from '@angular/fire/firestore';
+import { FirebaseService } from '../services/firebase.service';
 
 @Component({
   selector: 'app-test-messages',
   standalone: true,
   imports: [CommonModule, FormsModule, PickerComponent, MatIconModule],
   templateUrl: './test-messages.component.html',
-  styleUrl: './test-messages.component.scss',
+  styleUrls: ['./test-messages.component.scss'],
 })
 export class TestMessagesComponent implements OnInit {
-  private firestore: Firestore = inject(Firestore);
-  collection = collection(this.firestore, 'messages');
   user!: any;
   text: string = '';
   textFromServer: string = '';
+  editedMessage: string = '';
+  editedComment: string = '';
   active: boolean = false;
   activeComment: boolean = false;
   comment: string = '';
   messageId: string = '';
+  commentId: string = '';
   emojis: string[] = [];
   comments: any[] = [];
   activeCommentId: string | null = null;
+  editContainerOpen: boolean = false;
+  editMessageBtnShow: boolean = false;
+  editCommentContainerShow: boolean = false;
 
-  constructor() {}
+  constructor(private firebaseService: FirebaseService) {}
 
   ngOnInit(): void {
     if (typeof localStorage !== 'undefined') {
@@ -50,42 +43,83 @@ export class TestMessagesComponent implements OnInit {
     }
   }
 
-  // Create new message on Channel
-  addMessage() {
+  async updateMessage(id: string) {
+    const docSnapshot = await this.firebaseService.getDocument('messages', id);
+
+    if (docSnapshot.exists()) {
+      await this.firebaseService.updateDocument('messages', id, {
+        text: this.editedMessage,
+        edited: true,
+      });
+    }
+
+    this.editContainerOpen = false;
+    this.showMessage();
+  }
+
+  async updateComment(id: string) {
+    const docSnapshot = await this.firebaseService.getDocument('comments', id);
+
+    if (docSnapshot.exists()) {
+      await this.firebaseService.updateDocument('comments', id, {
+        text: this.editedComment,
+        edited: true,
+      });
+    }
+
+    this.editCommentContainerShow = false;
+    this.showComments();
+  }
+
+  editCommentOpenContainer() {
+    this.editCommentContainerShow = true;
+  }
+
+  closeEditContainer() {
+    this.editContainerOpen = false;
+  }
+
+  showEditContainer() {
+    this.editContainerOpen = true;
+  }
+
+  addMessage(channel: boolean) {
     const message = new Message({
       text: this.text,
       timestamp: new Date(),
       creator: this.user,
       channelId: '8dGv7CQvxfHJhcH1vyiw',
+      isChannelMessage: channel,
       reactions: [],
-      comments: [],
     });
 
-    const messageJSON = message.toJSON();
+    console.log(message.toJSON());
 
-    this.showMessage();
-
-    addDoc(this.collection, messageJSON)
-      .then((data) => {
+    this.firebaseService
+      .addDocument('messages', message.toJSON())
+      .then((data: any) => {
         this.messageId = data.id;
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.log(err);
       });
+
+    this.showMessage();
   }
 
   // Shows the message that was created
   async showMessage() {
     setTimeout(async () => {
       try {
-        const documentRef = doc(
-          collection(this.firestore, 'messages'),
+        const docSnapshot = await this.firebaseService.getDocument(
+          'messages',
           this.messageId
         );
-        const docSnapshot = await getDoc(documentRef);
         if (docSnapshot.exists()) {
           const documentData = docSnapshot.data();
           this.textFromServer = documentData['text'];
+          this.editedMessage = documentData['text'];
+          this.editMessageBtnShow = true;
         } else {
           console.error('Document not found');
         }
@@ -110,7 +144,7 @@ export class TestMessagesComponent implements OnInit {
   }
 
   // Add emoji to the main message on Channel
-  async addEmoji(event: any, from: string): Promise<void> {
+  async addEmoji(event: any, StringOrId: string): Promise<void> {
     this.activeCommentId = null;
 
     try {
@@ -121,20 +155,23 @@ export class TestMessagesComponent implements OnInit {
       });
 
       const reactionJSON = reaction.toJSON();
-      const documentRef = doc(
-        collection(this.firestore, 'messages'),
+      const docSnapshot = await this.firebaseService.getDocument(
+        'messages',
         this.messageId
       );
-      const docSnapshot = await getDoc(documentRef);
       if (docSnapshot.exists()) {
-        if (from === 'mainMessage') {
+        if (StringOrId === 'mainMessage') {
           let existingReactions = docSnapshot.data()?.['reactions'] || [];
-          await updateDoc(documentRef, {
-            reactions: arrayUnion(reactionJSON, ...existingReactions),
-          });
+          await this.firebaseService.updateDocument(
+            'messages',
+            this.messageId,
+            {
+              reactions: arrayUnion(reactionJSON, ...existingReactions),
+            }
+          );
           this.showReactionOnMainChannel();
         } else {
-          this.saveReactionComments(reactionJSON, from);
+          this.saveReactionComments(reactionJSON, StringOrId);
         }
       } else {
         console.error('Document not found');
@@ -144,12 +181,18 @@ export class TestMessagesComponent implements OnInit {
     }
   }
 
-  async saveReactionComments(reactionJSON: any, from: string): Promise<void> {
-    const documentRef = doc(collection(this.firestore, 'comments'), from);
-    const docSnapshot = await getDoc(documentRef);
+  // Save reaction on the comments
+  async saveReactionComments(
+    reactionJSON: any,
+    StringOrId: string
+  ): Promise<void> {
+    const docSnapshot = await this.firebaseService.getDocument(
+      'comments',
+      StringOrId
+    );
     if (docSnapshot.exists()) {
       let existingReactions = docSnapshot.data()?.['reactions'] || [];
-      await updateDoc(documentRef, {
+      await this.firebaseService.updateDocument('comments', StringOrId, {
         reactions: arrayUnion(reactionJSON, ...existingReactions),
       });
       this.showComments();
@@ -160,11 +203,10 @@ export class TestMessagesComponent implements OnInit {
 
   // Show reaction Channel main message
   async showReactionOnMainChannel() {
-    const documentRef = doc(
-      collection(this.firestore, 'messages'),
+    const docSnapshot = await this.firebaseService.getDocument(
+      'messages',
       this.messageId
     );
-    const docSnapshot = await getDoc(documentRef);
 
     if (docSnapshot.exists()) {
       const existingReactions = docSnapshot.data()?.['reactions'] || [];
@@ -184,15 +226,14 @@ export class TestMessagesComponent implements OnInit {
         timestamp: new Date(),
         creator: this.user,
         messageId: this.messageId,
+        isChannelMessage: true,
+        edited: false,
         reactions: [],
       });
 
       const commentJSON = comment.toJSON();
-      const commentCollection = collection(this.firestore, 'comments');
 
-      addDoc(commentCollection, commentJSON)
-        .then((data) => {})
-        .catch((err) => {});
+      await this.firebaseService.addDocument('comments', commentJSON);
 
       this.showComments();
     } catch (error) {
@@ -202,19 +243,18 @@ export class TestMessagesComponent implements OnInit {
 
   // Shows Comments
   async showComments() {
-    const commentsRef = collection(this.firestore, 'comments');
-    const queryRef = query(
-      commentsRef,
-      where('messageId', '==', this.messageId)
+    const querySnapshot = await this.firebaseService.queryDocuments(
+      'comments',
+      'messageId',
+      '==',
+      this.messageId
     );
-
-    const querySnapshot = await getDocs(queryRef);
     this.comments = [];
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach((doc: any) => {
       let commentData = doc.data();
       commentData['id'] = doc.id;
       this.comments.push(commentData);
-      console.log(commentData);
+      this.editedComment = commentData['text'];
     });
   }
 }

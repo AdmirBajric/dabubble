@@ -40,7 +40,48 @@ label {
   border: 0.2rem solid blue;
   margin-bottom: 5rem;
 
+  .messages-from-server {
+    display: flex;
+
+    button {
+      margin-left: 3rem;
+      height: 4rem;
+      padding: 1rem;
+      background-color: orange;
+    }
+  }
+
+  .messages-edit-container {
+    width: 80rem;
+    height: 4rem;
+    padding: 1rem 0rem;
+    margin-bottom: 5rem;
+
+    input {
+      width: 35rem;
+      height: 4rem;
+      padding-left: 2rem;
+    }
+
+    button {
+      width: 8rem;
+      height: 4rem;
+      margin-left: 2rem;
+    }
+
+    .message-success {
+      background-color: green;
+      color: white;
+    }
+
+    .message-danger {
+      background-color: red;
+      color: white;
+    }
+  }
+
   .message {
+    width: 45rem;
     height: 4rem;
     padding: 1rem;
     font-size: 1.6rem;
@@ -113,20 +154,61 @@ label {
 
     .comment-text {
       width: 50%;
+      display: flex;
+
+      button {
+        margin-left: 3rem;
+        height: 4rem;
+        padding: 1rem;
+        background-color: orange;
+      }
 
       .comment-text-first-child {
-        font-size: 1.6rem;
+        font-size: 2rem;
         color: red;
       }
 
       p {
-        font-size: 1.6rem;
+        font-size: 2rem;
       }
+    }
+
+    mat-icon {
+      cursor: pointer;
     }
 
     .comment-reactions {
       width: 50%;
       font-size: 2.5rem;
+    }
+
+    .edit-comment-container {
+      width: 80rem;
+      height: 4rem;
+      padding: 1rem 0rem;
+      margin-bottom: 5rem;
+
+      input {
+        width: 35rem;
+        height: 4rem;
+        padding-left: 2rem;
+      }
+
+      button {
+        width: 8rem;
+        height: 4rem;
+        margin-left: 2rem;
+      }
+
+      .message-success {
+        background-color: green;
+        color: white;
+      }
+
+      .message-danger {
+        background-color: red;
+        color: white;
+      }
     }
   }
 }

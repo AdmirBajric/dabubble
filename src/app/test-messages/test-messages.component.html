@@ -1,32 +1,55 @@
 <label class="message-main">Schreibe eine Nachricht</label>
 <div class="main-container">
   <input [(ngModel)]="text" type="text" placeholder="Your message" />
-  <button (click)="addMessage()">Create message</button>
+  <button (click)="addMessage(true)">Create message</button>
 </div>
 
 <label class="comment-main"
-  >Kommentiere diese Nachricht oder hinterlasse einen emoji</label
+  >Kommentiere diese Nachricht oder hinterlasse eine Reaktion</label
 >
 <div class="messages">
-  <p class="message">{{ textFromServer }}</p>
-  <div class="message-reactions">
+  <div *ngIf="editContainerOpen" class="messages-edit-container">
+    <label>Edit Message</label>
+    <div>
+      <input
+        [(ngModel)]="editedMessage"
+        type="text"
+        value="{{ textFromServer }}"
+      />
+      <button class="message-success" (click)="updateMessage(messageId)">
+        Save
+      </button>
+      <button class="message-danger" (click)="closeEditContainer()">
+        Cancel
+      </button>
+    </div>
+  </div>
+
+  <label>Message from Server</label>
+  <div class="messages-from-server">
+    <p class="message">{{ textFromServer }}</p>
+    <button *ngIf="editMessageBtnShow" (click)="showEditContainer()">
+      Edit message
+    </button>
+  </div>
+
+  <div *ngIf="editMessageBtnShow" class="message-reactions">
     <mat-icon (click)="addReactionToMainMessage('mainMessage')"
       >add_reaction</mat-icon
     >
-
     <div>
       <input
         [(ngModel)]="comment"
         type="text"
         placeholder="Kommentiere diese Nachricht..."
       />
-      <button (click)="commentMessage()">Kommentiere</button>
+      <button (click)="commentMessage()">Comment</button>
     </div>
-
     <div class="show-reactions-on-main-message">
       <p *ngFor="let emoji of emojis; index">{{ emoji }}</p>
     </div>
   </div>
+
   <div>
     <emoji-mart
       (emojiClick)="addEmoji($event, 'mainMessage')"
@@ -37,13 +60,34 @@
   </div>
 </div>
 
-<label class="reaction-on-comment">Kommentare auf die Nachricht</label>
+<label class="reaction-on-comment">Reaktionen auf die Kommentare</label>
 <div *ngIf="comments.length > 0" class="comments">
   <div *ngFor="let comment of comments" class="comment">
+    <div *ngIf="editCommentContainerShow" class="edit-comment-container">
+      <label>Edit Comment</label>
+      <div>
+        <input
+          [(ngModel)]="editedComment"
+          type="text"
+          value="{{ comment.text }}"
+        />
+        <button class="message-success" (click)="updateComment(comment.id)">
+          Save
+        </button>
+        <button class="message-danger" (click)="closeEditContainer()">
+          Cancel
+        </button>
+      </div>
+    </div>
+
     <div class="comment-container">
       <div class="comment-text">
-        <p class="comment-text-first-child">{{ comment.text }}</p>
-        <p>{{ comment.timestamp }}</p>
+        <div>
+          <p class="comment-text-first-child">{{ comment.text }}</p>
+          <p>{{ comment.timestamp }}</p>
+          <p *ngIf="comment.edited" class="edited-indicator">Edited</p>
+        </div>
+        <button (click)="editCommentOpenContainer()">Edit Comment</button>
       </div>
 
       <div class="comment-reactions">
