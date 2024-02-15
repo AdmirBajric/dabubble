@@ -22,6 +22,7 @@ import { DirectMessageComponent } from './components/chat/main-chat/direct-messa
 import { ReadDataComponent } from './read-data/read-data.component';
 import { TestMessagesComponent } from './test-messages/test-messages.component';
 import { UserToUserMsgComponent } from './user-to-user-msg/user-to-user-msg.component';
+import { AddUserToConversationsComponent } from './add-user-to-conversations/add-user-to-conversations.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -57,4 +58,8 @@ export const routes: Routes = [
   { path: 'read-data', component: ReadDataComponent },
   { path: 'test-messages', component: TestMessagesComponent },
   { path: 'user-to-user', component: UserToUserMsgComponent },
+  {
+    path: 'add-user-to-conversations',
+    component: AddUserToConversationsComponent,
+  },
 ];

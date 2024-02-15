@@ -50,9 +50,7 @@ export class UserToUserMsgComponent implements OnInit {
       this.firebaseService
         .getAllUsers()
         .then((users) => {
-          this.users = users.filter(
-            (user) => user['id'] !== this.loggedUser['id']
-          );
+          this.users = users;
         })
         .catch((error) => {
           console.error('Error fetching users:', error);
@@ -108,8 +106,7 @@ export class UserToUserMsgComponent implements OnInit {
     }
   }
 
-  startConversation(user: any) {
-    this.clickedUser = {};
+  startConversation(user: User) {
     this.clickedUser = user;
     this.searchMessages(user);
     this.startRealTimeUpdates(user);
@@ -117,6 +114,7 @@ export class UserToUserMsgComponent implements OnInit {
 
   async searchMessages(recipient: User) {
     const channel = false;
+
     this.firebaseService.searchMessagesRealTime(
       channel,
       recipient,

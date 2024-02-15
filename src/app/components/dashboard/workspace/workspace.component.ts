@@ -16,8 +16,10 @@ import { DirectMessageListItemComponent } from './direct-message-list-item/direc
 import { ButtonFunctionService } from '../../../services/button-function.service';
 import { HoverChangeDirective } from '../../../directives/hover-change.directive';
 import { EventEmitter } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
+import { Firestore, collection, getDocs, query } from '@angular/fire/firestore';
 import { FirebaseService } from '../../../services/firebase.service';
+import { Subscription } from 'rxjs';
+import { Conversation } from '../../../models/conversation.class';
 
 @Component({
   selector: 'app-workspace',
@@ -43,6 +45,11 @@ export class WorkspaceComponent implements OnInit {
   users: any[] = [];
   channels: any[] = [];
   channelId: string = '';
+  usersSubscription: Subscription | undefined;
+  usersSnapshotUnsubscribe: (() => void) | undefined;
+  conversationsSubscription: Subscription | undefined;
+  conversations: any[] = [];
+  conversationUpdateSubscription: Subscription;
   @Input() isOpen: boolean = true;
   // ********************** redirecting input event as output boolean to parent component
   showChannelContent!: boolean;
@@ -59,9 +66,36 @@ export class WorkspaceComponent implements OnInit {
   ) {
     this.checkWindowSize();
     this.checkImageFlag();
+    this.setUserFromStorage();
+    this.conversationUpdateSubscription = this.firebaseService
+      .subscribeToConversationUpdates()
+      .subscribe((update) => {
+        if (update !== null) {
+          const existingIndex = this.conversations.findIndex(
+            (conv) => conv.id === update.id
+          );
+          if (existingIndex !== -1) {
+            const data = update.data.users;
+            this.conversations = [];
+            data.forEach((user) => {
+              this.conversations.push(user);
+            });
+            this.showUsers();
+          } else {
+            const data = update.data.users;
+            this.conversations = [];
+            data.forEach((user) => {
+              this.conversations.push(user);
+            });
+            this.showUsers();
+          }
+        } else {
+          // Handle deletion of conversation
+        }
+      });
   }
 
-  ngOnInit() {
+  setUserFromStorage() {
     const loggedInUser =
       typeof localStorage !== 'undefined'
         ? localStorage.getItem('loggedInUser')
@@ -72,60 +106,49 @@ export class WorkspaceComponent implements OnInit {
     }
   }
 
-  async openDirectMsgs(): Promise<any[]> {
+  ngOnDestroy() {
+    this.conversationUpdateSubscription.unsubscribe();
+  }
+
+  ngOnInit() {
+    this.setUserFromStorage();
+  }
+
+  async openDirectMsgs() {
+    this.setUserFromStorage();
+
     this.showDMs = !this.showDMs;
-
-    try {
-      const creatorQuery = {
-        field: 'creator.id',
-        operator: '==',
-        value: this.user.id,
-      };
-
-      const recipientQuery = {
-        field: 'recipient.id',
-        operator: '==',
-        value: this.user.id,
-      };
-
-      const creatorSnapshot = await this.firebaseService.queryDocuments(
-        'messages',
-        creatorQuery.field,
-        creatorQuery.operator,
-        creatorQuery.value
-      );
-      const recipientSnapshot = await this.firebaseService.queryDocuments(
-        'messages',
-        recipientQuery.field,
-        recipientQuery.operator,
-        recipientQuery.value
-      );
-
-      const uniqueUsers = new Set<string>();
-
-      creatorSnapshot.forEach((doc) => {
-        const data = doc.data();
-        const otherUserId = data['recipient'].id;
-        if (otherUserId !== this.user.id && !uniqueUsers.has(otherUserId)) {
-          this.users.push(data['recipient']);
-          uniqueUsers.add(otherUserId);
+    await this.firebaseService
+      .getConversationForUser(this.user.id)
+      .then((data) => {
+        if (data) {
+          this.conversations = [];
+          data.data.users.forEach((user) => {
+            this.conversations.push(user);
+          });
         }
       });
+    this.showUsers();
+  }
 
-      recipientSnapshot.forEach((doc) => {
-        const data = doc.data();
-        const otherUserId = data['creator'].id;
-        if (otherUserId !== this.user.id && !uniqueUsers.has(otherUserId)) {
-          this.users.push(data['creator']);
-          uniqueUsers.add(otherUserId);
-        }
-      });
+  async showUsers() {
+    await this.firebaseService.getAllUsers().then((users) => {
+      const loggedInUser = users.find((user) => user['id'] === this.user.id);
+      this.users = [];
 
-      return this.users;
-    } catch (error) {
-      console.error('Error fetching messages:', error);
-      throw error;
-    }
+      if (loggedInUser) {
+        loggedInUser['loggedInUser'] = true;
+        this.users.push(loggedInUser);
+      }
+
+      users
+        .filter(
+          (user) =>
+            user['id'] !== this.user.id &&
+            this.conversations.some((id) => id === user['id'])
+        )
+        .forEach((user) => this.users.push(user));
+    });
   }
 
   sendData(userId: string) {
