@@ -12,7 +12,5 @@ export class DirectMessageListItemComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {
-    console.log(this.user);
-  }
+  ngOnInit(): void {}
 }
