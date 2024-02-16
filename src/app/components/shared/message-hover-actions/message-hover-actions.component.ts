@@ -32,7 +32,6 @@ export class MessageHoverActionsComponent {
     this.handlingTooltip();
     this.messageEditing = true;
     this.editMessage.emit(this.messageEditing);
-    // this.editMessage.emit(this.currentMessage);
   }
 
   handlingTooltip() {
