@@ -195,7 +195,11 @@ export class TestMessagesComponent implements OnInit {
   }
 
   // Add emoji to the main message on Channel
-  async addEmoji(event: any, StringOrId: string): Promise<void> {
+  async addEmoji(
+    event: any,
+    StringOrId: string,
+    isMainMessage: boolean
+  ): Promise<void> {
     this.activeCommentId = null;
 
     try {
@@ -206,20 +210,18 @@ export class TestMessagesComponent implements OnInit {
       });
 
       const reactionJSON = reaction.toJSON();
-      let existingReactions: any[] = [];
 
-      if (StringOrId === 'mainMessage') {
+      if (isMainMessage) {
         const docSnapshot = await this.firebaseService.getDocument(
           'messages',
           this.messageId
         );
         if (docSnapshot.exists()) {
-          existingReactions = docSnapshot.data()?.['reactions'] || [];
           await this.firebaseService.updateDocument(
             'messages',
             this.messageId,
             {
-              reactions: [reactionJSON], // Save only the new reaction
+              reactions: [reactionJSON], // Overwrite existing reactions with the new one
             }
           );
           this.showReactionOnMainChannel();
@@ -227,53 +229,8 @@ export class TestMessagesComponent implements OnInit {
           console.error('Document not found');
         }
       } else {
-        const docSnapshot = await this.firebaseService.getDocument(
-          'comments',
-          StringOrId
-        );
-        if (docSnapshot.exists()) {
-          existingReactions = docSnapshot.data()?.['reactions'] || [];
-          await this.firebaseService.updateDocument('comments', StringOrId, {
-            reactions: [reactionJSON], // Save only the new reaction
-          });
-          this.showComments();
-        } else {
-          console.error('Document not found');
-        }
+        await this.saveReactionComments(reactionJSON, StringOrId);
       }
-
-      // Update emojis with the new reaction emoji
-      this.emojis = existingReactions.map((reaction) => reaction.emoji);
-    } catch (error) {
-      console.error('Error updating document:', error);
-    }
-  }
-
-  // Save reaction on the comments
-  // Save reaction on the comments
-  async saveReactionComments(
-    reactionJSON: any,
-    StringOrId: string
-  ): Promise<void> {
-    try {
-      const docSnapshot = await this.firebaseService.getDocument(
-        'comments',
-        StringOrId
-      );
-      let existingReactions: any[] = [];
-
-      if (docSnapshot.exists()) {
-        existingReactions = docSnapshot.data()?.['reactions'] || [];
-        await this.firebaseService.updateDocument('comments', StringOrId, {
-          reactions: [reactionJSON], // Save only the new reaction
-        });
-        this.showComments();
-      } else {
-        console.error('Document not found');
-      }
-
-      // Update emojis with the new reaction emoji
-      this.emojis = existingReactions.map((reaction) => reaction.emoji);
     } catch (error) {
       console.error('Error updating document:', error);
     }
@@ -288,8 +245,34 @@ export class TestMessagesComponent implements OnInit {
 
     if (docSnapshot.exists()) {
       const existingReactions = docSnapshot.data()?.['reactions'] || [];
-      this.emojis = existingReactions.map((reaction: any) => reaction.emoji);
+      this.emojis = [];
+      existingReactions.forEach((reaction: any) => {
+        this.emojis.push(reaction.emoji);
+      });
       this.active = false;
+    }
+  }
+
+  // Save reaction on the comments
+  async saveReactionComments(
+    reactionJSON: any,
+    StringOrId: string
+  ): Promise<void> {
+    try {
+      const docSnapshot = await this.firebaseService.getDocument(
+        'comments',
+        StringOrId
+      );
+      if (docSnapshot.exists()) {
+        await this.firebaseService.updateDocument('comments', StringOrId, {
+          reactions: [reactionJSON], // Overwrite existing reactions with the new one
+        });
+        this.showComments(); // Refresh comments after saving reaction
+      } else {
+        console.error('Document not found');
+      }
+    } catch (error) {
+      console.error('Error updating document:', error);
     }
   }
 
