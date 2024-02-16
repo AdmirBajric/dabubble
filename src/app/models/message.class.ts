@@ -63,6 +63,7 @@ export class Message {
   reactions: Reaction[];
   isChannelMessage: boolean;
   edited: boolean;
+  id?: string;
 
   constructor(obj?: any) {
     this.text = obj?.text || '';
