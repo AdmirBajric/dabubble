@@ -1,6 +1,28 @@
 <label class="message-main">Schreibe eine Nachricht</label>
 <div class="main-container">
-  <input [(ngModel)]="text" type="text" placeholder="Your message" />
+  <form [formGroup]="form">
+    <input
+      type="text"
+      formControlName="userInput"
+      ngDefaultControl
+      placeholder="Your message"
+    />
+  </form>
+
+  <mat-expansion-panel [expanded]="usersSearch || channelSearch">
+    <ng-container *ngIf="usersSearch">
+      <div *ngFor="let user of users" class="show-users">
+        <img src="{{ user.avatar }}" alt="" />
+        <p>{{ user.fullName }}</p>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="channelSearch">
+      <div *ngFor="let channel of channels" class="show-users">
+        <p># {{ channel.channelName }}</p>
+      </div>
+    </ng-container>
+  </mat-expansion-panel>
   <button (click)="addMessage(true)">Create message</button>
 </div>
 
