@@ -2,15 +2,17 @@
     class="wrapper border-radius-3">
     <ng-container *ngIf="showChannel">
         <app-chat-header></app-chat-header>
-        <div *ngFor="let message of messages; let i = index;">
-            <ng-container  *ngIf="i === 0 || isDifferentDay(messages[i - 1].timestamp, message.timestamp)">
-                <app-time-separator-chat
-                    [timestamp]="message.timestamp"></app-time-separator-chat>
-            </ng-container>
-            <app-message [message]="message" [showAnswers]="true"></app-message>
-        </div>
+        <ng-container *ngIf="showMessages">
+            <div *ngFor="let message of messages; let i = index;">
+                <ng-container  *ngIf="i === 0 || isDifferentDay(messages[i - 1].timestamp, message.timestamp)">
+                    <app-time-separator-chat
+                        [timestamp]="message.timestamp"></app-time-separator-chat>
+                </ng-container>
+                <app-message (updatedMessage)="saveEditedMessage($event)" [message]="message" [messageId]="message.id"></app-message>
+            </div>
+        </ng-container>
         <div class="chat-input">
-            <app-message-input></app-message-input>
+            <app-message-input (messageText)="createMessage($event)"></app-message-input>
         </div>
     </ng-container>
 </section>
