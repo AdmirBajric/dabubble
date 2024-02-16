@@ -154,9 +154,22 @@ export class MainChatComponent implements OnInit {
                     this.messages.push(messageData);
                 }
             });
+
+            await this.sortMessagesChronologically();
             // Set 'showMessages' to true indicating that messages are available for display.
             this.showMessages = true;
         }
+    }
+    
+    /**
+     * Sorts messages chronologically according to timestamp. 
+     */
+    sortMessagesChronologically() {
+        this.messages.sort((a, b) => {
+            const dateA = new Date(a.timestamp);
+            const dateB = new Date(b.timestamp);
+            return dateA.getTime() - dateB.getTime();
+          });
     }
 
     /**
