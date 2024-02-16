@@ -13,9 +13,9 @@
                     <span class="time">{{getTimeFromString(message.timestamp)}} Uhr</span>
                 </div>
                 <div class="messageLine">{{message.text}}</div>
-                <div class="lastLine" *ngIf="showAnswers">
+                <div class="lastLine" *ngIf="this.answers.length > 0">
                     <span class="answerCount" (click)="showAnswersinThread(message)">{{answersCount}}
-                        <ng-container *ngIf="answersCount === 1; else multipleAnswers">Antwort</ng-container>
+                        <ng-container *ngIf="answersCount === 0; else multipleAnswers">Antwort</ng-container>
                         <ng-template #multipleAnswers>Antworten</ng-template>
                     </span>
                     <span class="time">Letzte Antwort {{lastAnswerTime}} Uhr</span>
@@ -32,7 +32,7 @@
 
         <ng-container *ngIf="openMessageEdit">
             <div class="edit-message-wrapper">
-                <textarea #messageEditInput [(ngModel)]="message.message" autocomplete="off"></textarea>
+                <textarea #messageEditInput [(ngModel)]="message.text" autocomplete="off"></textarea>
                 <div class="btn-edit-wrapper">
                     <button (click)="addEmoji()" class="btn-50" appHoverChange
                     [elementsConfig]="[{imageSelector: 'img', defaultSrc: '../../../../assets/img/add_emoji.svg', hoverSrc: '../../../../assets/img/add_emoji_hover.svg'}]">
@@ -40,7 +40,7 @@
                     </button>
                     
                     <div class="btn-edit-2">
-                        <button (click)="saveEditedMessage()" class="border-radius-3">Speichern</button>
+                        <button (click)="saveEditedMessage(messageEditInput.value, message.id)" class="border-radius-3">Speichern</button>
                         
                         <button (click)="cancelMessageEditing()" class="border-radius-3">Abbrechen</button>
                     </div>
@@ -56,7 +56,7 @@
                     <span class="time">{{getTimeFromString(message.timestamp)}} Uhr</span>
                 </div>
                 <div class="messageLine own">{{message.text}}</div>
-                <div class="lastLine">
+                <div class="lastLine" *ngIf="this.answers.length > 0">
                     <span class="answerCount" (click)="showAnswersinThread(message.message)">{{answersCount}}
                         Antworten</span>
                     <span class="time">Letzte Antwort {{lastAnswerTime}} Uhr</span>
