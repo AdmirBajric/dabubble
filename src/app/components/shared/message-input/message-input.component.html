@@ -13,7 +13,7 @@
           <img src="../../assets/img/add_message_@.svg" alt="@">
         </button>
       </div>
-      <button (click)="emitMessage()"
+      <button [disabled]="!text.trim().length" (click)="emitMessage()"
         appHoverChange [elementsConfig]="[ { imageSelector: 'img', defaultSrc: '../../assets/img/send_message.svg', hoverSrc: '../../assets/img/send_message_hover.svg' } ]" class="input-btn send">
         <img src="../../assets/img/send_message.svg" alt="">
       </button>

@@ -50,6 +50,11 @@
 
     .send {
         color: rgba(68, 77, 242, 1);
+
+        &:disabled{
+            color: $text-gray;
+            cursor: not-allowed;
+        }
     }
 
     .add {

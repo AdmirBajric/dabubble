@@ -20,6 +20,7 @@ export class MessageInputComponent {
 
   emitMessage() {
     this.messageText.emit(this.text);
+    this.text = '';
   }
 
 }
