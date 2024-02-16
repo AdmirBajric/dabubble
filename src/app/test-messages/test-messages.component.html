@@ -68,13 +68,13 @@
       <button (click)="commentMessage()">Comment</button>
     </div>
     <div class="show-reactions-on-main-message">
-      <p *ngFor="let emoji of emojis; index">{{ emoji }}</p>
+      <p *ngFor="let emoji of emojis">{{ emoji }}</p>
     </div>
   </div>
 
   <div>
     <emoji-mart
-      (emojiClick)="addEmoji($event, 'mainMessage')"
+      (emojiClick)="addEmoji($event, 'mainMessage', true)"
       *ngIf="active"
       title="Pick your emoji…"
       emoji="point_up"
@@ -126,7 +126,7 @@
       >
       <div>
         <emoji-mart
-          (emojiClick)="addEmoji($event, comment.id)"
+          (emojiClick)="addEmoji($event, comment.id, false)"
           *ngIf="activeCommentId === comment.id"
           title="Pick your emoji…"
           emoji="point_up"
