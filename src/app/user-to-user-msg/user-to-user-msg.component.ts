@@ -327,6 +327,7 @@ export class UserToUserMsgComponent implements OnInit {
       creator: this.loggedUser,
       recipient: recipient,
       isChannelMessage: channel,
+      privateMsg: recipient.id === this.loggedUser.id,
       reactions: [],
     });
 
