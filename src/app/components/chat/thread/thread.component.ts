@@ -12,6 +12,10 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { MessageInputComponent } from '../../shared/message-input/message-input.component';
 import { WorkspaceHeaderComponent } from '../../dashboard/workspace/workspace-header/workspace-header.component';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { chatNavigationService } from '../../../services/chat-navigation.service';
+import { MessageComponent } from "../message/message.component";
+
 @Component({
   selector: 'app-thread',
   standalone: true,
@@ -23,10 +27,14 @@ import { Router } from '@angular/router';
     PickerModule,
     MessageInputComponent,
     WorkspaceHeaderComponent,
-  ],
+    MessageComponent
+  ]
 })
 export class ThreadComponent implements OnInit {
   @Input() threadData!: any;
+  currentMessage!: any;
+  private messageSubscription!: Subscription;
+  private threadStatusSubscription!: Subscription;
 
   loggedUser = 'Julius Marecek';
   answersCount!: number;
@@ -36,8 +44,9 @@ export class ThreadComponent implements OnInit {
   constructor(
     private renderer: Renderer2,
     private el: ElementRef,
-    public router: Router
-  ) {}
+    public router: Router,
+    private navService: chatNavigationService
+  ) { }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
@@ -62,66 +71,47 @@ export class ThreadComponent implements OnInit {
   }
 
   ngOnInit() {
-    (this.threadData = {
-      sender: {
-        fullName: 'Admir Bajric',
-        email: '',
-        password: '',
-        avatar: '../../assets/img/avatar1.svg',
-        isOnline: true,
-      },
-
-      message: 'Hallo ich bin die erste testnachricht',
-      receiver: {
-        fullName: 'Julius Marecek',
-        email: '',
-        password: '',
-        avatar: '../../assets/img/avatar1.svg',
-        isOnline: true,
-      },
-
-      created_at: '2024-01-12T10:00:00',
-      room: '',
-      answers: [
-        {
-          sender: {
-            fullName: 'Julius Marecek',
-            email: '',
-            password: '',
-            avatar: '../../assets/img/avatar1.svg',
-            isOnline: true,
-          },
-          message: 'Hallo ich bin die Antwort auf deine erste testnachricht',
-          created_at: '2024-01-12T10:01:00',
-          reaction: [
-            {
-              sender: 'Selina Karlin',
-              emojiId: 'innocent',
-            },
-          ],
-        },
-      ],
-      reaction: [{}],
-    }),
-      this.countAnswers();
+    this.subscribeThreadStatus();
+    this.subscribeMessage();
+    // console.log('THREAD', this.currentMessage);
+    this.countAnswers();
   }
 
   getTimeFromString(dateTimeString: string): string {
     const dateObject = new Date(dateTimeString);
-
     const stunden = dateObject.getHours();
     const minuten = dateObject.getMinutes();
-
-    // Führende Nullen hinzufügen, wenn die Minuten einstellig sind
     const formatierteMinuten = minuten < 10 ? '0' + minuten : minuten;
-
-    // Das resultierende Zeitformat ist z.B. "10:30"
     const zeitFormat = `${stunden}:${formatierteMinuten}`;
-
     return zeitFormat;
   }
 
   countAnswers() {
     this.answersCount = this.threadData.answers.length;
+  }
+
+  subscribeMessage() {
+    this.navService.currentMessage.subscribe(message => {
+      this.currentMessage = message;
+    })
+  }
+
+  subscribeThreadStatus() {
+    this.threadStatusSubscription = this.navService.threadStatus$.subscribe(isOpen => {
+      if (!isOpen) {
+        if (this.messageSubscription) {
+          this.messageSubscription.unsubscribe();
+        }
+      }
+    })
+  }
+
+  ngOnDestroy() {
+    if (this.threadStatusSubscription) {
+      this.threadStatusSubscription.unsubscribe();
+    }
+    if (this.messageSubscription) {
+      this.messageSubscription.unsubscribe();
+    }
   }
 }

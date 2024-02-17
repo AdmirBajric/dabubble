@@ -11,6 +11,8 @@ import { ProfileMenuComponent } from "./profile-menu/profile-menu.component";
 import { ChatHeaderComponent } from "../shared/chat-header/chat-header.component";
 import { MainChatComponent } from "../chat/main-chat/main-chat.component";
 import { NewMessageComponent } from "../chat/main-chat/new-message/new-message.component";
+import { chatNavigationService } from '../../services/chat-navigation.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-dashboard',
@@ -34,7 +36,7 @@ import { NewMessageComponent } from "../chat/main-chat/new-message/new-message.c
 })
 export class DashboardComponent implements OnInit {
     workspaceIsOpen: boolean = true;
-    threadIsOpen: boolean = true;
+    threadIsOpen: boolean = false;
     gridAreaRegulation: string = 'nct';
     selectedMessageForThread: any[] = [];
     selectedRoomName: string = 'Entwicklerteam';
@@ -42,21 +44,19 @@ export class DashboardComponent implements OnInit {
     showMessages: boolean = true; // default
     writeNewMessage: boolean = false // default
 
+    private threadStatusSubscription!: Subscription;
+
+    constructor(private navService: chatNavigationService) { }
     ngOnInit(): void {
         this.handleGridAreaToggle();
+        this.subscribeToThreadStatus();
     }
 
-    handleThread(answers: any[]) {
-        this.selectedMessageForThread = answers;
-        this.threadIsOpen = true;
-        this.activateThreadHeader = true;
-        this.handleGridAreaToggle();
-    }
-
-    closeThread() {
-        this.threadIsOpen = false;
-        this.activateThreadHeader = false;
-        this.handleGridAreaToggle();
+    subscribeToThreadStatus() {
+        this.threadStatusSubscription = this.navService.threadStatus$.subscribe(value => {
+            this.threadIsOpen = value;
+            this.handleGridAreaToggle();
+        })
     }
 
     handleWorkspaceToggle(isOpen: boolean) {
@@ -79,16 +79,20 @@ export class DashboardComponent implements OnInit {
         }
     }
 
-    openNewMessage(){
+    openNewMessage() {
         // toggling does not help because it's a one way way
-        this.showMessages = false; 
+        this.showMessages = false;
         this.writeNewMessage = true;
     }
 
-    openChatofChannel(){
+    openChatofChannel() {
         // we need to get id of channel, so the correct content can be displayed
         this.showMessages = true;
         this.writeNewMessage = false;
+    }
+
+    ngOnDestroy() {
+        this.threadStatusSubscription.unsubscribe();
     }
 
     // messages: any[] = [

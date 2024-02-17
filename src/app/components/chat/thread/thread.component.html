@@ -3,15 +3,9 @@
 </ng-container>
 <div class="wrapper">
     <div class="container">
-      <img src=" {{ threadData.sender.avatar }} " alt="avatar">
-      <div class="message">
-        <div class="firstLine">
-          <span class="sender-name">{{threadData.sender.fullName}}</span>
-          <span class="time">{{getTimeFromString(threadData.created_at)}} Uhr</span>
-        </div>
-        <div class="messageLine">{{threadData.message}}</div>
-      </div>
+      <app-message [message]="currentMessage.message"></app-message>
     </div>
+
     <div class="answers-divider">
       <div class="answers-count">
         <span class="number">{{answersCount}} </span>
@@ -22,30 +16,10 @@
       </div>
       <span class="stroke"></span>
     </div>
+
     <div class="answers-details" *ngIf="threadData.answers.length > 0">
       <div *ngFor="let answer of threadData.answers">
-        <div [class.reverse]="answer.sender.fullName === loggedUser" class="container">
-          <img src=" {{ answer.sender.avatar }} " alt="avatar">
-          <div [class.reverse]="answer.sender.fullName === loggedUser" class="message">
-            <div [class.reverse]="answer.sender.fullName === loggedUser" class="firstLine">
-              <span class="sender-name">{{answer.sender.fullName}}</span>
-              <span class="time">{{getTimeFromString(answer.created_at)}} Uhr</span>
-            </div>
-            <div [class.user]="answer.sender.fullName === loggedUser" class="messageLine">{{answer.message}}</div>
-    
-            <div class="reactions-container" *ngIf="answer.reaction.length > 0 ">
-              <div class="reactions" *ngFor="let react of answer.reaction">
-                <!-- <emoji [emoji]="react.emojiId" size="24"></emoji> -->
-                <img src="../../../../assets/img/emoji_example.svg" alt="emoji">
-                <span> {{ answer.reaction.length }} </span>
-              </div>
-              <button>
-                <img src="../../../../assets/img/reaction_add.svg" alt="add reaction">
-              </button>
-              <!-- <app-emojis size="16"></app-emojis> -->
-            </div>
-          </div>
-        </div>
+        <app-message [message]="answer"></app-message>
       </div>
     </div>
 

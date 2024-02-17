@@ -13,7 +13,7 @@ import { registerLocaleData } from '@angular/common';
   ],
 })
 export class TimeSeparatorChatComponent {
-  @Input() timestamp!: number;
+  @Input() timestamp!: Date;
   formattedDate!: string;
 
   constructor() {

@@ -16,12 +16,12 @@
 
     <button appHoverChange
         [elementsConfig]="
-        [{imageSelector: 'img', defaultSrc: '../../../../assets/img/add_emoji.svg', hoverSrc: '../../../../assets/img/add_emoji_hover.svg'}]">
-
+        [{imageSelector: 'img', defaultSrc: '../../../../assets/img/add_emoji.svg', hoverSrc: '../../../../assets/img/add_emoji_hover.svg'}]"
+        (click)="openEmojiMart('mainMessage')">
         <img src="../../../../assets/img/add_emoji.svg" alt="add reaction">
     </button>
 
-    <button appHoverChange
+    <button (click)="openThread()" appHoverChange
         [elementsConfig]="
         [{imageSelector: 'img', defaultSrc: '../../../../assets/img/add_answer.svg', hoverSrc: '../../../../assets/img/add_answer_hover.svg'}]">
 
@@ -42,4 +42,9 @@
         </ng-container>
     </button>
 
+</div>
+
+<div>
+    <emoji-mart (emojiClick)="emitEmoji($event, 'mainMessage')" *ngIf="active" title="Pick your emoji…" emoji="point_up">
+    </emoji-mart>
 </div>

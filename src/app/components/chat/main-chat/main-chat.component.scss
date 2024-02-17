@@ -6,6 +6,11 @@
     background-color: white;
 }
 
+.content-container {
+    height: 45rem;
+    overflow-y: scroll;
+}
+
 .info-desktop {
     position: absolute;
     top: 2rem;

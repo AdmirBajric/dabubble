@@ -1,4 +1,4 @@
-<section [class.thread]="styleHeaderForThread" class="wrapper wrapper-padding" *ngFor="let r of room">
+<section [class.thread]="styleHeaderForThread" class="wrapper wrapper-padding">
 
     <div [ngClass]=" styleHeaderForThread ? 'thread-header' : 'header-left' "
         (click)=" styleHeaderForThread ? null : openEditChannel()" appHoverChange
@@ -10,7 +10,7 @@
         <div class="name">
             <img *ngIf="!styleHeaderForThread" class="hash" src="../../../../assets/img/hash.svg" alt="#">
             <img *ngIf="styleHeaderForThread" class="small" src="../../../../assets/img/hash_hover.svg" alt="#">
-            <h1 [ngStyle]="{'font-size': styleHeaderForThread ? '1.3rem' : '2rem' }"> {{ r.name }} </h1>
+            <h1 [ngStyle]="{'font-size': styleHeaderForThread ? '1.3rem' : '2rem' }"> {{ currentChannel.name }} </h1>
         </div>
 
         <img class="arrow" *ngIf="!styleHeaderForThread" src="../../../../assets/img/arrow_down_unfilled_chatHeader.svg"
@@ -28,9 +28,9 @@
 
             <div class="channel-members desktop-view" appHoverChange [elementsConfig]="[ 
                 { textSelector: '.members-count', defaultColor: '#000000', hoverColor: '#797ef3'}
-                ]" (click)="showMembers(room)">
+                ]" (click)="showMembers(currentChannel)">
                 <div class="channel-avatars">
-                    <ng-container *ngFor="let members of r.members; let i = index">
+                    <ng-container *ngFor="let members of currentChannel.members; let i = index">
                         <span *ngIf="i < 3" [ngStyle]="{'left': getLeftPositioning(i)}" class="avatar">
                             <img [src]="members.avatar">
                         </span>
@@ -42,7 +42,7 @@
             <div class="btn-wrapper">
                 <button class="btn-50" appHoverChange
                     [elementsConfig]="[ { imageSelector: 'img', defaultSrc: '../../../../assets/img/add_member_black.svg',
-                    hoverSrc: '../../../../assets/img/add_member_hover.svg'} ]" (click)="addMember(room)">
+                    hoverSrc: '../../../../assets/img/add_member_hover.svg'} ]" (click)="addMember(currentChannel)">
                     <img src="../../../../assets/img/add_member_black.svg" alt="add-member">
                 </button>
             </div>

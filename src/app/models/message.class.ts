@@ -64,6 +64,7 @@ export class Message {
   isChannelMessage: boolean;
   edited: boolean;
   privateMsg: boolean;
+  id?: string;
 
   constructor(obj?: any) {
     this.text = obj?.text || '';
@@ -85,6 +86,7 @@ export class Message {
       timestamp: this.timestamp.toISOString(),
       creator: this.creator.toJSON(),
       channelId: this.channelId,
+      recipientId: this.recipientId,
       reactions: this.reactions.map((reaction) => reaction.toJSON()),
       isChannelMessage: this.isChannelMessage,
       edited: this.edited,

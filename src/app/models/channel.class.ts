@@ -5,6 +5,7 @@ export class Channel {
   description: string;
   creator: User;
   members: User[];
+  id?: string; // ich implementiere das zu testzwecken hier. Im chat-header muss ich die ID haben, aber es hießt die Klasse Channel besitzt keine ID. Klar, denn die ID wird erst vergeben, wenn die Daten im Firestore angelegt sind. 
 
   constructor(obj?: any) {
     this.name = obj ? obj.name : '';
