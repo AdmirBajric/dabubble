@@ -63,6 +63,7 @@ export class Message {
   reactions: Reaction[];
   isChannelMessage: boolean;
   edited: boolean;
+  privateMsg: boolean;
 
   constructor(obj?: any) {
     this.text = obj?.text || '';
@@ -75,6 +76,7 @@ export class Message {
     );
     this.isChannelMessage = obj?.isChannelMessage || false;
     this.edited = obj ? obj.edited || false : false;
+    this.privateMsg = obj?.privateMsg || false;
   }
 
   public toJSON() {
@@ -86,6 +88,7 @@ export class Message {
       reactions: this.reactions.map((reaction) => reaction.toJSON()),
       isChannelMessage: this.isChannelMessage,
       edited: this.edited,
+      privateMsg: this.privateMsg,
     };
 
     if (this.recipient !== undefined) {
