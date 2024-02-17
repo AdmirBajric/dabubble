@@ -44,8 +44,6 @@ export class MessageComponent implements OnInit {
         this.user = JSON.parse(user);
       }
     }
-    console.log(this.user);
-    
     await this.searchForComments();
     await this.searchForReactions();
     this.TimeToStringAnswer();
@@ -76,10 +74,7 @@ export class MessageComponent implements OnInit {
       this.reactions = [];
       existingReactions.forEach((reaction: Reaction) => {
         this.reactions.push(reaction);
-        console.log(reaction.emoji);
       });
-      console.log(this.reactions);
-      
     }
   }
 
