@@ -82,12 +82,12 @@ export class MessageHoverActionsComponent {
       );
       if (docSnapshot.exists()) {
         if (StringOrId === 'mainMessage') {
-          // let existingReactions = docSnapshot.data()?.['reactions'] || [];
+          let existingReactions = docSnapshot.data()?.['reactions'] || [];
           await this.firebaseService.updateDocument(
             'messages',
             id,
             {
-              reactions: arrayUnion(reactionJSON),
+              reactions: arrayUnion(reactionJSON, ...existingReactions),
             }
           );
           // this.showReactionOnMainChannel();
