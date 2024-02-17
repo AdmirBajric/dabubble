@@ -1,12 +1,13 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { NgIf } from '@angular/common';
+import { NgIf, NgFor } from '@angular/common';
 import { ProfileViewComponent } from "../../profile/profile-view/profile-view.component";
 import { MessageHoverActionsComponent } from '../../shared/message-hover-actions/message-hover-actions.component';
-import { Comment, Message } from '../../../models/message.class';
+import { Comment, Message, Reaction } from '../../../models/message.class';
 import { FormsModule } from '@angular/forms';
 import { HoverChangeDirective } from '../../../directives/hover-change.directive';
 import { chatNavigationService } from '../../../services/chat-navigation.service';
 import { FirebaseService } from '../../../services/firebase.service';
+import { User } from '../../../models/user.class';
 
 
 @Component({
@@ -14,7 +15,7 @@ import { FirebaseService } from '../../../services/firebase.service';
   standalone: true,
   templateUrl: './message.component.html',
   styleUrl: './message.component.scss',
-  imports: [FormsModule, HoverChangeDirective, MessageHoverActionsComponent, NgIf, ProfileViewComponent]
+  imports: [FormsModule, HoverChangeDirective, MessageHoverActionsComponent, NgIf, NgFor, ProfileViewComponent]
 })
 export class MessageComponent implements OnInit {
   constructor(private navService: chatNavigationService,
@@ -23,17 +24,30 @@ export class MessageComponent implements OnInit {
   loggedUser = "Selina Karlin"
   @Input() message: any;
   @Input() messageId!: string | undefined;
-  @Output() updatedMessage = new EventEmitter<{messageText: string, id: string}>();
+  @Output() updatedMessage = new EventEmitter<{ messageText: string, id: string }>();
   showAnswers: boolean = false;
   answers: Comment[] = [];
+  reactions: Reaction[] = [];
   answersCount!: number;
   lastAnswerTime!: string;
   showActions: boolean = false;
   openMessageEdit: boolean = false;
+  showReactionCreator: boolean = true;
   saveOriginalMessage!: string;       // to reset the message text when editing is cancelled
+  hoveredIndex: number | null = null;
+  user!: User;
 
   async ngOnInit() {
+    if (typeof localStorage !== 'undefined') {
+      const user = localStorage.getItem('loggedInUser');
+      if (user) {
+        this.user = JSON.parse(user);
+      }
+    }
+    console.log(this.user);
+    
     await this.searchForComments();
+    await this.searchForReactions();
     this.TimeToStringAnswer();
   }
 
@@ -52,6 +66,28 @@ export class MessageComponent implements OnInit {
     });
   }
 
+  async searchForReactions() {
+    const docSnapshot = await this.firebaseService.getDocument(
+      'messages',
+      this.message.id
+    );
+    if (docSnapshot.exists()) {
+      const existingReactions = docSnapshot.data()?.['reactions'] as Reaction[] || [];
+      this.reactions = [];
+      existingReactions.forEach((reaction: Reaction) => {
+        this.reactions.push(reaction);
+        console.log(reaction.emoji);
+      });
+      console.log(this.reactions);
+      
+    }
+  }
+
+  isMultipleEmojis(emojiString: string): boolean {
+    // Diese Funktion nimmt an, dass die meisten einzelnen Emojis eine Länge von 2 haben,
+    // was nicht immer zutrifft, besonders bei zusammengesetzten Emojis.
+    return emojiString.length > 2;
+  }
   getTimeFromString(dateTimeString: Date): string {
     const dateObject = new Date(dateTimeString);
 
@@ -70,7 +106,7 @@ export class MessageComponent implements OnInit {
   TimeToStringAnswer() {
     this.countAnswers();
     if (this.answers.length > 0) {
-      let time = this.answers[this.answersCount -1].timestamp;
+      let time = this.answers[this.answersCount - 1].timestamp;
       this.lastAnswerTime = this.getTimeFromString(time);
     }
   }
@@ -106,8 +142,8 @@ export class MessageComponent implements OnInit {
    * @param {string} id
    */
   saveEditedMessage(messageText: string, id: string) {
-      this.updatedMessage.emit({messageText, id});
-      this.openMessageEdit = false;
+    this.updatedMessage.emit({ messageText, id });
+    this.openMessageEdit = false;
   }
 
   /**

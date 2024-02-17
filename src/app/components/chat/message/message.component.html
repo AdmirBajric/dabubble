@@ -1,5 +1,5 @@
 <div class="chat white wrapper-padding">
-    <section *ngIf="message.creator.fullName != loggedUser" (mouseover)="showActions = true"
+    <section *ngIf="message.creator.fullName != user.fullName" (mouseover)="showActions = true"
         (mouseleave)="showActions = false">
         <ng-container *ngIf="showActions">
             <app-message-hover-actions *ngIf="message" [isYou]="false"
@@ -13,18 +13,44 @@
                     <span class="time">{{getTimeFromString(message.timestamp)}} Uhr</span>
                 </div>
                 <div class="messageLine">{{message.text}}</div>
-                <div class="lastLine" *ngIf="this.answers.length > 0">
+                <div class="lastLine" *ngIf="answers.length > 0">
                     <span class="answerCount" (click)="showAnswersinThread(message)">{{answersCount}}
                         <ng-container *ngIf="answersCount === 0; else multipleAnswers">Antwort</ng-container>
                         <ng-template #multipleAnswers>Antworten</ng-template>
                     </span>
                     <span class="time">Letzte Antwort {{lastAnswerTime}} Uhr</span>
                 </div>
+
+                <div class="emoji-line" *ngIf="reactions.length > 0">
+                    <div *ngFor="let reaction of reactions; let i = index" class="reaction-wrapper">
+
+                        <div class="emoji-container" (mouseover)="hoveredIndex = i" (mouseout)="hoveredIndex = null">
+                            {{reaction.emoji}} 1
+                        </div>
+
+                        <ng-container *ngIf="hoveredIndex === i">
+                            <div class="reaction-info">
+                                <span>{{reaction.emoji}}</span>
+                                <span class="reaction-from">
+                                    {{reaction.fullName === user.fullName ? 'Du' : reaction.fullName}}
+                                </span>
+                                <ng-container *ngIf="reaction.fullName === user.fullName; else otherUserReaction">
+                                    hast reagiert
+                                </ng-container>
+
+                                <ng-template #otherUserReaction>
+                                    {{ isMultipleEmojis(reaction.emoji) ? 'haben reagiert' : 'hat reagiert' }}
+                                  </ng-template>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
 
-    <section *ngIf="message.creator.fullName == loggedUser" (mouseover)="showActions = true"
+    <section *ngIf="message.creator.fullName === user.fullName" (mouseover)="showActions = true"
         (mouseleave)="showActions = false">
         <ng-container *ngIf="showActions">
             <app-message-hover-actions (editMessage)="editMessage(message)" [isYou]="true"
@@ -35,19 +61,20 @@
                 <textarea #messageEditInput [(ngModel)]="message.text" autocomplete="off"></textarea>
                 <div class="btn-edit-wrapper">
                     <button (click)="addEmoji()" class="btn-50" appHoverChange
-                    [elementsConfig]="[{imageSelector: 'img', defaultSrc: '../../../../assets/img/add_emoji.svg', hoverSrc: '../../../../assets/img/add_emoji_hover.svg'}]">
+                        [elementsConfig]="[{imageSelector: 'img', defaultSrc: '../../../../assets/img/add_emoji.svg', hoverSrc: '../../../../assets/img/add_emoji_hover.svg'}]">
                         <img src="../../../../assets/img/add_emoji.svg" alt="emoji">
                     </button>
-                    
+
                     <div class="btn-edit-2">
-                        <button (click)="saveEditedMessage(messageEditInput.value, message.id)" class="border-radius-3">Speichern</button>
-                        
+                        <button (click)="saveEditedMessage(messageEditInput.value, message.id)"
+                            class="border-radius-3">Speichern</button>
+
                         <button (click)="cancelMessageEditing()" class="border-radius-3">Abbrechen</button>
                     </div>
                 </div>
             </div>
         </ng-container>
-        
+
         <div class="flex reverse">
             <img src="{{message.creator.avatar}}" alt="" class="userImg">
             <div>
@@ -61,6 +88,24 @@
                         Antworten</span>
                     <span class="time">Letzte Antwort {{lastAnswerTime}} Uhr</span>
                 </div>
+
+                <div class="emoji-line" *ngIf="reactions.length > 0">
+                    <div *ngFor="let reaction of reactions; let i = index" class="reaction-wrapper">
+
+                        <div class="emoji-container" (mouseover)="hoveredIndex = i" (mouseout)="hoveredIndex = null">
+                            {{reaction.emoji}} 1
+                        </div>
+
+                        <ng-container *ngIf="hoveredIndex === i">
+                            <div class="reaction-info">
+                                <span>{{reaction.emoji}}</span>
+                                <span class="reaction-from">{{reaction.fullName}}</span>
+                                <span>hat reagiert</span>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>

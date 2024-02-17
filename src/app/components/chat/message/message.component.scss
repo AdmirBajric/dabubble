@@ -84,6 +84,37 @@ img {
     justify-content: space-around;
 }
 
+.emoji-line {
+    display: flex;
+    gap: 1rem;
+
+    .emoji-container {
+        border-radius: 3rem;
+        padding: 0.2rem 0.6rem;
+        border: 0.1rem solid $purple-1;
+    }
+    .reaction-wrapper{
+        position: relative;
+    }
+}
+
+.reaction-info {
+    position: absolute;
+    top: -10rem;
+    background-color: $purple-1;
+    height: 10rem;
+    width: 10rem;
+    border-radius: 3rem 3rem 3rem 0;
+    left: 2rem;
+    color: white;
+    @include flexbox(flex, column, center, center);
+    gap: 1rem;
+
+    .reaction-from {
+        font-weight: bold;
+    }
+}
+
 button {
     background: transparent;
 }
