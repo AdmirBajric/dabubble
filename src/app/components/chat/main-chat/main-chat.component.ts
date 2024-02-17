@@ -86,9 +86,9 @@ export class MainChatComponent implements OnInit {
             .then((data: any) => {
                 this.messageId = data.id;
             })
-            .catch((err: any) => {
-                console.log(err);
-            });
+            // .catch((err: any) => {
+            //     console.log(err);
+            // });
     }
 
     /**
