@@ -3,7 +3,7 @@
         (mouseleave)="showActions = false">
         <ng-container *ngIf="showActions">
             <app-message-hover-actions *ngIf="message" [isYou]="false"
-                [currentMessage]="message.message"></app-message-hover-actions>
+                [currentMessage]="message"></app-message-hover-actions>
         </ng-container>
         <div class="flex">
             <img src="{{message.creator.avatar}}" alt="">

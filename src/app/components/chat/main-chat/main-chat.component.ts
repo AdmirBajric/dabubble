@@ -155,7 +155,7 @@ export class MainChatComponent implements OnInit {
                 }
             });
 
-            await this.sortMessagesChronologically();
+            this.sortMessagesChronologically();
             // Set 'showMessages' to true indicating that messages are available for display.
             this.showMessages = true;
         }
