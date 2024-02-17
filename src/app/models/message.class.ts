@@ -59,10 +59,11 @@ export class Message {
   timestamp: Date;
   creator: User;
   channelId?: string;
-  recipientId?: string;
+  recipient?: User;
   reactions: Reaction[];
   isChannelMessage: boolean;
   edited: boolean;
+  privateMsg: boolean;
   id?: string;
 
   constructor(obj?: any) {
@@ -70,16 +71,17 @@ export class Message {
     this.timestamp = obj?.timestamp ? new Date(obj.timestamp) : new Date();
     this.creator = obj && obj.creator ? new User(obj.creator) : new User();
     this.channelId = obj?.channelId || '';
-    this.recipientId = obj?.recipientId || '';
+    this.recipient = obj && obj.recipient ? new User(obj.recipient) : undefined;
     this.reactions = (obj?.reactions || []).map(
       (reaction: any) => new Reaction(reaction)
     );
     this.isChannelMessage = obj?.isChannelMessage || false;
     this.edited = obj ? obj.edited || false : false;
+    this.privateMsg = obj?.privateMsg || false;
   }
 
   public toJSON() {
-    return {
+    const json: any = {
       text: this.text,
       timestamp: this.timestamp.toISOString(),
       creator: this.creator.toJSON(),
@@ -88,6 +90,13 @@ export class Message {
       reactions: this.reactions.map((reaction) => reaction.toJSON()),
       isChannelMessage: this.isChannelMessage,
       edited: this.edited,
+      privateMsg: this.privateMsg,
     };
+
+    if (this.recipient !== undefined) {
+      json.recipient = this.recipient.toJSON();
+    }
+
+    return json;
   }
 }

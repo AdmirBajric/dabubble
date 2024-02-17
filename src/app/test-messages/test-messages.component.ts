@@ -6,11 +6,24 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { MatIconModule } from '@angular/material/icon';
 import { arrayUnion } from '@angular/fire/firestore';
 import { FirebaseService } from '../services/firebase.service';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-test-messages',
   standalone: true,
-  imports: [CommonModule, FormsModule, PickerComponent, MatIconModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    PickerComponent,
+    MatIconModule,
+    MatExpansionModule,
+    MatTooltipModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './test-messages.component.html',
   styleUrls: ['./test-messages.component.scss'],
 })
@@ -32,7 +45,45 @@ export class TestMessagesComponent implements OnInit {
   editMessageBtnShow: boolean = false;
   editCommentContainerShow: boolean = false;
 
-  constructor(private firebaseService: FirebaseService) {}
+  form: FormGroup;
+  usersSearch: boolean = false;
+  channelSearch: boolean = false;
+  users: { fullName: string; avatar: string }[] = [
+    {
+      fullName: 'John Doe',
+      avatar:
+        'https://gruppe-873.developerakademie.net/angular-projects/dabubble/assets/img/avatar3.svg',
+    },
+  ];
+  channels: { channelName: string }[] = [{ channelName: 'General' }];
+
+  constructor(
+    private firebaseService: FirebaseService,
+    private formBuilder: FormBuilder
+  ) {
+    this.form = this.formBuilder.group({
+      userInput: [''],
+    });
+
+    const inputControl = this.form.get('userInput');
+    if (inputControl) {
+      inputControl.valueChanges.subscribe((value) => {
+        this.text = value;
+
+        if (value === '@') {
+          this.usersSearch = true;
+        } else {
+          this.usersSearch = false;
+        }
+
+        if (value === '#') {
+          this.channelSearch = true;
+        } else {
+          this.channelSearch = false;
+        }
+      });
+    }
+  }
 
   ngOnInit(): void {
     if (typeof localStorage !== 'undefined') {
@@ -91,10 +142,9 @@ export class TestMessagesComponent implements OnInit {
       channelId: '8dGv7CQvxfHJhcH1vyiw',
       isChannelMessage: channel,
       reactions: [],
-      comments: [],
     });
 
-    this.showMessage();
+    console.log(message.toJSON());
 
     this.firebaseService
       .addDocument('messages', message.toJSON())
@@ -104,6 +154,8 @@ export class TestMessagesComponent implements OnInit {
       .catch((err: any) => {
         console.log(err);
       });
+
+    this.showMessage();
   }
 
   // Shows the message that was created
@@ -143,7 +195,11 @@ export class TestMessagesComponent implements OnInit {
   }
 
   // Add emoji to the main message on Channel
-  async addEmoji(event: any, StringOrId: string): Promise<void> {
+  async addEmoji(
+    event: any,
+    StringOrId: string,
+    isMainMessage: boolean
+  ): Promise<void> {
     this.activeCommentId = null;
 
     try {
@@ -154,49 +210,29 @@ export class TestMessagesComponent implements OnInit {
       });
 
       const reactionJSON = reaction.toJSON();
-      const docSnapshot = await this.firebaseService.getDocument(
-        'messages',
-        this.messageId
-      );
-      if (docSnapshot.exists()) {
-        if (StringOrId === 'mainMessage') {
-          let existingReactions = docSnapshot.data()?.['reactions'] || [];
+
+      if (isMainMessage) {
+        const docSnapshot = await this.firebaseService.getDocument(
+          'messages',
+          this.messageId
+        );
+        if (docSnapshot.exists()) {
           await this.firebaseService.updateDocument(
             'messages',
             this.messageId,
             {
-              reactions: arrayUnion(reactionJSON, ...existingReactions),
+              reactions: [reactionJSON], // Overwrite existing reactions with the new one
             }
           );
           this.showReactionOnMainChannel();
         } else {
-          this.saveReactionComments(reactionJSON, StringOrId);
+          console.error('Document not found');
         }
       } else {
-        console.error('Document not found');
+        await this.saveReactionComments(reactionJSON, StringOrId);
       }
     } catch (error) {
       console.error('Error updating document:', error);
-    }
-  }
-
-  // Save reaction on the comments
-  async saveReactionComments(
-    reactionJSON: any,
-    StringOrId: string
-  ): Promise<void> {
-    const docSnapshot = await this.firebaseService.getDocument(
-      'comments',
-      StringOrId
-    );
-    if (docSnapshot.exists()) {
-      let existingReactions = docSnapshot.data()?.['reactions'] || [];
-      await this.firebaseService.updateDocument('comments', StringOrId, {
-        reactions: arrayUnion(reactionJSON, ...existingReactions),
-      });
-      this.showComments();
-    } else {
-      console.error('Document not found');
     }
   }
 
@@ -214,6 +250,29 @@ export class TestMessagesComponent implements OnInit {
         this.emojis.push(reaction.emoji);
       });
       this.active = false;
+    }
+  }
+
+  // Save reaction on the comments
+  async saveReactionComments(
+    reactionJSON: any,
+    StringOrId: string
+  ): Promise<void> {
+    try {
+      const docSnapshot = await this.firebaseService.getDocument(
+        'comments',
+        StringOrId
+      );
+      if (docSnapshot.exists()) {
+        await this.firebaseService.updateDocument('comments', StringOrId, {
+          reactions: [reactionJSON], // Overwrite existing reactions with the new one
+        });
+        this.showComments(); // Refresh comments after saving reaction
+      } else {
+        console.error('Document not found');
+      }
+    } catch (error) {
+      console.error('Error updating document:', error);
     }
   }
 

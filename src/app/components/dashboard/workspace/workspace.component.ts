@@ -16,8 +16,11 @@ import { DirectMessageListItemComponent } from './direct-message-list-item/direc
 import { ButtonFunctionService } from '../../../services/button-function.service';
 import { HoverChangeDirective } from '../../../directives/hover-change.directive';
 import { EventEmitter } from '@angular/core';
-import { Firestore, collection, onSnapshot } from '@angular/fire/firestore';
 import { chatNavigationService } from '../../../services/chat-navigation.service';
+import { Firestore, collection, getDocs, query } from '@angular/fire/firestore';
+import { FirebaseService } from '../../../services/firebase.service';
+import { Subscription } from 'rxjs';
+import { Conversation } from '../../../models/conversation.class';
 
 @Component({
   selector: 'app-workspace',
@@ -40,8 +43,14 @@ export class WorkspaceComponent implements OnInit {
   screenWidth: number = 0;
   imageFlag!: string;
   user: any;
+  users: any[] = [];
   channels: any[] = [];
   channelId: string = '';
+  usersSubscription: Subscription | undefined;
+  usersSnapshotUnsubscribe: (() => void) | undefined;
+  conversationsSubscription: Subscription | undefined;
+  conversations: any[] = [];
+  conversationUpdateSubscription: Subscription;
   @Input() isOpen: boolean = true;
   // ********************** redirecting input event as output boolean to parent component
   showChannelContent!: boolean;
@@ -53,26 +62,114 @@ export class WorkspaceComponent implements OnInit {
   constructor(
     private el: ElementRef,
     private btnService: ButtonFunctionService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private firebaseService: FirebaseService
   ) {
     this.checkWindowSize();
     this.checkImageFlag();
+    this.setUserFromStorage();
+    this.conversationUpdateSubscription = this.firebaseService
+      .subscribeToConversationUpdates()
+      .subscribe((update) => {
+        if (update !== null) {
+          const existingIndex = this.conversations.findIndex(
+            (conv) => conv.id === update.id
+          );
+          if (existingIndex !== -1) {
+            const data = update.data.users;
+            this.conversations = [];
+            data.forEach((user) => {
+              this.conversations.push(user);
+            });
+            this.showUsers();
+          } else {
+            const data = update.data.users;
+            this.conversations = [];
+            data.forEach((user) => {
+              this.conversations.push(user);
+            });
+            this.showUsers();
+          }
+        } else {
+          // Handle deletion of conversation
+        }
+      });
+  }
+
+  setUserFromStorage() {
+    const loggedInUser =
+      typeof localStorage !== 'undefined'
+        ? localStorage.getItem('loggedInUser')
+        : null;
+    if (loggedInUser) {
+      const parsedUser = JSON.parse(loggedInUser);
+      this.user = parsedUser;
+    }
+  }
+
+  ngOnDestroy() {
+    this.conversationUpdateSubscription.unsubscribe();
   }
 
   ngOnInit() {
-    try {
-      const itemCollection = collection(this.firestore, 'channels');
-      onSnapshot(itemCollection, (querySnapshot) => {
-        this.channels = [];
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          data['id'] = doc.id;
-          this.channels.push(data);
-        });
+    this.setUserFromStorage();
+  }
+
+  async openDirectMsgs() {
+    this.setUserFromStorage();
+
+    this.showDMs = !this.showDMs;
+    await this.firebaseService
+      .getConversationForUser(this.user.id)
+      .then((data) => {
+        if (data) {
+          this.conversations = [];
+          data.data.users.forEach((user) => {
+            this.conversations.push(user);
+          });
+        }
       });
+    this.showUsers();
+  }
+
+  async showUsers() {
+    await this.firebaseService.getAllUsers().then((users) => {
+      const loggedInUser = users.find((user) => user['id'] === this.user.id);
+      this.users = [];
+
+      if (loggedInUser) {
+        loggedInUser['loggedInUser'] = true;
+        this.users.push(loggedInUser);
+      }
+
+      users
+        .filter(
+          (user) =>
+            user['id'] !== this.user.id &&
+            this.conversations.some((id) => id === user['id'])
+        )
+        .forEach((user) => this.users.push(user));
+    });
+  }
+
+  sendData(userId: string) {
+    console.log(userId);
+  }
+
+  openChannels() {
+    try {
+      this.firebaseService
+        .getAllChannels()
+        .then((channels) => {
+          this.channels = channels;
+        })
+        .catch((error) => {
+          console.error('Error fetching channels:', error);
+        });
     } catch (error) {
-      console.error('Error adding document: ', error);
+      console.error('Error fetching channels:', error);
     }
+    this.showChannels = !this.showChannels;
   }
 
   openCreateChannel() {
