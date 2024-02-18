@@ -2,24 +2,43 @@
 <div class="main-container">
   <form [formGroup]="form">
     <input
+      autocomplete="off"
+      id="userInput"
       type="text"
       formControlName="userInput"
       ngDefaultControl
       placeholder="Your message"
+      [value]="showUserInput.join(' ')"
+      [ngStyle]="{
+        color: isUserInput ? '#444df2' : 'black'
+      }"
     />
   </form>
 
-  <mat-expansion-panel [expanded]="usersSearch || channelSearch">
+  <mat-expansion-panel
+    class="expand-panel"
+    [expanded]="usersSearch || channelSearch"
+  >
     <ng-container *ngIf="usersSearch">
-      <div *ngFor="let user of users" class="show-users">
+      <div
+        (click)="addUser(user.id)"
+        id="{{ user.id }}"
+        *ngFor="let user of users"
+        class="show-users"
+      >
         <img src="{{ user.avatar }}" alt="" />
         <p>{{ user.fullName }}</p>
       </div>
     </ng-container>
 
     <ng-container *ngIf="channelSearch">
-      <div *ngFor="let channel of channels" class="show-users">
-        <p># {{ channel.channelName }}</p>
+      <div
+        (click)="addChannel(channel.name)"
+        id="{{ channel.id }}"
+        *ngFor="let channel of channels"
+        class="show-users"
+      >
+        <p># {{ channel.name }}</p>
       </div>
     </ng-container>
   </mat-expansion-panel>
