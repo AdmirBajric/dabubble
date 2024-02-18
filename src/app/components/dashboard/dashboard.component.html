@@ -14,7 +14,7 @@
   <div class="profile-menu"><app-profile-menu></app-profile-menu></div>
 
   <div class="sidenav">
-    <app-workspace
+    <app-workspace class="h-100 d-flex"
       [isOpen]="workspaceIsOpen"
       (openChatWriteNewMessage)="openNewMessage()"
       (openChannelChat)="openChatofChannel()"
@@ -34,9 +34,6 @@
   </div>
 
   <div *ngIf="threadIsOpen" class="threads border-radius-3">
-    <app-chat-header
-      [styleHeaderForThread]="activateThreadHeader"
-    ></app-chat-header>
     <app-thread
       [threadData]="selectedMessageForThread"
       class="border-radius-3"

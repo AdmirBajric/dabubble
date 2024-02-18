@@ -15,20 +15,22 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { chatNavigationService } from '../../../services/chat-navigation.service';
 import { MessageComponent } from "../message/message.component";
+import { ChatHeaderComponent } from "../../shared/chat-header/chat-header.component";
 
 @Component({
-  selector: 'app-thread',
-  standalone: true,
-  templateUrl: './thread.component.html',
-  styleUrl: './thread.component.scss',
-  imports: [
-    CommonModule,
-    EmojisComponent,
-    PickerModule,
-    MessageInputComponent,
-    WorkspaceHeaderComponent,
-    MessageComponent
-  ]
+    selector: 'app-thread',
+    standalone: true,
+    templateUrl: './thread.component.html',
+    styleUrl: './thread.component.scss',
+    imports: [
+        CommonModule,
+        EmojisComponent,
+        PickerModule,
+        MessageInputComponent,
+        WorkspaceHeaderComponent,
+        MessageComponent,
+        ChatHeaderComponent
+    ]
 })
 export class ThreadComponent implements OnInit {
   @Input() threadData!: any;

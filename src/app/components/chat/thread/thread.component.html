@@ -2,26 +2,27 @@
   <app-workspace-header></app-workspace-header>
 </ng-container>
 <div class="wrapper">
-    <div class="container">
-      <app-message [message]="currentMessage.message"></app-message>
-    </div>
+  <app-chat-header [styleHeaderForThread]="true"></app-chat-header>
+  <div class="container">
+    <app-message [message]="currentMessage.message"></app-message>
+  </div>
 
-    <div class="answers-divider">
-      <div class="answers-count">
-        <span class="number">{{answersCount}} </span>
-        <span class="text">
-          <ng-container *ngIf="answersCount === 1; else multipleAnswers">Antwort</ng-container>
-          <ng-template #multipleAnswers>Antworten</ng-template>
-        </span>
-      </div>
-      <span class="stroke"></span>
+  <div class="answers-divider">
+    <div class="answers-count">
+      <span class="number">{{answersCount}} </span>
+      <span class="text">
+        <ng-container *ngIf="answersCount === 1; else multipleAnswers">Antwort</ng-container>
+        <ng-template #multipleAnswers>Antworten</ng-template>
+      </span>
     </div>
+    <span class="stroke"></span>
+  </div>
 
-    <div class="answers-details" *ngIf="threadData.answers.length > 0">
-      <div *ngFor="let answer of threadData.answers">
-        <app-message [message]="answer"></app-message>
-      </div>
+  <div class="answers-details" *ngIf="threadData.answers.length > 0">
+    <div *ngFor="let answer of threadData.answers">
+      <app-message [message]="answer"></app-message>
     </div>
+  </div>
 
   <section class="input">
     <app-message-input></app-message-input>

@@ -4,35 +4,43 @@
 .db-main {
     &.grid-template-nct {
         grid-template-areas:
-        "logo search user"
-        "nav chat thread";
+            "logo search user"
+            "nav chat thread";
     }
+
     &.grid-template-cct {
         grid-template-areas:
-        "logo search user"
-        "chat chat thread";
+            "logo search user"
+            "chat chat thread";
     }
+
     &.grid-template-ccc {
         grid-template-areas:
-        "logo search user"
-        "chat chat chat";
+            "logo search user"
+            "chat chat chat";
     }
+
     &.grid-template-ncc {
         grid-template-areas:
-        "logo search user"
-        "nav chat chat";
+            "logo search user"
+            "nav chat chat";
     }
+
     display: grid;
     grid-template-columns: 32rem 3fr 1fr;
-    grid-template-rows: 8rem 70rem;
+    grid-template-rows: max-content;
     row-gap: 1rem;
     column-gap: 2rem;
     height: 100vh;
     padding: 2rem 4rem;
     position: relative;
 
-    @media only screen and (min-width: 1100px) and (min-height: 1100px) {
-        grid-template-columns: 26rem 3fr 1fr;
+    @media only screen and (min-width: 1100px) {
+        grid-template-columns: 28rem 3fr 1fr;
+    }
+
+    @media only screen and (min-width: 1900px) {
+        padding: 8rem 10rem;
     }
 }
 

@@ -39,6 +39,8 @@ export class ChatHeaderComponent implements OnInit {
 
   async ngOnInit() {
     await this.subscribeChannel();
+    console.log(this.styleHeaderForThread);
+    
     // console.log('CHAT HEADER', this.currentChannel);
     
   }
