@@ -43,37 +43,37 @@ a {
 }
 
 h1 {
-  @media only screen and (min-width: 1900px) {
+  @media only screen and (min-width: 1750px) {
     @include fonts-styles(2rem, bold);
   }
 }
 
 h2 {
-  @media only screen and (min-width: 1900px) {
+  @media only screen and (min-width: 1750px) {
     @include fonts-styles(1.8rem, bold);
   }
 }
 
 h4 {
-  @media only screen and (min-width: 1900px) {
+  @media only screen and (min-width: 1750px) {
     @include fonts-styles(1.4rem, bold);
   }
 }
 
 .fs-12 {
-  @media only screen and (min-width: 1900px) {
+  @media only screen and (min-width: 1750px) {
     @include fonts-styles(1.2rem, normal);
   }
 }
 
 .fs-16 {
-  @media only screen and (min-width: 1900px) {
+  @media only screen and (min-width: 1750px) {
     @include fonts-styles(1.6rem, normal);
   }
 }
 
 .fs-18 {
-  @media only screen and (min-width: 1900px) {
+  @media only screen and (min-width: 1750px) {
     @include fonts-styles(1.8rem, normal);
   }
 }

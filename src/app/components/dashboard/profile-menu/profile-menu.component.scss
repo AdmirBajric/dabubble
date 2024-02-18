@@ -24,8 +24,12 @@
 
   .profile-menu-name {
     p {
-      @include fonts-styles(2.8rem, 700);
+      @include fonts-styles(2.2rem, 700);
       line-height: normal;
+
+      @media only screen and (min-width: 1700px) {
+        @include fonts-styles(2.8rem, 700);
+      }
     }
   }
 
