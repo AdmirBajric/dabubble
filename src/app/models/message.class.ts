@@ -86,7 +86,6 @@ export class Message {
       timestamp: this.timestamp.toISOString(),
       creator: this.creator.toJSON(),
       channelId: this.channelId,
-      recipient: this.recipient,
       reactions: this.reactions.map((reaction) => reaction.toJSON()),
       isChannelMessage: this.isChannelMessage,
       edited: this.edited,

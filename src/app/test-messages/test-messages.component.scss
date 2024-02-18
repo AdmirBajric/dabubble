@@ -1,3 +1,6 @@
+@import "../colors.scss";
+@import "../mixins.scss";
+
 label {
   font-size: 2rem;
 }
@@ -211,4 +214,42 @@ label {
       }
     }
   }
+}
+
+.expand-panel {
+  width: 30rem;
+
+  .show-users {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 1rem 0rem;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $bg-color;
+    }
+
+    img {
+      margin-left: 3rem;
+      width: 4rem;
+      height: 4rem;
+      border-radius: 2rem;
+    }
+
+    p {
+      margin-left: 2rem;
+    }
+  }
+}
+
+.message-input {
+  min-height: 30px;
+  border: 1px solid #ccc;
+  padding: 5px;
+  font-family: Arial, sans-serif;
+}
+
+.message-input::first-letter {
+  color: #444df2; /* Your desired color */
 }
