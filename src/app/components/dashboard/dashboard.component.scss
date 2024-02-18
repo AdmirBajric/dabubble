@@ -36,6 +36,10 @@
     position: relative;
 
     @media only screen and (min-width: 1100px) {
+        grid-template-columns: 32rem 3fr 28rem;
+    }
+
+    @media only screen and (min-width: 1300px) {
         grid-template-columns: 32rem 3fr 32rem;
     }
 
