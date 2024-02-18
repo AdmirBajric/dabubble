@@ -1,3 +1,6 @@
+@import "../colors.scss";
+@import "../mixins.scss";
+
 label {
   font-size: 2rem;
 }
@@ -31,6 +34,11 @@ label {
     border: 0.1rem solid black;
     background-color: aquamarine;
     color: black;
+  }
+
+  .select-avatar-upload-foto {
+    margin-top: 4rem;
+    margin-bottom: 3rem;
   }
 }
 
@@ -137,6 +145,17 @@ label {
   mat-icon {
     cursor: pointer;
   }
+
+  .image {
+    width: 10rem;
+    height: 10rem;
+    margin-bottom: 4rem;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
 
 .comments {
@@ -211,4 +230,42 @@ label {
       }
     }
   }
+}
+
+.expand-panel {
+  width: 30rem;
+
+  .show-users {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 1rem 0rem;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $bg-color;
+    }
+
+    img {
+      margin-left: 3rem;
+      width: 4rem;
+      height: 4rem;
+      border-radius: 2rem;
+    }
+
+    p {
+      margin-left: 2rem;
+    }
+  }
+}
+
+.message-input {
+  min-height: 30px;
+  border: 1px solid #ccc;
+  padding: 5px;
+  font-family: Arial, sans-serif;
+}
+
+.message-input::first-letter {
+  color: #444df2; /* Your desired color */
 }

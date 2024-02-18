@@ -1,16 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Message, Comment, Reaction } from '../models/message.class';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { MatIconModule } from '@angular/material/icon';
-import { arrayUnion } from '@angular/fire/firestore';
 import { FirebaseService } from '../services/firebase.service';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Firestore, collection, addDoc } from '@angular/fire/firestore';
+import { getApp } from 'firebase/app';
+import { getStorage } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
+import { getAuth, signOut } from '@angular/fire/auth';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-test-messages',
@@ -45,42 +49,119 @@ export class TestMessagesComponent implements OnInit {
   editMessageBtnShow: boolean = false;
   editCommentContainerShow: boolean = false;
 
-  form: FormGroup;
+  form!: FormGroup;
   usersSearch: boolean = false;
   channelSearch: boolean = false;
-  users: { fullName: string; avatar: string }[] = [
-    {
-      fullName: 'John Doe',
-      avatar:
-        'https://gruppe-873.developerakademie.net/angular-projects/dabubble/assets/img/avatar3.svg',
-    },
-  ];
-  channels: { channelName: string }[] = [{ channelName: 'General' }];
+  users: any[] = [];
+  channels: any[] = [];
+  showUserInput: string[] = [];
+  isUserInput: boolean = false;
+  imgSelected: boolean = false;
+  selectedFile: File | null = null;
+  downloadURL: string | null = null;
+  previewImageUrl: any;
+  hidePersonImg: boolean = false;
+  personImg = '../../assets/img/person.svg';
+  uploadedFile: string = '';
+  img: string = '';
+
+  firestore: Firestore = inject(Firestore);
 
   constructor(
     private firebaseService: FirebaseService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private router: Router
   ) {
+    this.setInputControl();
+    this.setUserAndChannels();
+  }
+
+  setUserAndChannels() {
+    this.firebaseService
+      .getAllUsers()
+      .then((users: any[]) => {
+        this.users = users;
+      })
+      .catch((error) => {
+        console.error('Error fetching users:', error);
+      });
+
+    this.firebaseService
+      .getAllChannels()
+      .then((channels: any[]) => {
+        this.channels = channels;
+      })
+      .catch((error) => {
+        console.error('Error fetching channels:', error);
+      });
+  }
+
+  addUser(userId: any) {
+    const selectedUserIndex = this.users.findIndex(
+      (user) => user.id === userId
+    );
+    if (selectedUserIndex !== -1) {
+      const selectedUser = this.users.splice(selectedUserIndex, 1)[0];
+      this.showUserInput.push('@' + selectedUser.fullName);
+      this.form.get('userInput')?.setValue(this.showUserInput.join(' ') + ' ');
+      this.usersSearch = false;
+      this.setFocusToInput();
+    }
+  }
+
+  addChannel(channelName: string) {
+    const selectedChannelIndex = this.channels.find(
+      (channel) => channel.name === channelName
+    );
+
+    if (selectedChannelIndex.name !== -1) {
+      const selectedChannel = this.channels.splice(
+        selectedChannelIndex.name,
+        1
+      )[0];
+      this.showUserInput.push('#' + selectedChannel.name);
+      this.form.get('userInput')?.setValue(this.showUserInput.join(' ') + ' ');
+      this.channelSearch = false;
+      this.setFocusToInput();
+    }
+  }
+
+  setFocusToInput() {
+    const inputElement = document.getElementById(
+      'userInput'
+    ) as HTMLInputElement;
+    if (inputElement) {
+      if (this.showUserInput.length > 0) {
+        this.showUserInput.push(' ');
+      }
+      inputElement.focus();
+    }
+  }
+
+  setInputControl() {
     this.form = this.formBuilder.group({
       userInput: [''],
     });
-
     const inputControl = this.form.get('userInput');
     if (inputControl) {
       inputControl.valueChanges.subscribe((value) => {
         this.text = value;
 
-        if (value === '@') {
-          this.usersSearch = true;
-        } else {
-          this.usersSearch = false;
-        }
+        const values = value.split(' ');
 
-        if (value === '#') {
-          this.channelSearch = true;
-        } else {
-          this.channelSearch = false;
-        }
+        values.forEach((value: string) => {
+          if (value === '@' && this.users.length > 0) {
+            this.usersSearch = true;
+          } else {
+            this.usersSearch = false;
+          }
+
+          if (value === '#' && this.channels.length > 0) {
+            this.channelSearch = true;
+          } else {
+            this.channelSearch = false;
+          }
+        });
       });
     }
   }
@@ -134,7 +215,9 @@ export class TestMessagesComponent implements OnInit {
     this.editContainerOpen = true;
   }
 
-  addMessage(channel: boolean) {
+  async addMessage(channel: boolean) {
+    await this.uploadImage();
+
     const message = new Message({
       text: this.text,
       timestamp: new Date(),
@@ -142,14 +225,17 @@ export class TestMessagesComponent implements OnInit {
       channelId: '8dGv7CQvxfHJhcH1vyiw',
       isChannelMessage: channel,
       reactions: [],
+      file: this.uploadedFile,
     });
 
-    console.log(message.toJSON());
+    const messageToJson = message.toJSON();
 
     this.firebaseService
-      .addDocument('messages', message.toJSON())
+      .addDocument('messages', messageToJson)
       .then((data: any) => {
         this.messageId = data.id;
+        this.form.get('userInput')?.setValue('');
+        this.showUserInput = [];
       })
       .catch((err: any) => {
         console.log(err);
@@ -158,7 +244,6 @@ export class TestMessagesComponent implements OnInit {
     this.showMessage();
   }
 
-  // Shows the message that was created
   async showMessage() {
     setTimeout(async () => {
       try {
@@ -170,6 +255,7 @@ export class TestMessagesComponent implements OnInit {
           const documentData = docSnapshot.data();
           this.textFromServer = documentData['text'];
           this.editedMessage = documentData['text'];
+          this.img = documentData['file'];
           this.editMessageBtnShow = true;
         } else {
           console.error('Document not found');
@@ -180,7 +266,6 @@ export class TestMessagesComponent implements OnInit {
     }, 1500);
   }
 
-  // Opens the emoji container
   addReactionToMainMessage(from: string) {
     if (from === 'mainMessage') {
       this.active = !this.active;
@@ -194,7 +279,6 @@ export class TestMessagesComponent implements OnInit {
       this.activeCommentId === commentId ? null : commentId;
   }
 
-  // Add emoji to the main message on Channel
   async addEmoji(
     event: any,
     StringOrId: string,
@@ -221,7 +305,7 @@ export class TestMessagesComponent implements OnInit {
             'messages',
             this.messageId,
             {
-              reactions: [reactionJSON], // Overwrite existing reactions with the new one
+              reactions: [reactionJSON],
             }
           );
           this.showReactionOnMainChannel();
@@ -236,7 +320,6 @@ export class TestMessagesComponent implements OnInit {
     }
   }
 
-  // Show reaction Channel main message
   async showReactionOnMainChannel() {
     const docSnapshot = await this.firebaseService.getDocument(
       'messages',
@@ -253,7 +336,6 @@ export class TestMessagesComponent implements OnInit {
     }
   }
 
-  // Save reaction on the comments
   async saveReactionComments(
     reactionJSON: any,
     StringOrId: string
@@ -265,9 +347,9 @@ export class TestMessagesComponent implements OnInit {
       );
       if (docSnapshot.exists()) {
         await this.firebaseService.updateDocument('comments', StringOrId, {
-          reactions: [reactionJSON], // Overwrite existing reactions with the new one
+          reactions: [reactionJSON],
         });
-        this.showComments(); // Refresh comments after saving reaction
+        this.showComments();
       } else {
         console.error('Document not found');
       }
@@ -276,7 +358,6 @@ export class TestMessagesComponent implements OnInit {
     }
   }
 
-  // Add Comment on the main message on Channel
   async commentMessage(): Promise<void> {
     try {
       const comment = new Comment({
@@ -299,7 +380,6 @@ export class TestMessagesComponent implements OnInit {
     }
   }
 
-  // Shows Comments
   async showComments() {
     const querySnapshot = await this.firebaseService.queryDocuments(
       'comments',
@@ -314,5 +394,36 @@ export class TestMessagesComponent implements OnInit {
       this.comments.push(commentData);
       this.editedComment = commentData['text'];
     });
+  }
+
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files?.[0] || null;
+
+    if (this.selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.previewImageUrl = e.target.result;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
+  }
+
+  async uploadImage() {
+    if (this.selectedFile !== null) {
+      const filename = this.user.id + '_' + this.selectedFile.name;
+      const firebaseApp = getApp();
+      const storage = getStorage(
+        firebaseApp,
+        'gs://dabubble-cee4e.appspot.com'
+      );
+      const storageRef = ref(storage, 'images/' + filename);
+      await uploadBytes(storageRef, this.selectedFile)
+        .then(async (snapshot) => {
+          this.uploadedFile = await getDownloadURL(storageRef);
+        })
+        .catch((error) => {
+          console.error('Error uploading file:', error);
+        });
+    }
   }
 }

@@ -65,6 +65,7 @@ export class Message {
   edited: boolean;
   privateMsg: boolean;
   id?: string;
+  file: string;
 
   constructor(obj?: any) {
     this.text = obj?.text || '';
@@ -78,6 +79,7 @@ export class Message {
     this.isChannelMessage = obj?.isChannelMessage || false;
     this.edited = obj ? obj.edited || false : false;
     this.privateMsg = obj?.privateMsg || false;
+    this.file = obj?.file || '';
   }
 
   public toJSON() {
@@ -86,11 +88,11 @@ export class Message {
       timestamp: this.timestamp.toISOString(),
       creator: this.creator.toJSON(),
       channelId: this.channelId,
-      recipient: this.recipient,
       reactions: this.reactions.map((reaction) => reaction.toJSON()),
       isChannelMessage: this.isChannelMessage,
       edited: this.edited,
       privateMsg: this.privateMsg,
+      file: this.file,
     };
 
     if (this.recipient !== undefined) {
@@ -98,5 +100,9 @@ export class Message {
     }
 
     return json;
+  }
+
+  public toString(): string {
+    return JSON.stringify(this.toJSON(), null, 2);
   }
 }
