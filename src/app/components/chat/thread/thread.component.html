@@ -3,7 +3,7 @@
 </ng-container>
 <div class="wrapper">
     <div class="container">
-      <app-message [message]="currentMessage.message"></app-message>
+      <app-message [message]="currentMessage"></app-message>
     </div>
 
     <div class="answers-divider">
@@ -17,7 +17,7 @@
       <span class="stroke"></span>
     </div>
 
-    <div class="answers-details" *ngIf="threadData.answers.length > 0">
+    <div class="answers-details" *ngIf="">
       <div *ngFor="let answer of threadData.answers">
         <app-message [message]="answer"></app-message>
       </div>
