@@ -9,12 +9,11 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Firestore, collection, addDoc } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { getApp } from 'firebase/app';
 import { getStorage } from 'firebase/storage';
 import { ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
-import { getAuth, signOut } from '@angular/fire/auth';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-test-messages',

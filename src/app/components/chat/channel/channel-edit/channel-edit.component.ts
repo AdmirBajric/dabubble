@@ -12,6 +12,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { InputComponent } from '../../../shared/input/input.component';
 import { FormsModule } from '@angular/forms';
+import { ButtonFunctionService } from '../../../../services/button-function.service';
+import { chatNavigationService } from '../../../../services/chat-navigation.service';
+import { Channel } from '../../../../models/channel.class';
+import { FirebaseService } from '../../../../services/firebase.service';
 
 @Component({
   selector: 'app-channel-edit',
@@ -29,74 +33,86 @@ import { FormsModule } from '@angular/forms';
   encapsulation: ViewEncapsulation.None,
 })
 export class ChannelEditComponent {
-  user: any = {
-    id: 1,
-    fullName: 'Name LastName',
-    img: '../../assets/img/person.svg',
-    isOnline: true,
-  };
-  users: any[] = [
-    {
-      id: 2,
-      fullName: 'Admir Bajric',
-      img: '../../assets/img/avatar1.svg',
-      isOnline: true,
-    },
-    {
-      id: 3,
-      fullName: 'Selina Karlin',
-      img: '../../assets/img/avatar2.svg',
-      isOnline: false,
-    },
-    {
-      id: 4,
-      fullName: 'Julius Marecek',
-      img: '../../assets/img/avatar3.svg',
-      isOnline: false,
-    },
-    {
-      id: 2,
-      fullName: 'Admir Bajric',
-      img: '../../assets/img/avatar1.svg',
-      isOnline: true,
-    },
-    {
-      id: 3,
-      fullName: 'Selina Karlin',
-      img: '../../assets/img/avatar2.svg',
-      isOnline: false,
-    },
-    {
-      id: 4,
-      fullName: 'Julius Marecek',
-      img: '../../assets/img/avatar3.svg',
-      isOnline: false,
-    },
-  ];
+  user: any = {};
+  users: any[] = [];
   ifMobileView: boolean = true;
   windowWidth: number = 0;
-  ifUserCreateChannel: boolean = true;
-  channelName: string = 'Channel name';
-  channelNameCopy = this.channelName;
+  ifUserCreateChannel: boolean = false;
+  ifUserMemberChannel: boolean = false;
+  channelName: string = '';
+  channel: any;
+  channelNameCopy: string = '';
   channelNameToggle: boolean = true;
   channelDescriptionToggle: boolean = true;
   channelNameOnFocus: boolean = false;
   channelDescriptionOnFocus: boolean = false;
-  createdBy: string = 'Noah Braun';
-  channelDescription: string =
-    'Dieser Channel ist für alles rund um #dfsdf vorgesehen. Hier kannst du zusammen mit deinem Team Meetings abhalten, Dokumente teilen und Entscheidungen treffen.';
+  createdBy: string = '';
+  channelDescription: string = '';
+  channelId: string = '';
+  channelMembers: any[] = [];
 
   @ViewChild('channelNameInput') channelNameInput!: ElementRef;
   @ViewChild('channelDescriptionInput') channelDescriptionInput!: ElementRef;
 
+  currentChannel!: Channel;
+
   constructor(
     private elementRef: ElementRef,
     public dialogRef: MatDialogRef<ChannelEditComponent>,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private btnService: ButtonFunctionService,
+    private navService: chatNavigationService,
+    private firebaseService: FirebaseService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.checkWindowSize();
+    await this.loadUserFromStorage();
+    await this.subscribeChannel();
+    await this.channels();
+  }
+
+  async loadUserFromStorage() {
+    const loggedInUser =
+      typeof localStorage !== 'undefined'
+        ? localStorage.getItem('loggedInUser')
+        : null;
+    if (loggedInUser) {
+      const parsedUser = JSON.parse(loggedInUser);
+      this.user = parsedUser;
+    }
+  }
+
+  async subscribeChannel() {
+    this.navService.currentChannel.subscribe((channel) => {
+      this.channelId = channel.id;
+    });
+  }
+
+  async channels() {
+    const channels = await this.firebaseService.getAllChannels();
+    channels.forEach((channel) => {
+      if (channel['id'] === this.channelId) {
+        this.channelNameCopy = channel['name'];
+        this.channelName = channel['name'];
+        this.createdBy = channel['creator'].fullName;
+        this.channelDescription = channel['description'];
+
+        channel['members'].forEach((member: any) => {
+          this.channelMembers.push(member);
+        });
+
+        if (channel['creator'].id === this.user.id) {
+          this.ifUserCreateChannel = true;
+        }
+
+        this.channelMembers.forEach((member) => {
+          if (member.id === this.user.id) {
+            this.ifUserMemberChannel = true;
+          }
+        });
+      }
+    });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -120,9 +136,29 @@ export class ChannelEditComponent {
     }
   }
 
-  channelDelete() {}
+  channelDelete(id: string) {
+    this.firebaseService
+      .deleteChannel(id)
+      .then(() => {
+        console.log('Channel deleted');
+        this.onNoClick();
+      })
+      .catch((error) => {
+        console.error('Error deleting channel:', error);
+      });
+  }
 
-  leaveChannel() {}
+  leaveChannel(id: string) {
+    this.firebaseService
+      .removeMemberFromChannel(id, this.user.id)
+      .then(() => {
+        console.log('Memeber removed from channel');
+        this.onNoClick();
+      })
+      .catch((error) => {
+        console.error('Error deleting member:', error);
+      });
+  }
 
   editName() {
     this.channelNameToggle = !this.channelNameToggle;
@@ -135,10 +171,14 @@ export class ChannelEditComponent {
     }
   }
 
-  saveName() {
+  saveName(id: string) {
     this.channelNameOnFocus = false;
     this.channelNameToggle = !this.channelNameToggle;
     this.channelNameCopy = this.channelName;
+
+    this.firebaseService.updateDocument('channels', id, {
+      name: this.channelName,
+    });
   }
 
   editDescription() {
@@ -152,9 +192,12 @@ export class ChannelEditComponent {
     }
   }
 
-  saveDescription() {
+  saveDescription(id: string) {
     this.channelDescriptionOnFocus = false;
     this.channelDescriptionToggle = !this.channelDescriptionToggle;
+    this.firebaseService.updateDocument('channels', id, {
+      description: this.channelDescription,
+    });
   }
 
   onNoClick() {
