@@ -27,8 +27,7 @@ export const appConfig: ApplicationConfig = {
       )
     ),
     importProvidersFrom(provideAuth(() => getAuth())),
-    importProvidersFrom(provideFirestore(() => initializeFirestore(getApp(), 
-    { ignoreUndefinedProperties: true }))),                                                                   // this must be configured, so the recipient in message.class.ts can be accepted as undefined
+     importProvidersFrom(provideFirestore(() => getFirestore())),                             // this must be configured, so the recipient in message.class.ts can be accepted as undefined
     importProvidersFrom(provideDatabase(() => getDatabase())),
   ],
 };
