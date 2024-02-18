@@ -27,7 +27,7 @@
     }
 
     display: grid;
-    grid-template-columns: 32rem 3fr 1fr;
+    // grid-template-columns: 32rem 3fr 1fr;
     grid-template-rows: max-content;
     row-gap: 1rem;
     column-gap: 2rem;
@@ -36,7 +36,7 @@
     position: relative;
 
     @media only screen and (min-width: 1100px) {
-        grid-template-columns: 28rem 3fr 1fr;
+        grid-template-columns: 32rem 3fr 32rem;
     }
 
     @media only screen and (min-width: 1900px) {
