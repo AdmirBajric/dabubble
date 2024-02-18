@@ -21,8 +21,7 @@ export class MessageComponent implements OnInit {
   constructor(private navService: chatNavigationService,
     private firebaseService: FirebaseService
   ) { }
-  loggedUser = "Selina Karlin"
-  @Input() message: any;
+  @Input() message!: Message;
   @Input() messageId!: string | undefined;
   @Output() updatedMessage = new EventEmitter<{ messageText: string, id: string }>();
   showAnswers: boolean = false;
@@ -65,9 +64,10 @@ export class MessageComponent implements OnInit {
   }
 
   async searchForReactions() {
+    const id = this.getMessageId() as string;
     const docSnapshot = await this.firebaseService.getDocument(
       'messages',
-      this.message.id
+      id
     );
     if (docSnapshot.exists()) {
       const existingReactions = docSnapshot.data()?.['reactions'] as Reaction[] || [];
@@ -75,6 +75,17 @@ export class MessageComponent implements OnInit {
       existingReactions.forEach((reaction: Reaction) => {
         this.reactions.push(reaction);
       });
+    }
+  }
+  /**
+   * Gets ID from message for firestore handling and emitting emoji.
+   * @returns {*}
+   */
+  getMessageId() {
+    if (this.message && 'id' in this.message) {
+      return this.message.id;
+    } else {
+      return null;
     }
   }
 
@@ -110,7 +121,7 @@ export class MessageComponent implements OnInit {
     this.answersCount = this.answers.length;
   }
 
-  showAnswersinThread(m: any[]) {
+  showAnswersinThread(m: Message) {
     this.navService.openThread(m);
   }
 
@@ -136,7 +147,8 @@ export class MessageComponent implements OnInit {
    * @param {string} messageText
    * @param {string} id
    */
-  saveEditedMessage(messageText: string, id: string) {
+  saveEditedMessage(messageText: string) {
+    const id = this.getMessageId() as string; 
     this.updatedMessage.emit({ messageText, id });
     this.openMessageEdit = false;
   }

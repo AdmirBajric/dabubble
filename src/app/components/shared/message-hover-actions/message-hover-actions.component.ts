@@ -18,7 +18,7 @@ import { arrayUnion } from '@angular/fire/firestore';
 })
 export class MessageHoverActionsComponent {
   @Input() isYou!: boolean;
-  @Input() currentMessage!: Message[];
+  @Input() currentMessage!: Message;
   @Output() editMessage: EventEmitter<boolean> = new EventEmitter<boolean>();
   messageEditing!: boolean;
   showToolTip: boolean = false;
