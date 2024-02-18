@@ -7,10 +7,10 @@
     <app-message [message]="currentMessage" class="w-100"></app-message>
   </div>
 
-  <div class="answers-divider padding">
+  <div class="answers-divider wrapper-padding">
     <div class="answers-count">
       <span class="number">{{answersCount}} </span>
-      <span class="text">
+      <span class="text fs-12">
         <ng-container *ngIf="answersCount === 1; else multipleAnswers">Antwort</ng-container>
         <ng-template #multipleAnswers>Antworten</ng-template>
       </span>

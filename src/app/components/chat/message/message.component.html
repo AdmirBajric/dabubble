@@ -9,10 +9,10 @@
             <img src="{{message.creator.avatar}}" alt="">
             <div>
                 <div class="firstLine">
-                    <span class="mr-2"><b>{{message.creator.fullName}}</b></span>
+                    <h4 class="mr-2">{{message.creator.fullName}}</h4>
                     <span class="time">{{getTimeFromString(message.timestamp)}} Uhr</span>
                 </div>
-                <div class="messageLine">{{message.text}}</div>
+                <div class="messageLine fs-16">{{message.text}}</div>
                 <div class="lastLine" *ngIf="answers.length > 0">
                     <span class="answerCount" (click)="showAnswersinThread(message)">{{answersCount}}
                         <ng-container *ngIf="answersCount === 0; else multipleAnswers">Antwort</ng-container>
@@ -79,10 +79,10 @@
             <img src="{{message.creator.avatar}}" alt="" class="userImg">
             <div>
                 <div class="firstLine reverse">
-                    <span class="mr-2"><b>{{message.creator.fullName}}</b></span>
+                    <h4 class="mr-2">{{message.creator.fullName}}</h4>
                     <span class="time">{{getTimeFromString(message.timestamp)}} Uhr</span>
                 </div>
-                <div class="messageLine own">{{message.text}}</div>
+                <div class="messageLine own fs-16">{{message.text}}</div>
                 <div class="lastLine" *ngIf="this.answers.length > 0">
                     <span class="answerCount" (click)="showAnswersinThread(message)">{{answersCount}}
                         Antworten</span>
