@@ -15,13 +15,10 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { chatNavigationService } from '../../../services/chat-navigation.service';
 import { MessageComponent } from "../message/message.component";
-<<<<<<< HEAD
 import { ChatHeaderComponent } from "../../shared/chat-header/chat-header.component";
-=======
 import { User } from '../../../models/user.class';
 import { FirebaseService } from '../../../services/firebase.service';
 import { Comment } from '../../../models/message.class';
->>>>>>> feat-thread
 
 @Component({
     selector: 'app-thread',
