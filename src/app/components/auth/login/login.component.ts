@@ -115,7 +115,7 @@ export class LoginComponent implements OnInit {
         .then((userCredential) => {
           this.errorMessage = false;
           const user = userCredential.user;
-          this.showSuccessAnimation('/dashboard');
+          this.showSuccessAnimation();
         })
         .catch((error) => {
           this.errorMessage = true;
@@ -130,7 +130,7 @@ export class LoginComponent implements OnInit {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        this.showSuccessAnimation('/dashboard');
+        this.showSuccessAnimation();
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -142,18 +142,30 @@ export class LoginComponent implements OnInit {
     this.errorMessage = false;
     signInWithPopup(this.auth, new GoogleAuthProvider())
       .then((user) => {
-        this.showSuccessAnimation('/dashboard');
+        this.showSuccessAnimation();
       })
       .catch((error) => {
         console.log(error);
       });
   }
 
-  showSuccessAnimation(path: any) {
+  showSuccessAnimation() {
     this.loginSuccess = true;
+    const path = this.getPath();
+    console.log(path);
 
     setTimeout(() => {
       this.router.navigate([path]);
     }, 2000);
   }
+
+  getPath() {
+    if (this.windowWidth <= 110) {
+      return '/workspace'
+    } else {
+      return '/dashboard';
+    }
+  }
+
+
 }

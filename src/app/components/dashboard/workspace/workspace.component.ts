@@ -21,20 +21,22 @@ import { Firestore, collection, getDocs, query } from '@angular/fire/firestore';
 import { FirebaseService } from '../../../services/firebase.service';
 import { Subscription } from 'rxjs';
 import { Conversation } from '../../../models/conversation.class';
+import { MobileHeaderComponent } from "../../shared/mobile-header/mobile-header.component";
 
 @Component({
-  selector: 'app-workspace',
-  standalone: true,
-  templateUrl: './workspace.component.html',
-  styleUrl: './workspace.component.scss',
-  imports: [
-    ChannelListItemComponent,
-    CommonModule,
-    DirectMessageListItemComponent,
-    RouterModule,
-    WorkspaceHeaderComponent,
-    HoverChangeDirective,
-  ],
+    selector: 'app-workspace',
+    standalone: true,
+    templateUrl: './workspace.component.html',
+    styleUrl: './workspace.component.scss',
+    imports: [
+        ChannelListItemComponent,
+        CommonModule,
+        DirectMessageListItemComponent,
+        RouterModule,
+        WorkspaceHeaderComponent,
+        HoverChangeDirective,
+        MobileHeaderComponent
+    ]
 })
 export class WorkspaceComponent implements OnInit {
   firestore: Firestore = inject(Firestore);
@@ -65,7 +67,6 @@ export class WorkspaceComponent implements OnInit {
     private renderer: Renderer2,
     private firebaseService: FirebaseService
   ) {
-    this.checkWindowSize();
     this.checkImageFlag();
     this.setUserFromStorage();
     this.conversationUpdateSubscription = this.firebaseService
@@ -113,6 +114,9 @@ export class WorkspaceComponent implements OnInit {
 
   ngOnInit() {
     this.setUserFromStorage();
+    setTimeout(() => {
+    this.checkWindowSize();
+    }, 1500);
   }
 
   async openDirectMsgs() {

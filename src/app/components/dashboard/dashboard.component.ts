@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { MessageComponent } from "../chat/message/message.component";
 import { WorkspaceComponent } from "./workspace/workspace.component";
@@ -13,6 +13,7 @@ import { MainChatComponent } from "../chat/main-chat/main-chat.component";
 import { NewMessageComponent } from "../chat/main-chat/new-message/new-message.component";
 import { chatNavigationService } from '../../services/chat-navigation.service';
 import { Subscription } from 'rxjs';
+import { MobileHeaderComponent } from "../shared/mobile-header/mobile-header.component";
 
 @Component({
     selector: 'app-dashboard',
@@ -31,7 +32,8 @@ import { Subscription } from 'rxjs';
         ProfileMenuComponent,
         ChatHeaderComponent,
         MainChatComponent,
-        NewMessageComponent
+        NewMessageComponent,
+        MobileHeaderComponent
     ]
 })
 export class DashboardComponent implements OnInit {
@@ -45,11 +47,28 @@ export class DashboardComponent implements OnInit {
     writeNewMessage: boolean = false // default
 
     private threadStatusSubscription!: Subscription;
+    windowWidth!: number;
+    mobileView!: boolean;
 
-    constructor(private navService: chatNavigationService) { }
+    constructor(private navService: chatNavigationService,
+        private renderer: Renderer2,
+        private elementRef: ElementRef,
+    ) { }
     ngOnInit(): void {
         this.handleGridAreaToggle();
         this.subscribeToThreadStatus();
+        this.checkWindowSize();
+    }
+
+    private checkWindowSize(): void {
+        this.windowWidth = this.renderer.parentNode(
+            this.elementRef.nativeElement
+        ).ownerDocument.defaultView.innerWidth;
+        if (this.windowWidth <= 1100) {
+            this.mobileView = true;
+        } else {
+            this.mobileView = false;
+        }
     }
 
     subscribeToThreadStatus() {
@@ -94,76 +113,4 @@ export class DashboardComponent implements OnInit {
     ngOnDestroy() {
         this.threadStatusSubscription.unsubscribe();
     }
-
-    // messages: any[] = [
-    //     {
-    //         sender: {
-    //             fullName: 'Admir Bajric',
-    //             email: "",
-    //             password: "",
-    //             avatar: '../../assets/img/avatar1.svg',
-    //             isOnline: true,
-    //         },
-
-    //         message: "Hallo ich bin die erste testnachricht",
-    //         receiver: {
-    //             fullName: 'Julius Marecek',
-    //             email: "",
-    //             password: "",
-    //             avatar: '../../assets/img/avatar1.svg',
-    //             isOnline: true,
-    //         },
-
-    //         created_at: "2024-01-12T10:00:00",
-    //         room: "",
-    //         answers: [{
-    //             sender: {
-    //                 fullName: 'Julius Marecek',
-    //                 email: "",
-    //                 password: "",
-    //                 avatar: '../../assets/img/avatar1.svg',
-    //                 isOnline: true,
-    //             },
-    //             message: "Hallo ich bin die Antwort auf deine erste testnachricht",
-    //             created_at: "2024-01-12T10:01:00",
-    //             reaction: [{}],
-    //         }],
-    //         reaction: [{}],
-    //     },
-    //     {
-    //         sender: {
-    //             fullName: 'Julius Marecek',
-    //             email: "",
-    //             password: "",
-    //             avatar: '../../assets/img/avatar1.svg',
-    //             isOnline: true,
-    //         },
-
-    //         message: "Hallo ich bin eine zweite testnachricht an Admir",
-    //         receiver: {
-    //             fullName: 'Admir Bajric',
-    //             email: "",
-    //             password: "",
-    //             avatar: '../../assets/img/avatar1.svg',
-    //             isOnline: true,
-    //         },
-
-    //         created_at: "2024-01-12T10:02:00",
-    //         room: "",
-    //         answers: [{
-    //             sender: {
-    //                 fullName: 'Julius Marecek',
-    //                 email: "",
-    //                 password: "",
-    //                 avatar: '../../assets/img/avatar1.svg',
-    //                 isOnline: true,
-    //             },
-    //             message: "Hallo ich bin die Antwort auf deine zweite testnachricht",
-    //             created_at: "2024-01-12T10:03:00",
-    //             reaction: [{}],
-    //         }],
-    //         reaction: [{}],
-    //     },
-    // ];
-
 }

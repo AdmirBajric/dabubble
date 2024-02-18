@@ -1,5 +1,6 @@
 <div class="db-main" [ngClass]="'grid-template-' + gridAreaRegulation">
   <div class="logo"><app-logo></app-logo></div>
+  <ng-container *ngIf="mobileView"><app-mobile-header></app-mobile-header></ng-container>
 
   <div class="searchbar">
     <app-searchbar
