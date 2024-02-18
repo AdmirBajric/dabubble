@@ -66,7 +66,7 @@
                     </button>
 
                     <div class="btn-edit-2">
-                        <button (click)="saveEditedMessage(messageEditInput.value, message.id)"
+                        <button (click)="saveEditedMessage(messageEditInput.value)"
                             class="border-radius-3">Speichern</button>
 
                         <button (click)="cancelMessageEditing()" class="border-radius-3">Abbrechen</button>
@@ -84,7 +84,7 @@
                 </div>
                 <div class="messageLine own">{{message.text}}</div>
                 <div class="lastLine" *ngIf="this.answers.length > 0">
-                    <span class="answerCount" (click)="showAnswersinThread(message.message)">{{answersCount}}
+                    <span class="answerCount" (click)="showAnswersinThread(message)">{{answersCount}}
                         Antworten</span>
                     <span class="time">Letzte Antwort {{lastAnswerTime}} Uhr</span>
                 </div>

@@ -25,7 +25,7 @@ export class chatNavigationService {
     })
   }
 
-  openThread(message: any[]) {
+  openThread(message: Message) {
     this.currentMessage$.next(message);
     this.isThreadOpen$.next(true);
   }
