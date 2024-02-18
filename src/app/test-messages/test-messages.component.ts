@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Message, Comment, Reaction } from '../models/message.class';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -9,6 +9,12 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Firestore, collection, addDoc } from '@angular/fire/firestore';
+import { getApp } from 'firebase/app';
+import { getStorage } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
+import { getAuth, signOut } from '@angular/fire/auth';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-test-messages',
@@ -50,10 +56,21 @@ export class TestMessagesComponent implements OnInit {
   channels: any[] = [];
   showUserInput: string[] = [];
   isUserInput: boolean = false;
+  imgSelected: boolean = false;
+  selectedFile: File | null = null;
+  downloadURL: string | null = null;
+  previewImageUrl: any;
+  hidePersonImg: boolean = false;
+  personImg = '../../assets/img/person.svg';
+  uploadedFile: string = '';
+  img: string = '';
+
+  firestore: Firestore = inject(Firestore);
 
   constructor(
     private firebaseService: FirebaseService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private router: Router
   ) {
     this.setInputControl();
     this.setUserAndChannels();
@@ -198,7 +215,9 @@ export class TestMessagesComponent implements OnInit {
     this.editContainerOpen = true;
   }
 
-  addMessage(channel: boolean) {
+  async addMessage(channel: boolean) {
+    await this.uploadImage();
+
     const message = new Message({
       text: this.text,
       timestamp: new Date(),
@@ -206,6 +225,7 @@ export class TestMessagesComponent implements OnInit {
       channelId: '8dGv7CQvxfHJhcH1vyiw',
       isChannelMessage: channel,
       reactions: [],
+      file: this.uploadedFile,
     });
 
     const messageToJson = message.toJSON();
@@ -235,6 +255,7 @@ export class TestMessagesComponent implements OnInit {
           const documentData = docSnapshot.data();
           this.textFromServer = documentData['text'];
           this.editedMessage = documentData['text'];
+          this.img = documentData['file'];
           this.editMessageBtnShow = true;
         } else {
           console.error('Document not found');
@@ -373,5 +394,36 @@ export class TestMessagesComponent implements OnInit {
       this.comments.push(commentData);
       this.editedComment = commentData['text'];
     });
+  }
+
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files?.[0] || null;
+
+    if (this.selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.previewImageUrl = e.target.result;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
+  }
+
+  async uploadImage() {
+    if (this.selectedFile !== null) {
+      const filename = this.user.id + '_' + this.selectedFile.name;
+      const firebaseApp = getApp();
+      const storage = getStorage(
+        firebaseApp,
+        'gs://dabubble-cee4e.appspot.com'
+      );
+      const storageRef = ref(storage, 'images/' + filename);
+      await uploadBytes(storageRef, this.selectedFile)
+        .then(async (snapshot) => {
+          this.uploadedFile = await getDownloadURL(storageRef);
+        })
+        .catch((error) => {
+          console.error('Error uploading file:', error);
+        });
+    }
   }
 }

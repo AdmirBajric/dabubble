@@ -35,6 +35,11 @@ label {
     background-color: aquamarine;
     color: black;
   }
+
+  .select-avatar-upload-foto {
+    margin-top: 4rem;
+    margin-bottom: 3rem;
+  }
 }
 
 .messages {
@@ -139,6 +144,17 @@ label {
 
   mat-icon {
     cursor: pointer;
+  }
+
+  .image {
+    width: 10rem;
+    height: 10rem;
+    margin-bottom: 4rem;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 

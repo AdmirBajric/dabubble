@@ -43,6 +43,7 @@ export class SelectAvatarComponent {
   imgSelected: boolean = false;
   selectedFile: File | null = null;
   downloadURL: string | null = null;
+  previewImageUrl: any;
   avatars = [
     '../../assets/img/avatar1.svg',
     '../../assets/img/avatar2.svg',
@@ -53,7 +54,6 @@ export class SelectAvatarComponent {
   ];
 
   firestore: Firestore = inject(Firestore);
-  previewImageUrl: any;
 
   constructor(
     private dataService: DataService,
