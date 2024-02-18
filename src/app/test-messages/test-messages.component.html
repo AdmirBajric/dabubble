@@ -42,6 +42,20 @@
       </div>
     </ng-container>
   </mat-expansion-panel>
+
+  <div class="select-avatar-upload-foto">
+    <div>
+      <p>Eigenes Bild verwenden?</p>
+
+      <input
+        class="upload-hidden"
+        type="file"
+        id="actual-btn"
+        (change)="onFileSelected($event)"
+      />
+    </div>
+  </div>
+
   <button (click)="addMessage(true)">Create message</button>
 </div>
 
@@ -72,6 +86,10 @@
     <button *ngIf="editMessageBtnShow" (click)="showEditContainer()">
       Edit message
     </button>
+  </div>
+
+  <div *ngIf="img !== ''" class="image">
+    <img src="{{ img }}" alt="" />
   </div>
 
   <div *ngIf="editMessageBtnShow" class="message-reactions">
