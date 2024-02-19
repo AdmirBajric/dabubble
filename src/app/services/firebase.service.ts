@@ -200,7 +200,7 @@ export class FirebaseService {
       }
 
       // Find the index of the member in the members array
-      const memberIndex = channelData['members'].indexOf(memberId);
+      const memberIndex = channelData['members'].findIndex((member: any) => member.id === memberId);
 
       if (memberIndex === -1) {
         throw new Error('Member not found in channel.');

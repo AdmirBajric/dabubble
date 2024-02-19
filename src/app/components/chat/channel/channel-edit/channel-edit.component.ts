@@ -149,6 +149,8 @@ export class ChannelEditComponent {
   }
 
   leaveChannel(id: string) {
+    console.log(id, this.user.id);
+
     this.firebaseService
       .removeMemberFromChannel(id, this.user.id)
       .then(() => {
