@@ -13,6 +13,7 @@ import {
   onSnapshot,
   orderBy,
   setDoc,
+  deleteDoc,
 } from '@angular/fire/firestore';
 import { User } from '../models/user.class';
 import { Conversation } from '../models/conversation.class';
@@ -160,6 +161,60 @@ export class FirebaseService {
       documentId
     );
     return await updateDoc(documentRef, data, { merge });
+  }
+
+  async deleteChannel(channelId: string): Promise<void> {
+    try {
+      if (!this.firestore) {
+        throw new Error('Firestore is not initialized.');
+      }
+
+      const channelRef = doc(collection(this.firestore, 'channels'), channelId);
+      await deleteDoc(channelRef);
+    } catch (error) {
+      console.error('Error deleting channel:', error);
+      throw error;
+    }
+  }
+
+  async removeMemberFromChannel(
+    channelId: string,
+    memberId: string
+  ): Promise<void> {
+    try {
+      if (!this.firestore) {
+        throw new Error('Firestore is not initialized.');
+      }
+
+      // Get the channel document
+      const channelRef = doc(collection(this.firestore, 'channels'), channelId);
+      const channelSnapshot = await getDoc(channelRef);
+
+      if (!channelSnapshot.exists()) {
+        throw new Error('Channel not found.');
+      }
+
+      const channelData = channelSnapshot.data();
+      if (!channelData || !Array.isArray(channelData['members'])) {
+        throw new Error('Invalid channel data.');
+      }
+
+      // Find the index of the member in the members array
+      const memberIndex = channelData['members'].findIndex((member: any) => member.id === memberId);
+
+      if (memberIndex === -1) {
+        throw new Error('Member not found in channel.');
+      }
+
+      // Remove the member from the array
+      channelData['members'].splice(memberIndex, 1);
+
+      // Update the channel document in Firestore
+      await updateDoc(channelRef, { members: channelData['members'] });
+    } catch (error) {
+      console.error('Error removing member from channel:', error);
+      throw error; // Optionally handle or rethrow the error
+    }
   }
 
   async queryDocuments(

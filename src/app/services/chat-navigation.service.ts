@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { Message } from '../models/message.class';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class chatNavigationService {
   private threadOpenStatus!: boolean;
-  private isThreadOpen$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private isThreadOpen$: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
 
   private channelOpenStatus!: boolean;
-  private isChannelOpen$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private isChannelOpen$: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
   private currentChannel$ = new BehaviorSubject<any>(null);
 
   private currentMessage$ = new BehaviorSubject<any>(null);
@@ -18,11 +19,11 @@ export class chatNavigationService {
   constructor() {
     this.isThreadOpen$.subscribe((value) => {
       this.threadOpenStatus = value;
-    })
+    });
 
     this.isChannelOpen$.subscribe((value) => {
       this.channelOpenStatus = value;
-    })
+    });
   }
 
   openThread(message: any[]) {

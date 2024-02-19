@@ -5,7 +5,7 @@
       <mat-card-title>{{ channelNameCopy }}</mat-card-title>
     </div>
     <mat-icon class="channel-edition-img-close" (click)="onNoClick()"
-      ></mat-icon
+      >close</mat-icon
     >
   </mat-card-header>
 
@@ -13,14 +13,16 @@
     <mat-card-content>
       <div class="channel-edition-name">
         <div class="channel-edition-name-header">
-          <p>Channel-Name</p>
+          <p>{{ channelNameCopy }}</p>
           <a *ngIf="!ifMobileView" (click)="editName()">Bearbeiten</a>
-          <mat-icon class="icon" *ngIf="ifMobileView" (click)="editName()">edit</mat-icon>
+          <mat-icon class="icon" *ngIf="ifMobileView" (click)="editName()"
+            >edit</mat-icon
+          >
         </div>
 
         <div class="channel-edition-name-tag">
           <mat-icon class="channel-edition-img-tag">tag</mat-icon>
-          <p>{{ channelName }}</p>
+          <p>{{ channelNameCopy }}</p>
         </div>
       </div>
     </mat-card-content>
@@ -30,8 +32,11 @@
     <div class="channel-edition-input-main-container first-container">
       <div class="channel-edition-input-container">
         <p>Channel-Name</p>
-        <a *ngIf="!ifMobileView" (click)="saveName()">Speichern</a>
-        <mat-icon class="icon" *ngIf="ifMobileView" (click)="saveName()"
+        <a *ngIf="!ifMobileView" (click)="saveName(channelId)">Speichern</a>
+        <mat-icon
+          class="icon"
+          *ngIf="ifMobileView"
+          (click)="saveName(channelId)"
           >check_circle</mat-icon
         >
       </div>
@@ -62,7 +67,10 @@
         <div class="description-header">
           <p>Beschreibung</p>
           <a *ngIf="!ifMobileView" (click)="editDescription()">Bearbeiten</a>
-          <mat-icon class="icon" *ngIf="ifMobileView" (click)="editDescription()"
+          <mat-icon
+            class="icon"
+            *ngIf="ifMobileView"
+            (click)="editDescription()"
             >edit</mat-icon
           >
         </div>
@@ -76,8 +84,13 @@
       <div class="channel-edition-input-main-container">
         <div class="channel-edition-input-container">
           <p>Beschreibung</p>
-          <a *ngIf="!ifMobileView" (click)="saveDescription()">Speichern</a>
-          <mat-icon class="icon" *ngIf="ifMobileView" (click)="saveDescription()"
+          <a *ngIf="!ifMobileView" (click)="saveDescription(channelId)"
+            >Speichern</a
+          >
+          <mat-icon
+            class="icon"
+            *ngIf="ifMobileView"
+            (click)="saveDescription(channelId)"
             >check_circle</mat-icon
           >
         </div>
@@ -175,11 +188,15 @@
     <button
       *ngIf="ifUserCreateChannel"
       class="channel-delete"
-      (click)="channelDelete()"
+      (click)="channelDelete(channelId)"
     >
       Channel löschen
     </button>
-    <button class="channel-exit" (click)="leaveChannel()">
+    <button
+      *ngIf="ifUserMemberChannel"
+      class="channel-exit"
+      (click)="leaveChannel(channelId)"
+    >
       Channel verlassen
     </button>
   </mat-card-actions>
