@@ -25,6 +25,10 @@ label {
   input {
     padding: 1.4rem;
     width: 30rem;
+
+    &:focus {
+      border: 1px solid red;
+    }
   }
 
   button {

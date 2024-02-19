@@ -17,7 +17,13 @@ import { ButtonFunctionService } from '../../../services/button-function.service
 import { HoverChangeDirective } from '../../../directives/hover-change.directive';
 import { EventEmitter } from '@angular/core';
 import { chatNavigationService } from '../../../services/chat-navigation.service';
-import { Firestore, collection, getDocs, query } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  getDocs,
+  onSnapshot,
+  query,
+} from '@angular/fire/firestore';
 import { FirebaseService } from '../../../services/firebase.service';
 import { Subscription } from 'rxjs';
 import { Conversation } from '../../../models/conversation.class';
@@ -58,12 +64,16 @@ export class WorkspaceComponent implements OnInit {
 
   showNewChat!: boolean;
   @Output() openChatWriteNewMessage = new EventEmitter<boolean>();
+  @Output() channelsUpdated: EventEmitter<any[]> = new EventEmitter<any[]>();
+
+  private unsubscribeSnapshot: (() => void) | null = null;
 
   constructor(
     private el: ElementRef,
     private btnService: ButtonFunctionService,
     private renderer: Renderer2,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private channelUpdateService: chatNavigationService
   ) {
     this.checkWindowSize();
     this.checkImageFlag();
@@ -108,7 +118,7 @@ export class WorkspaceComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.conversationUpdateSubscription.unsubscribe();
+    this.unsubscribeFromSnapshot();
   }
 
   ngOnInit() {
@@ -158,18 +168,35 @@ export class WorkspaceComponent implements OnInit {
 
   openChannels() {
     try {
-      this.firebaseService
-        .getAllChannels()
-        .then((channels) => {
-          this.channels = channels;
-        })
-        .catch((error) => {
+      // Listen to changes in the channels collection
+      const channelsCollection = collection(this.firestore, 'channels');
+      this.unsubscribeSnapshot = onSnapshot(
+        channelsCollection,
+        (snapshot) => {
+          // Update channels whenever there is a change in the collection
+          this.channels = snapshot.docs.map((doc) => {
+            const data = doc.data();
+            data['id'] = doc.id;
+            return data;
+          });
+          // Emit the updated channels data
+          this.channelUpdateService.updateChannels(this.channels);
+        },
+        (error) => {
           console.error('Error fetching channels:', error);
-        });
+        }
+      );
     } catch (error) {
       console.error('Error fetching channels:', error);
     }
     this.showChannels = !this.showChannels;
+  }
+
+  unsubscribeFromSnapshot() {
+    if (this.unsubscribeSnapshot) {
+      this.unsubscribeSnapshot();
+      this.unsubscribeSnapshot = null; // Reset the unsubscribe function
+    }
   }
 
   openCreateChannel() {

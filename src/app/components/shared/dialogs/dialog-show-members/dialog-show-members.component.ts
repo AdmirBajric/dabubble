@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { HoverChangeDirective } from '../../../../directives/hover-change.directive';
 import { ButtonFunctionService } from '../../../../services/button-function.service';
-// import { Room } from '../../../../models/collection.class';
+import { FirebaseService } from '../../../../services/firebase.service';
 
 // ************************************************************* interface in collection.class.ts korrekt anlegen********
 interface Member {
@@ -27,34 +27,46 @@ interface Room {
 @Component({
   selector: 'app-dialog-show-members',
   standalone: true,
-  imports: [CommonModule, HoverChangeDirective, MatCardModule, MatIconModule, MatDialogModule],
+  imports: [
+    CommonModule,
+    HoverChangeDirective,
+    MatCardModule,
+    MatIconModule,
+    MatDialogModule,
+  ],
   templateUrl: './dialog-show-members.component.html',
-  styleUrl: './dialog-show-members.component.scss'
+  styleUrl: './dialog-show-members.component.scss',
 })
-
 export class DialogShowMembersComponent implements OnInit {
-
-  constructor(public dialogRef: MatDialogRef<DialogShowMembersComponent>, 
+  constructor(
+    public dialogRef: MatDialogRef<DialogShowMembersComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private btnService: ButtonFunctionService){
-  }
+    private btnService: ButtonFunctionService,
+    private firebaseNav: FirebaseService
+  ) {}
   channel = this.data;
 
   ngOnInit(): void {
-      console.log(this.channel);
+    this.firebaseNav.getAllUsers().then((users) => {
+      users.forEach((user) => {
+        this.channel.members.forEach((member: any) => {
+          if (user['id'] === member.id) {
+            member.isOnline = user['isOnline'];
+          }
+        });
+      });
+    });
   }
 
-  closeDialog(){
+  closeDialog() {
     this.dialogRef.close();
   }
 
-  showMemberProfile(m: Member[]){
+  showMemberProfile(m: Member[]) {
     this.btnService.openProfile(m);
   }
 
-  openDialogAddingMember(){
-    console.log(this.channel.id);
-    
+  openDialogAddingMember() {
     this.closeDialog();
     this.btnService.addMemberDialog(this.channel);
   }
