@@ -3,15 +3,15 @@
 
 ::ng-deep .mat-mdc-dialog-container,
 ::ng-deep .mdc-dialog__surface {
-    border-radius: 3rem 0rem 3rem 3rem !important;
-    background: $white !important;
-    box-shadow: 0rem 0.6rem 1rem 0rem rgba(0, 0, 0, 0.2) !important;
-    min-height: 30rem;
-    width: 51rem;
+  border-radius: 3rem 0rem 3rem 3rem !important;
+  background: $white !important;
+  box-shadow: 0rem 0.6rem 1rem 0rem rgba(0, 0, 0, 0.2) !important;
+  min-height: 30rem;
+  width: 51rem;
 }
 
 ::ng-deep .mat-mdc-card {
-    box-shadow: none !important;
+  box-shadow: none !important;
 }
 
 // ::ng-deep .cdk-global-overlay-wrapper {
@@ -25,108 +25,122 @@
 // }
 
 .card {
-    padding: 2rem;
-    height: 100%;
+  padding: 2rem;
+  height: 100%;
 }
 
 .head {
-    display: flex;
-    position: relative;
+  display: flex;
+  position: relative;
 
-    .title {
-        @include fonts-styles(2.4rem, bold);
-        margin-bottom: 0.5rem;
+  .title {
+    @include fonts-styles(2.4rem, bold);
+    margin-bottom: 0.5rem;
+  }
+
+  .icon {
+    position: absolute;
+    right: 0;
+
+    &:hover {
+      background-color: $bg-color;
+      color: $purple-3;
+      cursor: pointer;
     }
-
-    .icon {
-        position: absolute;
-        right: 0;
-
-        &:hover {
-            background-color: $bg-color;
-            color: $purple-3;
-            cursor: pointer;
-        }
-    }
+  }
 }
 
 .content {
-    padding: unset !important;
-    @include flexbox(flex, column, unset, unset);
-    gap: 2rem;
-    position: relative; // does not work for positionen of user-list.component(fixed) 
-    margin-top: 3rem;
+  padding: unset !important;
+  @include flexbox(flex, column, unset, unset);
+  gap: 2rem;
+  position: relative; // does not work for positionen of user-list.component(fixed)
+  margin-top: 3rem;
 
-    .btn-container {
-        @include flexbox(flex, unset, flex-end, unset);
+  .form-input {
+    padding: 2.5rem;
+    width: 100%;
+    height: 6.5rem;
+    border: 0.1rem solid $light-purple-lines;
+    border-radius: 10rem;
+    font-size: 1.8rem;
+    color: $text-gray;
+
+    &:focus {
+      border: 0.1rem solid $purple-1;
+    }
+  }
+
+  .btn-container {
+    @include flexbox(flex, unset, flex-end, unset);
+  }
+
+  button {
+    height: 4.9rem;
+    width: 14.7rem;
+    background-color: $text-gray;
+    color: white;
+    font-size: 1.8rem; // needs to go in global styles
+
+    &:enabled {
+      background-color: $purple-1;
     }
 
-    button {
-        height: 4.9rem;
-        width: 14.7rem;
-        background-color: $text-gray;
-        color: white;
-        font-size: 1.8rem; // needs to go in global styles
-
-        &:enabled {
-            background-color: $purple-1;
-        }
-
-        &:disabled{
-            cursor: not-allowed;
-        }
+    &:disabled {
+      cursor: not-allowed;
     }
+  }
 }
 
 // ******************************** only if users are selected ***********
 .selection-list {
-    ul {
-        display: flex;
-        flex-wrap: wrap;
-        // gap: 1rem;
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    // gap: 1rem;
 
-        .selected-item {
-            border: none;
-            margin: 2rem;
-            @include flexbox(flex, unset, unset, center);
-            margin: 1rem;
-            padding: 0.5rem;
-            border-radius: 3rem;
-            background-color: $bg-color;
-            height: 5rem;
-            gap: 1rem;
+    .selected-item {
+      border: none;
+      margin: 2rem;
+      @include flexbox(flex, unset, unset, center);
+      margin: 1rem;
+      padding: 0.5rem;
+      border-radius: 3rem;
+      background-color: $bg-color;
+      height: 5rem;
+      gap: 1rem;
 
-            .selected-avatar {
-                position: relative;
+      .selected-avatar {
+        position: relative;
 
-                .icon {
-                    position: absolute;
-                    bottom: 0;
-                    right: -1rem;
-                }
-            }
+        .icon {
+          position: absolute;
+          bottom: 0;
+          right: -1rem;
         }
-
-        .selected-name {
-            color: #000000;
-            @include fonts-styles(1.8rem, normal);
-        }
+      }
     }
 
-    .ul>* {
-        flex: 1 1 160px;
+    .selected-name {
+      color: #000000;
+      @include fonts-styles(1.8rem, normal);
     }
+  }
+
+  .ul > * {
+    flex: 1 1 160px;
+  }
 }
 // ********************************************* CAN BE SET IN GLOBAL STYLES****************
 span {
-    font-size: 1.8rem;
-    color: $purple-2;
+  font-size: 1.8rem;
+  color: $purple-2;
 }
 
 .online {
-    color: $online-green;
+  color: $online-green;
 }
 
 .offline {
-    color: $text-gray;
+  color: $text-gray;
 }

@@ -1,38 +1,46 @@
 <mat-card class="card">
-    <mat-card-header class="head">
-        <mat-card-title class="title">Leute hinzufügen</mat-card-title>
-        <mat-card-subtitle>
-            <span># {{ channel.name }}</span>
-        </mat-card-subtitle>
+  <mat-card-header class="head">
+    <mat-card-title class="title">Leute hinzufügen</mat-card-title>
+    <mat-card-subtitle>
+      <span># {{ channel.name }}</span>
+    </mat-card-subtitle>
 
-        <mat-icon class="icon btn-50" (click)="closeDialog()">close</mat-icon>
-    </mat-card-header>
+    <mat-icon class="icon btn-50" (click)="closeDialog()">close</mat-icon>
+  </mat-card-header>
 
-    <mat-card-content class="content">
-        <app-searchbar [potentialMembersSearch]="true" [globalSearch]="false" [showBorder]="true"
-            [placeholder]="'Name eingeben'" (userListForAddingChannel)="receiveUserList($event)"
-            (inputChange)="onSearchInputChange($event)"></app-searchbar>
-        <ng-container *ngIf="(!isSearchbarEmpty) && (userListForAddingChannel$ | async) as userList">
-            <app-user-list [users]="userList" (selectedUser)="userSelectionChange($event)"></app-user-list>
-        </ng-container>
+  <mat-card-content class="content">
+    <form [formGroup]="form">
+      <input
+        class="form-input"
+        autocomplete="off"
+        id="userInput"
+        type="text"
+        formControlName="userInput"
+        ngDefaultControl
+        placeholder="Your message"
+        [value]="showUserInput.join(' ')"
+        [ngStyle]="{
+          color: isUserInput ? '#444df2' : 'black'
+        }"
+      />
+    </form>
 
-        <ng-container *ngIf="selectedUsers.length > 0">
-            <section class="selection-list">
-                <ul>
-                    <li class="selected-item border-radius-3" *ngFor="let selected of selectedUsers">
-                        <div class="selected-avatar">
-                            <img [src]="selected.avatar" alt="avatar">
-                            <mat-icon [ngClass]="{ online: selected.online, offline: !selected.offline }" class="icon">circle</mat-icon>
-                        </div>
-                        <span class="selected-name">{{selected.fullName}}</span>
-                        <img class="img-x" src="../../../../../assets/img/exit_X.svg" alt="delete" (click)="removeUserFromSelection(selected)">
-                    </li>
-                </ul>
-            </section>
-        </ng-container>
-
-        <div class="btn-container">
-            <button [disabled]="selectedUsers.length === 0" class="border-radius-3">Hinzufügen</button>
+    <mat-expansion-panel class="expand-panel" [expanded]="usersSearch">
+      <ng-container *ngIf="usersSearch">
+        <div
+          (click)="addUser(user.id)"
+          id="{{ user.id }}"
+          *ngFor="let user of users"
+          class="show-users"
+        >
+          <img src="{{ user.avatar }}" alt="" />
+          <p>{{ user.fullName }}</p>
         </div>
-    </mat-card-content>
+      </ng-container>
+    </mat-expansion-panel>
+
+    <div class="btn-container">
+      <button class="border-radius-3">Hinzufügen</button>
+    </div>
+  </mat-card-content>
 </mat-card>
