@@ -1,0 +1,13 @@
+@import "../../../colors.scss";
+@import "../../../mixins.scss";
+
+header {
+    @include flexbox(flex, unset, space-between, center);
+    background-color: $bg-color;
+    padding: 1.5rem 1.7rem;
+
+    .chat-logo {
+        @include flexbox(flex, unset, unset, center);
+        gap: 1rem;
+    }
+}

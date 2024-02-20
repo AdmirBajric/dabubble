@@ -2,40 +2,39 @@
 @import "../../mixins.scss";
 
 .db-main {
-    &.grid-template-nct {
-        grid-template-areas:
-            "logo search user"
-            "nav chat thread";
-    }
-
-    &.grid-template-cct {
-        grid-template-areas:
-            "logo search user"
-            "chat chat thread";
-    }
-
-    &.grid-template-ccc {
-        grid-template-areas:
-            "logo search user"
-            "chat chat chat";
-    }
-
-    &.grid-template-ncc {
-        grid-template-areas:
-            "logo search user"
-            "nav chat chat";
-    }
-
-    display: grid;
-    // grid-template-columns: 32rem 3fr 1fr;
-    grid-template-rows:8rem calc(100vh - 18rem);
-    row-gap: 1rem;
-    column-gap: 2rem;
-    height: 100vh;
-    padding: 2rem 4rem;
-    position: relative;
-
     @media only screen and (min-width: 1100px) {
+        display: grid;
+        grid-template-rows: 8rem calc(100vh - 22rem);
+        row-gap: 1rem;
+        column-gap: 2rem;
+        height: 99vh;
+        padding: 2rem 4rem;
+        position: relative;
+
+        &.grid-template-nct {
+            grid-template-areas:
+                "logo search user"
+                "nav chat thread";
+        }
+
+        &.grid-template-cct {
+            grid-template-areas:
+                "logo search user"
+                "chat chat thread";
+        }
+
+        &.grid-template-ccc {
+            grid-template-areas:
+                "logo search user"
+                "chat chat chat";
+        }
+
+        &.grid-template-ncc {
+            grid-template-areas:
+                "logo search user"
+                "nav chat chat";
+        }
+
         grid-template-columns: 32rem 3fr 28rem;
     }
 
@@ -52,6 +51,10 @@
     position: absolute;
     bottom: 50%;
     left: -14rem;
+
+    @media only screen and (max-width: 1099px) {
+        display: none;
+    }
 }
 
 .logo {
@@ -67,7 +70,6 @@
 }
 
 .sidenav {
-    // height: 67rem; // same as workspace
     grid-area: nav;
 }
 
@@ -80,4 +82,29 @@
 .threads {
     grid-area: thread;
     background-color: white;
+}
+
+// ############################################# MOBILE #################################
+@media only screen and (max-width: 1099px) {
+    .logo, 
+    .profile-menu, 
+    .searchbar, 
+    .sidenav, 
+    .chat, 
+    .threads {
+        display: none;
+    }
+}
+
+.mbl-content {
+    background-color: white;
+    height: calc(100vh - 11rem);
+}
+
+.mbl-search {
+    padding: 4rem 0 2rem 0;
+}
+
+.mbl-nav {
+    padding: 0 1rem;
 }

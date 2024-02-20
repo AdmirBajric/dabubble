@@ -22,9 +22,7 @@ export class ChannelListItemComponent implements OnInit {
   openChannelChat!: boolean;
   @Output() openChatChannel = new EventEmitter<boolean>();
 
-  constructor(private router: Router,
-    private navService: chatNavigationService
-    ) {}
+  constructor(private navService: chatNavigationService) {}
 
   ngOnInit(): void {
     // console.log(this.channels);
@@ -32,7 +30,5 @@ export class ChannelListItemComponent implements OnInit {
 
   displayChannel(channels: any[]) {
     this.navService.openChannel(channels);
-    // this.openChannelChat = true;
-    // this.openChatChannel.emit(this.openChannelChat);
   }
 }

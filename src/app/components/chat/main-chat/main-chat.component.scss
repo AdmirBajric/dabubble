@@ -4,10 +4,15 @@
 .wrapper {
     position: relative;
     background-color: white;
+
+    @media only screen and (max-width: 1099px) {
+        height: calc(100vh - 11rem);
+        display: block;
+    }
 }
 
 .content-container {
-    height: 45rem;
+    height: calc(100% - 25rem);
     overflow-y: scroll;
 }
 

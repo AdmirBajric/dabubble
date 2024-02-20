@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, Renderer2 } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { MessageComponent } from "../chat/message/message.component";
 import { WorkspaceComponent } from "./workspace/workspace.component";
@@ -41,23 +41,32 @@ export class DashboardComponent implements OnInit {
     threadIsOpen: boolean = false;
     gridAreaRegulation: string = 'nct';
     selectedMessageForThread: any[] = [];
-    selectedRoomName: string = 'Entwicklerteam';
     activateThreadHeader: boolean = true; // must be set to true, because the default grid style shows all 3 main components of dashboard
     showMessages: boolean = true; // default
     writeNewMessage: boolean = false // default
-
     private threadStatusSubscription!: Subscription;
+    private chatStatusSubscription!: Subscription;
     windowWidth!: number;
     mobileView!: boolean;
+    mobilePageStyling!: string;
+    channelOpenStatusSubscription: any;
+    showChat: boolean = false;
+    @HostListener('window:resize', ['$event'])
+    onResize(event: Event): void {
+        this.checkWindowSize();
+    }
 
     constructor(private navService: chatNavigationService,
         private renderer: Renderer2,
         private elementRef: ElementRef,
     ) { }
+
     ngOnInit(): void {
         this.handleGridAreaToggle();
         this.subscribeToThreadStatus();
         this.checkWindowSize();
+        this.subscribeChatStatus();
+        this.subscribeChannelStatus();
     }
 
     private checkWindowSize(): void {
@@ -66,6 +75,7 @@ export class DashboardComponent implements OnInit {
         ).ownerDocument.defaultView.innerWidth;
         if (this.windowWidth <= 1100) {
             this.mobileView = true;
+            this.mobilePageStyling = 'home';
         } else {
             this.mobileView = false;
         }
@@ -75,6 +85,25 @@ export class DashboardComponent implements OnInit {
         this.threadStatusSubscription = this.navService.threadStatus$.subscribe(value => {
             this.threadIsOpen = value;
             this.handleGridAreaToggle();
+        })
+    }
+
+    subscribeChatStatus() {
+        this.chatStatusSubscription = this.navService.currentChannel.subscribe(value => {
+            console.log(value);
+
+        })
+    }
+
+    subscribeChannelStatus() {
+        this.channelOpenStatusSubscription = this.navService.channelStatus$.subscribe(isOpen => {
+            this.showChat = isOpen;
+            if (isOpen === true) {
+                this.mobilePageStyling = 'chat'
+            } else if (isOpen === false) {
+                this.mobilePageStyling = 'home'
+            }
+
         })
     }
 

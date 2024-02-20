@@ -1,49 +1,47 @@
 <div class="db-main" [ngClass]="'grid-template-' + gridAreaRegulation">
   <div class="logo"><app-logo></app-logo></div>
-  <ng-container *ngIf="mobileView"><app-mobile-header></app-mobile-header></ng-container>
 
   <div class="searchbar">
-    <app-searchbar
-      [showBorder]="false"
-      [showLoupe]="true"
-      [globalSearch]="true"
-      [potentialMembersSearch]="false"
-      [placeholder]="'Code learning durchsuchen'"
-    ></app-searchbar>
+    <app-searchbar [showBorder]="false" [showLoupe]="true" [globalSearch]="true" [potentialMembersSearch]="false"
+      [placeholder]="'Code learning durchsuchen'"></app-searchbar>
   </div>
 
   <div class="profile-menu"><app-profile-menu></app-profile-menu></div>
 
   <div class="sidenav">
-    <app-workspace class="h-100 d-flex"
-      [isOpen]="workspaceIsOpen"
-      (openChatWriteNewMessage)="openNewMessage()"
-      (openChannelChat)="openChatofChannel()"
-    >
+    <app-workspace class="h-100 d-flex" [isOpen]="workspaceIsOpen" (openChatWriteNewMessage)="openNewMessage()"
+      (openChannelChat)="openChatofChannel()">
     </app-workspace>
   </div>
 
   <div class="chat border-radius-3">
-    <app-main-chat
-      *ngIf="showMessages"
-      class="border-radius-3"
-    ></app-main-chat>
-    <app-new-message
-      *ngIf="writeNewMessage"
-      class="border-radius-3"
-    ></app-new-message>
+    <app-main-chat *ngIf="showMessages" class="border-radius-3"></app-main-chat>
+    <app-new-message *ngIf="writeNewMessage" class="border-radius-3"></app-new-message>
   </div>
 
   <div *ngIf="threadIsOpen" class="threads border-radius-3">
-    <app-thread
-      [threadData]="selectedMessageForThread"
-      class="border-radius-3"
-    ></app-thread>
+    <app-thread [threadData]="selectedMessageForThread" class="border-radius-3"></app-thread>
   </div>
 
   <div class="btn-toggle">
-    <app-button-workspace
-      (toggle)="handleWorkspaceToggle($event)"
-    ></app-button-workspace>
+    <app-button-workspace (toggle)="handleWorkspaceToggle($event)"></app-button-workspace>
   </div>
 </div>
+
+<ng-container *ngIf="mobileView">
+  <app-mobile-header [logoStyling]="mobilePageStyling"></app-mobile-header>
+  <div class="mbl-content mbl-padding">
+    <div class="mbl-search" *ngIf="mobilePageStyling === 'home'">
+      <app-searchbar [showBorder]="true" [showLoupe]="true" [globalSearch]="true" [potentialMembersSearch]="false"
+      [placeholder]="'Gehe zu...'"></app-searchbar>
+    </div>
+
+    <div class="mbl-nav" *ngIf="mobilePageStyling === 'home'">
+      <app-workspace></app-workspace>
+    </div>
+
+    <div *ngIf="showChat" class="mbl-chat">
+      <app-main-chat></app-main-chat>
+    </div>
+  </div>
+</ng-container>
