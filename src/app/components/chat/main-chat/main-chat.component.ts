@@ -68,7 +68,7 @@ export class MainChatComponent implements OnInit {
             text: messageString,
             timestamp: new Date(),
             creator: this.user,
-            channelId: '8dGv7CQvxfHJhcH1vyiw',
+            channelId: this.channelId,
             isChannelMessage: isChannelMessage,
             reactions: [],
             comments: [],
@@ -143,6 +143,9 @@ export class MainChatComponent implements OnInit {
             id
         )
 
+        console.log(id);
+        
+
         if (querySnapshot) {
             querySnapshot.forEach((doc: any) => {
                 let messageData = doc.data();
@@ -150,8 +153,10 @@ export class MainChatComponent implements OnInit {
                 // Check if the mssage is already in the local messages array to avoid duplicates.
                 const messageExists = this.messages.some(message => message.id === messageData.id);
                 //if the message does not exist, adds it to the loval messages array.
+                console.log(messageData);
                 if (!messageExists) {
                     this.messages.push(messageData);
+                    
                 }
             });
 
@@ -159,6 +164,8 @@ export class MainChatComponent implements OnInit {
             // Set 'showMessages' to true indicating that messages are available for display.
             this.showMessages = true;
         }
+        console.log(this.currentChannel);
+
     }
     
     /**
