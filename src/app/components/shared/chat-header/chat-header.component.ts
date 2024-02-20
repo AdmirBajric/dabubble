@@ -39,10 +39,6 @@ export class ChatHeaderComponent implements OnInit {
 
   async ngOnInit() {
     await this.subscribeChannel();
-    console.log(this.styleHeaderForThread);
-    
-    // console.log('CHAT HEADER', this.currentChannel);
-    
   }
 
   subscribeChannel() {
@@ -58,7 +54,6 @@ export class ChatHeaderComponent implements OnInit {
 
   showMembers(channel: Channel) {
     this.btnService.showChannelMembers(channel); // passing the whole channel Object because id, members is necessary ID EXISTIERT NICHT IN CHANNEL.CLASS
-    // console.log(this.currentChannel.id);
   }
 
   addMember(channel: Channel) {

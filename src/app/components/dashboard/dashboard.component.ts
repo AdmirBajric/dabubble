@@ -79,7 +79,6 @@ export class DashboardComponent implements OnInit {
     }
 
     handleWorkspaceToggle(isOpen: boolean) {
-        // console.log(isOpen);
         this.workspaceIsOpen = isOpen;
         this.handleGridAreaToggle();
     }
@@ -87,10 +86,8 @@ export class DashboardComponent implements OnInit {
     handleGridAreaToggle() {
         if (this.workspaceIsOpen && this.threadIsOpen === true) {
             this.gridAreaRegulation = 'nct';
-            // console.log(this.gridAreaRegulation);
         } else if (!this.workspaceIsOpen && this.threadIsOpen) {
             this.gridAreaRegulation = 'cct'
-            // console.log(this.gridAreaRegulation);
         } else if (!this.workspaceIsOpen && !this.threadIsOpen) {
             this.gridAreaRegulation = 'ccc';
         } else if (this.workspaceIsOpen && !this.threadIsOpen) {
