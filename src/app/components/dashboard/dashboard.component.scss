@@ -28,7 +28,7 @@
 
     display: grid;
     // grid-template-columns: 32rem 3fr 1fr;
-    grid-template-rows: max-content;
+    grid-template-rows:8rem calc(100vh - 18rem);
     row-gap: 1rem;
     column-gap: 2rem;
     height: 100vh;
