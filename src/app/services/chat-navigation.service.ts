@@ -39,6 +39,10 @@ export class chatNavigationService {
     this.isThreadOpen$.next(false);
   }
 
+  closeChat(){
+    this.isChannelOpen$.next(false);
+  }
+
   /**
    * Observable to be subsribed by components that need information about thread.component status.
    *
