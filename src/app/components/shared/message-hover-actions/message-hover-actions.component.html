@@ -28,7 +28,7 @@
         <img src="../../../../assets/img/add_answer.svg" alt="">
     </button>
 
-    <button (click)="showToolTip = true" class="btn-edit-wrapper">
+    <button (click)="toggleToolTip($event)" class="btn-edit-wrapper">
         <div *ngIf="isYou" appHoverChange
             [elementsConfig]="
             [{imageSelector: 'img', defaultSrc: '../../../../assets/img/edit_message.svg', hoverSrc: '../../../../assets/img/edit_message_hover.svg'}]">

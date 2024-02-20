@@ -18,8 +18,10 @@ import { User } from '../../../models/user.class';
   imports: [FormsModule, HoverChangeDirective, MessageHoverActionsComponent, NgIf, NgFor, ProfileViewComponent]
 })
 export class MessageComponent implements OnInit {
-  constructor(private navService: chatNavigationService,
-    private firebaseService: FirebaseService
+  constructor(
+    private navService: chatNavigationService,
+    private firebaseService: FirebaseService,
+    private elementRef: ElementRef
   ) { }
   @Input() message!: Message;
   @Input() messageId!: string | undefined;
@@ -162,7 +164,28 @@ export class MessageComponent implements OnInit {
     this.message.text = this.saveOriginalMessage;
   }
 
-  addEmoji() {
+  toggleShowActions(){
+    this.showActions = !this.showActions;
+  }
+
+  toggleShowActionsOutside(event: Event): void {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.showActions = false;
+    }
+  }
+
+  checkClickLocation(event: Event){
+    if (this.elementRef.nativeElement.contains(event.target)) {
+      // Wenn der Klick innerhalb der Komponente erfolgt, wird die Propagation gestoppt
+      event.stopPropagation();
+    } else {
+      // Wenn außerhalb der Komponente geklickt wird, schließen Sie die Aktionen
+      this.showActions = false;
+    }
+  }
+
+
+  addEmoji(){
 
   }
 

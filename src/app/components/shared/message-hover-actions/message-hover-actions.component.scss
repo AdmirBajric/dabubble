@@ -5,13 +5,17 @@
     background-color: white;
     height: 5rem;
     // width: 21rem;
-    position: absolute; //container of parent element is relativ
+    position: absolute; //container of parent element is relative
     top: -2rem; //must be half of height
     border-radius: 2.5rem 2.5rem 0 2.5rem;
     @include flexbox(flex, unset, center, center);
     gap: 0.5rem;
     border: 0.1rem solid $light-purple-lines;
     right: 1.6rem;
+
+    @media only screen and (max-width: 1099px) {
+        top: 0;
+    }
 
     @media only screen and (min-width: 768px) {
         right: 3.2rem;
@@ -57,5 +61,10 @@ button {
             color: $purple-3;
             font-weight: bold;
         }
+    }
+
+    @media only screen and (max-width: 1099px) {
+        left: -5rem;
+        z-index: 2;
     }
 }

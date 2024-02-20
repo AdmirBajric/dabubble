@@ -1,6 +1,10 @@
-<div class="chat white wrapper-padding">
-    <section *ngIf="message.creator.fullName != user.fullName" (mouseover)="showActions = true"
-        (mouseleave)="showActions = false">
+<div class="chat white wrapper-padding" (click)="checkClickLocation($event)">
+    <section 
+        *ngIf="message.creator.fullName != user.fullName" 
+        (mouseover)="showActions = true"
+        (mouseleave)="showActions = false"
+        
+        >
         <ng-container *ngIf="showActions">
             <app-message-hover-actions *ngIf="message" [isYou]="false"
                 [currentMessage]="message"></app-message-hover-actions>
@@ -50,11 +54,13 @@
         </div>
     </section>
 
-    <section *ngIf="message.creator.fullName === user.fullName" (mouseover)="showActions = true"
+    <section 
+        *ngIf="message.creator.fullName === user.fullName" 
+        (mouseover)="showActions = true"
         (mouseleave)="showActions = false">
-        <ng-container *ngIf="showActions">
+        <div class="hover-actions" *ngIf="showActions">
             <app-message-hover-actions (editMessage)="editMessage(message)" [isYou]="true"
-                [currentMessage]="message"></app-message-hover-actions></ng-container>
+                [currentMessage]="message"></app-message-hover-actions></div>
 
         <ng-container *ngIf="openMessageEdit">
             <div class="edit-message-wrapper">
