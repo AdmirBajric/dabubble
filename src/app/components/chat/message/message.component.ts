@@ -1,6 +1,14 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { NgIf, NgFor } from '@angular/common';
-import { ProfileViewComponent } from "../../profile/profile-view/profile-view.component";
+import { ProfileViewComponent } from '../../profile/profile-view/profile-view.component';
 import { MessageHoverActionsComponent } from '../../shared/message-hover-actions/message-hover-actions.component';
 import { Comment, Message, Reaction } from '../../../models/message.class';
 import { FormsModule } from '@angular/forms';
@@ -8,33 +16,46 @@ import { HoverChangeDirective } from '../../../directives/hover-change.directive
 import { chatNavigationService } from '../../../services/chat-navigation.service';
 import { FirebaseService } from '../../../services/firebase.service';
 import { User } from '../../../models/user.class';
-
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-message',
   standalone: true,
   templateUrl: './message.component.html',
   styleUrl: './message.component.scss',
-  imports: [FormsModule, HoverChangeDirective, MessageHoverActionsComponent, NgIf, NgFor, ProfileViewComponent]
+  imports: [
+    FormsModule,
+    HoverChangeDirective,
+    MessageHoverActionsComponent,
+    NgIf,
+    NgFor,
+    ProfileViewComponent,
+    CommonModule,
+  ],
 })
 export class MessageComponent implements OnInit {
-  constructor(private navService: chatNavigationService,
+  constructor(
+    private navService: chatNavigationService,
     private firebaseService: FirebaseService
-  ) { }
-  loggedUser = "Selina Karlin"
+  ) {}
+  loggedUser = 'Selina Karlin';
   @Input() message: any;
   @Input() messageId!: string | undefined;
-  @Output() updatedMessage = new EventEmitter<{ messageText: string, id: string }>();
+  @Output() updatedMessage = new EventEmitter<{
+    messageText: string;
+    id: string;
+  }>();
   showAnswers: boolean = false;
   answers: Comment[] = [];
-  reactions: Reaction[] = [];
+  reactions: any[] = [];
   answersCount!: number;
   lastAnswerTime!: string;
   showActions: boolean = false;
   openMessageEdit: boolean = false;
   showReactionCreator: boolean = true;
-  saveOriginalMessage!: string;       // to reset the message text when editing is cancelled
+  saveOriginalMessage!: string;
   hoveredIndex: number | null = null;
+  reactionMap: Map<string, string[]> = new Map<string, string[]>();
   user!: User;
 
   async ngOnInit() {
@@ -65,24 +86,38 @@ export class MessageComponent implements OnInit {
   }
 
   async searchForReactions() {
-    const docSnapshot = await this.firebaseService.getDocument(
-      'messages',
-      this.message.id
-    );
-    if (docSnapshot.exists()) {
-      const existingReactions = docSnapshot.data()?.['reactions'] as Reaction[] || [];
-      this.reactions = [];
-      existingReactions.forEach((reaction: Reaction) => {
-        this.reactions.push(reaction);
-      });
-    }
+    const docRef = this.firebaseService.getDocRef('messages', this.message.id);
+    this.firebaseService.subscribeToDocumentUpdates(docRef, (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        const existingReactions =
+          (docSnapshot.data()?.['reactions'] as Reaction[]) || [];
+        this.reactions = existingReactions;
+
+        const emojiCountMap = new Map();
+
+        this.reactions.forEach((item) => {
+          const { emoji, fullName, userId } = item;
+
+          if (emojiCountMap.has(emoji)) {
+            emojiCountMap.set(emoji, emojiCountMap.get(emoji) + 1);
+          } else {
+            emojiCountMap.set(emoji, 1);
+          }
+        });
+
+        const result: { emoji: string; count: number; users: string[] }[] = [];
+        emojiCountMap.forEach((count, emoji) => {
+          const users = this.reactions
+            .filter((item) => item.emoji === emoji)
+            .map((item) => item.fullName);
+          result.push({ emoji, count, users });
+        });
+
+        this.reactions = result;
+      }
+    });
   }
 
-  isMultipleEmojis(emojiString: string): boolean {
-    // Diese Funktion nimmt an, dass die meisten einzelnen Emojis eine Länge von 2 haben,
-    // was nicht immer zutrifft, besonders bei zusammengesetzten Emojis.
-    return emojiString.length > 2;
-  }
   getTimeFromString(dateTimeString: Date): string {
     const dateObject = new Date(dateTimeString);
 
@@ -117,7 +152,7 @@ export class MessageComponent implements OnInit {
   /**
    * Handles the hover actions,
    * saves the original message in case user cancels editing,
-   * opens the input field for message editing. 
+   * opens the input field for message editing.
    * @param {Message} m
    */
   editMessage(m: Message) {
@@ -150,8 +185,5 @@ export class MessageComponent implements OnInit {
     this.message.text = this.saveOriginalMessage;
   }
 
-  addEmoji() {
-
-  }
-
+  addEmoji() {}
 }

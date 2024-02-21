@@ -36,6 +36,10 @@
   align-items: center;
   cursor: pointer;
 
+  &:first-child {
+    margin-top: 2rem;
+  }
+
   &:hover {
     border-radius: 4rem;
     background-color: $bg-color;

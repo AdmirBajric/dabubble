@@ -14,7 +14,7 @@ import { arrayUnion } from '@angular/fire/firestore';
   standalone: true,
   imports: [HoverChangeDirective, MatTooltipModule, NgIf, PickerComponent],
   templateUrl: './message-hover-actions.component.html',
-  styleUrl: './message-hover-actions.component.scss'
+  styleUrl: './message-hover-actions.component.scss',
 })
 export class MessageHoverActionsComponent {
   @Input() isYou!: boolean;
@@ -29,8 +29,7 @@ export class MessageHoverActionsComponent {
   constructor(
     private navService: chatNavigationService,
     private firebaseService: FirebaseService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     if (typeof localStorage !== 'undefined') {
@@ -64,11 +63,23 @@ export class MessageHoverActionsComponent {
     }
   }
 
+  async setEmoji(emoji: string, StringOrId: string) {
+    const id = this.getMessageID() as string;
+    if (id && emoji) {
+      this.setAndSaveEmoji(id, emoji, StringOrId);
+    }
+  }
+
   async emitEmoji(event: any, StringOrId: string) {
     const id = this.getMessageID() as string;
     const emoji = this.getEmojiNative(event);
     this.openEmojiMart(StringOrId);
-    console.log('emoji:', emoji, id);
+    if (id && emoji) {
+      this.setAndSaveEmoji(id, emoji, StringOrId);
+    }
+  }
+
+  async setAndSaveEmoji(id: string, emoji: string, StringOrId: string) {
     try {
       const reaction = new Reaction({
         fullName: this.user.fullName,
@@ -76,23 +87,31 @@ export class MessageHoverActionsComponent {
         emoji: emoji,
       });
       const reactionJSON = reaction.toJSON();
+
       const docSnapshot = await this.firebaseService.getDocument(
         'messages',
         id
       );
       if (docSnapshot.exists()) {
-        if (StringOrId === 'mainMessage') {
-          let existingReactions = docSnapshot.data()?.['reactions'] || [];
-          await this.firebaseService.updateDocument(
-            'messages',
-            id,
-            {
-              reactions: arrayUnion(reactionJSON, ...existingReactions),
-            }
-          );
-          // this.showReactionOnMainChannel();
+        let existingReactions = docSnapshot.data()?.['reactions'] || [];
+
+        const existingReactionIndex = existingReactions.findIndex(
+          (reaction: any) => reaction.userId === this.user.id
+        );
+        if (existingReactionIndex !== -1) {
+          existingReactions[existingReactionIndex] = reactionJSON;
         } else {
+          existingReactions.push(reactionJSON);
+        }
+
+        await this.firebaseService.updateDocument('messages', id, {
+          reactions: existingReactions,
+        });
+
+        if (StringOrId !== 'mainMessage') {
           this.saveReactionComments(reactionJSON, StringOrId);
+        } else {
+          // this.showReactionOnMainChannel();
         }
       } else {
         console.error('Document not found');
@@ -135,9 +154,9 @@ export class MessageHoverActionsComponent {
 
   getEmojiNative(e: any): string | null {
     if (e.emoji && 'native') {
-      return e.emoji.native
+      return e.emoji.native;
     } else {
-      return null
+      return null;
     }
   }
 }
