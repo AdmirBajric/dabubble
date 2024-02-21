@@ -54,8 +54,14 @@
   padding: unset !important;
   @include flexbox(flex, column, unset, unset);
   gap: 2rem;
-  position: relative; // does not work for positionen of user-list.component(fixed)
+  position: relative;
   margin-top: 3rem;
+
+  .no-member {
+    padding-left: 1.6rem;
+    font-size: 1.6rem;
+    color: $rosa-error;
+  }
 
   .form-input {
     padding: 2.5rem;
@@ -143,4 +149,74 @@ span {
 
 .offline {
   color: $text-gray;
+}
+
+.users-show {
+  padding: 1rem 1rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  &:first-child {
+    margin-top: 2rem;
+  }
+
+  &:hover {
+    border-radius: 4rem;
+    background-color: $bg-color;
+  }
+
+  img {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 2rem;
+  }
+
+  p {
+    margin-left: 2rem;
+    font-size: 1.4rem;
+    font-weight: normal;
+  }
+}
+
+.selectedUsers {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 3rem;
+
+  .selectedUser {
+    display: flex;
+    align-items: center;
+    margin-left: 2rem;
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: $bg-color;
+    border-radius: 3rem;
+
+    img {
+      width: 4rem;
+      height: 4rem;
+      border-radius: 2rem;
+    }
+
+    p {
+      margin-left: 1rem;
+      font-size: 1.4rem;
+      font-weight: normal;
+    }
+
+    mat-icon {
+      width: 1.8rem;
+      height: 1.8rem;
+      font-size: 1.8rem;
+      cursor: pointer;
+      margin-left: 1rem;
+
+      &:hover {
+        border-radius: 0.9rem;
+        background-color: $bg-color;
+      }
+    }
+  }
 }

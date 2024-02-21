@@ -9,38 +9,48 @@
   </mat-card-header>
 
   <mat-card-content class="content">
-    <form [formGroup]="form">
-      <input
-        class="form-input"
-        autocomplete="off"
-        id="userInput"
-        type="text"
-        formControlName="userInput"
-        ngDefaultControl
-        placeholder="Your message"
-        [value]="showUserInput.join(' ')"
-        [ngStyle]="{
-          color: isUserInput ? '#444df2' : 'black'
-        }"
-      />
-    </form>
+    <p class="no-member" *ngIf="noMembers">Keine Mitglieder vorhanden</p>
+    <app-dialog-input
+      [value]="userInputValue"
+      [(ngModel)]="userInputValue"
+      name="userInputValue"
+      ngDefaultControl
+      class="dialog-input"
+      [Tag]="false"
+      [placeholder]="placeholder"
+      #searchUser
+      (input)="searchInUsers()"
+      (click)="searchInUsers()"
+    ></app-dialog-input>
 
-    <mat-expansion-panel class="expand-panel" [expanded]="usersSearch">
-      <ng-container *ngIf="usersSearch">
-        <div
-          (click)="addUser(user.id)"
-          id="{{ user.id }}"
-          *ngFor="let user of users"
-          class="show-users"
-        >
-          <img src="{{ user.avatar }}" alt="" />
-          <p>{{ user.fullName }}</p>
-        </div>
-      </ng-container>
+    <mat-expansion-panel [expanded]="filteredUsers.length > 0 && inputOnSearch">
+      <div
+        (click)="selectedUser(user.id); $event.stopPropagation()"
+        class="users-show"
+        *ngFor="let user of filteredUsers; let i = index"
+      >
+        <img src="{{ user.avatar }}" alt="" />
+        <p>{{ user.fullName }}</p>
+      </div>
     </mat-expansion-panel>
 
+    <div class="selectedUsers" *ngIf="chosenUsers.length > 0">
+      <div class="selectedUser" *ngFor="let user of chosenUsers; let i = index">
+        <img src="{{ user.avatar }}" alt="" />
+        <p>{{ user.fullName }}</p>
+        <mat-icon
+          (click)="removeMember(user.id)"
+          #tooltip="matTooltip"
+          matTooltip="Remove member"
+          >close</mat-icon
+        >
+      </div>
+    </div>
+
     <div class="btn-container">
-      <button class="border-radius-3">Hinzufügen</button>
+      <button (click)="addMemberToChannel()" class="border-radius-3">
+        Hinzufügen
+      </button>
     </div>
   </mat-card-content>
 </mat-card>

@@ -150,7 +150,7 @@ export class ProfileEditComponent implements AfterViewInit {
           allUsersData.push(userData);
         });
         localStorage.setItem('users', JSON.stringify(allUsersData));
-        location.reload();
+        this.onNoClick();
       } else {
         console.log('User with ID not found');
       }

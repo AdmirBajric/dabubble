@@ -14,6 +14,9 @@ import {
   orderBy,
   setDoc,
   deleteDoc,
+  DocumentReference,
+  DocumentData,
+  DocumentSnapshot,
 } from '@angular/fire/firestore';
 import { User } from '../models/user.class';
 import { Conversation } from '../models/conversation.class';
@@ -200,7 +203,9 @@ export class FirebaseService {
       }
 
       // Find the index of the member in the members array
-      const memberIndex = channelData['members'].findIndex((member: any) => member.id === memberId);
+      const memberIndex = channelData['members'].findIndex(
+        (member: any) => member.id === memberId
+      );
 
       if (memberIndex === -1) {
         throw new Error('Member not found in channel.');
@@ -232,6 +237,27 @@ export class FirebaseService {
       orderBy('timestamp')
     );
     return await getDocs(queryRef);
+  }
+
+  getDocRef(collectionName: string, documentId: string): DocumentReference {
+    if (!this.firestore) {
+      throw new Error('Firestore is not initialized.');
+    }
+    return doc(this.firestore, collectionName, documentId);
+  }
+
+  subscribeToDocumentUpdates(
+    docRef: DocumentReference,
+    callback: (snapshot: DocumentSnapshot) => void
+  ): () => void {
+    if (!this.firestore) {
+      throw new Error('Firestore is not initialized.');
+    }
+
+    const unsubscribe = onSnapshot(docRef, callback);
+
+    // Return the unsubscribe function
+    return unsubscribe;
   }
 
   async getAllUsers() {

@@ -9,7 +9,7 @@
       <span class="member-wrapper" *ngFor="let m of channel.members">
         <div
           class="member"
-          (click)="showMemberProfile(m)"
+          (click)="showMemberProfile(m.id)"
           appHoverChange
           [elementsConfig]="[
             {

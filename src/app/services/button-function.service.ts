@@ -7,6 +7,7 @@ import { DialogShowMembersComponent } from '../components/shared/dialogs/dialog-
 import { DialogAddUserComponent } from '../components/shared/dialogs/dialog-add-user/dialog-add-user.component';
 import { DialogAddMemberChannelComponent } from '../components/shared/dialogs/dialog-add-member-channel/dialog-add-member-channel.component';
 import { Channel } from '../models/channel.class';
+import { DataService } from './data.service';
 // import { Room } from '../models/collection.class';
 
 // ################################# DUMMY DATA TO TYPE MEMBER ###############
@@ -23,9 +24,7 @@ interface Member {
   providedIn: 'root',
 })
 export class ButtonFunctionService {
-
-  constructor(public dialog: MatDialog) {}
-
+  constructor(public dialog: MatDialog, private dataService: DataService) {}
 
   openDialog() {
     this.dialog.open(ProfileViewComponent);
@@ -57,10 +56,9 @@ export class ButtonFunctionService {
    * Opens dialog with all necessary details of member. Member can be user or contacts of user.
    * @param {Member[]} user
    */
-  openProfile(user: Member[]) {
-    this.dialog.open(ProfileViewComponent, {
-      data: user,
-    });
+  openProfile(id: string) {
+    this.dataService.sendUserId(id);
+    this.dialog.open(ProfileViewComponent);
   }
 
   /****************************************************adding member to channel with firestore ID */

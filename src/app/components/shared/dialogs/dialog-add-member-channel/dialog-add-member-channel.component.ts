@@ -6,7 +6,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { HoverChangeDirective } from '../../../../directives/hover-change.directive';
 import { InputComponent } from '../../input/input.component';
 import { SearchbarComponent } from '../../searchbar/searchbar.component';
-import { Observable, of } from 'rxjs';
 import { NgIf, CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -16,6 +15,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../../../../services/firebase.service';
 import { Firestore } from '@angular/fire/firestore';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { DialogInputComponent } from '../dialog-input/dialog-input.component';
 
 @Component({
   selector: 'app-dialog-add-member-channel',
@@ -35,6 +36,8 @@ import { Firestore } from '@angular/fire/firestore';
     FormsModule,
     ReactiveFormsModule,
     MatExpansionModule,
+    MatTooltipModule,
+    DialogInputComponent,
   ],
 })
 export class DialogAddMemberChannelComponent implements OnInit {
@@ -45,6 +48,15 @@ export class DialogAddMemberChannelComponent implements OnInit {
   isUserInput: boolean = false;
   usersSearch: boolean = false;
   users: any[] = [];
+  userInputValue: string = '';
+  placeholder: string = 'Mitglied suchen!';
+  filteredUsers: any[] = [];
+  chosenUsers: any[] = [];
+  inputOnSearch: boolean = false;
+  checked: boolean = false;
+  search: boolean = false;
+  noMembers: boolean = false;
+
   firestore: Firestore = inject(Firestore);
 
   /**
@@ -60,8 +72,7 @@ export class DialogAddMemberChannelComponent implements OnInit {
     public dialogRef: MatDialogRef<DialogAddMemberChannelComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.setInputControl();
-    this.setUserAndChannels();
+    this.setUser();
   }
   // sets data that is given by parent element /chat-header of specific channel as room to be red in HTML
   channel = this.data;
@@ -75,58 +86,70 @@ export class DialogAddMemberChannelComponent implements OnInit {
     }
   }
 
-  addUser(userId: any) {
-    const selectedUserIndex = this.users.findIndex(
-      (user) => user.id === userId
-    );
-    if (selectedUserIndex !== -1) {
-      const selectedUser = this.users.splice(selectedUserIndex, 1)[0];
-      this.showUserInput.push('@' + selectedUser.fullName);
-      this.form.get('userInput')?.setValue(this.showUserInput.join(' ') + ' ');
-      this.usersSearch = false;
-      this.setFocusToInput();
+  checkIfUser(): void {
+    if (this.users.length === 0) {
+      this.noMembers = true;
+    } else {
+      this.noMembers = false;
     }
   }
 
-  setFocusToInput() {
-    const inputElement = document.getElementById(
-      'userInput'
-    ) as HTMLInputElement;
-    if (inputElement) {
-      if (this.showUserInput.length > 0) {
-        this.showUserInput.push(' ');
-      }
-      inputElement.focus();
-    }
-  }
-
-  setInputControl() {
-    this.form = this.formBuilder.group({
-      userInput: [''],
+  addMemberToChannel() {
+    this.firebaseService.updateDocument('channels', this.channel.id, {
+      members: [...this.channel.members, ...this.chosenUsers],
     });
-    const inputControl = this.form.get('userInput');
-    if (inputControl) {
-      inputControl.valueChanges.subscribe((value) => {
-        this.text = value;
-
-        const values = value.split(' ');
-
-        values.forEach((value: string) => {
-          if (value === '@' && this.users.length > 0) {
-            this.usersSearch = true;
-          } else {
-            this.usersSearch = false;
-          }
-        });
-      });
-    }
+    this.closeDialog();
   }
 
-  setUserAndChannels() {
+  searchInUsers() {
+    this.checkIfUser();
+    this.inputOnSearch = true;
+    this.search = true;
+    this.filteredUsers = [];
+
+    this.channel.members.forEach((member: { id: any }) => {
+      this.users = this.users.filter((user) => user.id !== member.id);
+    });
+
+    this.users.filter((user) => {
+      if (
+        user.fullName.toLowerCase().includes(this.userInputValue.toLowerCase())
+      ) {
+        this.filteredUsers.push(user);
+      }
+    });
+  }
+
+  selectedUser(id: string) {
+    this.checked = true;
+    const filter = this.filteredUsers.filter((user) => {
+      if (user.id != id) {
+        return user;
+      }
+      this.chosenUsers.push(user);
+    });
+
+    this.filteredUsers = filter;
+    this.users = filter;
+  }
+
+  removeMember(id: string) {
+    const filter = this.chosenUsers.filter((user) => {
+      if (user.id !== id) {
+        return user;
+      }
+      this.users.push(user);
+    });
+
+    this.chosenUsers = filter;
+  }
+
+  setUser() {
     this.firebaseService
       .getAllUsers()
       .then((users: any[]) => {
         this.users = users;
+        this.checkIfUser();
       })
       .catch((error) => {
         console.error('Error fetching users:', error);
