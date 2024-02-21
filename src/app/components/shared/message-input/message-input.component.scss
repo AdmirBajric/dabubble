@@ -2,63 +2,100 @@
 @import "../../../mixins.scss";
 
 .message-field {
-    background-color: white;
-    resize: none;
+  background-color: white;
+  resize: none;
+  border: none;
+  width: 100%;
+  height: 4rem;
+
+  &:focus {
     border: none;
-    width: 100%;
-    height: 4rem;
+    outline: none;
+  }
 
-    &:focus {
-        border: none;
-        outline: none;
-    }
-
-    &::placeholder {
-        color: rgba(0, 0, 0, 0.3);
-    }
+  &::placeholder {
+    color: rgba(0, 0, 0, 0.3);
+  }
 }
 
 .flex {
-    display: flex;
+  display: flex;
 }
 
 .between {
-    justify-content: space-between;
+  justify-content: space-between;
 }
 
 .inputComp {
-    min-width: 15rem;
-    max-width: 100%;
-    height: fit-content;
-    padding: 1.5rem;
-    border: 0.1rem solid rgba(178, 181, 219, 0.8);
-    border-radius: 2rem;
-    background-color: white;
-    transition: all 225ms;
+  min-width: 15rem;
+  max-width: 100%;
+  height: fit-content;
+  padding: 1.5rem;
+  border: 0.1rem solid rgba(178, 181, 219, 0.8);
+  border-radius: 2rem;
+  background-color: white;
+  transition: all 225ms;
+
+  &:hover {
+    cursor: pointer;
+    border: 0.1rem solid $purple-1;
+  }
+
+  .input-btn {
+    cursor: pointer;
+    background-color: transparent;
+    color: #686868;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .icon {
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &:hover {
-        cursor: pointer;
-        border: 0.1rem solid $purple-1;
+      border-radius: 50%;
+      background-color: $bg-color;
+      color: $purple-1;
+      font-weight: bold;
     }
 
-    .input-btn {
-        background-color: transparent;
-        color: black;
-        box-shadow: none;
-        border-radius: 0;
+    mat-icon {
+      width: 2.6rem;
+      height: 2.6rem;
+
+      &:hover {
+        color: $purple-1;
+      }
     }
+  }
 
-    .send {
-        color: rgba(68, 77, 242, 1);
+  .send {
+    color: rgba(68, 77, 242, 1);
 
-        &:disabled{
-            color: $text-gray;
-            cursor: not-allowed;
-        }
+    &:disabled {
+      color: $text-gray;
+      cursor: not-allowed;
     }
+  }
+}
 
-    .add {
-        border-right: 0.1rem solid rgba(178, 181, 219, 0.8);
-    }
+.options {
+  width: 13rem;
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
+.upload-hidden {
+  display: none;
+}
+
+.upload-container {
+  border-right: 0.1rem solid rgba(178, 181, 219, 0.8);
+  padding-right: 0.3rem;
 }

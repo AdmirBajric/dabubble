@@ -17,6 +17,7 @@ import { chatNavigationService } from '../../../services/chat-navigation.service
 import { FirebaseService } from '../../../services/firebase.service';
 import { User } from '../../../models/user.class';
 import { CommonModule } from '@angular/common';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 
 @Component({
   selector: 'app-message',
@@ -31,6 +32,7 @@ import { CommonModule } from '@angular/common';
     NgFor,
     ProfileViewComponent,
     CommonModule,
+    PickerComponent,
   ],
 })
 export class MessageComponent implements OnInit {
@@ -38,7 +40,6 @@ export class MessageComponent implements OnInit {
     private navService: chatNavigationService,
     private firebaseService: FirebaseService
   ) {}
-  loggedUser = 'Selina Karlin';
   @Input() message: any;
   @Input() messageId!: string | undefined;
   @Output() updatedMessage = new EventEmitter<{
@@ -46,6 +47,7 @@ export class MessageComponent implements OnInit {
     id: string;
   }>();
   showAnswers: boolean = false;
+  showEmoji: boolean = false;
   answers: Comment[] = [];
   reactions: any[] = [];
   answersCount!: number;
@@ -56,7 +58,9 @@ export class MessageComponent implements OnInit {
   saveOriginalMessage!: string;
   hoveredIndex: number | null = null;
   reactionMap: Map<string, string[]> = new Map<string, string[]>();
+  @Input() currentMessage!: Message[];
   user!: User;
+  emoji: string = '';
 
   async ngOnInit() {
     if (typeof localStorage !== 'undefined') {
@@ -174,6 +178,7 @@ export class MessageComponent implements OnInit {
   saveEditedMessage(messageText: string, id: string) {
     this.updatedMessage.emit({ messageText, id });
     this.openMessageEdit = false;
+    this.setAndSaveEmoji(this.messageId, this.emoji);
   }
 
   /**
@@ -185,5 +190,60 @@ export class MessageComponent implements OnInit {
     this.message.text = this.saveOriginalMessage;
   }
 
-  addEmoji() {}
+  addEmoji() {
+    this.showEmoji = !this.showEmoji;
+  }
+
+  async emitEmoji(event: any, id: any) {
+    const emoji = this.getEmojiNative(event);
+    if (id && emoji) {
+      this.emoji = emoji;
+      this.messageId = id;
+      this.addEmoji();
+    }
+  }
+
+  async setAndSaveEmoji(id: any, emoji: string) {
+    try {
+      const reaction = new Reaction({
+        fullName: this.user.fullName,
+        userId: this.user.id,
+        emoji: emoji,
+      });
+      const reactionJSON = reaction.toJSON();
+
+      const docSnapshot = await this.firebaseService.getDocument(
+        'messages',
+        id
+      );
+      if (docSnapshot.exists()) {
+        let existingReactions = docSnapshot.data()?.['reactions'] || [];
+
+        const existingReactionIndex = existingReactions.findIndex(
+          (reaction: any) => reaction.userId === this.user.id
+        );
+        if (existingReactionIndex !== -1) {
+          existingReactions[existingReactionIndex] = reactionJSON;
+        } else {
+          existingReactions.push(reactionJSON);
+        }
+
+        await this.firebaseService.updateDocument('messages', id, {
+          reactions: existingReactions,
+        });
+      } else {
+        console.error('Document not found');
+      }
+    } catch (error) {
+      console.error('Error updating document:', error);
+    }
+  }
+
+  getEmojiNative(e: any): string | null {
+    if (e.emoji && 'native') {
+      return e.emoji.native;
+    } else {
+      return null;
+    }
+  }
 }

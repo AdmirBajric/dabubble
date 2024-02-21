@@ -12,7 +12,7 @@
       ></app-message-hover-actions>
     </ng-container>
     <div class="flex">
-      <img src="{{ message.creator.avatar }}" alt="" />
+      <img class="flex-img" src="{{ message.creator.avatar }}" alt="" />
       <div>
         <div class="firstLine">
           <span class="mr-2"
@@ -23,6 +23,9 @@
           >
         </div>
         <div class="messageLine">{{ message.text }}</div>
+        <ng-container *ngIf="message.file.length > 0">
+          <img class="message-line-img" src="{{ message.file }}" />
+        </ng-container>
         <div class="lastLine" *ngIf="answers.length > 0">
           <span class="answerCount" (click)="showAnswersinThread(message)"
             >{{ answersCount }}
@@ -103,6 +106,9 @@
           >
             <img src="../../../../assets/img/add_emoji.svg" alt="emoji" />
           </button>
+          <ng-container *ngIf="emoji.length > 0">
+            <p class="selected-emoji">Your selected emoji: {{ emoji }}</p>
+          </ng-container>
 
           <div class="btn-edit-2">
             <button
@@ -118,10 +124,24 @@
           </div>
         </div>
       </div>
+
+      <emoji-mart
+        *ngIf="showEmoji"
+        [emojiSize]="16"
+        [sheetSize]="16"
+        [darkMode]="false"
+        [totalFrequentLines]="0"
+        [enableSearch]="false"
+        (emojiClick)="emitEmoji($event, messageId)"
+        [style]="{
+          position: 'absolute',
+          top: '9.5rem'
+        }"
+      ></emoji-mart>
     </ng-container>
 
     <div class="flex reverse">
-      <img src="{{ message.creator.avatar }}" alt="" class="userImg" />
+      <img src="{{ message.creator.avatar }}" alt="" class="userImg flex-img" />
       <div>
         <div class="firstLine reverse">
           <span class="mr-2"
@@ -132,6 +152,9 @@
           >
         </div>
         <div class="messageLine own">{{ message.text }}</div>
+        <ng-container *ngIf="message.file.length > 0">
+          <img class="message-line-img" src="{{ message.file }}" />
+        </ng-container>
         <div class="lastLine" *ngIf="this.answers.length > 0">
           <span
             class="answerCount"

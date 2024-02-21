@@ -31,6 +31,10 @@ img {
   padding: 1rem 0;
 }
 
+.flex-img {
+  border-radius: 50%;
+}
+
 .reverse {
   flex-direction: row-reverse;
   justify-content: flex-start;
@@ -61,6 +65,13 @@ img {
   border-start-start-radius: 0;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+}
+
+.message-line-img {
+  width: 30rem;
+  height: 15rem;
+  object-fit: cover;
+  margin-top: 1rem;
 }
 
 .own {
@@ -172,4 +183,8 @@ button {
       }
     }
   }
+}
+
+.selected-emoji {
+  font-size: 1.8rem;
 }

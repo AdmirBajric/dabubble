@@ -1,21 +1,66 @@
 <div class="inputComp">
-  <textarea [(ngModel)]="text" class="message-field" matInput placeholder="{{ placeholder }}"></textarea>
+  <textarea
+    [(ngModel)]="text"
+    class="message-field"
+    matInput
+    placeholder="{{ placeholder }}"
+  ></textarea>
   <div>
     <div class="flex between">
-      <div>
-        <button appHoverChange [elementsConfig]="[ { imageSelector: 'img', defaultSrc: '../../assets/img/add_message_input.svg', hoverSrc: '../../assets/img/add_message_input_hover.svg' } ]" class="input-btn add">
-          <img src="../../assets/img/add_message_input.svg" alt="add-file">
+      <div class="options">
+        <input
+          class="upload-hidden"
+          type="file"
+          id="actual-btn"
+          (change)="onFileSelected($event)"
+        />
+        <label class="upload" for="actual-btn">
+          <div class="upload-container">
+            <div class="icon">
+              <mat-icon class="input-btn">add</mat-icon>
+            </div>
+          </div>
+        </label>
+        <button
+          appHoverChange
+          [elementsConfig]="[
+            {
+              imageSelector: 'img',
+              defaultSrc: '../../assets/img/add_message_emoji.svg',
+              hoverSrc: '../../assets/img/add_message_emoji_hover.svg'
+            }
+          ]"
+          class="input-btn"
+        >
+          <img src="../../assets/img/add_message_emoji.svg" alt="add-emoji" />
         </button>
-        <button appHoverChange [elementsConfig]="[ { imageSelector: 'img', defaultSrc: '../../assets/img/add_message_emoji.svg', hoverSrc: '../../assets/img/add_message_emoji_hover.svg' } ]" class="input-btn">
-          <img src="../../assets/img/add_message_emoji.svg" alt="add-emoji">
-        </button>
-        <button appHoverChange [elementsConfig]="[ { imageSelector: 'img', defaultSrc: '../../assets/img/add_message_@.svg', hoverSrc: '../../assets/img/add_message_@_hover.svg' } ]" class="input-btn">
-          <img src="../../assets/img/add_message_@.svg" alt="@">
+        <button
+          appHoverChange
+          [elementsConfig]="[
+            {
+              imageSelector: 'img',
+              defaultSrc: '../../assets/img/add_message_@.svg',
+              hoverSrc: '../../assets/img/add_message_@_hover.svg'
+            }
+          ]"
+          class="input-btn"
+        >
+          <img src="../../assets/img/add_message_@.svg" alt="@" />
         </button>
       </div>
-      <button [disabled]="!text.trim().length" (click)="emitMessage()"
-        appHoverChange [elementsConfig]="[ { imageSelector: 'img', defaultSrc: '../../assets/img/send_message.svg', hoverSrc: '../../assets/img/send_message_hover.svg' } ]" class="input-btn send">
-        <img src="../../assets/img/send_message.svg" alt="">
+      <button
+        (click)="addMessage(true)"
+        appHoverChange
+        [elementsConfig]="[
+          {
+            imageSelector: 'img',
+            defaultSrc: '../../assets/img/send_message.svg',
+            hoverSrc: '../../assets/img/send_message_hover.svg'
+          }
+        ]"
+        class="input-btn send"
+      >
+        <img src="../../assets/img/send_message.svg" alt="" />
       </button>
     </div>
   </div>
