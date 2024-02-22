@@ -73,7 +73,6 @@ export class MessageHoverActionsComponent {
     const id = this.getMessageID() as string;
     const emoji = this.getEmojiNative(event);
     this.openEmojiMart(StringOrId);
-    console.log('emoji:', emoji, id);
     try {
       const reaction = new Reaction({
         fullName: this.user.fullName,

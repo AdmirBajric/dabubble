@@ -66,7 +66,6 @@ export class DialogAddMemberChannelComponent implements OnInit{
    */
   receiveUserList(userList: any[]) {
     this.userListForAddingChannel$ = of(userList);
-    // console.log(userList);
   }
 
   /**

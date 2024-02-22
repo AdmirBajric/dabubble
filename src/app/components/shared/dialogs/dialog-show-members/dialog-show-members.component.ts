@@ -32,17 +32,13 @@ interface Room {
   styleUrl: './dialog-show-members.component.scss'
 })
 
-export class DialogShowMembersComponent implements OnInit {
+export class DialogShowMembersComponent {
 
   constructor(public dialogRef: MatDialogRef<DialogShowMembersComponent>, 
     @Inject(MAT_DIALOG_DATA) public data: any,
     private btnService: ButtonFunctionService){
   }
   channel = this.data;
-
-  ngOnInit(): void {
-      console.log(this.channel);
-  }
 
   closeDialog(){
     this.dialogRef.close();
@@ -53,8 +49,6 @@ export class DialogShowMembersComponent implements OnInit {
   }
 
   openDialogAddingMember(){
-    console.log(this.channel.id);
-    
     this.closeDialog();
     this.btnService.addMemberDialog(this.channel);
   }

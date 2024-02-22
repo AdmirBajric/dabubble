@@ -85,7 +85,6 @@ export class ThreadComponent implements OnInit {
     }
     this.subscribeThreadStatus();
     this.subscribeMessage();
-    console.log('THREAD', this.currentMessage);
     this.searchForComments();
     this.countAnswers();
   }
@@ -111,8 +110,6 @@ export class ThreadComponent implements OnInit {
       commentData['id'] = doc.id;
       this.answers.push(commentData);
     });
-    console.log(this.answers);
-
   }
 
 

@@ -12,10 +12,8 @@ import { log } from 'console';
 })
 export class ChannelListItemComponent implements OnInit {
   @Input() channels: any = []; //workaround due to typing-errors (NG0 Type '' is missing the following properties from type: length, pop, push ANGULAR )
-  // @Input() channels!: Array<{ name: string }>;
   @Input() user!: {
     channels: Array<{ name: string }>;
-    // directMessages: Array<any>;
   };
 
   // ************* directing event as boolean to grandparent (/dashboard) through parent(/workspace)
@@ -25,7 +23,6 @@ export class ChannelListItemComponent implements OnInit {
   constructor(private navService: chatNavigationService) {}
 
   ngOnInit(): void {
-    // console.log(this.channels);
   }
 
   displayChannel(channels: any[]) {
