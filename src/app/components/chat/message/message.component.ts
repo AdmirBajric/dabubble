@@ -224,27 +224,6 @@ export class MessageComponent implements OnInit {
   }
 
 
-  toggleShowActions(){
-    this.showActions = !this.showActions;
-  }
-
-  toggleShowActionsOutside(event: Event): void {
-    if (!this.elementRef.nativeElement.contains(event.target)) {
-      this.showActions = false;
-    }
-  }
-
-  checkClickLocation(event: Event){
-    if (this.elementRef.nativeElement.contains(event.target)) {
-      // Wenn der Klick innerhalb der Komponente erfolgt, wird die Propagation gestoppt
-      event.stopPropagation();
-    } else {
-      // Wenn außerhalb der Komponente geklickt wird, schließen Sie die Aktionen
-      this.showActions = false;
-    }
-  }
-
-
   addEmoji(){
 
   }
