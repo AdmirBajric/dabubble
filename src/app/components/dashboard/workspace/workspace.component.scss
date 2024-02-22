@@ -91,9 +91,6 @@ h2 {
     button {
       &.btn-small-create-channel {
         @include flexbox(flex, unset, unset, center);
-        position: absolute;
-        right: 0;
-        top: 0;
         border-radius: 50%;
         background: transparent;
 
@@ -101,15 +98,28 @@ h2 {
           height: 2rem;
           width: 2rem;
         }
+
+        &:hover {
+          img {
+            height: 3rem;
+            width: 3rem;
+          }
+        }
       }
     }
   }
 
   .drawer-header {
     position: relative;
-    @include flexbox(flex, unset, unset, center);
-    gap: 3rem;
+    @include flexbox(flex, unset, space-between, center);
     width: 100%;
+    padding-right: 1rem;
+    gap: 3rem;
+
+    .header-left {
+      @include flexbox(flex, unset, unset, center);
+      gap: 3rem;
+    }
 
     &:nth-of-type(2n) {
       position: fixed;
