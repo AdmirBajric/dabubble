@@ -33,6 +33,7 @@ export class MainChatComponent implements OnInit {
     messageId: string = '';
 
     private channelOpenStatusSubscription!: Subscription;
+    private currentChannelSubscription!: Subscription;
     showChannel: boolean = false;
 
     constructor(
@@ -174,7 +175,7 @@ export class MainChatComponent implements OnInit {
      * When a new channel is emitted, it checks if the channel has changed and, if so, prepares data for the new channel.
      */
     subscribeToCurrentChannel() {
-        this.navServie.currentChannel.subscribe(channel => {
+        this.currentChannelSubscription = this.navServie.currentChannel.subscribe(channel => {
             if (channel && 'id' in channel) {
                 if (this.channelChanged(channel.id)) {
                     this.prepareData(channel.id, channel)
@@ -229,6 +230,9 @@ export class MainChatComponent implements OnInit {
     ngOnDestroy() {
         if (this.channelOpenStatusSubscription) {
             this.channelOpenStatusSubscription.unsubscribe();
+        }
+        if (this.currentChannelSubscription) {
+            this.currentChannelSubscription.unsubscribe();
         }
     }
 }
