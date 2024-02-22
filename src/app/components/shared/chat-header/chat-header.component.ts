@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, Renderer2 } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { ChannelEditComponent } from '../../chat/channel/channel-edit/channel-edit.component';
 import { ButtonFunctionService } from "../../../services/button-function.service";
@@ -25,20 +25,39 @@ interface Member {
 })
 
 export class ChatHeaderComponent implements OnInit {
-  @Input() styleHeaderForThread!: boolean;
-  @Output() closeThread = new EventEmitter<any[]>();
-
-  currentChannel!: Channel;
-
   constructor(
     private btnService: ButtonFunctionService,
+    private renderer: Renderer2,
+    private elementRef: ElementRef,
     private dialog: MatDialog,
     private navService: chatNavigationService
   ) {
   }
 
+  @Input() styleHeaderForThread!: boolean;
+  @Output() closeThread = new EventEmitter<any[]>();
+  currentChannel!: Channel;
+
+  windowWidth!: number;
+  mobileView!: boolean;
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.checkWindowSize();
+  }
+  private checkWindowSize(): void {
+    this.windowWidth = this.renderer.parentNode(
+      this.elementRef.nativeElement
+    ).ownerDocument.defaultView.innerWidth;
+    if (this.windowWidth <= 1100) {
+      this.mobileView = true;
+    } else {
+      this.mobileView = false;
+    }
+  }
+
   async ngOnInit() {
     await this.subscribeChannel();
+    this.checkWindowSize();
   }
 
   subscribeChannel() {
@@ -48,9 +67,9 @@ export class ChatHeaderComponent implements OnInit {
   }
 
   // ######################################### Subsribe here to uptdate when adding new members ##########################
-   get countMembersRoom() {
-     return this.currentChannel.members.length
-   }
+  get countMembersRoom() {
+    return this.currentChannel.members.length
+  }
 
   showMembers(channel: Channel) {
     this.btnService.showChannelMembers(channel); // passing the whole channel Object because id, members is necessary ID EXISTIERT NICHT IN CHANNEL.CLASS

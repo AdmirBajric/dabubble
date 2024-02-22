@@ -6,8 +6,36 @@ header {
     background-color: $bg-color;
     padding: 1.5rem 1.7rem;
 
+    @media only screen and (max-width: 767px) {
+        padding: 0 1.7rem;
+    }
+
+    @media only screen and (min-width: 768px) {
+        padding: 1.5rem 3.2rem;
+    }
+   
+
     .chat-logo {
         @include flexbox(flex, unset, unset, center);
         gap: 1rem;
+
+        @media only screen and (max-width: 767px) {
+            gap: unset;
+        }
+
+        .back {
+            margin-left: -1rem;
+        }
+
+        .logo {
+            height: 5rem;
+            width: 5rem;
+        }
+
+        h1 {
+            @media only screen and (max-width: 767px) {
+                margin-left: 1rem;
+            } 
+        }
     }
 }

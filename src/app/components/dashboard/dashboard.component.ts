@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
     private chatStatusSubscription!: Subscription;
     windowWidth!: number;
     mobileView!: boolean;
-    mobilePageStyling!: string;
+    mobilePage!: string;
     channelOpenStatusSubscription: any;
     showChat: boolean = false;
     @HostListener('window:resize', ['$event'])
@@ -75,15 +75,22 @@ export class DashboardComponent implements OnInit {
         ).ownerDocument.defaultView.innerWidth;
         if (this.windowWidth <= 1100) {
             this.mobileView = true;
-            this.mobilePageStyling = 'home';
+            // this.mobilePage = 'home';
         } else {
             this.mobileView = false;
         }
     }
 
     subscribeToThreadStatus() {
-        this.threadStatusSubscription = this.navService.threadStatus$.subscribe(value => {
-            this.threadIsOpen = value;
+        this.threadStatusSubscription = this.navService.threadStatus$.subscribe(isOpen => {
+            this.threadIsOpen = isOpen;
+            if (isOpen === true) {
+                this.mobilePage = 'thread';
+            } else if (isOpen === false){
+                this.mobilePage = 'chat';
+            }
+            // console.log('threadStatus:', isOpen, 'channel status', this.channelOpenStatusSubscription, this.openChatofChannel);
+            
             this.handleGridAreaToggle();
         })
     }
@@ -99,9 +106,9 @@ export class DashboardComponent implements OnInit {
         this.channelOpenStatusSubscription = this.navService.channelStatus$.subscribe(isOpen => {
             this.showChat = isOpen;
             if (isOpen === true) {
-                this.mobilePageStyling = 'chat'
+                this.mobilePage = 'chat'
             } else if (isOpen === false) {
-                this.mobilePageStyling = 'home'
+                this.mobilePage = 'home'
             }
 
         })
@@ -137,6 +144,8 @@ export class DashboardComponent implements OnInit {
     }
 
     ngOnDestroy() {
+        this.threadStatusSubscription.unsubscribe();
+        this.channelOpenStatusSubscription.unsubscribe();
         this.threadStatusSubscription.unsubscribe();
     }
 }

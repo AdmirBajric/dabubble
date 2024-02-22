@@ -3,9 +3,9 @@
 
 ::ng-deep .mat-mdc-dialog-container,
 ::ng-deep .mdc-dialog__surface {
-  border-radius: 3rem 0rem 3rem 3rem !important;
-  background: $white !important;
-  box-shadow: 0rem 0.6rem 1rem 0rem rgba(0, 0, 0, 0.2) !important;
+    border-radius: 3rem 0rem 3rem 3rem !important;
+    background: $white !important;
+    box-shadow: 0rem 0.6rem 1rem 0rem rgba(0, 0, 0, 0.2) !important;
 }
 
 .title {
@@ -20,6 +20,16 @@
     padding: 2rem 2rem 1rem 2rem;
     border-radius: 30px, 0px, 30px, 30px;
     overflow: hidden;
+
+    @media only screen and (max-width: 499px) {
+        padding: 0 2rem 1rem 2rem;
+        width: 25rem;
+        height: 48rem;
+    }
+
+    @media only screen and (min-width: 500px) and (max-width: 767px) {
+        width: 40rem;
+    }
 }
 
 .close-img {
@@ -43,6 +53,13 @@
     overflow: scroll;
     overflow-x: hidden;
 
+    @media only screen and (max-width: 767px) {
+        top: 6rem;
+        width: 22rem;
+        max-height: unset;
+        height: 36rem;
+    }
+
     ul {
         list-style: none;
 
@@ -59,6 +76,12 @@
     width: 27rem;
     border-radius: 5rem;
     padding: 1rem 2rem 0rem 2rem;
+
+    @media only screen and (max-width: 767px) {
+        padding: 1rem 0.5rem 0rem 0.5rem;
+        width: unset;
+        margin-bottom: 2rem;
+    }
 
     &:hover {
         background-color: $bg-color;
@@ -77,15 +100,30 @@
     border-radius: 3.5rem;
     position: relative;
 
+    @media only screen and (max-width: 767px) {
+        height: 4rem;
+        width: 4rem;
+    }
+
     img {
         height: 6rem;
+        border-radius: 50%;
+
+        @media only screen and (max-width: 767px) {
+            height: 5rem;
+            border-radius: 50%;
+        }
     }
 
     .icon {
-        // height: 1rem;
         position: absolute;
         bottom: 0.5rem;
         right: 0.5rem;
+
+        @media only screen and (max-width: 767px) {
+            bottom: -2rem;
+            right: -2rem;
+        }
     }
 }
 
@@ -96,6 +134,10 @@
     background-color: white;
     left: 4rem;
     @include flexbox(flex, unset, unset, center);
+
+    @media screen and (max-width: 767px) {
+        left: 2rem;
+    }
 
     button {
         background: transparent;
@@ -118,7 +160,6 @@
     }
 
 }
-
 
 // ************************* kann auch global definiert werden, da auch in DM's, profile-view verwendet*****
 .online {

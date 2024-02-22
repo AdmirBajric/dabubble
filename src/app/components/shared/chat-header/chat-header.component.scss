@@ -13,6 +13,10 @@ h1 {
 .header-right {
     @include flexbox(flex, unset, unset, center);
     gap: 2rem;
+
+    @media only screen and (max-width: 767px) {
+        gap: unset;
+    }
 }
 
 .btn-wrapper {
@@ -37,6 +41,11 @@ h1 {
             background-color: $bg-color;
             color: $purple-3;
             cursor: pointer;
+        }
+
+        @media only screen and (max-width: 767px) {
+            gap: unset;
+            height: 5rem;
         }
     }
 
@@ -65,8 +74,7 @@ h1 {
                 font-weight: normal !important;
             }
 
-            span,
-            h1 {
+           h2 {
                 color: $purple-2;
             }
         }

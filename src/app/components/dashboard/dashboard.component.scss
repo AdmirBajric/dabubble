@@ -86,11 +86,12 @@
 
 // ############################################# MOBILE #################################
 @media only screen and (max-width: 1099px) {
-    .logo, 
-    .profile-menu, 
-    .searchbar, 
-    .sidenav, 
-    .chat, 
+
+    .logo,
+    .profile-menu,
+    .searchbar,
+    .sidenav,
+    .chat,
     .threads {
         display: none;
     }
@@ -103,6 +104,14 @@
 
 .mbl-search {
     padding: 4rem 0 2rem 0;
+
+    @media only screen and (max-width: 767px) {
+        padding: 1rem 0 1rem 0;
+    }
+
+    @media only screen and (min-width: 768px) and (max-height: 600px) {
+        padding: 1rem 0 0rem 0;
+    }
 }
 
 .mbl-nav {

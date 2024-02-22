@@ -29,19 +29,23 @@
 </div>
 
 <ng-container *ngIf="mobileView">
-  <app-mobile-header [logoStyling]="mobilePageStyling"></app-mobile-header>
+  <app-mobile-header [logoStyling]="mobilePage"></app-mobile-header>
   <div class="mbl-content mbl-padding">
-    <div class="mbl-search" *ngIf="mobilePageStyling === 'home'">
+    <div class="mbl-search" *ngIf="mobilePage === 'home'">
       <app-searchbar [showBorder]="true" [showLoupe]="true" [globalSearch]="true" [potentialMembersSearch]="false"
       [placeholder]="'Gehe zu...'"></app-searchbar>
     </div>
 
-    <div class="mbl-nav" *ngIf="mobilePageStyling === 'home'">
+    <div class="mbl-nav" *ngIf="mobilePage === 'home'">
       <app-workspace></app-workspace>
     </div>
 
-    <div *ngIf="showChat" class="mbl-chat">
+    <div class="mbl-chat" *ngIf="mobilePage === 'chat'">
       <app-main-chat></app-main-chat>
+    </div>
+
+    <div class="mgl-thred" *ngIf="mobilePage === 'thread'">
+      <app-thread [threadData]="selectedMessageForThread"></app-thread>
     </div>
   </div>
 </ng-container>

@@ -1,4 +1,4 @@
-<section [class.thread]="styleHeaderForThread" class="wrapper wrapper-padding">
+<section [class.thread]="styleHeaderForThread" [ngClass]="!mobileView ? 'wrapper-padding' : ''" class="wrapper">
 
     <div [ngClass]=" styleHeaderForThread ? 'thread-header' : 'header-left' "
         (click)=" styleHeaderForThread ? null : openEditChannel()" appHoverChange

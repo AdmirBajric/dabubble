@@ -1,11 +1,23 @@
 @import "./../../../colors.scss";
 @import "./../../../mixins.scss";
 
-@media only screen and (max-width: 1100px) {
+@media only screen and (min-width: 768px) and (max-width: 1100px) {
   .profile-menu-img {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
+
+    img {
+      width: 5rem !important;
+      height: 5rem !important;
+      border-radius: 2.5rem !important;
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .profile-menu-img {
+    @include flexbox(flex, unset, flex-end, center);
 
     img {
       width: 5rem !important;
