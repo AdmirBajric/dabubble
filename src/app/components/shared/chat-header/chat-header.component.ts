@@ -37,10 +37,6 @@ export class ChatHeaderComponent implements OnInit, OnDestroy {
     private navService: chatNavigationService
   ) {}
 
-  @Input() styleHeaderForThread!: boolean;
-  @Output() closeThread = new EventEmitter<any[]>();
-  currentChannel!: Channel;
-
   windowWidth!: number;
   mobileView!: boolean;
   @HostListener('window:resize', ['$event'])
