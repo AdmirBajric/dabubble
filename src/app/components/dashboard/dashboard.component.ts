@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
     windowWidth!: number;
     mobileView!: boolean;
     mobilePage!: string;
-    channelOpenStatusSubscription: any;
+    channelOpenStatusSubscription!: Subscription;
     showChat: boolean = false;
     @HostListener('window:resize', ['$event'])
     onResize(event: Event): void {
