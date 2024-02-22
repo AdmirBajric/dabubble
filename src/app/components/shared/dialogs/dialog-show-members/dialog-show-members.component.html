@@ -1,30 +1,56 @@
 <mat-card class="dialog-members">
-    <mat-card-header class="head">
-        <mat-card-title class="title">Mitglieder</mat-card-title>
-        <mat-icon class="close-img btn-50" (click)="closeDialog()">close</mat-icon>
-    </mat-card-header>
+  <mat-card-header class="head">
+    <mat-card-title class="title">Mitglieder</mat-card-title>
+    <mat-icon class="close-img btn-50" (click)="closeDialog()">close</mat-icon>
+  </mat-card-header>
 
-    <mat-card-content class="content scroll">
-        <ul>
-            <span class="member-wrapper" *ngFor="let m of channel.members">
-                <div class="member" (click)="showMemberProfile(m)" appHoverChange [elementsConfig]="[{ textSelector: 'li', defaultColor: '#000000', hoverColor: '#535AF1'}]">
-                    <div class="avatar">
-                        <img [src]="m.avatar" alt="">
-                        <mat-icon [ngClass]="{ online: m.online, offline: !m.offline }" class="icon">circle</mat-icon>
-                    </div>
-                    <li>{{m.fullName}}</li>
-                </div>
-            </span>
-        </ul>
-    </mat-card-content>
+  <mat-card-content class="content scroll">
+    <ul>
+      <span class="member-wrapper" *ngFor="let m of channel.members">
+        <div
+          class="member"
+          (click)="showMemberProfile(m.id)"
+          appHoverChange
+          [elementsConfig]="[
+            {
+              textSelector: 'li',
+              defaultColor: '#000000',
+              hoverColor: '#535AF1'
+            }
+          ]"
+        >
+          <div class="avatar">
+            <img [src]="m.avatar" alt="" />
+            <mat-icon
+              [ngClass]="{ online: m.isOnline, offline: !m.isOnline }"
+              class="icon"
+              >circle</mat-icon
+            >
+          </div>
+          <li>{{ m.fullName }}</li>
+        </div>
+      </span>
+    </ul>
+  </mat-card-content>
 
-    <div class="dialog-footer">
-        <button (click)="openDialogAddingMember()" appHoverChange [elementsConfig]="[
-            { imageSelector: 'img', defaultSrc: '../../../../../assets/img/add_member_black.svg', hoverSrc: '../../../../../assets/img/add_member_hover.svg' },
-            { textSelector: 'span', defaultColor: '#000000', hoverColor: '#535AF1' }
-            ]" >
-            <img src="../../../../../assets/img/add_member_black.svg" alt="add-member">
-            <span>Mitglieder hinzufügen</span>
-        </button>
-    </div>
+  <div class="dialog-footer">
+    <button
+      (click)="openDialogAddingMember()"
+      appHoverChange
+      [elementsConfig]="[
+        {
+          imageSelector: 'img',
+          defaultSrc: '../../../../../assets/img/add_member_black.svg',
+          hoverSrc: '../../../../../assets/img/add_member_hover.svg'
+        },
+        { textSelector: 'span', defaultColor: '#000000', hoverColor: '#535AF1' }
+      ]"
+    >
+      <img
+        src="../../../../../assets/img/add_member_black.svg"
+        alt="add-member"
+      />
+      <span>Mitglieder hinzufügen</span>
+    </button>
+  </div>
 </mat-card>

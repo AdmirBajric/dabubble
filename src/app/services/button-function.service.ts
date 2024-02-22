@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProfileViewComponent } from '../components/profile/profile-view/profile-view.component';
 import { ChannelEditComponent } from '../components/chat/channel/channel-edit/channel-edit.component';
@@ -7,6 +7,7 @@ import { DialogShowMembersComponent } from '../components/shared/dialogs/dialog-
 import { DialogAddUserComponent } from '../components/shared/dialogs/dialog-add-user/dialog-add-user.component';
 import { DialogAddMemberChannelComponent } from '../components/shared/dialogs/dialog-add-member-channel/dialog-add-member-channel.component';
 import { Channel } from '../models/channel.class';
+import { DataService } from './data.service';
 // import { Room } from '../models/collection.class';
 
 // ################################# DUMMY DATA TO TYPE MEMBER ###############
@@ -20,11 +21,10 @@ interface Member {
 // ################################# DUMMY DATA END ################################
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ButtonFunctionService {
-
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, private dataService: DataService) {}
 
   openDialog() {
     this.dialog.open(ProfileViewComponent);
@@ -41,34 +41,32 @@ export class ButtonFunctionService {
       autoFocus: false,
     });
   }
-  
+
   /**
    * Opening a dialog with a list of all channel members.
    * @param {Member[]} members
    */
-  showChannelMembers(channel: Channel){
+  showChannelMembers(channel: Channel) {
     this.dialog.open(DialogShowMembersComponent, {
-      data: channel
-    })
+      data: channel,
+    });
   }
-  
+
   /**
    * Opens dialog with all necessary details of member. Member can be user or contacts of user.
    * @param {Member[]} user
    */
-  openProfile(user: Member[]){
-    this.dialog.open(ProfileViewComponent, {
-      data: user
-    })
+  openProfile(id: string) {
+    this.dataService.sendUserId(id);
+    this.dialog.open(ProfileViewComponent);
   }
 
-
   /****************************************************adding member to channel with firestore ID */
-  addMemberDialog(channel: Channel){
-  this.dialog.open(DialogAddMemberChannelComponent, {
-    data: channel,
-    position: { top: '7.5rem', right: '2rem' }
-  });
+  addMemberDialog(channel: Channel) {
+    this.dialog.open(DialogAddMemberChannelComponent, {
+      data: channel,
+      position: { top: '7.5rem', right: '2rem' },
+    });
   }
 
   // userListDialog(userList: Member[]){

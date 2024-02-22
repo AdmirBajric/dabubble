@@ -1,3 +1,41 @@
+<section
+  [ngStyle]="{ height: isNotDashboard ? '100vh' : '97%' }"
+  [class.no-mobile]="isNotDashboard"
+  class="wrapper border-radius-3"
+>
+  <ng-container *ngIf="!showChannel">
+    <div class="show-start-message">
+      <h1>Welcome to DaBubble</h1>
+      <h2>Please select a Channel or Direct Message to start Conversation!</h2>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="showChannel">
+    <app-chat-header></app-chat-header>
+    <div class="content-container scroll" *ngIf="showMessages">
+      <div *ngFor="let message of messages; let i = index">
+        <ng-container
+          *ngIf="
+            i === 0 ||
+            isDifferentDay(messages[i - 1].timestamp, message.timestamp)
+          "
+        >
+          <app-time-separator-chat
+            [timestamp]="message.timestamp"
+          ></app-time-separator-chat>
+        </ng-container>
+        <app-message
+          (updatedMessage)="saveEditedMessage($event)"
+          [message]="message"
+          [messageId]="message.id"
+        ></app-message>
+      </div>
+    </div>
+    <div class="chat-input">
+      <app-message-input
+        (messageText)="createMessage($event)"
+      ></app-message-input>
+    </div>
+  </ng-container>
 <section [class.no-mobile]="isNotDashboard"
     class="wrapper border-radius-3">
     <ng-container *ngIf="showChannel">
@@ -18,10 +56,17 @@
 </section>
 
 <section *ngIf="isNotDashboard" class="desktop-view info-desktop" appHoverImage>
-    <div class="border-radius-3 no-mobile wrapper-padding" appHoverChange [elementsConfig]="[  
-    { textSelector: 'h1', defaultColor: '#797ef3', hoverColor: '#FFF' },
-    { textSelector: 'a', defaultColor: '#000000', hoverColor: '#444df2'}]">
-        <h1>Für die Desktop-Ansicht</h1>
-        <a [routerLink]="['/dashboard']" routerLinkActive="router-link-active">zum Dashboard</a>
-    </div>
+  <div
+    class="border-radius-3 no-mobile wrapper-padding"
+    appHoverChange
+    [elementsConfig]="[
+      { textSelector: 'h1', defaultColor: '#797ef3', hoverColor: '#FFF' },
+      { textSelector: 'a', defaultColor: '#000000', hoverColor: '#444df2' }
+    ]"
+  >
+    <h1>Für die Desktop-Ansicht</h1>
+    <a [routerLink]="['/dashboard']" routerLinkActive="router-link-active"
+      >zum Dashboard</a
+    >
+  </div>
 </section>

@@ -1,29 +1,40 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Message } from '../models/message.class';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class chatNavigationService {
+export class chatNavigationService implements OnInit {
   private threadOpenStatus!: boolean;
-  private isThreadOpen$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private isThreadOpen$: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
 
   private channelOpenStatus!: boolean;
-  private isChannelOpen$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private isChannelOpen$: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
   private currentChannel$ = new BehaviorSubject<any>(null);
 
   private currentMessage$ = new BehaviorSubject<any>(null);
 
+  private channelsUpdatedSubject = new Subject<any[]>();
+  channelsUpdated$ = this.channelsUpdatedSubject.asObservable();
+
   constructor() {
     this.isThreadOpen$.subscribe((value) => {
       this.threadOpenStatus = value;
-    })
+    });
 
     this.isChannelOpen$.subscribe((value) => {
       this.channelOpenStatus = value;
     })
   }
+
+  updateChannels(channels: any[]) {
+    this.channelsUpdatedSubject.next(channels);
+  }
+
+  ngOnInit(): void {}
 
   openThread(message: Message) {
     this.currentMessage$.next(message);
@@ -35,8 +46,12 @@ export class chatNavigationService {
     this.isChannelOpen$.next(true);
   }
 
-  cloesThread() {
+  closeThread() {
     this.isThreadOpen$.next(false);
+  }
+
+  updateChannelStatus(status: boolean) {
+    this.isChannelOpen$.next(status);
   }
 
   closeChat(){
@@ -44,7 +59,7 @@ export class chatNavigationService {
   }
 
   /**
-   * Observable to be subsribed by components that need information about thread.component status.
+   * Observable to be subscribed by components that need information about thread.component status.
    *
    * @readonly
    * @type {*}
@@ -67,5 +82,9 @@ export class chatNavigationService {
 
   get channelStatus$() {
     return this.isChannelOpen$.asObservable();
+  }
+
+  get isChannelOpen(): boolean {
+    return this.channelOpenStatus;
   }
 }

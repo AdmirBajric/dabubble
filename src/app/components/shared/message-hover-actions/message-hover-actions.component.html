@@ -1,32 +1,59 @@
 <div class="actions-container" [class.user-reaction]="isYou">
+  <button
+    appHoverChange
+    [elementsConfig]="[
+      {
+        imageSelector: 'img',
+        defaultSrc: '../../../../assets/img/add_emoji_check.svg',
+        hoverSrc: '../../../../assets/img/add_emoji_check_hover.svg'
+      }
+    ]"
+    (click)="setEmoji('✅', 'mainMessage')"
+  >
+    <img src="../../../../assets/img/add_emoji_check.svg" alt="ok" />
+  </button>
 
-    <button appHoverChange
-        [elementsConfig]="
-        [{ imageSelector: 'img', defaultSrc: '../../../../assets/img/add_emoji_check.svg', hoverSrc: '../../../../assets/img/add_emoji_check_hover.svg' }]">
+  <button
+    appHoverChange
+    [elementsConfig]="[
+      {
+        imageSelector: 'img',
+        defaultSrc: '../../../../assets/img/add_emoji_handsUP.svg',
+        hoverSrc: '../../../../assets/img/add_emoji_handsUP_hover.svg'
+      }
+    ]"
+    (click)="setEmoji('🙌', 'mainMessage')"
+  >
+    <img src="../../../../assets/img/add_emoji_handsUP.svg" alt="bravo" />
+  </button>
 
-        <img src="../../../../assets/img/add_emoji_check.svg" alt="ok">
-    </button>
+  <button
+    appHoverChange
+    [elementsConfig]="[
+      {
+        imageSelector: 'img',
+        defaultSrc: '../../../../assets/img/add_emoji.svg',
+        hoverSrc: '../../../../assets/img/add_emoji_hover.svg'
+      }
+    ]"
+    (click)="openEmojiMart('mainMessage')"
+  >
+    <img src="../../../../assets/img/add_emoji.svg" alt="add reaction" />
+  </button>
 
-    <button appHoverChange
-        [elementsConfig]="
-        [{imageSelector: 'img', defaultSrc: '../../../../assets/img/add_emoji_handsUP.svg', hoverSrc: '../../../../assets/img/add_emoji_handsUP_hover.svg'}]">
-
-        <img src="../../../../assets/img/add_emoji_handsUP.svg" alt="bravo">
-    </button>
-
-    <button appHoverChange
-        [elementsConfig]="
-        [{imageSelector: 'img', defaultSrc: '../../../../assets/img/add_emoji.svg', hoverSrc: '../../../../assets/img/add_emoji_hover.svg'}]"
-        (click)="openEmojiMart('mainMessage')">
-        <img src="../../../../assets/img/add_emoji.svg" alt="add reaction">
-    </button>
-
-    <button (click)="openThread()" appHoverChange
-        [elementsConfig]="
-        [{imageSelector: 'img', defaultSrc: '../../../../assets/img/add_answer.svg', hoverSrc: '../../../../assets/img/add_answer_hover.svg'}]">
-
-        <img src="../../../../assets/img/add_answer.svg" alt="">
-    </button>
+  <button
+    (click)="openThread()"
+    appHoverChange
+    [elementsConfig]="[
+      {
+        imageSelector: 'img',
+        defaultSrc: '../../../../assets/img/add_answer.svg',
+        hoverSrc: '../../../../assets/img/add_answer_hover.svg'
+      }
+    ]"
+  >
+    <img src="../../../../assets/img/add_answer.svg" alt="" />
+  </button>
 
     <button (click)="toggleToolTip($event)" class="btn-edit-wrapper">
         <div *ngIf="isYou" appHoverChange
@@ -45,6 +72,19 @@
 </div>
 
 <div>
-    <emoji-mart (emojiClick)="emitEmoji($event, 'mainMessage')" *ngIf="active" title="Pick your emoji…" emoji="point_up">
-    </emoji-mart>
+  <emoji-mart
+    (emojiClick)="emitEmoji($event, 'mainMessage')"
+    *ngIf="active"
+    title="Pick your emoji…"
+    [emojiSize]="16"
+    [sheetSize]="16"
+    [darkMode]="false"
+    [totalFrequentLines]="0"
+    [enableSearch]="false"
+    [style]="{
+      zIndex: 999999,
+      marginTop: '30px',
+    }"
+  >
+  </emoji-mart>
 </div>

@@ -9,67 +9,79 @@
 }
 
 .title {
-    @include fonts-styles(2rem, bold);
+  @include fonts-styles(2rem, bold);
 }
 
 .dialog-members {
-    width: 44rem;
-    height: 45rem;
-    display: flex;
-    gap: 2rem;
-    padding: 2rem 2rem 1rem 2rem;
-    border-radius: 30px, 0px, 30px, 30px;
-    overflow: hidden;
+  width: 44rem;
+  height: 45rem;
+  display: flex;
+  gap: 2rem;
+  padding: 2rem 2rem 1rem 2rem;
+  border-radius: 30px, 0px, 30px, 30px;
+  overflow: hidden;
 
-    @media only screen and (max-width: 499px) {
-        padding: 0 2rem 1rem 2rem;
-        width: 25rem;
-        height: 48rem;
-    }
+  @media only screen and (max-width: 499px) {
+    padding: 0 2rem 1rem 2rem;
+    width: 25rem;
+    height: 48rem;
+  }
 
-    @media only screen and (min-width: 500px) and (max-width: 767px) {
-        width: 40rem;
-    }
+  @media only screen and (min-width: 500px) and (max-width: 767px) {
+    width: 40rem;
+  }
 }
 
 .close-img {
-
-    &:hover {
-        background-color: $bg-color;
-        color: $purple-3;
-        cursor: pointer;
-    }
+  &:hover {
+    background-color: $bg-color;
+    color: $purple-3;
+    cursor: pointer;
+  }
 }
 
 .head {
-    @include flexbox(flex, unset, space-between, center);
+  @include flexbox(flex, unset, space-between, center);
 }
 
 .content {
-    max-height: 27rem;
-    position: absolute;
-    width: 38rem;
-    top: 10rem;
-    overflow: scroll;
-    overflow-x: hidden;
+  max-height: 27rem;
+  position: absolute;
+  width: 38rem;
+  top: 10rem;
+  overflow: scroll;
+  overflow-x: hidden;
 
-    @media only screen and (max-width: 767px) {
-        top: 6rem;
-        width: 22rem;
-        max-height: unset;
-        height: 36rem;
-    }
+  @media only screen and (max-width: 767px) {
+    top: 6rem;
+    width: 22rem;
+    max-height: unset;
+    height: 36rem;
+  }
 
-    ul {
-        list-style: none;
+  ul {
+    list-style: none;
+  }
 
-        li {
-            @include fonts-styles(1.6rem, normal);
-        }
-    }
+  li {
+    @include fonts-styles(1.6rem, normal);
+  }
 }
 
 .member-wrapper {
+  @include flexbox(flex, unset, unset, center);
+  gap: 2rem;
+  margin-bottom: 1rem;
+  width: 27rem;
+  border-radius: 5rem;
+  padding: 1rem 2rem 0rem 2rem;
+
+  &:hover {
+    background-color: $bg-color;
+    cursor: pointer;
+  }
+
+  .member {
     @include flexbox(flex, unset, unset, center);
     gap: 2rem;
     margin-bottom: 1rem;
@@ -78,94 +90,109 @@
     padding: 1rem 2rem 0rem 2rem;
 
     @media only screen and (max-width: 767px) {
-        padding: 1rem 0.5rem 0rem 0.5rem;
-        width: unset;
-        margin-bottom: 2rem;
+      padding: 1rem 0.5rem 0rem 0.5rem;
+      width: unset;
+      margin-bottom: 2rem;
     }
 
     &:hover {
-        background-color: $bg-color;
-        cursor: pointer;
+      background-color: $bg-color;
+      cursor: pointer;
     }
 
     .member {
-        @include flexbox(flex, unset, unset, center);
-        gap: 1.5rem;
+      @include flexbox(flex, unset, unset, center);
+      gap: 1.5rem;
     }
-}
+  }
 
-.avatar {
+  .avatar {
     width: 7rem;
     height: 7rem;
     border-radius: 3.5rem;
     position: relative;
 
     @media only screen and (max-width: 767px) {
-        height: 4rem;
-        width: 4rem;
+      height: 4rem;
+      width: 4rem;
     }
 
     img {
-        height: 6rem;
-        border-radius: 50%;
+      height: 6rem;
+      border-radius: 50%;
 
-        @media only screen and (max-width: 767px) {
-            height: 5rem;
-            border-radius: 50%;
-        }
+      @media only screen and (max-width: 767px) {
+        height: 5rem;
+        border-radius: 50%;
+      }
     }
 
     .icon {
-        position: absolute;
-        bottom: 0.5rem;
-        right: 0.5rem;
+      position: absolute;
+      bottom: 0.5rem;
+      right: 0.5rem;
 
-        @media only screen and (max-width: 767px) {
-            bottom: -2rem;
-            right: -2rem;
-        }
+      @media only screen and (max-width: 767px) {
+        bottom: -2rem;
+        right: -2rem;
+      }
     }
+  }
 }
 
 .dialog-footer {
-    position: absolute;
-    bottom: 2rem;
-    right: 0;
-    background-color: white;
-    left: 4rem;
+  position: absolute;
+  bottom: 2rem;
+  right: 0;
+  background-color: white;
+  left: 4rem;
+  @include flexbox(flex, unset, unset, center);
+
+  button {
+    background: transparent;
     @include flexbox(flex, unset, unset, center);
+    gap: 2rem;
+    width: 27rem;
+    border-radius: 3rem;
+    padding: 0.5rem;
+    padding-left: 1rem;
 
     @media screen and (max-width: 767px) {
-        left: 2rem;
+      left: 2rem;
     }
 
     button {
-        background: transparent;
-        @include flexbox(flex, unset, unset, center);
-        gap: 2rem;
-        width: 27rem;
-        border-radius: 3rem;
-        padding: 0.5rem;
-        padding-left: 1rem;
+      background: transparent;
+      @include flexbox(flex, unset, unset, center);
+      gap: 2rem;
+      width: 27rem;
+      border-radius: 3rem;
+      padding: 0.5rem;
+      padding-left: 1rem;
 
-        img {
-            width: 4rem;
-            height: 4rem;
-        }
+      img {
+        width: 4rem;
+        height: 4rem;
+      }
 
-        &:hover {
-            cursor: pointer;
-            background-color: $bg-color;
-        }
+      &:hover {
+        cursor: pointer;
+        background-color: $bg-color;
+      }
     }
 
+    &:hover {
+      cursor: pointer;
+      background-color: $bg-color;
+    }
+  }
 }
 
 // ************************* kann auch global definiert werden, da auch in DM's, profile-view verwendet*****
 .online {
-    color: $online-green;
+  color: $online-green;
 }
 
 .offline {
-    color: $text-gray;
+  color: $text-gray;
 }

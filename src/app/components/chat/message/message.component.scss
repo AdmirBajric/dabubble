@@ -2,22 +2,22 @@
 @import "../../../mixins.scss";
 
 img {
-    width: 3.5rem;
-    height: 3.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
 }
 
 .chat {
-    position: relative;
+  position: relative;
 
-    &:hover {
-        background-color: $bg-color;
-        cursor: pointer;
-    }
+  &:hover {
+    background-color: $bg-color;
+    cursor: pointer;
+  }
 
-    &:hover .messageLine {
-        background-color: white;
-        color: black;
-    }
+  &:hover .messageLine {
+    background-color: white;
+    color: black;
+  }
 }
 
 .hover-actions {
@@ -25,103 +25,113 @@ img {
 }
 
 .white {
-    background-color: white;
+  background-color: white;
 }
 
 .flex {
-    display: flex;
-    width: 100%;
-    gap: 1rem;
-    padding: 1rem 0;
+  display: flex;
+  width: 100%;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.flex-img {
+  border-radius: 50%;
 }
 
 .reverse {
-    flex-direction: row-reverse;
-    justify-content: flex-start;
-    gap: 2rem;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  gap: 2rem;
 }
 
 .mr-2 {
-    margin-right: 2rem;
+  margin-right: 2rem;
 }
 
 .time {
-    color: $text-gray;
+  color: $text-gray;
 }
 
 .answerCount {
-    margin-right: 2rem;
-    color: $purple-2;
+  margin-right: 2rem;
+  color: $purple-2;
 
-    &:hover {
-        cursor: pointer;
-    }
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .messageLine {
-    background-color: $bg-color;
-    padding: 1rem;
-    border-radius: 1rem;
-    border-start-start-radius: 0;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+  background-color: $bg-color;
+  padding: 1rem;
+  border-radius: 1rem;
+  border-start-start-radius: 0;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.message-line-img {
+  width: 30rem;
+  height: 15rem;
+  object-fit: cover;
+  margin-top: 1rem;
 }
 
 .own {
-    background-color: $purple-2;
-    color: white;
-    border-radius: 1.5rem 0 1.5rem 1.5rem;
+  background-color: $purple-2;
+  color: white;
+  border-radius: 1.5rem 0 1.5rem 1.5rem;
 }
 
 .userImg {
-    transform: scaleX(-1);
+  transform: scaleX(-1);
 }
 
 .firstLine {
-    display: flex;
-    width: 100%;
+  display: flex;
+  width: 100%;
 }
 
 .lastLine {
-    display: flex;
-    width: 100%;
-    justify-content: space-around;
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
 }
 
 .emoji-line {
-    display: flex;
-    gap: 1rem;
+  display: flex;
+  gap: 1rem;
 
-    .emoji-container {
-        border-radius: 3rem;
-        padding: 0.2rem 0.6rem;
-        border: 0.1rem solid $purple-1;
-    }
-
-    .reaction-wrapper {
-        position: relative;
-    }
+  .emoji-container {
+    border-radius: 3rem;
+    padding: 0.2rem 0.6rem;
+    border: 0.1rem solid $purple-1;
+  }
+  .reaction-wrapper {
+    position: relative;
+  }
 }
 
 .reaction-info {
-    position: absolute;
-    top: -10rem;
-    background-color: $purple-1;
-    height: 10rem;
-    width: 10rem;
-    border-radius: 3rem 3rem 3rem 0;
-    left: 2rem;
-    color: white;
-    @include flexbox(flex, column, center, center);
-    gap: 1rem;
+  position: absolute;
+  top: -10rem;
+  background-color: $purple-1;
+  height: 10rem;
+  width: 10rem;
+  border-radius: 3rem 3rem 3rem 0;
+  left: 2rem;
+  color: white;
+  @include flexbox(flex, column, center, center);
+  gap: 1rem;
 
-    .reaction-from {
-        font-weight: bold;
-    }
+  .reaction-from {
+    font-weight: bold;
+  }
 }
 
 button {
-    background: transparent;
+  background: transparent;
 }
 
 .edit-message-wrapper {
@@ -141,29 +151,29 @@ button {
         right: 5.2rem;
     }
 
-    @include flexbox(flex, column, space-between, unset);
+  @include flexbox(flex, column, space-between, unset);
 
-    textarea {
-        width: 100%;
-        color: $text-gray;
-        overflow: auto;
-        resize: none;
-        height: 4rem;
-        border: none;
+  textarea {
+    width: 100%;
+    color: $text-gray;
+    overflow: auto;
+    resize: none;
+    height: 4rem;
+    border: none;
 
         &:focus-visible {
             outline: none;
         }
     }
 
-    .btn-edit-wrapper {
-        @include flexbox(flex, unset, space-between, center);
-    }
+  .btn-edit-wrapper {
+    @include flexbox(flex, unset, space-between, center);
+  }
 
-    .btn-edit-2 {
-        @include flexbox(flex, unset, space-between, unset);
-        gap: 1rem;
-        width: 18rem;
+  .btn-edit-2 {
+    @include flexbox(flex, unset, space-between, unset);
+    gap: 1rem;
+    width: 18rem;
 
         button {
             padding: 0 1rem 0 1rem;
@@ -173,15 +183,19 @@ button {
                 font-weight: bold;
             }
 
-            &:first-child {
-                border: 0.1rem solid $purple-2;
-                color: $purple-1;
-            }
+      &:first-child {
+        border: 0.1rem solid $purple-2;
+        color: $purple-1;
+      }
 
-            &:nth-child(2) {
-                color: white;
-                background-color: $purple-1;
-            }
-        }
+      &:nth-child(2) {
+        color: white;
+        background-color: $purple-1;
+      }
     }
+  }
+}
+
+.selected-emoji {
+  font-size: 1.8rem;
 }
