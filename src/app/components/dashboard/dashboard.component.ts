@@ -45,7 +45,6 @@ export class DashboardComponent implements OnInit {
     showMessages: boolean = true; // default
     writeNewMessage: boolean = false // default
     private threadStatusSubscription!: Subscription;
-    private chatStatusSubscription!: Subscription;
     windowWidth!: number;
     mobileView!: boolean;
     mobilePage!: string;
@@ -65,7 +64,6 @@ export class DashboardComponent implements OnInit {
         this.handleGridAreaToggle();
         this.subscribeToThreadStatus();
         this.checkWindowSize();
-        this.subscribeChatStatus();
         this.subscribeChannelStatus();
     }
 
@@ -75,7 +73,6 @@ export class DashboardComponent implements OnInit {
         ).ownerDocument.defaultView.innerWidth;
         if (this.windowWidth <= 1100) {
             this.mobileView = true;
-            // this.mobilePage = 'home';
         } else {
             this.mobileView = false;
         }
@@ -89,16 +86,8 @@ export class DashboardComponent implements OnInit {
             } else if (isOpen === false){
                 this.mobilePage = 'chat';
             }
-            // console.log('threadStatus:', isOpen, 'channel status', this.channelOpenStatusSubscription, this.openChatofChannel);
             
             this.handleGridAreaToggle();
-        })
-    }
-
-    subscribeChatStatus() {
-        this.chatStatusSubscription = this.navService.currentChannel.subscribe(value => {
-            console.log(value);
-
         })
     }
 
