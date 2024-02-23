@@ -145,7 +145,7 @@ export class MainChatComponent implements OnInit {
             querySnapshot.forEach((doc: any) => {
                 let messageData = doc.data();
                 messageData['id'] = doc.id;
-                // Check if the mssage is already in the local messages array to avoid duplicates.
+                // Check if the message is already in the local messages array to avoid duplicates.
                 const messageExists = this.messages.some(message => message.id === messageData.id);
                 //if the message does not exist, adds it to the loval messages array.
                 if (!messageExists) {
