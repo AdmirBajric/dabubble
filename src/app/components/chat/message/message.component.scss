@@ -35,6 +35,10 @@ img {
   border-radius: 50%;
 }
 
+.flex-end-img {
+  justify-self: flex-end;
+}
+
 .reverse {
   flex-direction: row-reverse;
   justify-content: flex-start;
@@ -68,8 +72,8 @@ img {
 }
 
 .message-line-img {
-  width: 30rem;
-  height: 15rem;
+  width: 40rem;
+  height: 25rem;
   object-fit: cover;
   margin-top: 1rem;
 }
@@ -109,6 +113,11 @@ img {
   }
 }
 
+.emoji-line-end {
+  justify-self: flex-end;
+  margin-top: 0.5rem;
+}
+
 .reaction-info {
   position: absolute;
   top: -10rem;
@@ -131,28 +140,40 @@ button {
 }
 
 .edit-message-wrapper {
+  height: auto;
   background-color: white;
-  height: 100%;
   left: 3.2rem;
   right: 7rem;
   position: absolute;
   border: 0.1rem solid $light-purple-lines;
   border-radius: 2rem;
-  padding: 1rem 1rem 0 1rem;
+  padding: 1rem 1rem 1rem 1rem;
   z-index: 1;
 
   @include flexbox(flex, column, space-between, unset);
 
   textarea {
-    width: 100%;
-    color: $text-gray;
-    overflow: auto;
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid #ccc;
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: 0.2rem;
+    color: #333;
     resize: none;
-    height: 4rem;
-    border: none;
+    transition: border-color 0.3s ease;
+    height: auto;
+    margin-bottom: 1rem;
+    font-family: "Nunito Sans", sans-serif;
 
-    &:focus-visible {
+    &:hover {
+      border-color: #999;
+    }
+
+    &:focus {
       outline: none;
+      border-color: $purple-1;
+      box-shadow: 0 0 5px rgba(102, 175, 233, 0.5);
     }
   }
 
@@ -187,4 +208,8 @@ button {
 
 .selected-emoji {
   font-size: 1.8rem;
+}
+
+.first-line-container {
+  display: grid;
 }

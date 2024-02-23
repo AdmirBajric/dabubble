@@ -1,6 +1,6 @@
 <div class="chat white wrapper-padding">
   <section
-    *ngIf="message.creator.fullName != user.fullName"
+    *ngIf="message?.creator?.fullName != user?.fullName"
     (mouseover)="showActions = true"
     (mouseleave)="showActions = false"
   >
@@ -9,6 +9,7 @@
         *ngIf="message"
         [isYou]="false"
         [currentMessage]="message"
+        [position]="'right'"
       ></app-message-hover-actions>
     </ng-container>
     <div class="flex">
@@ -72,7 +73,7 @@
   </section>
 
   <section
-    *ngIf="message.creator.fullName === user.fullName"
+    *ngIf="message?.creator?.fullName === user?.fullName"
     (mouseover)="showActions = true"
     (mouseleave)="showActions = false"
   >
@@ -81,6 +82,7 @@
         (editMessage)="editMessage(message)"
         [isYou]="true"
         [currentMessage]="message"
+        [position]="'left'"
       ></app-message-hover-actions
     ></ng-container>
 
@@ -135,14 +137,15 @@
         (emojiClick)="emitEmoji($event, messageId)"
         [style]="{
           position: 'absolute',
-          top: '9.5rem'
+          top: '10rem',
+          zIndex: 9999999,
         }"
       ></emoji-mart>
     </ng-container>
 
     <div class="flex reverse">
       <img src="{{ message.creator.avatar }}" alt="" class="userImg flex-img" />
-      <div>
+      <div class="first-line-container">
         <div class="firstLine reverse">
           <span class="mr-2"
             ><b>{{ message.creator.fullName }}</b></span
@@ -153,7 +156,7 @@
         </div>
         <div class="messageLine own">{{ message.text }}</div>
         <ng-container *ngIf="message.file.length > 0">
-          <img class="message-line-img" src="{{ message.file }}" />
+          <img class="message-line-img flex-end-img" src="{{ message.file }}" />
         </ng-container>
         <div class="lastLine" *ngIf="this.answers.length > 0">
           <span
@@ -164,7 +167,7 @@
           <span class="time">Letzte Antwort {{ lastAnswerTime }} Uhr</span>
         </div>
 
-        <div class="emoji-line" *ngIf="reactions.length > 0">
+        <div class="emoji-line emoji-line-end" *ngIf="reactions.length > 0">
           <div
             *ngFor="let reaction of reactions; let i = index"
             class="reaction-wrapper"

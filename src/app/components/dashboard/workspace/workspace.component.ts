@@ -17,16 +17,9 @@ import { ButtonFunctionService } from '../../../services/button-function.service
 import { HoverChangeDirective } from '../../../directives/hover-change.directive';
 import { EventEmitter } from '@angular/core';
 import { chatNavigationService } from '../../../services/chat-navigation.service';
-import {
-  Firestore,
-  collection,
-  getDocs,
-  onSnapshot,
-  query,
-} from '@angular/fire/firestore';
+import { Firestore, collection, onSnapshot } from '@angular/fire/firestore';
 import { FirebaseService } from '../../../services/firebase.service';
 import { Subscription } from 'rxjs';
-import { Conversation } from '../../../models/conversation.class';
 
 @Component({
   selector: 'app-workspace',
@@ -43,6 +36,7 @@ import { Conversation } from '../../../models/conversation.class';
   ],
 })
 export class WorkspaceComponent implements OnInit {
+  @Output() showChannelClicked = new EventEmitter<void>();
   firestore: Firestore = inject(Firestore);
   showChannels: boolean = false;
   showDMs: boolean = false;

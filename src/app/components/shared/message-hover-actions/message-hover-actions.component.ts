@@ -18,6 +18,7 @@ import { arrayUnion } from '@angular/fire/firestore';
 })
 export class MessageHoverActionsComponent {
   @Input() isYou!: boolean;
+  @Input() position!: string;
   @Input() currentMessage!: Message[];
   @Output() editMessage: EventEmitter<boolean> = new EventEmitter<boolean>();
   messageEditing!: boolean;
@@ -53,9 +54,10 @@ export class MessageHoverActionsComponent {
 
   openThread() {
     this.navService.openThread(this.currentMessage);
+    this.active = false;
   }
 
-  openEmojiMart(from: string) {
+  openEmojiMart(event: any, from: string) {
     if (from === 'mainMessage') {
       this.active = !this.active;
     } else {
@@ -73,7 +75,7 @@ export class MessageHoverActionsComponent {
   async emitEmoji(event: any, StringOrId: string) {
     const id = this.getMessageID() as string;
     const emoji = this.getEmojiNative(event);
-    this.openEmojiMart(StringOrId);
+    this.openEmojiMart(event, StringOrId);
     if (id && emoji) {
       this.setAndSaveEmoji(id, emoji, StringOrId);
     }
