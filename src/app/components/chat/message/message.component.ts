@@ -41,7 +41,8 @@ export class MessageComponent implements OnInit {
     private firebaseService: FirebaseService,
     private elementRef: ElementRef
   ) { }
-  @Input() message!: Message;
+  @Input() message!: Message | Comment;
+  // @Input() comment!: Comment;
   @Input() messageId!: string | undefined;
   @Input() thread: boolean = false;
   @Output() updatedMessage = new EventEmitter<{
@@ -77,11 +78,12 @@ export class MessageComponent implements OnInit {
   }
 
   async searchForComments() {
+    const id = this.getMessageId();
     const querySnapshot = await this.firebaseService.queryDocuments(
       'comments',
       'messageId',
       '==',
-      this.message.id
+      id
     );
     querySnapshot.forEach((doc: any) => {
       let commentData = doc.data();
@@ -101,6 +103,7 @@ export class MessageComponent implements OnInit {
       return null;
     }
   }
+  
   async searchForReactions() {
     const id = this.getMessageId() as string;
     const docRef = this.firebaseService.getDocRef('messages', id);
@@ -216,10 +219,8 @@ export class MessageComponent implements OnInit {
 
   checkClickLocation(event: Event) {
     if (this.elementRef.nativeElement.contains(event.target)) {
-      // Wenn der Klick innerhalb der Komponente erfolgt, wird die Propagation gestoppt
       event.stopPropagation();
     } else {
-      // Wenn außerhalb der Komponente geklickt wird, schließen Sie die Aktionen
       this.showActions = false;
     }
   }
