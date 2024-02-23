@@ -8,44 +8,48 @@
     <div class="flex">
       <img class="flex-img" src="{{ message.creator.avatar }}" alt="" />
       <div>
-        <div class="firstLine">
+        <div class="first-line">
           <h4 class="mr-2">{{message.creator.fullName}}</h4>
           <span class="time">{{ getTimeFromString(message.timestamp) }} Uhr</span>
         </div>
-        <div class="messageLine">{{ message.text }}</div>
+        <div class="message-line fs-16">{{ message.text }}</div>
         <ng-container *ngIf="message.file.length > 0">
-          <img class="message-line-img" src="{{ message.file }}" />
-        </ng-container>
-
-        <ng-container *ngIf="!thread">
-          <div class="lastLine" *ngIf="answers.length > 0">
-            <span class="answerCount" (click)="showAnswersinThread(message)">{{ answersCount }}
-              <ng-container *ngIf="answersCount === 0; else multipleAnswers">Antwort</ng-container>
-              <ng-template #multipleAnswers>Antworten</ng-template>
-            </span>
-            <span class="time">Letzte Antwort {{ lastAnswerTime }} Uhr</span>
+          <div class="file">
+            <img [class.thread-size]="thread" class="message-line-img" src="{{ message.file }}" />
           </div>
         </ng-container>
 
-        <div class="emoji-line" *ngIf="reactions.length > 0">
-          <div *ngFor="let reaction of reactions; let i = index" class="reaction-wrapper">
-            <div class="emoji-container" (mouseover)="hoveredIndex = i" (mouseout)="hoveredIndex = null">
-              {{ reaction.emoji }} {{ reaction.count }}
+        <div class="reactions-section">
+
+          <ng-container *ngIf="!thread">
+            <div class="answers-line" *ngIf="answers.length > 0">
+              <span class="answers-count" (click)="showAnswersinThread(message)">{{ answersCount }}
+                <ng-container *ngIf="answersCount === 0; else multipleAnswers">Antwort</ng-container>
+                <ng-template #multipleAnswers>Antworten</ng-template>
+              </span>
+              <span class="time">Letzte Antwort {{ lastAnswerTime }} Uhr</span>
             </div>
+          </ng-container>
 
-            <ng-container *ngIf="hoveredIndex === i">
-              <div class="reaction-info">
-                <span>{{ reaction.emoji }}</span>
-                <ng-container *ngFor="let r of reaction.users; let i = index">
-                  <span class="reaction-from">{{ r }}</span>
-                </ng-container>
-
-                <span *ngIf="reaction.users.length > 1; else singleUserReaction">
-                  haben reagiert
-                </span>
-                <ng-template #singleUserReaction> hat reagiert </ng-template>
+          <div class="emoji-line" *ngIf="reactions.length > 0">
+            <div *ngFor="let reaction of reactions; let i = index" class="reaction-wrapper">
+              <div class="emoji-container" (mouseover)="hoveredIndex = i" (mouseout)="hoveredIndex = null">
+                <span class="emoji-img">{{ reaction.emoji }}</span>
+                <span class="emoji-count">{{ reaction.count }}</span>
               </div>
-            </ng-container>
+              <ng-container *ngIf="hoveredIndex === i">
+                <div class="reaction-info">
+                  <span>{{ reaction.emoji }}</span>
+                  <ng-container *ngFor="let r of reaction.users; let i = index">
+                    <span class="reaction-from">{{ r }}</span>
+                  </ng-container>
+                  <span *ngIf="reaction.users.length > 1; else singleUserReaction">
+                    haben reagiert
+                  </span>
+                  <ng-template #singleUserReaction> hat reagiert </ng-template>
+                </div>
+              </ng-container>
+            </div>
           </div>
         </div>
 
@@ -53,7 +57,10 @@
     </div>
   </section>
 
-  <section *ngIf="message.creator.fullName === user.fullName" (mouseover)="showActions = true" (mouseleave)="showActions = false">
+
+
+  <section *ngIf="message.creator.fullName === user.fullName" (mouseover)="showActions = true"
+    (mouseleave)="showActions = false">
     <div class="hover-actions" *ngIf="showActions">
       <app-message-hover-actions (editMessage)="editMessage(message)" [isYou]="true" [currentMessage]="message"
         [thread]="thread"></app-message-hover-actions>
@@ -96,45 +103,50 @@
     </ng-container>
 
     <div class="flex reverse">
-      <img src="{{ message.creator.avatar }}" alt="" class="userImg flex-img" />
-      <div>
-        <div class="firstLine reverse">
+      <img src="{{ message.creator.avatar }}" alt="" class="user-img flex-img" />
+      <div class="message-wrapper">
+        <div class="first-line reverse">
           <h4 class="mr-2">{{ message.creator.fullName }}</h4>
           <span class="time">{{ getTimeFromString(message.timestamp) }} Uhr</span>
         </div>
-        <div class="messageLine own fs-16">{{ message.text }}</div>
+        <div class="message-line own fs-16">{{ message.text }}</div>
         <ng-container *ngIf="message.file.length > 0">
-          <img [class.thread-size]="thread" class="message-line-img" src="{{ message.file }}" />
-        </ng-container>
-
-        <ng-container *ngIf="!thread">
-          <div class="lastLine" *ngIf="this.answers.length > 0">
-            <span class="answerCount" (click)="showAnswersinThread(message)">{{ answersCount }} Antworten</span>
-            <span class="time">Letzte Antwort {{ lastAnswerTime }} Uhr</span>
+          <div class="file" [class.justify-end]="message.creator.fullName === user.fullName">
+            <img [class.thread-size]="thread" class="message-line-img" src="{{ message.file }}" />
           </div>
         </ng-container>
 
-        <div class="emoji-line" *ngIf="reactions.length > 0">
-          <div *ngFor="let reaction of reactions; let i = index" class="reaction-wrapper">
-            <div class="emoji-container" (mouseover)="hoveredIndex = i" (mouseout)="hoveredIndex = null">
-              {{ reaction.emoji }} {{ reaction.count }}
+        <div class="reactions-section">
+
+          <ng-container *ngIf="!thread">
+            <div class="answers-line" *ngIf="this.answers.length > 0">
+              <span class="answers-count" (click)="showAnswersinThread(message)">{{ answersCount }} Antworten</span>
+              <span class="time">Letzte Antwort {{ lastAnswerTime }} Uhr</span>
             </div>
+          </ng-container>
 
-            <ng-container *ngIf="hoveredIndex === i">
-              <div class="reaction-info">
-                <span>{{ reaction.emoji }}</span>
-                <ng-container *ngFor="let r of reaction.users; let i = index">
-                  <span class="reaction-from">{{ r }}</span>
-                </ng-container>
-
-                <span *ngIf="reaction.users.length > 1; else singleUserReaction">
-                  haben reagiert
-                </span>
-                <ng-template #singleUserReaction> hat reagiert </ng-template>
+          <div class="emoji-line" *ngIf="reactions.length > 0">
+            <div *ngFor="let reaction of reactions; let i = index" class="reaction-wrapper">
+              <div class="emoji-container" (mouseover)="hoveredIndex = i" (mouseout)="hoveredIndex = null">
+                <span class="emoji-img">{{ reaction.emoji }}</span>
+                <span class="emoji-count">{{ reaction.count }}</span>
               </div>
-            </ng-container>
+              <ng-container *ngIf="hoveredIndex === i">
+                <div class="reaction-info">
+                  <span>{{ reaction.emoji }}</span>
+                  <ng-container *ngFor="let r of reaction.users; let i = index">
+                    <span class="reaction-from">{{ r }}</span>
+                  </ng-container>
+                  <span *ngIf="reaction.users.length > 1; else singleUserReaction">
+                    haben reagiert
+                  </span>
+                  <ng-template #singleUserReaction> hat reagiert </ng-template>
+                </div>
+              </ng-container>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
   </section>
