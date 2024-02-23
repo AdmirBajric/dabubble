@@ -1,0 +1,9 @@
+<header>
+    <app-logo *ngIf="logoStyling === 'home'"></app-logo>
+    <div *ngIf="logoStyling === 'chat' || logoStyling === 'thread'" class="chat-logo">
+        <img class="back" (click)="closeMainChat()" src="../../../../assets/img/arrow_down.svg" alt="">
+        <img class="logo" src="../../../../assets/img/workspace_3_desktop_logo.svg" alt="code logo">
+        <h1>Code learning</h1>
+    </div>
+    <app-profile-menu></app-profile-menu>
+</header>

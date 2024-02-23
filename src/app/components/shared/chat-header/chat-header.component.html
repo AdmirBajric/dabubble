@@ -1,4 +1,4 @@
-<section [class.thread]="styleHeaderForThread" class="wrapper wrapper-padding">
+<section [class.thread]="styleHeaderForThread" [ngClass]="!mobileView ? 'wrapper-padding' : ''" class="wrapper">
   <div
     [ngClass]="styleHeaderForThread ? 'thread-header' : 'header-left'"
     (click)="styleHeaderForThread ? null : openEditChannel()"
@@ -31,9 +31,9 @@
         src="../../../../assets/img/hash_hover.svg"
         alt="#"
       />
-      <h1 [ngStyle]="{ 'font-size': styleHeaderForThread ? '1.3rem' : '2rem' }">
+      <h2 [ngStyle]="{ 'font-size': styleHeaderForThread ? '1.3rem' : '2rem' }">
         {{ currentChannel?.name }}
-      </h1>
+      </h2>
     </div>
 
     <img

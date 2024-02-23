@@ -28,6 +28,9 @@ export class Comment {
   messageId: string;
   isChannelMessage: boolean;
   edited: boolean;
+  file: string;
+  privateMsg: boolean;
+  id?: string;
 
   constructor(obj?: any) {
     this.text = obj?.text || '';
@@ -39,6 +42,8 @@ export class Comment {
     this.messageId = obj?.messageId || '';
     this.isChannelMessage = obj?.isChannelMessage || false;
     this.edited = obj ? obj.edited || false : false;
+    this.file = obj?.file || '';
+    this.privateMsg = obj?.privateMsg || false;
   }
 
   public toJSON() {
@@ -50,6 +55,8 @@ export class Comment {
       messageId: this.messageId,
       isChannelMessage: this.isChannelMessage,
       edited: this.edited,
+      privateMsg: this.privateMsg,
+      file: this.file,
     };
   }
 }

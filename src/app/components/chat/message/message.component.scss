@@ -14,10 +14,14 @@ img {
     cursor: pointer;
   }
 
-  &:hover .messageLine {
+  &:hover .message-line {
     background-color: white;
     color: black;
   }
+}
+
+.hover-actions {
+  z-index: 9999;
 }
 
 .white {
@@ -53,7 +57,7 @@ img {
   color: $text-gray;
 }
 
-.answerCount {
+.answers-count {
   margin-right: 2rem;
   color: $purple-2;
 
@@ -62,13 +66,18 @@ img {
   }
 }
 
-.messageLine {
+.message-wrapper {
+  @include flexbox(flex, column, unset, flex-end);
+}
+
+.message-line {
   background-color: $bg-color;
   padding: 1rem;
   border-radius: 1rem;
   border-start-start-radius: 0;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+  width: fit-content;
 }
 
 .message-line-img {
@@ -76,6 +85,12 @@ img {
   height: 25rem;
   object-fit: cover;
   margin-top: 1rem;
+
+  &.thread-size {
+    @media only screen and (min-width: 1100px) and (max-width: 1299px) {
+      width: 100%;
+    }
+  }
 }
 
 .own {
@@ -84,30 +99,54 @@ img {
   border-radius: 1.5rem 0 1.5rem 1.5rem;
 }
 
-.userImg {
+.user-img {
   transform: scaleX(-1);
 }
 
-.firstLine {
-  display: flex;
+.first-line {
+  @include flexbox(flex, unset, unset, center);
   width: 100%;
 }
 
-.lastLine {
-  display: flex;
-  width: 100%;
-  justify-content: space-around;
+.file {
+  margin-bottom: 0.5rem;
+  @include flexbox(flex, unset, flex-start, center);
+
+  &.justify-end {
+    justify-content: end !important
+  }
 }
 
-.emoji-line {
-  display: flex;
-  gap: 1rem;
+.reactions-section {
+  @include flexbox(flex, unset, unset, center);
+  gap: 2rem;
+
+  .answers-line {
+    @include fonts-styles(1.2rem, normal);
+    @include flexbox(flex, unset, unset, unset);
+  }
+
+  .emoji-line {
+    display: flex;
+    gap: 1rem;
+  }
 
   .emoji-container {
+    @include flexbox(flex, unset, space-between, center);
+    width: 6rem;
     border-radius: 3rem;
-    padding: 0.2rem 0.6rem;
+    padding: 0.2rem 1rem;
     border: 0.1rem solid $purple-1;
+
+    .emoji-img {
+      font-size: 1.6rem;
+    }
+
+    .emoji-count {
+      font-size: 1.4rem;
+    }
   }
+
   .reaction-wrapper {
     position: relative;
   }
@@ -150,6 +189,12 @@ button {
   padding: 1rem 1rem 1rem 1rem;
   z-index: 1;
 
+  @media only screen and (max-width: 1099px) {
+    bottom: 0;
+    left: 0.3rem;
+    right: 5.2rem;
+  }
+
   @include flexbox(flex, column, space-between, unset);
 
   textarea {
@@ -189,6 +234,7 @@ button {
     button {
       padding: 0 1rem 0 1rem;
       height: 3rem;
+
       &:hover {
         font-weight: bold;
       }
@@ -213,3 +259,6 @@ button {
 .first-line-container {
   display: grid;
 }
+
+}
+

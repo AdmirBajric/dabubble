@@ -4,9 +4,9 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getApp, initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { getFirestore, initializeFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getDatabase, provideDatabase } from '@angular/fire/database';
 
 export const appConfig: ApplicationConfig = {
@@ -27,7 +27,7 @@ export const appConfig: ApplicationConfig = {
       )
     ),
     importProvidersFrom(provideAuth(() => getAuth())),
-    importProvidersFrom(provideFirestore(() => getFirestore())),
+     importProvidersFrom(provideFirestore(() => getFirestore())),                             // this must be configured, so the recipient in message.class.ts can be accepted as undefined
     importProvidersFrom(provideDatabase(() => getDatabase())),
   ],
 };

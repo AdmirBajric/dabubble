@@ -1,9 +1,9 @@
 import {
   Component,
-  EventEmitter,
-  Input,
+  ElementRef, EventEmitter,
+  HostListener, Input,
   OnInit,
-  Output,
+  Output, Renderer2,
   OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -31,13 +31,33 @@ export class ChatHeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private btnService: ButtonFunctionService,
+    private renderer: Renderer2,
+    private elementRef: ElementRef,
     private dialog: MatDialog,
     private navService: chatNavigationService
   ) {}
 
+  windowWidth!: number;
+  mobileView!: boolean;
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.checkWindowSize();
+  }
+  private checkWindowSize(): void {
+    this.windowWidth = this.renderer.parentNode(
+      this.elementRef.nativeElement
+    ).ownerDocument.defaultView.innerWidth;
+    if (this.windowWidth <= 1100) {
+      this.mobileView = true;
+    } else {
+      this.mobileView = false;
+    }
+  }
+
   ngOnInit() {
     this.subscribeChannel();
     this.subscribeChannels();
+    this.checkWindowSize();
   }
 
   ngOnDestroy() {

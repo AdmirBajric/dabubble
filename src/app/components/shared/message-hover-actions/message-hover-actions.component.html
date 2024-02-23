@@ -1,5 +1,7 @@
-<div class="actions-container" [class.user-reaction]="isYou">
-  <button
+<div class="actions-container" 
+  [ngClass]="{'thread-size': thread, 'chat-size': !thread}" 
+  [class.user-reaction]="isYou">
+  <button *ngIf="!thread"
     appHoverChange
     [elementsConfig]="[
       {
@@ -13,7 +15,7 @@
     <img src="../../../../assets/img/add_emoji_check.svg" alt="ok" />
   </button>
 
-  <button
+  <button *ngIf="!thread"
     appHoverChange
     [elementsConfig]="[
       {
@@ -43,6 +45,7 @@
 
   <button
     (click)="openThread(); showToolTip = false"
+
     appHoverChange
     [elementsConfig]="[
       {
@@ -54,6 +57,7 @@
   >
     <img src="../../../../assets/img/add_answer.svg" alt="" />
   </button>
+
 
   <button (click)="showToolTip = true; active = false" class="btn-edit-wrapper">
     <div
@@ -75,6 +79,22 @@
       </div>
     </ng-container>
   </button>
+=======
+    <button (click)="toggleToolTip($event)" class="btn-edit-wrapper">
+        <div *ngIf="isYou" appHoverChange
+            [elementsConfig]="
+            [{imageSelector: 'img', defaultSrc: '../../../../assets/img/edit_message.svg', hoverSrc: '../../../../assets/img/edit_message_hover.svg'}]">
+
+            <img src="../../../../assets/img/edit_message.svg" alt="">
+        </div>
+        <ng-container *ngIf="showToolTip">
+            <div class="tooltip-edit">
+                <span (click)="openEditMessage($event)">Nachricht bearbeiten</span>
+            </div>
+        </ng-container>
+    </button>
+
+
 </div>
 
 <div>
