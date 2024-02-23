@@ -76,6 +76,12 @@ img {
   height: 15rem;
   object-fit: cover;
   margin-top: 1rem;
+
+  &.thread-size {
+    @media only screen and (min-width: 1100px) and (max-width: 1299px) {
+      width: 100%;
+    }
+  }
 }
 
 .own {

@@ -101,7 +101,7 @@
         </div>
         <div class="messageLine own fs-16">{{ message.text }}</div>
         <ng-container *ngIf="message.file.length > 0">
-          <img class="message-line-img" src="{{ message.file }}" />
+          <img [class.thread-size]="thread" class="message-line-img" src="{{ message.file }}" />
         </ng-container>
         <div class="lastLine" *ngIf="this.answers.length > 0">
           <span class="answerCount" (click)="showAnswersinThread(message)">{{ answersCount }} Antworten</span>

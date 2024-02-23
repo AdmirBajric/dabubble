@@ -43,6 +43,7 @@ export class MessageComponent implements OnInit {
   ) { }
   @Input() message!: Message;
   @Input() messageId!: string | undefined;
+  @Input() thread: boolean = false;
   @Output() updatedMessage = new EventEmitter<{
     messageText: string;
     id: string;

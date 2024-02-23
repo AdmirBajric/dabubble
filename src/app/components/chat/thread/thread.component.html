@@ -4,7 +4,7 @@
 <div class="wrapper">
   <app-chat-header [styleHeaderForThread]="true"></app-chat-header>
   <div class="container">
-    <app-message [message]="currentMessage" class="w-100"></app-message>
+    <app-message [thread]="true" [message]="currentMessage" class="w-100"></app-message>
   </div>
 
   <div class="answers-divider wrapper-padding">
@@ -20,7 +20,7 @@
 
   <div class="answers-details" *ngIf="">
     <div *ngFor="let answer of threadData.answers">
-      <app-message [message]="answer"></app-message>
+      <app-message [thread]="true" [message]="answer"></app-message>
     </div>
   </div>
   
