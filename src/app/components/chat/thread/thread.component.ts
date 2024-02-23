@@ -18,7 +18,7 @@ import { MessageComponent } from "../message/message.component";
 import { ChatHeaderComponent } from "../../shared/chat-header/chat-header.component";
 import { User } from '../../../models/user.class';
 import { FirebaseService } from '../../../services/firebase.service';
-import { Comment } from '../../../models/message.class';
+import { Comment, Message } from '../../../models/message.class';
 
 @Component({
     selector: 'app-thread',
@@ -37,7 +37,7 @@ import { Comment } from '../../../models/message.class';
 })
 export class ThreadComponent implements OnInit {
   @Input() threadData!: any;
-  currentMessage!: any;
+  currentMessage!: Message;
   private messageSubscription!: Subscription;
   private threadStatusSubscription!: Subscription;
   user!: User;
@@ -51,7 +51,7 @@ export class ThreadComponent implements OnInit {
     private el: ElementRef,
     public router: Router,
     private navService: chatNavigationService,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
   ) { }
 
   @HostListener('window:resize', ['$event'])
@@ -99,22 +99,70 @@ export class ThreadComponent implements OnInit {
   }
 
   async searchForComments() {
-    const querySnapshot = await this.firebaseService.queryDocuments(
-      'comments',
-      'messageId',
-      '==',
-      this.threadData.id
-    );
-    querySnapshot.forEach((doc: any) => {
-      let commentData = doc.data();
-      commentData['id'] = doc.id;
-      this.answers.push(commentData);
-    });
+    try {
+      const id = this.getMessageId();
+      const querySnapshot = await this.firebaseService.queryDocuments(
+        'comments',
+        'messageId',
+        '==',
+        id
+      );
+
+      if (querySnapshot) {
+        querySnapshot.forEach((doc: any) => {
+          let commentData = doc.data();
+          commentData['id'] = doc.id;
+          //check if the comment is already in local answers arra to avoid duplicates
+          const commentExists = this.answers.some(answer => answer.id === commentData.id);
+          if(!commentExists){
+            this.answers.push(commentData);
+          }
+        });
+      }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
 
   countAnswers() {
     this.answersCount = this.answers.length;
+  }
+
+  prepareComment(event: { commentText: string, commentFile: string }) {
+    const id = this.getMessageId();
+    const text = event.commentText;
+    const file = event.commentFile;
+    const comment = new Comment({
+      text: text,
+      timestamp: new Date(),
+      creator: this.user,
+      reactions: [],
+      messageId: id,
+      isChannelMessage: false,
+      edited: false,
+      file: file,
+      privateMsg: false //DYNAMISCH ANPASSEN
+    });
+    this.sendComment(comment);
+  }
+
+  getMessageId() {
+    if (this.currentMessage && 'id' in this.currentMessage) {
+      return this.currentMessage.id;
+    } else {
+      return null;
+    }
+  }
+
+  async sendComment(comment: Comment): Promise<void> {
+    try {
+      const commentJSON = comment.toJSON();
+      await this.firebaseService.addDocument('comments', commentJSON);
+      this.searchForComments();
+    } catch (error) {
+      console.error('Error adding comment:', error);
+    }
   }
 
   subscribeMessage() {
