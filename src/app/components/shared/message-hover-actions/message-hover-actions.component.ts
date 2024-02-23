@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { HoverChangeDirective } from '../../../directives/hover-change.directive';
 import { NgIf } from '@angular/common';
@@ -12,12 +13,13 @@ import { arrayUnion } from '@angular/fire/firestore';
 @Component({
   selector: 'app-message-hover-actions',
   standalone: true,
-  imports: [HoverChangeDirective, MatTooltipModule, NgIf, PickerComponent],
+  imports: [CommonModule, HoverChangeDirective, MatTooltipModule, NgIf, PickerComponent],
   templateUrl: './message-hover-actions.component.html',
   styleUrl: './message-hover-actions.component.scss',
 })
 export class MessageHoverActionsComponent {
   @Input() isYou!: boolean;
+  @Input() thread: boolean = false;
   @Input() currentMessage!: Message;
   @Output() editMessage: EventEmitter<boolean> = new EventEmitter<boolean>();
   messageEditing!: boolean;
