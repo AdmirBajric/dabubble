@@ -13,6 +13,10 @@
         height: calc(100vh - 11rem);
         display: block;
     }
+
+    @media only screen and (min-width: 1100px){
+      height: 97%;
+    }
 }
 
 .content-container {
@@ -28,7 +32,7 @@
     }
 
     @media only screen and (min-width: 1100px) {
-      height: calc(100vh - 53rem);
+      height: calc(100vh - 48rem);
   }
 }
 
