@@ -143,11 +143,7 @@ export class MessageComponent implements OnInit {
 
     const stunden = dateObject.getHours();
     const minuten = dateObject.getMinutes();
-
-    // Führende Nullen hinzufügen, wenn die Minuten einstellig sind
     const formatierteMinuten = minuten < 10 ? '0' + minuten : minuten;
-
-    // Das resultierende Zeitformat ist z.B. "10:30"
     const zeitFormat = `${stunden}:${formatierteMinuten}`;
 
     return zeitFormat;
@@ -176,6 +172,10 @@ export class MessageComponent implements OnInit {
    * @param {Message} m
    */
   editMessage(m: Message) {
+    if (m.reactions[0].userId === this.user.id) {
+      this.emoji = m.reactions.length !== 0 ? m.reactions[0].emoji : '';
+    }
+
     this.closeMessageHoverActions();
     this.saveOriginalMessage = m.text;
     this.openMessageEdit = true;

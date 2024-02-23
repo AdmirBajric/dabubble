@@ -117,6 +117,39 @@ export class MessageInputComponent implements OnInit {
     );
   }
 
+
+  async addMessage(channel: boolean) {
+    if (this.text.length > 0 || this.selectedFile !== null) {
+      await this.uploadImage();
+
+      if (this.text.length > 0) {
+        const message = new Message({
+          text: this.text,
+          timestamp: new Date(),
+          creator: this.user,
+          channelId: this.currentChannel?.id,
+          isChannelMessage: channel,
+          reactions: [],
+          file: this.uploadedFile,
+        });
+
+        const messageToJson = message.toJSON();
+
+        this.firebaseService
+          .addDocument('messages', messageToJson)
+          .then((data: any) => {
+            this.messageId = data.id;
+            this.text = '';
+            // Reset uploadedFile if no image was selected
+            if (this.selectedFile === null) {
+              this.uploadedFile = '';
+            }
+          })
+          .catch((err: any) => {
+            console.log(err);
+          });
+      }
+
   async prepareData() {
     const channel = this.checkIfChannel();
     await this.uploadImage(); // saves file within local variable
@@ -163,6 +196,7 @@ export class MessageInputComponent implements OnInit {
       return true;
     } else {
       return false;
+
     }
   }
 
@@ -190,6 +224,8 @@ export class MessageInputComponent implements OnInit {
       await uploadBytes(storageRef, this.selectedFile)
         .then(async (snapshot) => {
           this.uploadedFile = await getDownloadURL(storageRef);
+          this.selectedFile = null;
+          this.previewImageUrl = null;
         })
         .catch((error) => {
           console.error('Error uploading file:', error);

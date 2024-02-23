@@ -10,7 +10,7 @@
         hoverSrc: '../../../../assets/img/add_emoji_check_hover.svg'
       }
     ]"
-    (click)="setEmoji('✅', 'mainMessage')"
+    (click)="setEmoji('✅', 'mainMessage'); showToolTip = false"
   >
     <img src="../../../../assets/img/add_emoji_check.svg" alt="ok" />
   </button>
@@ -24,7 +24,7 @@
         hoverSrc: '../../../../assets/img/add_emoji_handsUP_hover.svg'
       }
     ]"
-    (click)="setEmoji('🙌', 'mainMessage')"
+    (click)="setEmoji('🙌', 'mainMessage'); showToolTip = false"
   >
     <img src="../../../../assets/img/add_emoji_handsUP.svg" alt="bravo" />
   </button>
@@ -38,13 +38,14 @@
         hoverSrc: '../../../../assets/img/add_emoji_hover.svg'
       }
     ]"
-    (click)="openEmojiMart('mainMessage')"
+    (click)="openEmojiMart($event, 'mainMessage'); showToolTip = false"
   >
     <img src="../../../../assets/img/add_emoji.svg" alt="add reaction" />
   </button>
 
-  <button *ngIf="!thread"
-    (click)="openThread()"
+  <button
+    (click)="openThread(); showToolTip = false"
+
     appHoverChange
     [elementsConfig]="[
       {
@@ -57,6 +58,28 @@
     <img src="../../../../assets/img/add_answer.svg" alt="" />
   </button>
 
+
+  <button (click)="showToolTip = true; active = false" class="btn-edit-wrapper">
+    <div
+      *ngIf="isYou"
+      appHoverChange
+      [elementsConfig]="[
+        {
+          imageSelector: 'img',
+          defaultSrc: '../../../../assets/img/edit_message.svg',
+          hoverSrc: '../../../../assets/img/edit_message_hover.svg'
+        }
+      ]"
+    >
+      <img src="../../../../assets/img/edit_message.svg" alt="" />
+    </div>
+    <ng-container *ngIf="showToolTip">
+      <div class="tooltip-edit">
+        <span (click)="openEditMessage($event)">Nachricht bearbeiten</span>
+      </div>
+    </ng-container>
+  </button>
+=======
     <button (click)="toggleToolTip($event)" class="btn-edit-wrapper">
         <div *ngIf="isYou" appHoverChange
             [elementsConfig]="
@@ -71,6 +94,7 @@
         </ng-container>
     </button>
 
+
 </div>
 
 <div>
@@ -84,9 +108,13 @@
     [totalFrequentLines]="0"
     [enableSearch]="false"
     [style]="{
-      zIndex: 999999,
-      marginTop: '30px',
-    }"
+          position: 'absolute',
+          top: '3rem',
+          margin: 'auto',
+          zIndex: 9999999,
+          'left': position === 'left' ? '3rem' : 'auto',
+          'right': position === 'right' ? '3rem' : 'auto',
+        }"
   >
   </emoji-mart>
 </div>

@@ -10,7 +10,11 @@
   </ng-container>
   <ng-container *ngIf="showChannel">
     <app-chat-header></app-chat-header>
-    <div class="content-container scroll" *ngIf="showMessages">
+    <div
+      class="content-container scroll"
+      *ngIf="showMessages"
+      #scrollContainerRef
+    >
       <div *ngFor="let message of messages; let i = index">
         <ng-container
           *ngIf="
