@@ -20,6 +20,10 @@ img {
   }
 }
 
+.hover-actions {
+    z-index: 9999;
+}
+
 .white {
   background-color: white;
 }
@@ -131,15 +135,21 @@ button {
 }
 
 .edit-message-wrapper {
-  background-color: white;
-  height: 100%;
-  left: 3.2rem;
-  right: 7rem;
-  position: absolute;
-  border: 0.1rem solid $light-purple-lines;
-  border-radius: 2rem;
-  padding: 1rem 1rem 0 1rem;
-  z-index: 1;
+    background-color: white;
+    height: 100%;
+    left: 3.2rem;
+    right: 7rem;
+    position: absolute;
+    border: 0.1rem solid $light-purple-lines;
+    border-radius: 2rem;
+    padding: 1rem 1rem 0 1rem;
+    z-index: 1;
+
+    @media only screen and (max-width: 1099px) {
+        bottom: 0;
+        left: 0.3rem;
+        right: 5.2rem;
+    }
 
   @include flexbox(flex, column, space-between, unset);
 
@@ -151,10 +161,10 @@ button {
     height: 4rem;
     border: none;
 
-    &:focus-visible {
-      outline: none;
+        &:focus-visible {
+            outline: none;
+        }
     }
-  }
 
   .btn-edit-wrapper {
     @include flexbox(flex, unset, space-between, center);
@@ -165,12 +175,13 @@ button {
     gap: 1rem;
     width: 18rem;
 
-    button {
-      padding: 0 1rem 0 1rem;
-      height: 3rem;
-      &:hover {
-        font-weight: bold;
-      }
+        button {
+            padding: 0 1rem 0 1rem;
+            height: 3rem;
+
+            &:hover {
+                font-weight: bold;
+            }
 
       &:first-child {
         border: 0.1rem solid $purple-2;

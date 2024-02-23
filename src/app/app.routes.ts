@@ -46,10 +46,14 @@ export const routes: Routes = [
     component: CreateChannelComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [AuthGuard]
+  },
   { path: 'privacy-policy', component: PrivacyPolicyComponent },
   { path: 'impressum', component: ImpressumComponent },
   { path: 'emoji', component: EmojisComponent },
-  { path: 'dashboard', component: DashboardComponent },
   { path: 'profile', component: ProfileMenuComponent },
   { path: 'thread', component: ThreadComponent },
   { path: 'main-chat', component: MainChatComponent },

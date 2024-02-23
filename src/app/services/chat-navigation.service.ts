@@ -1,5 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { Message } from '../models/message.class';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,7 @@ export class chatNavigationService implements OnInit {
 
     this.isChannelOpen$.subscribe((value) => {
       this.channelOpenStatus = value;
-    });
+    })
   }
 
   updateChannels(channels: any[]) {
@@ -35,7 +36,7 @@ export class chatNavigationService implements OnInit {
 
   ngOnInit(): void {}
 
-  openThread(message: any[]) {
+  openThread(message: Message) {
     this.currentMessage$.next(message);
     this.isThreadOpen$.next(true);
   }
@@ -51,6 +52,10 @@ export class chatNavigationService implements OnInit {
 
   updateChannelStatus(status: boolean) {
     this.isChannelOpen$.next(status);
+  }
+
+  closeChat(){
+    this.isChannelOpen$.next(false);
   }
 
   /**

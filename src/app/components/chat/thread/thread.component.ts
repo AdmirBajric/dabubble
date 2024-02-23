@@ -15,37 +15,43 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { chatNavigationService } from '../../../services/chat-navigation.service';
 import { MessageComponent } from "../message/message.component";
+import { ChatHeaderComponent } from "../../shared/chat-header/chat-header.component";
+import { User } from '../../../models/user.class';
+import { FirebaseService } from '../../../services/firebase.service';
+import { Comment } from '../../../models/message.class';
 
 @Component({
-  selector: 'app-thread',
-  standalone: true,
-  templateUrl: './thread.component.html',
-  styleUrl: './thread.component.scss',
-  imports: [
-    CommonModule,
-    EmojisComponent,
-    PickerModule,
-    MessageInputComponent,
-    WorkspaceHeaderComponent,
-    MessageComponent
-  ]
+    selector: 'app-thread',
+    standalone: true,
+    templateUrl: './thread.component.html',
+    styleUrl: './thread.component.scss',
+    imports: [
+        CommonModule,
+        EmojisComponent,
+        PickerModule,
+        MessageInputComponent,
+        WorkspaceHeaderComponent,
+        MessageComponent,
+        ChatHeaderComponent
+    ]
 })
 export class ThreadComponent implements OnInit {
   @Input() threadData!: any;
   currentMessage!: any;
   private messageSubscription!: Subscription;
   private threadStatusSubscription!: Subscription;
-
-  loggedUser = 'Julius Marecek';
+  user!: User;
   answersCount!: number;
   mobileView!: boolean;
   windowWidth!: number;
+  answers: Comment[] = [];
 
   constructor(
     private renderer: Renderer2,
     private el: ElementRef,
     public router: Router,
-    private navService: chatNavigationService
+    private navService: chatNavigationService,
+    private firebaseService: FirebaseService
   ) { }
 
   @HostListener('window:resize', ['$event'])
@@ -71,9 +77,15 @@ export class ThreadComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (typeof localStorage !== 'undefined') {
+      const user = localStorage.getItem('loggedInUser');
+      if (user) {
+        this.user = JSON.parse(user);
+      }
+    }
     this.subscribeThreadStatus();
     this.subscribeMessage();
-    // console.log('THREAD', this.currentMessage);
+    this.searchForComments();
     this.countAnswers();
   }
 
@@ -86,8 +98,23 @@ export class ThreadComponent implements OnInit {
     return zeitFormat;
   }
 
+  async searchForComments() {
+    const querySnapshot = await this.firebaseService.queryDocuments(
+      'comments',
+      'messageId',
+      '==',
+      this.threadData.id
+    );
+    querySnapshot.forEach((doc: any) => {
+      let commentData = doc.data();
+      commentData['id'] = doc.id;
+      this.answers.push(commentData);
+    });
+  }
+
+
   countAnswers() {
-    this.answersCount = this.threadData.answers.length;
+    this.answersCount = this.answers.length;
   }
 
   subscribeMessage() {

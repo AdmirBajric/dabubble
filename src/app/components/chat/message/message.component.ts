@@ -38,9 +38,10 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 export class MessageComponent implements OnInit {
   constructor(
     private navService: chatNavigationService,
-    private firebaseService: FirebaseService
-  ) {}
-  @Input() message: any;
+    private firebaseService: FirebaseService,
+    private elementRef: ElementRef
+  ) { }
+  @Input() message!: Message;
   @Input() messageId!: string | undefined;
   @Output() updatedMessage = new EventEmitter<{
     messageText: string;
@@ -88,9 +89,20 @@ export class MessageComponent implements OnInit {
       // this.editedComment = commentData['text'];
     });
   }
-
+  /**
+   * Gets ID from message for firestore handling and emitting emoji.
+   * @returns {*}
+   */
+  getMessageId() {
+    if (this.message && 'id' in this.message) {
+      return this.message.id;
+    } else {
+      return null;
+    }
+  }
   async searchForReactions() {
-    const docRef = this.firebaseService.getDocRef('messages', this.message.id);
+    const id = this.getMessageId() as string;
+    const docRef = this.firebaseService.getDocRef('messages', id);
     this.firebaseService.subscribeToDocumentUpdates(docRef, (docSnapshot) => {
       if (docSnapshot.exists()) {
         const existingReactions =
@@ -149,7 +161,7 @@ export class MessageComponent implements OnInit {
     this.answersCount = this.answers.length;
   }
 
-  showAnswersinThread(m: any[]) {
+  showAnswersinThread(m: Message) {
     this.navService.openThread(m);
   }
 
@@ -175,7 +187,8 @@ export class MessageComponent implements OnInit {
    * @param {string} messageText
    * @param {string} id
    */
-  saveEditedMessage(messageText: string, id: string) {
+  saveEditedMessage(messageText: string) {
+    const id = this.getMessageId() as string;
     this.updatedMessage.emit({ messageText, id });
     this.openMessageEdit = false;
     this.setAndSaveEmoji(this.messageId, this.emoji);
@@ -190,8 +203,29 @@ export class MessageComponent implements OnInit {
     this.message.text = this.saveOriginalMessage;
   }
 
-  addEmoji() {
-    this.showEmoji = !this.showEmoji;
+  toggleShowActions() {
+    this.showActions = !this.showActions;
+  }
+
+  toggleShowActionsOutside(event: Event): void {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.showActions = false;
+    }
+  }
+
+  checkClickLocation(event: Event) {
+    if (this.elementRef.nativeElement.contains(event.target)) {
+      // Wenn der Klick innerhalb der Komponente erfolgt, wird die Propagation gestoppt
+      event.stopPropagation();
+    } else {
+      // Wenn außerhalb der Komponente geklickt wird, schließen Sie die Aktionen
+      this.showActions = false;
+    }
+  }
+
+
+  addEmoji(){
+
   }
 
   async emitEmoji(event: any, id: any) {

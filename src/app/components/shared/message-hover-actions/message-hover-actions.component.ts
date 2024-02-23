@@ -18,7 +18,7 @@ import { arrayUnion } from '@angular/fire/firestore';
 })
 export class MessageHoverActionsComponent {
   @Input() isYou!: boolean;
-  @Input() currentMessage!: Message[];
+  @Input() currentMessage!: Message;
   @Output() editMessage: EventEmitter<boolean> = new EventEmitter<boolean>();
   messageEditing!: boolean;
   showToolTip: boolean = false;
@@ -40,8 +40,8 @@ export class MessageHoverActionsComponent {
     }
   }
 
-  openEditMessage($event: MouseEvent) {
-    $event.stopPropagation();
+  openEditMessage(event: Event) {
+    event.stopPropagation();
     this.handlingTooltip();
     this.messageEditing = true;
     this.editMessage.emit(this.messageEditing);
@@ -49,6 +49,11 @@ export class MessageHoverActionsComponent {
 
   handlingTooltip() {
     this.showToolTip = false;
+  }
+
+  toggleToolTip(event: Event) {
+    event.stopPropagation();
+    this.showToolTip = !this.showToolTip;
   }
 
   openThread() {

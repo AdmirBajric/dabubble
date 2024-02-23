@@ -2,50 +2,50 @@
   <div class="logo"><app-logo></app-logo></div>
 
   <div class="searchbar">
-    <app-searchbar
-      [showBorder]="false"
-      [showLoupe]="true"
-      [globalSearch]="true"
-      [potentialMembersSearch]="false"
-      [placeholder]="'Code learning durchsuchen'"
-    ></app-searchbar>
+    <app-searchbar [showBorder]="false" [showLoupe]="true" [globalSearch]="true" [potentialMembersSearch]="false"
+      [placeholder]="'Code learning durchsuchen'"></app-searchbar>
   </div>
 
   <div class="profile-menu"><app-profile-menu></app-profile-menu></div>
 
   <div class="sidenav">
-    <app-workspace
-      [isOpen]="workspaceIsOpen"
-      (openChatWriteNewMessage)="openNewMessage()"
-      (openChannelChat)="openChatofChannel()"
-    >
+    <app-workspace class="h-100 d-flex" [isOpen]="workspaceIsOpen" (openChatWriteNewMessage)="openNewMessage()"
+      (openChannelChat)="openChatofChannel()">
     </app-workspace>
   </div>
 
   <div class="chat border-radius-3">
-    <app-main-chat
-      *ngIf="showMessages"
-      class="border-radius-3"
-    ></app-main-chat>
-    <app-new-message
-      *ngIf="writeNewMessage"
-      class="border-radius-3"
-    ></app-new-message>
+    <app-main-chat *ngIf="showMessages" class="border-radius-3"></app-main-chat>
+    <app-new-message *ngIf="writeNewMessage" class="border-radius-3"></app-new-message>
   </div>
 
   <div *ngIf="threadIsOpen" class="threads border-radius-3">
-    <app-chat-header
-      [styleHeaderForThread]="activateThreadHeader"
-    ></app-chat-header>
-    <app-thread
-      [threadData]="selectedMessageForThread"
-      class="border-radius-3"
-    ></app-thread>
+    <app-thread [threadData]="selectedMessageForThread" class="border-radius-3"></app-thread>
   </div>
 
   <div class="btn-toggle">
-    <app-button-workspace
-      (toggle)="handleWorkspaceToggle($event)"
-    ></app-button-workspace>
+    <app-button-workspace (toggle)="handleWorkspaceToggle($event)"></app-button-workspace>
   </div>
 </div>
+
+<ng-container *ngIf="mobileView">
+  <app-mobile-header [logoStyling]="mobilePage"></app-mobile-header>
+  <div class="mbl-content mbl-padding">
+    <div class="mbl-search" *ngIf="mobilePage === 'home'">
+      <app-searchbar [showBorder]="true" [showLoupe]="true" [globalSearch]="true" [potentialMembersSearch]="false"
+      [placeholder]="'Gehe zu...'"></app-searchbar>
+    </div>
+
+    <div class="mbl-nav" *ngIf="mobilePage === 'home'">
+      <app-workspace></app-workspace>
+    </div>
+
+    <div class="mbl-chat" *ngIf="mobilePage === 'chat'">
+      <app-main-chat></app-main-chat>
+    </div>
+
+    <div class="mgl-thred" *ngIf="mobilePage === 'thread'">
+      <app-thread [threadData]="selectedMessageForThread"></app-thread>
+    </div>
+  </div>
+</ng-container>

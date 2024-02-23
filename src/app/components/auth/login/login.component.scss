@@ -2,13 +2,20 @@
 @import "./../../../mixins.scss";
 
 @media only screen and (max-height: 800px) {
-  #start-screen {
-    align-items: unset !important;
-  }
-
   .login-container {
-    margin-top: 2rem !important;
+    margin-top: 5rem !important;
     margin-bottom: 2rem !important;
+  }
+}
+
+@media only screen and (min-width: 319px) and (max-width: 519px) and (max-height: 800px) {
+  .go-2-registration {
+    gap: 1rem;
+    margin-top: 1rem !important;
+  }
+  
+  .card-content {
+    margin-top: 1rem !important;
   }
 }
 
@@ -100,18 +107,13 @@
   }
 }
 
-@keyframes showUp {
-  100% {
-    opacity: 1 !important;
-  }
-}
-
 @media only screen and (max-width: 1099px) {
   .login-success {
     width: 34rem !important;
     bottom: 28rem !important;
     right: 1.8rem !important;
     padding: 2rem !important;
+
     p {
       font-size: 2rem !important;
     }
@@ -129,8 +131,8 @@
   .card-content {
     margin-top: 3rem !important;
     margin-bottom: 0rem !important;
+
     h1 {
-      font-size: 3.2rem !important;
       margin-bottom: 1.5rem !important;
     }
 
@@ -138,6 +140,12 @@
       font-size: 1.7rem !important;
       margin-bottom: 1.5rem !important;
     }
+  }
+}
+
+@keyframes showUp {
+  100% {
+    opacity: 1 !important;
   }
 }
 
@@ -304,10 +312,6 @@ span {
   font-size: 17px;
 }
 
-h1 {
-  font-size: 32px;
-}
-
 .main {
   @include flex-center;
   width: 100%;
@@ -338,13 +342,12 @@ h1 {
         border-radius: 1.875rem;
         position: relative;
 
-        h1 {
-          color: $purple-1;
-          @include fonts-styles(4.6rem, 700);
+        @media only screen and (max-width: 450px){
+          width: unset;
         }
 
-        span {
-          @include fonts-styles(2rem, 400);
+        h1 {
+          color: $purple-1;
         }
       }
     }
@@ -417,6 +420,10 @@ h1 {
     line-height: normal;
     display: flex;
     @include fonts-styles(1.8rem, 700);
+
+    @media only screen and (max-width: 540px){
+      padding: 1.2rem 1.5rem;
+    }
   }
 
   button:first-of-type {

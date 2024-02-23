@@ -19,6 +19,13 @@
   mat-card-content {
     width: 30rem !important;
   }
+
+  .content-img {
+    img {
+      height: 10rem;
+      width: 10rem;
+    }
+  }
 }
 
 @media only screen and (max-width: 430px) {
