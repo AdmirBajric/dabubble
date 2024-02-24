@@ -41,6 +41,7 @@ export class MessageComponent implements OnInit {
     private firebaseService: FirebaseService
   ) {}
   @Input() message: any;
+  @Input() position: string | undefined;
   @Input() messageId!: string | undefined;
   @Output() updatedMessage = new EventEmitter<{
     messageText: string;
@@ -156,9 +157,11 @@ export class MessageComponent implements OnInit {
    * @param {Message} m
    */
   editMessage(m: Message) {
-    if (m.reactions[0].userId === this.user.id) {
-      this.emoji = m.reactions.length !== 0 ? m.reactions[0].emoji : '';
-    }
+    m.reactions.forEach((reaction: any) => {
+      if (reaction.userId === this.user.id) {
+        this.emoji = reaction.emoji;
+      }
+    });
 
     this.closeMessageHoverActions();
     this.saveOriginalMessage = m.text;
