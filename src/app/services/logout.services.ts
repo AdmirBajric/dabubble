@@ -30,7 +30,9 @@ export class LogoutService {
       .then(() => {
         console.log('Benutzer abgemeldet');
         localStorage.removeItem('loggedInUser');
-        this.router.navigate(['/']);
+        this.router.navigateByUrl('/', { replaceUrl: true }).then(() => {
+          window.location.reload();
+        });
       })
       .catch((error) => {
         console.error('Fehler beim Abmelden des Benutzers', error);

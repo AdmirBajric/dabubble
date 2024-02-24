@@ -13,6 +13,7 @@ import { chatNavigationService } from '../../../services/chat-navigation.service
 import { Subscription } from 'rxjs';
 import { Channel } from 'diagnostics_channel';
 import { FirebaseService } from '../../../services/firebase.service';
+import { DataService } from '../../../services/data.service';
 
 @Component({
   selector: 'app-main-chat',
@@ -38,16 +39,26 @@ export class MainChatComponent implements OnInit, OnDestroy {
   user!: User;
   messageId: string = '';
 
-  messagesSubscription: Subscription | undefined;
-
   private channelOpenStatusSubscription!: Subscription;
   showChannel: boolean = false;
+  private subscription: Subscription;
+  messagesSubscription: Subscription | undefined;
 
   constructor(
     private routeService: RouteService,
     private navServie: chatNavigationService,
-    private firebaseService: FirebaseService
-  ) {}
+    private firebaseService: FirebaseService,
+    private dataService: DataService
+  ) {
+    this.subscription = this.dataService.triggerFunction$.subscribe(() => {
+      this.clearMainChat();
+    });
+  }
+
+  clearMainChat() {
+    this.messages = [];
+    this.showChannel = false;
+  }
 
   get isNotDashboard() {
     return !this.routeService.checkRoute('/dashboard');
@@ -262,5 +273,6 @@ export class MainChatComponent implements OnInit, OnDestroy {
       this.messagesSubscription.unsubscribe();
     }
     this.firebaseService.unsubscribeFromMessages();
+    this.subscription.unsubscribe();
   }
 }

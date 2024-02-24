@@ -26,6 +26,8 @@ import { Subscription } from 'rxjs';
 import { ButtonFunctionService } from '../../../services/button-function.service';
 import { MatDialog } from '@angular/material/dialog';
 import { chatNavigationService } from '../../../services/chat-navigation.service';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-message-input',
@@ -38,6 +40,8 @@ import { chatNavigationService } from '../../../services/chat-navigation.service
     MatIconModule,
     MatDividerModule,
     MatButtonModule,
+    PickerComponent,
+    CommonModule,
   ],
   templateUrl: './message-input.component.html',
   styleUrl: './message-input.component.scss',
@@ -52,12 +56,15 @@ export class MessageInputComponent implements OnInit {
   @Output() messageText: EventEmitter<string> = new EventEmitter<string>();
   placeholder: string = 'Nachricht an #Entwicklerteam';
   text: string = '';
+  textForFile: string = '';
   form!: FormGroup;
   uploadedFile: string = '';
   user!: any;
   messageId: string = '';
   selectedFile: File | null = null;
   previewImageUrl: any;
+  showEmoji: boolean = false;
+  emoji: string = '';
 
   firestore: Firestore = inject(Firestore);
 
@@ -92,6 +99,16 @@ export class MessageInputComponent implements OnInit {
     if (this.channelsSubscription) {
       this.channelsSubscription.unsubscribe();
     }
+  }
+
+  addEmoji(event: any): void {
+    this.emoji = event.emoji.native;
+    this.showEmoji = false;
+    this.text += this.emoji;
+  }
+
+  toggleEmojiContainer() {
+    this.showEmoji = !this.showEmoji;
   }
 
   subscribeChannel() {
@@ -137,7 +154,7 @@ export class MessageInputComponent implements OnInit {
           .then((data: any) => {
             this.messageId = data.id;
             this.text = '';
-            // Reset uploadedFile if no image was selected
+            this.textForFile = '';
             if (this.selectedFile === null) {
               this.uploadedFile = '';
             }
@@ -158,6 +175,12 @@ export class MessageInputComponent implements OnInit {
         this.previewImageUrl = e.target.result;
       };
       reader.readAsDataURL(this.selectedFile);
+
+      // Set the text to indicate that a file has been added
+      this.textForFile = 'File added';
+    } else {
+      // Set the text to indicate that no file has been added
+      this.textForFile = 'No file selected';
     }
   }
 
