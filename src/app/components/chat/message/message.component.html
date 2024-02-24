@@ -9,6 +9,7 @@
         *ngIf="message"
         [isYou]="false"
         [currentMessage]="message"
+        (editMessage)="editMessage(message)"
         [position]="'right'"
       ></app-message-hover-actions>
     </ng-container>
@@ -55,7 +56,7 @@
               <div class="reaction-info">
                 <span>{{ reaction.emoji }}</span>
                 <ng-container *ngFor="let r of reaction.users; let i = index">
-                  <span class="reaction-from">{{ r }}</span>
+                  <span class="reaction-from">{{ r.fullName }}</span>
                 </ng-container>
 
                 <span
@@ -184,7 +185,7 @@
               <div class="reaction-info">
                 <span>{{ reaction.emoji }}</span>
                 <ng-container *ngFor="let r of reaction.users; let i = index">
-                  <span class="reaction-from">{{ r }}</span>
+                  <span class="reaction-from">{{ r.fullName }}</span>
                 </ng-container>
 
                 <span

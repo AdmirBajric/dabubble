@@ -38,10 +38,10 @@ export class MainChatComponent implements OnInit, OnDestroy {
   user!: User;
   messageId: string = '';
 
+  messagesSubscription: Subscription | undefined;
+
   private channelOpenStatusSubscription!: Subscription;
   showChannel: boolean = false;
-
-  private messageSubscription: Subscription = new Subscription();
 
   constructor(
     private routeService: RouteService,
@@ -75,7 +75,7 @@ export class MainChatComponent implements OnInit, OnDestroy {
       text: messageString,
       timestamp: new Date(),
       creator: this.user,
-      channelId: '8dGv7CQvxfHJhcH1vyiw',
+      channelId: this.channelId,
       isChannelMessage: isChannelMessage,
       reactions: [],
       comments: [],
@@ -213,10 +213,15 @@ export class MainChatComponent implements OnInit, OnDestroy {
     this.channelId = id; // Stores the channel ID for message search purposes
     this.searchChannelMessages(id);
 
-    this.firebaseService.searchChannelMessages(id);
-    this.firebaseService.getMessageUpdateSubject().subscribe((messages) => {
-      this.searchChannelMessages(id);
-    });
+    this.messagesSubscription = this.firebaseService
+      .getMessagesObservable()
+      .subscribe((messages) => {
+        this.messages = messages;
+        this.sortMessagesChronologically();
+        this.showMessages = true;
+      });
+
+    this.firebaseService.searchChannelMessagesRealTime(this.channelId);
   }
 
   /**
@@ -252,5 +257,10 @@ export class MainChatComponent implements OnInit, OnDestroy {
     if (this.channelOpenStatusSubscription) {
       this.channelOpenStatusSubscription.unsubscribe();
     }
+
+    if (this.messagesSubscription) {
+      this.messagesSubscription.unsubscribe();
+    }
+    this.firebaseService.unsubscribeFromMessages();
   }
 }

@@ -110,11 +110,15 @@ export class MessageComponent implements OnInit {
           }
         });
 
-        const result: { emoji: string; count: number; users: string[] }[] = [];
+        const result: {
+          emoji: string;
+          count: number;
+          users: { fullName: string; userId: string }[];
+        }[] = [];
         emojiCountMap.forEach((count, emoji) => {
           const users = this.reactions
             .filter((item) => item.emoji === emoji)
-            .map((item) => item.fullName);
+            .map((item) => ({ fullName: item.fullName, userId: item.userId }));
           result.push({ emoji, count, users });
         });
 
@@ -156,11 +160,13 @@ export class MessageComponent implements OnInit {
    * opens the input field for message editing.
    * @param {Message} m
    */
-  editMessage(m: Message) {
-    m.reactions.forEach((reaction: any) => {
-      if (reaction.userId === this.user.id) {
-        this.emoji = reaction.emoji;
-      }
+  async editMessage(m: Message) {
+    this.reactions.forEach((reaction: any) => {
+      reaction.users.forEach((user: any) => {
+        if (user.userId === this.user.id) {
+          this.emoji = reaction.emoji;
+        }
+      });
     });
 
     this.closeMessageHoverActions();
@@ -181,7 +187,9 @@ export class MessageComponent implements OnInit {
   saveEditedMessage(messageText: string, id: string) {
     this.updatedMessage.emit({ messageText, id });
     this.openMessageEdit = false;
-    this.setAndSaveEmoji(this.messageId, this.emoji);
+    if (this.emoji.length > 0) {
+      this.setAndSaveEmoji(this.messageId, this.emoji);
+    }
   }
 
   /**
@@ -191,6 +199,7 @@ export class MessageComponent implements OnInit {
   cancelMessageEditing() {
     this.openMessageEdit = false;
     this.message.text = this.saveOriginalMessage;
+    this.closeMessageHoverActions();
   }
 
   addEmoji() {
