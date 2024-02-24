@@ -41,7 +41,7 @@ export class MessageComponent implements OnInit {
     private firebaseService: FirebaseService,
     private elementRef: ElementRef
   ) { }
-  @Input() message!: Message | Comment;
+  @Input() message!: Message;
   // @Input() comment!: Comment;
   @Input() messageId!: string | undefined;
   @Input() thread: boolean = false;
