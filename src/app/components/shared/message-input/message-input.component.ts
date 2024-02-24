@@ -43,13 +43,15 @@ import { chatNavigationService } from '../../../services/chat-navigation.service
   styleUrl: './message-input.component.scss',
 })
 export class MessageInputComponent implements OnInit {
-  @Input() styleHeaderForThread: boolean = false;
-  @Output() closeThread: EventEmitter<any[]> = new EventEmitter<any[]>();
   currentChannel: Channel | null = null;
-  channelSubscription: Subscription | undefined;
-  channelsSubscription: Subscription | undefined;
-
-  @Output() messageText: EventEmitter<string> = new EventEmitter<string>();
+  channelSubscription!: Subscription;
+  channelsSubscription!: Subscription;
+  // can be used in 'directMessages', 'channel', 'thread'
+  @Input() usedLocation!: string;
+  @Output() commentData = new EventEmitter<{
+    commentText: string;
+    commentFile: string;
+  }>();
   placeholder: string = 'Nachricht an #Entwicklerteam';
   text: string = '';
   form!: FormGroup;
@@ -115,37 +117,52 @@ export class MessageInputComponent implements OnInit {
     );
   }
 
-  async addMessage(channel: boolean) {
-    if (this.text.length > 0 || this.selectedFile !== null) {
-      await this.uploadImage();
-
-      if (this.text.length > 0) {
-        const message = new Message({
-          text: this.text,
-          timestamp: new Date(),
-          creator: this.user,
-          channelId: this.currentChannel?.id,
-          isChannelMessage: channel,
-          reactions: [],
-          file: this.uploadedFile,
-        });
-
+  async prepareData() {
+    const channel = this.checkIfChannel();
+    await this.uploadImage(); // saves file within local variable
+    if (this.text.length > 0) {
+      if (channel) {
+        const message = this.packMessageData(channel);
         const messageToJson = message.toJSON();
-
-        this.firebaseService
-          .addDocument('messages', messageToJson)
-          .then((data: any) => {
-            this.messageId = data.id;
-            this.text = '';
-            // Reset uploadedFile if no image was selected
-            if (this.selectedFile === null) {
-              this.uploadedFile = '';
-            }
-          })
-          .catch((err: any) => {
-            console.log(err);
-          });
+        this.sendMessage(messageToJson);
+      } else if (this.usedLocation === 'thread') {
+        const commentText = this.text;
+        const commentFile = this.uploadedFile;
+        this.commentData.emit({ commentText, commentFile })
       }
+      this.text = '';
+    }
+  }
+
+  sendMessage(messageToJson: Message) {
+    this.firebaseService
+      .addDocument('messages', messageToJson)
+      .then((data: any) => {
+        this.messageId = data.id;
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  }
+
+  packMessageData(channel: boolean) {
+    return new Message({
+      text: this.text,
+      timestamp: new Date(),
+      creator: this.user,
+      channelId: this.currentChannel?.id,
+      isChannelMessage: channel,
+      reactions: [],
+      file: this.uploadedFile,
+    });
+  }
+
+
+  checkIfChannel() {
+    if (this.usedLocation === 'channel') {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -173,8 +190,6 @@ export class MessageInputComponent implements OnInit {
       await uploadBytes(storageRef, this.selectedFile)
         .then(async (snapshot) => {
           this.uploadedFile = await getDownloadURL(storageRef);
-          this.selectedFile = null;
-          this.previewImageUrl = null;
         })
         .catch((error) => {
           console.error('Error uploading file:', error);

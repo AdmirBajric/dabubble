@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { HoverChangeDirective } from '../../../directives/hover-change.directive';
 import { NgIf } from '@angular/common';
@@ -12,14 +13,14 @@ import { arrayUnion } from '@angular/fire/firestore';
 @Component({
   selector: 'app-message-hover-actions',
   standalone: true,
-  imports: [HoverChangeDirective, MatTooltipModule, NgIf, PickerComponent],
+  imports: [CommonModule, HoverChangeDirective, MatTooltipModule, NgIf, PickerComponent],
   templateUrl: './message-hover-actions.component.html',
   styleUrl: './message-hover-actions.component.scss',
 })
 export class MessageHoverActionsComponent {
   @Input() isYou!: boolean;
-  @Input() position!: string;
-  @Input() currentMessage!: Message[];
+  @Input() thread: boolean = false;
+  @Input() currentMessage!: Message;
   @Output() editMessage: EventEmitter<boolean> = new EventEmitter<boolean>();
   messageEditing!: boolean;
   showToolTip: boolean = false;
@@ -41,8 +42,8 @@ export class MessageHoverActionsComponent {
     }
   }
 
-  openEditMessage($event: MouseEvent) {
-    $event.stopPropagation();
+  openEditMessage(event: Event) {
+    event.stopPropagation();
     this.handlingTooltip();
     this.messageEditing = true;
     this.editMessage.emit(this.messageEditing);
@@ -52,12 +53,16 @@ export class MessageHoverActionsComponent {
     this.showToolTip = false;
   }
 
-  openThread() {
-    this.navService.openThread(this.currentMessage);
-    this.active = false;
+  toggleToolTip(event: Event) {
+    event.stopPropagation();
+    this.showToolTip = !this.showToolTip;
   }
 
-  openEmojiMart(event: any, from: string) {
+  openThread() {
+    this.navService.openThread(this.currentMessage);
+  }
+
+  openEmojiMart(from: string) {
     if (from === 'mainMessage') {
       this.active = !this.active;
     } else {
@@ -75,7 +80,7 @@ export class MessageHoverActionsComponent {
   async emitEmoji(event: any, StringOrId: string) {
     const id = this.getMessageID() as string;
     const emoji = this.getEmojiNative(event);
-    this.openEmojiMart(event, StringOrId);
+    this.openEmojiMart(StringOrId);
     if (id && emoji) {
       this.setAndSaveEmoji(id, emoji, StringOrId);
     }
