@@ -1,7 +1,6 @@
-<div class="actions-container" 
-  [ngClass]="{'thread-size': thread, 'chat-size': !thread}" 
+<div class="actions-container chat-size" 
   [class.user-reaction]="isYou">
-  <button *ngIf="!thread"
+  <button
     appHoverChange
     [elementsConfig]="[
       {
@@ -15,7 +14,7 @@
     <img src="../../../../assets/img/add_emoji_check.svg" alt="ok" />
   </button>
 
-  <button *ngIf="!thread"
+  <button
     appHoverChange
     [elementsConfig]="[
       {
@@ -43,7 +42,7 @@
     <img src="../../../../assets/img/add_emoji.svg" alt="add reaction" />
   </button>
 
-  <button *ngIf="!thread"
+  <button
     (click)="openThread()"
     appHoverChange
     [elementsConfig]="[
