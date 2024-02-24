@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChatHeaderComponent } from '../../shared/chat-header/chat-header.component';
 import { MessageInputComponent } from '../../shared/message-input/message-input.component';
@@ -29,7 +29,7 @@ import { FirebaseService } from '../../../services/firebase.service';
     TimeSeparatorChatComponent,
   ],
 })
-export class MainChatComponent implements OnInit {
+export class MainChatComponent implements OnInit, OnDestroy {
   text: string = '';
   messages: Message[] = [];
   showMessages!: boolean;
@@ -40,6 +40,8 @@ export class MainChatComponent implements OnInit {
 
   private channelOpenStatusSubscription!: Subscription;
   showChannel: boolean = false;
+
+  private messageSubscription: Subscription = new Subscription();
 
   constructor(
     private routeService: RouteService,
@@ -90,10 +92,10 @@ export class MainChatComponent implements OnInit {
       .addDocument('messages', message.toJSON())
       .then((data: any) => {
         this.messageId = data.id;
+      })
+      .catch((err: any) => {
+        console.log(err);
       });
-    // .catch((err: any) => {
-    //     console.log(err);
-    // });
   }
 
   /**
@@ -209,7 +211,12 @@ export class MainChatComponent implements OnInit {
     this.messages = []; // Clears existing messages to prepare for new channel messages
     this.currentChannel = channel; // Sets the current channel.
     this.channelId = id; // Stores the channel ID for message search purposes
-    this.searchChannelMessages(id); // Inititates a search for messages.
+    this.searchChannelMessages(id);
+
+    this.firebaseService.searchChannelMessages(id);
+    this.firebaseService.getMessageUpdateSubject().subscribe((messages) => {
+      this.searchChannelMessages(id);
+    });
   }
 
   /**

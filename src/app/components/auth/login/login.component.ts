@@ -151,6 +151,7 @@ export class LoginComponent implements OnInit {
 
   showSuccessAnimation(path: any) {
     this.loginSuccess = true;
+    console.log(path);
 
     setTimeout(() => {
       this.router.navigate([path]);

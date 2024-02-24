@@ -38,11 +38,39 @@ export class FirebaseService {
     data: Conversation;
   }>;
 
+  private messageUpdateSubject: Subject<any[]> = new Subject<any[]>();
+
   constructor() {
     this.conversationUpdateSubject = new Subject<{
       id: string;
       data: Conversation;
     }>();
+  }
+
+  getMessageUpdateSubject() {
+    return this.messageUpdateSubject.asObservable();
+  }
+
+  searchChannelMessages(id: string): void {
+    const queryRef = query(
+      collection(this.firestore, 'messages'),
+      where('channelId', '==', id)
+    );
+
+    onSnapshot(queryRef, (snapshot) => {
+      const messages: any[] = [];
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === 'added') {
+          const messageData = change.doc.data();
+          const messageId = change.doc.id;
+          messages.push({ id: messageId, ...messageData });
+        }
+      });
+
+      if (messages.length > 0) {
+        this.messageUpdateSubject.next(messages);
+      }
+    });
   }
 
   async createConversation(conversation: Conversation) {
