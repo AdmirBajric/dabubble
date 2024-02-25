@@ -5,6 +5,9 @@ import {
   EventEmitter,
   inject,
   Input,
+  ElementRef,
+  HostListener,
+  ViewChild,
 } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -28,6 +31,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { chatNavigationService } from '../../../services/chat-navigation.service';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { CommonModule } from '@angular/common';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { fromEvent } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-message-input',
@@ -42,6 +48,7 @@ import { CommonModule } from '@angular/common';
     MatButtonModule,
     PickerComponent,
     CommonModule,
+    MatExpansionModule,
   ],
   templateUrl: './message-input.component.html',
   styleUrl: './message-input.component.scss',
@@ -49,11 +56,13 @@ import { CommonModule } from '@angular/common';
 export class MessageInputComponent implements OnInit {
   @Input() styleHeaderForThread: boolean = false;
   @Output() closeThread: EventEmitter<any[]> = new EventEmitter<any[]>();
+  @Output() messageText: EventEmitter<string> = new EventEmitter<string>();
+  @ViewChild('userInputField') userInputField!: ElementRef<HTMLInputElement>;
+
   currentChannel: Channel | null = null;
   channelSubscription: Subscription | undefined;
   channelsSubscription: Subscription | undefined;
 
-  @Output() messageText: EventEmitter<string> = new EventEmitter<string>();
   placeholder: string = 'Nachricht an #Entwicklerteam';
   text: string = '';
   textForFile: string = '';
@@ -65,6 +74,12 @@ export class MessageInputComponent implements OnInit {
   previewImageUrl: any;
   showEmoji: boolean = false;
   emoji: string = '';
+  showUserInput: string[] = [];
+  usersSearch: boolean = false;
+  channelSearch: boolean = false;
+  users: any[] = [];
+  channels: any[] = [];
+  isInputFocused: boolean = false;
 
   firestore: Firestore = inject(Firestore);
 
@@ -74,7 +89,8 @@ export class MessageInputComponent implements OnInit {
     private router: Router,
     private btnService: ButtonFunctionService,
     private dialog: MatDialog,
-    private navService: chatNavigationService
+    private navService: chatNavigationService,
+    private elementRef: ElementRef
   ) {}
 
   ngOnInit(): void {
@@ -89,6 +105,7 @@ export class MessageInputComponent implements OnInit {
 
     this.subscribeChannel();
     this.subscribeChannels();
+    this.setUserAndChannels();
   }
 
   ngOnDestroy() {
@@ -101,10 +118,105 @@ export class MessageInputComponent implements OnInit {
     }
   }
 
+  onInputChange(event: any) {
+    console.log('Textarea value changed:', event.target.value);
+
+    const values = event.target.value.split(' ');
+
+    values.forEach((value: string) => {
+      if (value === '@' && this.users.length > 0) {
+        this.usersSearch = true;
+      } else {
+        this.usersSearch = false;
+      }
+
+      if (value === '#' && this.channels.length > 0) {
+        this.channelSearch = true;
+      } else {
+        this.channelSearch = false;
+      }
+    });
+  }
+
+  onInputFocus() {
+    this.isInputFocused = true;
+    this.usersSearch = false;
+    this.showEmoji = false;
+  }
+
+  onInputBlur() {
+    this.isInputFocused = false;
+  }
+
+  setUserAndChannels() {
+    this.firebaseService
+      .getAllUsers()
+      .then((users: any[]) => {
+        this.users = users;
+      })
+      .catch((error) => {
+        console.error('Error fetching users:', error);
+      });
+
+    this.firebaseService
+      .getAllChannels()
+      .then((channels: any[]) => {
+        this.channels = channels;
+      })
+      .catch((error) => {
+        console.error('Error fetching channels:', error);
+      });
+  }
+
+  toggleExpandPanel() {
+    if (this.users.length > 0) {
+      this.usersSearch = !this.usersSearch;
+    }
+  }
+
+  addUser(userId: any) {
+    const selectedUserIndex = this.users.findIndex(
+      (user) => user.id === userId
+    );
+
+    if (this.users.length === 1) {
+      this.usersSearch = false;
+    }
+
+    if (selectedUserIndex !== -1) {
+      const selectedUser = this.users.splice(selectedUserIndex, 1)[0];
+      this.text += '@' + selectedUser.fullName + ' ';
+    }
+  }
+
+  addChannel(channelName: string) {
+    const selectedChannelIndex = this.channels.find(
+      (channel) => channel.name === channelName
+    );
+
+    if (selectedChannelIndex.name !== -1) {
+      const selectedChannel = this.channels.splice(
+        selectedChannelIndex.name,
+        1
+      )[0];
+      this.text += '#' + selectedChannel.name + ' ';
+    }
+  }
+
+  addFreeSpace() {
+    if (this.userInputField) {
+      if (this.text.length > 0) {
+        this.text += ' ';
+      }
+      this.userInputField.nativeElement.focus();
+    }
+  }
+
   addEmoji(event: any): void {
     this.emoji = event.emoji.native;
     this.showEmoji = false;
     this.text += this.emoji;
+    this.addFreeSpace();
   }
 
   toggleEmojiContainer() {
@@ -133,6 +245,13 @@ export class MessageInputComponent implements OnInit {
   }
 
   async addMessage(channel: boolean) {
+    this.usersSearch = false;
+    this.showEmoji = false;
+
+    if (this.userInputField) {
+      this.text = this.userInputField.nativeElement.value;
+    }
+
     if (this.text.length > 0 || this.selectedFile !== null) {
       await this.uploadImage();
 
