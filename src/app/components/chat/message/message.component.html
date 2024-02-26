@@ -113,8 +113,9 @@
           <span class="time">{{ getTimeFromString(message.timestamp) }} Uhr</span>
         </div>
         <div class="message-line own fs-16">{{ message.text }}</div>
+
         <ng-container *ngIf="message.file.length > 0">
-          <div class="file" [class.justify-end]="message.creator.fullName === user.fullName">
+          <div class="file" [ngStyle]="{'display': openMessageEdit ? 'none' : 'flex'}" [class.justify-end]="message.creator.fullName === user.fullName">
             <img [class.thread-size]="thread" class="message-line-img" src="{{ message.file }}" />
           </div>
         </ng-container>
