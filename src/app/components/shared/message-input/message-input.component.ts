@@ -333,7 +333,10 @@ export class MessageInputComponent implements OnInit {
           .catch((err: any) => {
             console.log(err);
           });
-        
+      }
+    }
+  }
+
   async prepareData() {
     const channel = this.checkIfChannel();
     await this.uploadImage(); // saves file within local variable
