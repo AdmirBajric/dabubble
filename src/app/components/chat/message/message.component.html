@@ -43,7 +43,7 @@
                 <div class="reaction-info">
                   <span>{{ reaction.emoji }}</span>
                   <ng-container *ngFor="let r of reaction.users; let i = index">
-                    <span class="reaction-from">{{ r }}</span>
+                    <span class="reaction-from">{{ r.fullName }}</span>
                   </ng-container>
                   <span *ngIf="reaction.users.length > 1; else singleUserReaction">
                     haben reagiert
@@ -139,7 +139,7 @@
                 <div class="reaction-info">
                   <span>{{ reaction.emoji }}</span>
                   <ng-container *ngFor="let r of reaction.users; let i = index">
-                    <span class="reaction-from">{{ r }}</span>
+                    <span class="reaction-from">{{ r.fullName }}</span>
                   </ng-container>
                   <span *ngIf="reaction.users.length > 1; else singleUserReaction">
                     haben reagiert
