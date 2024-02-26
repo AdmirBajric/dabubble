@@ -2,14 +2,9 @@
   <section *ngIf="message.creator.fullName != user.fullName" (mouseover)="showActions = true"
     (mouseleave)="showActions = false">
     <ng-container *ngIf="showActions">
-      <app-message-hover-actions 
-        [typeOfMessage]="typeOfMessage" 
-        [thread]="thread" *ngIf="message" 
-        [isYou]="false"
-        [currentMessage]="message"
-        (editMessage)="editMessage(message)"
-        [position]="'right'"
-      ></app-message-hover-actions>
+      <app-message-hover-actions [typeOfMessage]="typeOfMessage" [thread]="thread" *ngIf="message" [isYou]="false"
+        [currentMessage]="message" (editMessage)="editMessage(message)"
+        [position]="'right'"></app-message-hover-actions>
     </ng-container>
     <div class="flex">
       <img class="flex-img" src="{{ message.creator.avatar }}" alt="" />
@@ -37,19 +32,6 @@
             </div>
           </ng-container>
 
-            <ng-container *ngIf="hoveredIndex === i">
-              <div class="reaction-info">
-                <span>{{ reaction.emoji }}</span>
-                <ng-container *ngFor="let r of reaction.users; let i = index">
-                  <span class="reaction-from">{{ r.fullName }}</span>
-                </ng-container>
-
-                <span
-                  *ngIf="reaction.users.length > 1; else singleUserReaction"
-                >
-                  haben reagiert
-                </span>
-                <ng-template #singleUserReaction> hat reagiert </ng-template>
           <div class="emoji-line" *ngIf="reactions.length > 0">
             <div *ngFor="let reaction of reactions; let i = index" class="reaction-wrapper">
               <div class="emoji-container" (mouseover)="hoveredIndex = i" (mouseout)="hoveredIndex = null">
@@ -69,7 +51,7 @@
                   <ng-template #singleUserReaction> hat reagiert </ng-template>
                 </div>
               </ng-container>
-              
+
             </div>
           </div>
         </div>
@@ -83,8 +65,8 @@
   <section *ngIf="message.creator.fullName === user.fullName" (mouseover)="showActions = true"
     (mouseleave)="showActions = false">
     <div class="hover-actions" *ngIf="showActions">
-      <app-message-hover-actions  [typeOfMessage]="typeOfMessage" (editMessage)="editMessage(message)" [isYou]="true" [currentMessage]="message"
-        [thread]="thread"></app-message-hover-actions>
+      <app-message-hover-actions [typeOfMessage]="typeOfMessage" (editMessage)="editMessage(message)" [isYou]="true"
+        [currentMessage]="message" [thread]="thread"></app-message-hover-actions>
     </div>
 
     <ng-container *ngIf="openMessageEdit">
@@ -146,25 +128,13 @@
             </div>
           </ng-container>
 
-            <ng-container *ngIf="hoveredIndex === i">
-              <div class="reaction-info">
-                <span>{{ reaction.emoji }}</span>
-                <ng-container *ngFor="let r of reaction.users; let i = index">
-                  <span class="reaction-from">{{ r.fullName }}</span>
-                </ng-container>
-
-                <span
-                  *ngIf="reaction.users.length > 1; else singleUserReaction"
-                >
-                  haben reagiert
-                </span>
-                <ng-template #singleUserReaction> hat reagiert </ng-template>
           <div class="emoji-line" *ngIf="reactions.length > 0">
             <div *ngFor="let reaction of reactions; let i = index" class="reaction-wrapper">
               <div class="emoji-container" (mouseover)="hoveredIndex = i" (mouseout)="hoveredIndex = null">
                 <span class="emoji-img">{{ reaction.emoji }}</span>
                 <span class="emoji-count">{{ reaction.count }}</span>
               </div>
+              
               <ng-container *ngIf="hoveredIndex === i">
                 <div class="reaction-info">
                   <span>{{ reaction.emoji }}</span>
