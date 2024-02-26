@@ -169,6 +169,10 @@ button {
   background: transparent;
 }
 
+.bigger {
+  height: 15rem;
+}
+
 .edit-message-wrapper {
   background-color: white;
   height: 100%;
@@ -186,14 +190,14 @@ button {
     right: 5.2rem;
   }
 
-  @include flexbox(flex, column, space-between, unset);
+  @include flexbox(flex, column, unset, unset);
 
   textarea {
     width: 100%;
     color: $text-gray;
     overflow: auto;
     resize: none;
-    height: 4rem;
+    height: 100%;
     border: none;
 
     &:focus-visible {

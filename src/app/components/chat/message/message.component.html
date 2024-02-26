@@ -63,7 +63,7 @@
 
 
   <section *ngIf="message.creator.fullName === user.fullName" (mouseover)="showActions = true"
-    (mouseleave)="showActions = false">
+    (mouseleave)="showActions = false" [class.bigger]="openMessageEdit">
     <div class="hover-actions" *ngIf="showActions">
       <app-message-hover-actions [typeOfMessage]="typeOfMessage" (editMessage)="editMessage(message)" [isYou]="true"
         [currentMessage]="message" [thread]="thread"></app-message-hover-actions>
