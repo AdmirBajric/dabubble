@@ -33,7 +33,7 @@
   <div class="mbl-content mbl-padding">
     <div class="mbl-search" *ngIf="mobilePage === 'home'">
       <app-searchbar [showBorder]="true" [showLoupe]="true" [globalSearch]="true" [potentialMembersSearch]="false"
-      [placeholder]="'Gehe zu...'"></app-searchbar>
+        [placeholder]="'Gehe zu...'"></app-searchbar>
     </div>
 
     <div class="mbl-nav" *ngIf="mobilePage === 'home'">
@@ -41,7 +41,8 @@
     </div>
 
     <div class="mbl-chat" *ngIf="mobilePage === 'chat'">
-      <app-main-chat></app-main-chat>
+      <app-main-chat *ngIf="showMessages"></app-main-chat>
+      <app-new-message *ngIf="writeNewMessage"></app-new-message>
     </div>
 
     <div class="mgl-thred" *ngIf="mobilePage === 'thread'">

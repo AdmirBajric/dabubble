@@ -49,7 +49,7 @@ export class DashboardComponent implements OnInit {
     mobileView!: boolean;
     mobilePage!: string;
     channelOpenStatusSubscription!: Subscription;
-    showChat: boolean = false;
+    newMessageStatusSubscription!: Subscription;
     @HostListener('window:resize', ['$event'])
     onResize(event: Event): void {
         this.checkWindowSize();
@@ -65,6 +65,7 @@ export class DashboardComponent implements OnInit {
         this.subscribeToThreadStatus();
         this.checkWindowSize();
         this.subscribeChannelStatus();
+        this.subscribeNewMessageStatus();
     }
 
     private checkWindowSize(): void {
@@ -83,23 +84,33 @@ export class DashboardComponent implements OnInit {
             this.threadIsOpen = isOpen;
             if (isOpen === true) {
                 this.mobilePage = 'thread';
-            } else if (isOpen === false){
+            } else if (isOpen === false) {
                 this.mobilePage = 'chat';
             }
-            
+
             this.handleGridAreaToggle();
         })
     }
 
     subscribeChannelStatus() {
         this.channelOpenStatusSubscription = this.navService.channelStatus$.subscribe(isOpen => {
-            this.showChat = isOpen;
+            this.showMessages = isOpen;
             if (isOpen === true) {
-                this.mobilePage = 'chat'
+                this.mobilePage = 'chat';
             } else if (isOpen === false) {
-                this.mobilePage = 'home'
+                this.mobilePage = 'home';
             }
+        })
+    }
 
+    subscribeNewMessageStatus() {
+        this.newMessageStatusSubscription = this.navService.newMessageStatus$.subscribe(isOpen => {
+            this.writeNewMessage = isOpen;
+            if (isOpen === true) {
+                this.mobilePage = 'chat';
+            } else if (isOpen === false) {
+                this.mobilePage = 'home';
+            }
         })
     }
 
@@ -136,5 +147,6 @@ export class DashboardComponent implements OnInit {
         this.threadStatusSubscription.unsubscribe();
         this.channelOpenStatusSubscription.unsubscribe();
         this.threadStatusSubscription.unsubscribe();
+        this.newMessageStatusSubscription.unsubscribe();
     }
 }

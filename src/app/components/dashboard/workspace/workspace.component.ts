@@ -63,9 +63,6 @@ export class WorkspaceComponent implements OnInit {
   // ********************** redirecting input event as output boolean to parent component
   showChannelContent!: boolean;
   @Output() openChannelChat = new EventEmitter<boolean>();
-
-  showNewChat!: boolean;
-  @Output() openChatWriteNewMessage = new EventEmitter<boolean>();
   @Output() channelsUpdated: EventEmitter<any[]> = new EventEmitter<any[]>();
 
   private unsubscribeSnapshot: (() => void) | null = null;
@@ -225,9 +222,8 @@ export class WorkspaceComponent implements OnInit {
     ).ownerDocument.defaultView.innerWidth;
   }
 
-  showNewMessage() {
-    this.showNewChat = true;
-    this.openChatWriteNewMessage.emit(this.showNewChat);
+  writeNewMessage(){
+    this.channelUpdateService.openNewMessage();
   }
 
   showChannelChat() {

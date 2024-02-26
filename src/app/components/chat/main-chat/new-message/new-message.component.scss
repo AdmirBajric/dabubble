@@ -8,6 +8,10 @@ h1 {
 .wrapper {
     background-color: white;
     position: relative;
+
+    @media only screen and (max-width: 1099px){
+        height: calc(100vh - 10rem);
+    }
 }
 
 .head {

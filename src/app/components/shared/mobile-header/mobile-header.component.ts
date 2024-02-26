@@ -17,5 +17,6 @@ export class MobileHeaderComponent {
     constructor(private navService: chatNavigationService){}
     closeMainChat(){
         this.navService.closeChat();
+        this.navService.closeNewMessage();
     }
 }

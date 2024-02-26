@@ -1,6 +1,6 @@
 <div *ngIf="isOpen" class="main">
   <div class="workspace-wrapper">
-    <app-workspace-header (openChatWriteNewMessage)="showNewMessage()"></app-workspace-header>
+    <app-workspace-header></app-workspace-header>
     <div class="drawer-container">
       <div class="drawer">
         <div class="drawer-header">
@@ -92,7 +92,7 @@
     </div>
   </div>
 
-  <button class="mobile-btn-write-dm">
+  <button class="mobile-btn-write-dm" (click)="writeNewMessage()">
     <img src="../../../../assets/img/workspace_2_mobile_write_dm_square.svg" alt="write message" />
   </button>
 </div>
