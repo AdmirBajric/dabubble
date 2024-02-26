@@ -156,10 +156,6 @@ export class WorkspaceComponent implements OnInit {
     });
   }
 
-  sendData(userId: string) {
-    console.log(userId);
-  }
-
   openChannels() {
     try {
       // Listen to changes in the channels collection

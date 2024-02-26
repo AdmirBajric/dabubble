@@ -31,8 +31,8 @@ export class ChannelListItemComponent implements OnInit {
     // console.log(this.channels);
   }
 
-  displayChannel(channels: any[]) {
-    this.navService.openChannel(channels);
+  displayChannel(channel: any[]) {
+    this.navService.openChannel(channel);
     // this.openChannelChat = true;
     // this.openChatChannel.emit(this.openChannelChat);
   }

@@ -48,7 +48,7 @@ export class FirebaseService {
     }>();
   }
 
-  searchChannelMessagesRealTime(id: string) {
+  async searchChannelMessagesRealTime(id: string) {
     if (!this.firestore) {
       throw new Error('Firestore is not initialized.');
     }
@@ -66,6 +66,42 @@ export class FirebaseService {
       });
       this.messagesSubject.next(messages);
     });
+  }
+
+  async searchUserMessagesRealTime(recipientId: string, user: User) {
+    if (!this.firestore) {
+      throw new Error('Firestore is not initialized.');
+    }
+
+    if (user) {
+      let queryRef;
+
+      if (user.id !== recipientId) {
+        queryRef = query(
+          collection(this.firestore, 'messages'),
+          where('isChannelMessage', '==', false),
+          where('creator.id', '==', user.id),
+          where('recipient.id', '==', recipientId),
+          orderBy('timestamp')
+        );
+      } else {
+        queryRef = query(
+          collection(this.firestore, 'messages'),
+          where('isChannelMessage', '==', false),
+          where('creator.id', 'in', [user.id, recipientId]),
+          where('recipient.id', 'in', [user.id, recipientId]),
+          orderBy('timestamp')
+        );
+      }
+
+      this.unsubscribeMessages = onSnapshot(queryRef, (snapshot) => {
+        const messages = snapshot.docs.map((doc) => {
+          const data = doc.data();
+          return { id: doc.id, ...data };
+        });
+        this.messagesSubject.next(messages);
+      });
+    }
   }
 
   getMessagesObservable() {

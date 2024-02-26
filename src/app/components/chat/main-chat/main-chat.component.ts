@@ -35,7 +35,9 @@ export class MainChatComponent implements OnInit, OnDestroy {
   messages: Message[] = [];
   showMessages!: boolean;
   currentChannel!: Channel;
+  currentUser!: User;
   channelId!: string;
+  userId!: string;
   user!: User;
   messageId: string = '';
 
@@ -168,6 +170,7 @@ export class MainChatComponent implements OnInit, OnDestroy {
     if (querySnapshot) {
       querySnapshot.forEach((doc: any) => {
         let messageData = doc.data();
+
         messageData['id'] = doc.id;
         // Check if the mssage is already in the local messages array to avoid duplicates.
         const messageExists = this.messages.some(
@@ -200,11 +203,11 @@ export class MainChatComponent implements OnInit, OnDestroy {
    * Subscribes to the observable of current channel from the navigation service.
    * When a new channel is emitted, it checks if the channel has changed and, if so, prepares data for the new channel.
    */
-  subscribeToCurrentChannel() {
-    this.navServie.currentChannel.subscribe((channel) => {
-      if (channel && 'id' in channel) {
-        if (this.channelChanged(channel.id)) {
-          this.prepareData(channel.id, channel);
+  async subscribeToCurrentChannel() {
+    this.navServie.currentChannel.subscribe(async (channelOrUser) => {
+      if (channelOrUser && 'id' in channelOrUser) {
+        if (this.channelChanged(channelOrUser.id)) {
+          await this.prepareData(channelOrUser.id, channelOrUser);
         }
       }
     });
@@ -218,21 +221,76 @@ export class MainChatComponent implements OnInit, OnDestroy {
    * @param {string} id - The ID of the channel to prepare data for.
    * @param {Channel} channel - The channel obkect containing data about the current channel.
    */
-  prepareData(id: string, channel: Channel) {
-    this.messages = []; // Clears existing messages to prepare for new channel messages
-    this.currentChannel = channel; // Sets the current channel.
-    this.channelId = id; // Stores the channel ID for message search purposes
-    this.searchChannelMessages(id);
 
-    this.messagesSubscription = this.firebaseService
-      .getMessagesObservable()
-      .subscribe((messages) => {
-        this.messages = messages;
-        this.sortMessagesChronologically();
-        this.showMessages = true;
-      });
+  async prepareData(id: string, channelOrUser: any) {
+    if (channelOrUser.avatar) {
+      this.messages = []; // Clears existing messages to prepare for new channel messages
+      this.currentChannel = channelOrUser; // Sets the current channel.
+      this.channelId = id;
 
-    this.firebaseService.searchChannelMessagesRealTime(this.channelId);
+      this.messagesSubscription = this.firebaseService
+        .getMessagesObservable()
+        .subscribe((messages) => {
+          this.messages = messages;
+          this.sortMessagesChronologically();
+          this.showMessages = true;
+        });
+      await this.firebaseService.searchUserMessagesRealTime(id, this.user);
+    } else {
+      this.messages = []; // Clears existing messages to prepare for new channel messages
+      this.currentChannel = channelOrUser; // Sets the current channel.
+      this.channelId = id; // Stores the channel ID for message search purposes
+      await this.searchChannelMessages(id);
+
+      this.messagesSubscription = this.firebaseService
+        .getMessagesObservable()
+        .subscribe((messages) => {
+          this.messages = messages;
+          this.sortMessagesChronologically();
+          this.showMessages = true;
+        });
+
+      await this.firebaseService.searchChannelMessagesRealTime(this.channelId);
+    }
+  }
+
+  async searchUserMessages(recipient: User) {
+    const channel = false;
+
+    this.firebaseService.searchMessagesRealTime(
+      channel,
+      recipient,
+      this.user,
+      async (messagesWithIds) => {
+        this.messages = [];
+        this.messages = await Promise.all(
+          messagesWithIds.map(async (item) => {
+            const message = item.message;
+            message.id = item.id;
+            message.comment = await this.showCommentsLength(item.id);
+            return message;
+          })
+        );
+        console.log(this.messages); // This will log the messages with comments length after all comments are fetched.
+      }
+    );
+  }
+
+  async showCommentsLength(id: any): Promise<string> {
+    try {
+      const querySnapshot = await this.firebaseService.queryDocuments(
+        'comments',
+        'messageId',
+        '==',
+        id
+      );
+      const comments = querySnapshot.docs.map((doc: any) => doc.data());
+      const length = comments.length.toString();
+      return length;
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+      throw error;
+    }
   }
 
   /**

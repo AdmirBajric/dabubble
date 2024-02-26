@@ -2,114 +2,154 @@
 @import "../../../mixins.scss";
 
 h1 {
-    font-size: 2rem; // must be set to global styles
+  font-size: 2rem; // must be set to global styles
 }
 
 .small {
-    height: 2rem;
-    width: 2rem;
+  height: 2rem;
+  width: 2rem;
 }
 
 .header-right {
-    @include flexbox(flex, unset, unset, center);
-    gap: 2rem;
+  @include flexbox(flex, unset, unset, center);
+  gap: 2rem;
 }
 
 .btn-wrapper {
-    position: relative;
+  position: relative;
 }
 
 .wrapper {
-    @include flexbox(flex, unset, space-between, center);
-    height: 7rem;
-    box-shadow: 0 6px 6px -2px #00000014;
-    background-color: white;
-    border-radius: 3rem 3rem 0 0;
-    margin-bottom: 1rem;
+  @include flexbox(flex, unset, space-between, center);
+  height: 7rem;
+  box-shadow: 0 6px 6px -2px #00000014;
+  background-color: white;
+  border-radius: 3rem 3rem 0 0;
+  margin-bottom: 1rem;
 
-    .header-left {
-        @include flexbox(flex, unset, unset, center);
-        gap: 2rem;
-        border-radius: 100px;
-        transition: all 225ms;
+  .header-left {
+    @include flexbox(flex, unset, unset, center);
+    gap: 2rem;
+    border-radius: 100px;
+    transition: all 225ms;
 
-        &:hover {
-            background-color: $bg-color;
-            color: $purple-3;
-            cursor: pointer;
-        }
+    &:hover {
+      background-color: $bg-color;
+      color: $purple-3;
+      cursor: pointer;
+    }
+  }
+
+  &.thread {
+    padding: 0rem 2rem;
+    height: 6rem;
+    position: relative;
+  }
+
+  .thread-header {
+    @include flexbox(flex, unset, unset, center);
+    position: relative;
+    gap: 1rem;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.08);
+    height: 6rem;
+    width: 100%;
+
+    button {
+      background: transparent;
+      position: absolute;
+      right: 0;
     }
 
-    &.thread {
-        padding: 0rem 2rem;
-        height: 6rem;
-        position: relative;
+    .name {
+      h1 {
+        font-weight: normal !important;
+      }
+
+      span,
+      h1 {
+        color: $purple-2;
+      }
     }
-
-    .thread-header {
-        @include flexbox(flex, unset, unset, center);
-        position: relative;
-        gap: 1rem;
-        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.08);
-        height: 6rem;
-        width: 100%;
-
-        button {
-            background: transparent;
-            position: absolute;
-            right: 0;
-        }
-
-        .name {
-            h1 {
-                font-weight: normal !important;
-            }
-
-            span,
-            h1 {
-                color: $purple-2;
-            }
-        }
-    }
+  }
 }
 
 .name {
-    @include flexbox(flex, unset, unset, center);
-    gap: 0.5rem;
+  @include flexbox(flex, unset, unset, center);
+  gap: 0.5rem;
 }
 
 .channel-members {
-    @include flexbox(flex, unset, unset, center);
-    width: 14rem;
-    position: relative;
-    border-radius: 3rem;
-    // padding: 1rem 2rem 1rem 1rem; **** for larger screens than 1400px
-    padding: 0rem 1rem 0rem 1rem;
-    &:hover{
-        background-color: $bg-color;
-        cursor: pointer;
-    }
+  @include flexbox(flex, unset, unset, center);
+  width: 14rem;
+  position: relative;
+  border-radius: 3rem;
+  // padding: 1rem 2rem 1rem 1rem; **** for larger screens than 1400px
+  padding: 0rem 1rem 0rem 1rem;
+  &:hover {
+    background-color: $bg-color;
+    cursor: pointer;
+  }
 
-    .members-count {
-        position: absolute;
-        right: 1rem;
-        @include fonts-styles(1.4rem, bold);
-    }
+  .members-count {
+    position: absolute;
+    right: 1rem;
+    @include fonts-styles(1.4rem, bold);
+  }
 }
 
-.channel-avatars{
-    position: relative;
-    width: 10rem;
-    height: 4rem; // must be same as images of avatars
+.channel-avatars {
+  position: relative;
+  width: 10rem;
+  height: 4rem; // must be same as images of avatars
 
-    .avatar{
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        img {
-            height: 4rem;
-            border: 0.2rem solid white;
-            border-radius: 50%;
-        }
+  .avatar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    img {
+      height: 4rem;
+      border: 0.2rem solid white;
+      border-radius: 50%;
     }
+  }
+}
+
+.chat-header-user-data {
+  width: 25rem;
+  display: flex;
+  align-items: center;
+
+  .chat-header-img-container {
+    width: 4.8rem;
+    height: 4.8rem;
+    border-radius: 2.4rem;
+    position: relative;
+
+    .img {
+      width: 4.8rem;
+      height: 4.8rem;
+      border-radius: 2.4rem;
+    }
+
+    .mat-icon {
+      font-size: 1.6rem;
+      position: absolute;
+      bottom: -0.8rem;
+      right: -0.8rem;
+    }
+  }
+
+  h1 {
+    margin-left: 2rem;
+  }
+}
+
+.online,
+.userActive {
+  color: $online-green;
+}
+
+.offline,
+.userOffline {
+  color: $text-gray;
 }

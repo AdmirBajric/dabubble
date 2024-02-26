@@ -1,6 +1,4 @@
-<div class="links-2-dm">
+<div (click)="displayChannel(user)" class="links-2-dm">
   <img src="{{ user.avatar }}" alt="" />
-  <a routerLink="/UserId"
-    >{{ user.fullName }}{{ user.loggedInUser ? " (Du)" : "" }}</a
-  >
+  <p>{{ user.fullName }}{{ user.loggedInUser ? " (Du)" : "" }}</p>
 </div>

@@ -1,5 +1,6 @@
 <section [class.thread]="styleHeaderForThread" class="wrapper wrapper-padding">
   <div
+    *ngIf="!isUserData"
     [ngClass]="styleHeaderForThread ? 'thread-header' : 'header-left'"
     (click)="styleHeaderForThread ? null : openEditChannel()"
     appHoverChange
@@ -59,7 +60,24 @@
     </button>
   </div>
 
-  <ng-container *ngIf="!styleHeaderForThread">
+  <ng-container *ngIf="isUserData">
+    <div class="chat-header-user-data">
+      <div class="chat-header-img-container">
+        <img class="img" [src]="currentUser?.avatar" alt="avatar" />
+        <mat-icon
+          [ngClass]="{
+            online: currentUser?.isOnline,
+            offline: !currentUser?.isOnline
+          }"
+          class="mat-icon"
+          >circle</mat-icon
+        >
+      </div>
+      <h1>{{ currentUser?.fullName }}</h1>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="!styleHeaderForThread && !isUserData">
     <div class="header-right">
       <div
         class="channel-members desktop-view"

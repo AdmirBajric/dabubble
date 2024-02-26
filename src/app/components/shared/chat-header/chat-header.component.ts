@@ -13,12 +13,19 @@ import { HoverChangeDirective } from '../../../directives/hover-change.directive
 import { MatDialog } from '@angular/material/dialog';
 import { chatNavigationService } from '../../../services/chat-navigation.service';
 import { Channel } from '../../../models/channel.class';
+import { User } from '../../../models/user.class';
 import { Subscription } from 'rxjs';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-chat-header',
   standalone: true,
-  imports: [ChannelEditComponent, CommonModule, HoverChangeDirective],
+  imports: [
+    ChannelEditComponent,
+    CommonModule,
+    HoverChangeDirective,
+    MatIconModule,
+  ],
   templateUrl: './chat-header.component.html',
   styleUrls: ['./chat-header.component.scss'],
 })
@@ -26,8 +33,10 @@ export class ChatHeaderComponent implements OnInit, OnDestroy {
   @Input() styleHeaderForThread: boolean = false;
   @Output() closeThread: EventEmitter<any[]> = new EventEmitter<any[]>();
   currentChannel: Channel | null = null;
+  currentUser: User | null = null;
   channelSubscription: Subscription | undefined;
   channelsSubscription: Subscription | undefined;
+  isUserData: boolean = false;
 
   constructor(
     private btnService: ButtonFunctionService,
@@ -52,8 +61,15 @@ export class ChatHeaderComponent implements OnInit, OnDestroy {
 
   subscribeChannel() {
     this.channelSubscription = this.navService.currentChannel.subscribe(
-      (channel) => {
-        this.currentChannel = channel;
+      (channelOrUser) => {
+        this.isUserData = false;
+
+        if (channelOrUser.avatar) {
+          this.isUserData = true;
+          this.currentUser = channelOrUser;
+        } else {
+          this.currentChannel = channelOrUser;
+        }
       }
     );
   }
@@ -62,9 +78,16 @@ export class ChatHeaderComponent implements OnInit, OnDestroy {
     this.channelsSubscription = this.navService.channelsUpdated$.subscribe(
       (channels) => {
         const id = this.currentChannel?.id;
-        channels.forEach((channel) => {
-          if (channel.id === id) {
-            this.currentChannel = channel;
+        this.isUserData = false;
+
+        channels.forEach((channelOrUser) => {
+          if (channelOrUser.id === id) {
+            if (channelOrUser.avatar) {
+              this.isUserData = true;
+              this.currentUser = channelOrUser;
+            } else {
+              this.currentChannel = channelOrUser;
+            }
           }
         });
       }
@@ -72,7 +95,7 @@ export class ChatHeaderComponent implements OnInit, OnDestroy {
   }
 
   get countMembersRoom(): number {
-    return this.currentChannel ? this.currentChannel.members.length : 0;
+    return this.currentChannel ? this.currentChannel?.members?.length : 0;
   }
 
   showMembers(channel: Channel) {

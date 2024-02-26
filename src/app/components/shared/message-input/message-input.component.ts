@@ -291,6 +291,8 @@ export class MessageInputComponent implements OnInit {
   }
 
   async addMessage(channel: boolean) {
+    console.log(this.currentChannel);
+
     this.usersSearch = false;
     this.channelSearch = false;
     this.showEmoji = false;
