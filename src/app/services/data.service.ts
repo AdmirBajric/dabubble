@@ -1,11 +1,18 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { User } from '../models/user.class';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DataService {
+  private triggerFunctionSubject = new Subject<void>();
+  triggerFunction$ = this.triggerFunctionSubject.asObservable();
+
+  triggerFunction() {
+    this.triggerFunctionSubject.next();
+  }
+
   private userSource = new BehaviorSubject<User | null>(null);
   currentUser = this.userSource.asObservable();
 

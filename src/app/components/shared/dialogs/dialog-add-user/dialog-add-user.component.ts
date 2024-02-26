@@ -12,6 +12,7 @@ import { Firestore, addDoc, collection } from '@angular/fire/firestore';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { chatNavigationService } from '../../../../services/chat-navigation.service';
 
 @Component({
   selector: 'app-dialog-add-user',
@@ -56,7 +57,8 @@ export class DialogAddUserComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<DialogAddUserComponent>,
-    private dataService: DataService
+    private dataService: DataService,
+    private navService: chatNavigationService
   ) {
     this.channelInfoSubscription =
       this.dataService.currentChannelInfo.subscribe((channelInfo) => {
@@ -208,6 +210,8 @@ export class DialogAddUserComponent implements OnInit {
     try {
       const itemCollection = collection(this.firestore, 'channels');
       const newDocRef = await addDoc(itemCollection, toJsonChannel);
+      channel.id = newDocRef.id;
+      this.navService.openChannel(channel);
     } catch (error) {
       console.error('Error adding document: ', error);
     }

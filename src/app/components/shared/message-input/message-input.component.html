@@ -1,5 +1,16 @@
 <div class="inputComp">
-  <textarea [(ngModel)]="text" class="message-field fs-16" matInput placeholder="{{ placeholder }}"></textarea>
+  <textarea
+    [(ngModel)]="text"
+    class="message-field fs-16"
+    matInput
+    placeholder="{{ placeholder }}"
+    [value]="showUserInput.join(' ')"
+    (focus)="onInputFocus()"
+    (blur)="onInputBlur()"
+    (input)="onInputChange($event)"
+    #userInputField
+  ></textarea>
+
   <div>
     <div class="flex between">
       <div class="options">
@@ -17,6 +28,7 @@
           </div>
         </label>
         <button
+          (click)="toggleEmojiContainer(); usersSearch = false"
           appHoverChange
           [elementsConfig]="[
             {
@@ -30,6 +42,7 @@
           <img src="../../assets/img/add_message_emoji.svg" alt="add-emoji" />
         </button>
         <button
+          (click)="toggleExpandPanel(); showEmoji = false"
           appHoverChange
           [elementsConfig]="[
             {
@@ -58,5 +71,51 @@
         <img src="../../assets/img/send_message.svg" alt="" />
       </button>
     </div>
+    <p class="text-for-file">{{ textForFile }}</p>
   </div>
+  <div *ngIf="showEmoji" id="emoji">
+    <emoji-mart
+      [emojiSize]="16"
+      [sheetSize]="16"
+      [darkMode]="false"
+      [totalFrequentLines]="0"
+      [enableSearch]="false"
+      (emojiClick)="addEmoji($event)"
+      [style]="{
+        position: 'absolute',
+        top: '50%',
+        right: '50%',
+        transform: 'translate(50%, -50%)'
+      }"
+    ></emoji-mart>
+  </div>
+
+  <mat-expansion-panel
+    *ngIf="usersSearch || channelSearch"
+    class="expand-panel"
+    [expanded]="usersSearch || channelSearch"
+  >
+    <ng-container *ngIf="usersSearch">
+      <div
+        (click)="addUser(user.id)"
+        id="{{ user.id }}"
+        *ngFor="let user of users"
+        class="show-users"
+      >
+        <img src="{{ user.avatar }}" alt="" />
+        <p>{{ user.fullName }}</p>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="channelSearch">
+      <div
+        (click)="addChannel(channel.name)"
+        id="{{ channel.id }}"
+        *ngFor="let channel of channels"
+        class="show-users"
+      >
+        <p># {{ channel.name }}</p>
+      </div>
+    </ng-container>
+  </mat-expansion-panel>
 </div>

@@ -81,8 +81,11 @@
       @if (showDMs) {
       <div class="dm-list-container">
         <ng-container *ngFor="let user of users">
-          <app-direct-message-list-item [user]="user" id="{{ user.id }}"
-            (click)="sendData(user.id)"></app-direct-message-list-item>
+          <app-direct-message-list-item
+            [user]="user"
+            id="{{ user.id }}"
+            (click)="sendData(user.id)"
+          ></app-direct-message-list-item>
         </ng-container>
       </div>
       }

@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { HoverChangeDirective } from '../../../../directives/hover-change.directive';
 import { chatNavigationService } from '../../../../services/chat-navigation.service';
-import { log } from 'console';
+
 @Component({
   selector: 'app-channel-list-item',
   standalone: true,
@@ -20,7 +20,10 @@ export class ChannelListItemComponent implements OnInit {
   openChannelChat!: boolean;
   @Output() openChatChannel = new EventEmitter<boolean>();
 
-  constructor(private navService: chatNavigationService) {}
+  constructor(
+    private router: Router,
+    private navService: chatNavigationService
+  ) {}
 
   ngOnInit(): void {
   }

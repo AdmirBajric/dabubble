@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import {
   Firestore,
   collection,
@@ -20,7 +20,7 @@ import {
 } from '@angular/fire/firestore';
 import { User } from '../models/user.class';
 import { Conversation } from '../models/conversation.class';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 interface ConversationData {
   id: string;
@@ -38,11 +38,44 @@ export class FirebaseService {
     data: Conversation;
   }>;
 
+  private messagesSubject: Subject<any[]> = new Subject<any[]>();
+  private unsubscribeMessages: any;
+
   constructor() {
     this.conversationUpdateSubject = new Subject<{
       id: string;
       data: Conversation;
     }>();
+  }
+
+  searchChannelMessagesRealTime(id: string) {
+    if (!this.firestore) {
+      throw new Error('Firestore is not initialized.');
+    }
+
+    const queryRef = query(
+      collection(this.firestore, 'messages'),
+      where('channelId', '==', id),
+      orderBy('timestamp')
+    );
+
+    this.unsubscribeMessages = onSnapshot(queryRef, (snapshot) => {
+      const messages = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return { id: doc.id, ...data };
+      });
+      this.messagesSubject.next(messages);
+    });
+  }
+
+  getMessagesObservable() {
+    return this.messagesSubject.asObservable();
+  }
+
+  unsubscribeFromMessages() {
+    if (this.unsubscribeMessages) {
+      this.unsubscribeMessages();
+    }
   }
 
   async createConversation(conversation: Conversation) {

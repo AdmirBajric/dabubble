@@ -7,7 +7,9 @@
         [thread]="thread" *ngIf="message" 
         [isYou]="false"
         [currentMessage]="message"
-        ></app-message-hover-actions>
+        (editMessage)="editMessage(message)"
+        [position]="'right'"
+      ></app-message-hover-actions>
     </ng-container>
     <div class="flex">
       <img class="flex-img" src="{{ message.creator.avatar }}" alt="" />
@@ -35,6 +37,19 @@
             </div>
           </ng-container>
 
+            <ng-container *ngIf="hoveredIndex === i">
+              <div class="reaction-info">
+                <span>{{ reaction.emoji }}</span>
+                <ng-container *ngFor="let r of reaction.users; let i = index">
+                  <span class="reaction-from">{{ r.fullName }}</span>
+                </ng-container>
+
+                <span
+                  *ngIf="reaction.users.length > 1; else singleUserReaction"
+                >
+                  haben reagiert
+                </span>
+                <ng-template #singleUserReaction> hat reagiert </ng-template>
           <div class="emoji-line" *ngIf="reactions.length > 0">
             <div *ngFor="let reaction of reactions; let i = index" class="reaction-wrapper">
               <div class="emoji-container" (mouseover)="hoveredIndex = i" (mouseout)="hoveredIndex = null">
@@ -131,6 +146,19 @@
             </div>
           </ng-container>
 
+            <ng-container *ngIf="hoveredIndex === i">
+              <div class="reaction-info">
+                <span>{{ reaction.emoji }}</span>
+                <ng-container *ngFor="let r of reaction.users; let i = index">
+                  <span class="reaction-from">{{ r.fullName }}</span>
+                </ng-container>
+
+                <span
+                  *ngIf="reaction.users.length > 1; else singleUserReaction"
+                >
+                  haben reagiert
+                </span>
+                <ng-template #singleUserReaction> hat reagiert </ng-template>
           <div class="emoji-line" *ngIf="reactions.length > 0">
             <div *ngFor="let reaction of reactions; let i = index" class="reaction-wrapper">
               <div class="emoji-container" (mouseover)="hoveredIndex = i" (mouseout)="hoveredIndex = null">

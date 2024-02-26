@@ -1,18 +1,19 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Output, AfterViewInit } from '@angular/core';
 import { CommonModule, formatDate } from '@angular/common';
-import { ChatHeaderComponent } from "../../shared/chat-header/chat-header.component";
-import { MessageInputComponent } from "../../shared/message-input/message-input.component";
-import { MessageComponent } from "../../chat/message/message.component";
-import { RouteService } from "../../../services/route.service";
-import { HoverChangeDirective } from "../../../directives/hover-change.directive";
-import { RouterLink } from "@angular/router";
-import { TimeSeparatorChatComponent } from "../../shared/time-separator-chat/time-separator-chat.component";
+import { ChatHeaderComponent } from '../../shared/chat-header/chat-header.component';
+import { MessageInputComponent } from '../../shared/message-input/message-input.component';
+import { MessageComponent } from '../../chat/message/message.component';
+import { RouteService } from '../../../services/route.service';
+import { HoverChangeDirective } from '../../../directives/hover-change.directive';
+import { RouterLink } from '@angular/router';
+import { TimeSeparatorChatComponent } from '../../shared/time-separator-chat/time-separator-chat.component';
 import { Comment, Message } from '../../../models/message.class';
 import { User } from '../../../models/user.class';
 import { chatNavigationService } from '../../../services/chat-navigation.service';
 import { Subscription } from 'rxjs';
 import { Channel } from 'diagnostics_channel';
 import { FirebaseService } from '../../../services/firebase.service';
+import { DataService } from '../../../services/data.service';
 import { send } from 'process';
 
 @Component({
@@ -23,107 +24,105 @@ import { send } from 'process';
     imports: [ChatHeaderComponent, CommonModule, HoverChangeDirective, MessageComponent, MessageInputComponent, RouterLink, TimeSeparatorChatComponent],
 
 })
-export class MainChatComponent implements OnInit {
-    text: string = ''; // to be used for message text variable
-    messages: Message[] = [];
-    showMessages!: boolean;
-    currentChannel!: Channel;
-    channelId!: string;
-    user!: User;
-    messageId: string = '';
+export class MainChatComponent implements OnInit, OnDestroy {
+  text: string = ''; // to be used for message text variable
+  messages: Message[] = [];
+  showMessages!: boolean;
+  currentChannel!: Channel;
+  channelId!: string;
+  user!: User;
+  messageId: string = '';
 
-    private channelOpenStatusSubscription!: Subscription;
-    private currentChannelSubscription!: Subscription;
-    showChannel: boolean = false;
+  private channelOpenStatusSubscription!: Subscription;
+  private currentChannelSubscription!: Subscription;
+  showChannel: boolean = false;
 
-    constructor(
-        private routeService: RouteService,
-        private navServie: chatNavigationService,
-        private firebaseService: FirebaseService
-    ) {
+  private subscription: Subscription;
+  messagesSubscription: Subscription | undefined;
+
+  constructor(
+    private routeService: RouteService,
+    private navServie: chatNavigationService,
+    private firebaseService: FirebaseService,
+    private dataService: DataService
+  ) {
+    this.subscription = this.dataService.triggerFunction$.subscribe(() => {
+      this.clearMainChat();
+    });
+  }
+
+  clearMainChat() {
+    this.messages = [];
+    this.showChannel = false;
+  }
+
+  get isNotDashboard() {
+    return !this.routeService.checkRoute('/dashboard');
+  }
+
+  ngOnInit(): void {
+    this.subscribeToCurrentChannel();
+    this.subscribeChannelStatus();
+    if (typeof localStorage !== 'undefined') {
+      const user = localStorage.getItem('loggedInUser');
+      if (user) {
+        this.user = JSON.parse(user);
+      }
     }
+  }
 
-    get isNotDashboard() {
-        return !this.routeService.checkRoute('/dashboard');
-    }
+  /**
+   * Is being called when messageString is emited from message-input.component.
+   * Creates a new message object to be sent.
+   * @param {string} messageString
+   */
+  createMessage(messageString: string) {
+    const isChannelMessage = this.checkIfChannel();
+    const message = new Message({
+      text: messageString,
+      timestamp: new Date(),
+      creator: this.user,
+      channelId: this.channelId,
+      isChannelMessage: isChannelMessage,
+      reactions: [],
+      comments: [],
+    });
+    this.sendMessage(message);
+  }
 
-    ngOnInit(): void {
-        this.subscribeToCurrentChannel();
-        this.subscribeChannelStatus();
-        if (typeof localStorage !== 'undefined') {
-            const user = localStorage.getItem('loggedInUser');
-            if (user) {
-                this.user = JSON.parse(user);
-            }
-        }
-    }
+  /**
+   * Gets the message object and sends it to Firestore database.
+   * @param {Message} message
+   */
+  sendMessage(message: Message) {
+    this.firebaseService
+      .addDocument('messages', message.toJSON())
+      .then((data: any) => {
+        this.messageId = data.id;
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  }
 
-    /**
-     * Is being called when messageString is emited from message-input.component.
-     * Creates a new message object to be sent.
-     * @param {string} messageString
-     */
-    createMessage(messageString: string) {
-        const isChannelMessage = this.checkIfChannel();
-        const message = new Message({
-            text: messageString,
-            timestamp: new Date(),
-            creator: this.user,
-            channelId: this.channelId,
-            isChannelMessage: isChannelMessage,
-            reactions: [],
-            comments: [],
-        });
-        this.sendMessage(message);
-    }
+  /**
+   * Is being called when event is emited.
+   * Saves the edited message and marks is as edited in Firestore database.
+   * @async
+   * @param {{messageText: string, id: string}} event - An object containing the edited text and the message id.
+   * @returns {*}
+   */
+  async saveEditedMessage(event: { messageText: string; id: string }) {
+    const docSnapshot = await this.firebaseService.getDocument(
+      'messages',
+      event.id
+    );
 
-    /**
-     * Gets the message object and sends it to Firestore database.
-     * @param {Message} message
-     */
-    sendMessage(message: Message) {
-        this.firebaseService
-            .addDocument('messages', message.toJSON())
-            .then((data: any) => {
-                this.messageId = data.id;
-            })
-    }
-
-    /**
-     * Is being called when event is emited. 
-     * Saves the edited message and marks is as edited in Firestore database.
-     * @async
-     * @param {{messageText: string, id: string}} event - An object containing the edited text and the message id.
-     * @returns {*}
-     */
-    async saveEditedMessage(event: { messageText: string, id: string }) {
-        const docSnapshot = await this.firebaseService.getDocument('messages', event.id);
-
-        if (docSnapshot.exists()) {
-            await this.firebaseService.updateDocument('messages', event.id, {
-                text: event.messageText,
-                edited: true,
-            });
-        }
-    }
-
-    /**
-     * Checks if channel ID is presend and returns a boolean.
-     * @returns {boolean} - true, if: channel id is present; false, if: otherwise
-     */
-    checkIfChannel() {
-        return !!this.channelId;
-    }
-
-    /**
-     * Subscribes to the observable 'channelOpenStatus' of the navigation Service.
-     * Subscription is stored in 'channelOpenStatusSubscription' to manage the lifecycle of it.
-     * Updates 'showChannel' based on the latest status of the channel (open or closed).
-     */
-    subscribeChannelStatus() {
-        this.channelOpenStatusSubscription = this.navServie.channelStatus$.subscribe(isOpen => {
-            this.showChannel = isOpen;
-        })
+    if (docSnapshot.exists()) {
+      await this.firebaseService.updateDocument('messages', event.id, {
+        text: event.messageText,
+        edited: true,
+      });
     }
 
     /**
@@ -227,12 +226,15 @@ export class MainChatComponent implements OnInit {
             previousDate.getFullYear() !== currentDate.getFullYear();
     }
 
-    ngOnDestroy() {
-        if (this.channelOpenStatusSubscription) {
-            this.channelOpenStatusSubscription.unsubscribe();
-        }
-        if (this.currentChannelSubscription) {
-            this.currentChannelSubscription.unsubscribe();
-        }
+  ngOnDestroy() {
+    if (this.channelOpenStatusSubscription) {
+      this.channelOpenStatusSubscription.unsubscribe();
     }
+
+    if (this.messagesSubscription) {
+      this.messagesSubscription.unsubscribe();
+    }
+    this.firebaseService.unsubscribeFromMessages();
+    this.subscription.unsubscribe();
+  }
 }

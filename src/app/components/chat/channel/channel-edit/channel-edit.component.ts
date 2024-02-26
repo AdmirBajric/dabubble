@@ -16,6 +16,7 @@ import { ButtonFunctionService } from '../../../../services/button-function.serv
 import { chatNavigationService } from '../../../../services/chat-navigation.service';
 import { Channel } from '../../../../models/channel.class';
 import { FirebaseService } from '../../../../services/firebase.service';
+import { DataService } from '../../../../services/data.service';
 
 @Component({
   selector: 'app-channel-edit',
@@ -62,7 +63,8 @@ export class ChannelEditComponent {
     private renderer: Renderer2,
     private btnService: ButtonFunctionService,
     private navService: chatNavigationService,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private dataService: DataService
   ) {}
 
   async ngOnInit() {
@@ -141,6 +143,7 @@ export class ChannelEditComponent {
       .deleteChannel(id)
       .then(() => {
         console.log('Channel deleted');
+        this.dataService.triggerFunction();
         this.onNoClick();
       })
       .catch((error) => {
