@@ -12,17 +12,18 @@ $font-family-figtree: "Figtree", sans-serif;
   padding: 0;
   box-sizing: border-box;
 }
+
 * {
-  
+
   &::-webkit-scrollbar {
     width: 4px;
   }
-  
+
   &::-webkit-scrollbar-track {
     border-radius: 8px;
     background-color: white;
   }
-  
+
   &::-webkit-scrollbar-thumb {
     border-radius: 8px;
     background-color: $text-gray;
@@ -34,7 +35,7 @@ html {
   user-select: none;
   scroll-behavior: smooth;
 
-  @media only screen and (max-width: 768px) and (max-height: 700px){
+  @media only screen and (max-width: 768px) and (max-height: 700px) {
     font-size: 50%;
   }
 }
@@ -76,6 +77,10 @@ h1 {
 }
 
 h2 {
+  @media only screen and (max-width: 768px) and (max-height: 700px) {
+    @include fonts-styles(1.4rem, bold);
+  }
+
   @media only screen and (min-width: 1750px) {
     @include fonts-styles(1.8rem, bold);
   }
@@ -145,7 +150,7 @@ h4 {
 
   @media only screen and (min-width: 768px) {
     left: 1.6rem;
-  right: 1.6rem;
+    right: 1.6rem;
     bottom: 3.2rem;
   }
 
