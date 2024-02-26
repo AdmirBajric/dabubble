@@ -1,6 +1,7 @@
-<div class="actions-container chat-size" 
+<div class="actions-container" 
+  [ngClass]="{'thread-size': thread, 'chat-size': !thread}" 
   [class.user-reaction]="isYou">
-  <button
+  <button *ngIf="!thread"
     appHoverChange
     [elementsConfig]="[
       {
@@ -14,7 +15,7 @@
     <img src="../../../../assets/img/add_emoji_check.svg" alt="ok" />
   </button>
 
-  <button
+  <button *ngIf="!thread"
     appHoverChange
     [elementsConfig]="[
       {
@@ -42,7 +43,7 @@
     <img src="../../../../assets/img/add_emoji.svg" alt="add reaction" />
   </button>
 
-  <button
+  <button *ngIf="!thread"
     (click)="openThread()"
     appHoverChange
     [elementsConfig]="[
@@ -74,7 +75,7 @@
 
 <div>
   <emoji-mart
-    (emojiClick)="emitEmoji($event, 'mainMessage')"
+    (emojiClick)="emitEmoji($event, typeOfMessage)"
     *ngIf="active"
     title="Pick your emoji…"
     [emojiSize]="16"
