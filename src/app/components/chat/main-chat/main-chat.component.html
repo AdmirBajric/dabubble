@@ -23,6 +23,7 @@
           ></app-time-separator-chat>
         </ng-container>
         <app-message
+          [typeOfMessage]="'mainMessage'"
           (updatedMessage)="saveEditedMessage($event)"
           [message]="message"
           [messageId]="message.id"

@@ -42,6 +42,7 @@ export class MessageComponent implements OnInit {
     private elementRef: ElementRef
   ) { }
   @Input() message!: Message;
+  @Input() typeOfMessage!: string; // either 'mainMessage' or 'comment'
   // @Input() comment!: Comment;
   @Input() messageId!: string | undefined;
   @Input() thread: boolean = false;
@@ -103,10 +104,11 @@ export class MessageComponent implements OnInit {
       return null;
     }
   }
-  
+
   async searchForReactions() {
     const id = this.getMessageId() as string;
-    const docRef = this.firebaseService.getDocRef('messages', id);
+    const collection = this.getType() as string;
+    const docRef = this.firebaseService.getDocRef(collection, id);
     this.firebaseService.subscribeToDocumentUpdates(docRef, (docSnapshot) => {
       if (docSnapshot.exists()) {
         const existingReactions =
@@ -136,6 +138,16 @@ export class MessageComponent implements OnInit {
         this.reactions = result;
       }
     });
+  }
+
+  getType() {
+    if (this.typeOfMessage === 'mainMessage') {
+      return 'messages'
+    } else if (this.typeOfMessage === 'comment') {
+      return 'comments'
+    } else {
+      return;
+    }
   }
 
   getTimeFromString(dateTimeString: Date): string {
