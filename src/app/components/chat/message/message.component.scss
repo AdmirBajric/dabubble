@@ -82,6 +82,11 @@ img {
   object-fit: cover;
   margin-top: 1rem;
 
+
+  @media only screen and (max-width: 767px) {
+    width: 20rem;
+  }
+
   &.thread-size {
     @media only screen and (min-width: 1100px) and (max-width: 1299px) {
       width: 100%;
@@ -148,8 +153,8 @@ img {
     position: relative;
   }
 
-  @media only screen and (max-width: 768px) and (max-height: 700px){
-    flex-direction: column;
+  @media only screen and (max-width: 768px) {
+    flex-direction: column !important;
     gap: 0.5rem;
     align-items: unset !important;
   }
