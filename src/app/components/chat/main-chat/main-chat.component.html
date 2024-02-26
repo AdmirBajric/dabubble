@@ -1,5 +1,4 @@
 <section
-  [ngStyle]="{ height: isNotDashboard ? '100vh' : '97%' }"
   [class.no-mobile]="isNotDashboard"
   class="wrapper border-radius-3"
 >
@@ -11,11 +10,7 @@
   </ng-container>
   <ng-container *ngIf="showChannel">
     <app-chat-header></app-chat-header>
-    <div
-      class="content-container scroll"
-      *ngIf="showMessages"
-      #scrollContainerRef
-    >
+    <div class="content-container scroll" *ngIf="showMessages">
       <div *ngFor="let message of messages; let i = index">
         <ng-container
           *ngIf="
@@ -28,6 +23,7 @@
           ></app-time-separator-chat>
         </ng-container>
         <app-message
+          [typeOfMessage]="'mainMessage'"
           (updatedMessage)="saveEditedMessage($event)"
           [message]="message"
           [messageId]="message.id"
@@ -36,24 +32,7 @@
     </div>
     <div class="chat-input">
       <app-message-input
-        (messageText)="createMessage($event)"
+        [usedLocation]="'channel'"
       ></app-message-input>
     </div>
   </ng-container>
-</section>
-
-<section *ngIf="isNotDashboard" class="desktop-view info-desktop" appHoverImage>
-  <div
-    class="border-radius-3 no-mobile wrapper-padding"
-    appHoverChange
-    [elementsConfig]="[
-      { textSelector: 'h1', defaultColor: '#797ef3', hoverColor: '#FFF' },
-      { textSelector: 'a', defaultColor: '#000000', hoverColor: '#444df2' }
-    ]"
-  >
-    <h1>Für die Desktop-Ansicht</h1>
-    <a [routerLink]="['/dashboard']" routerLinkActive="router-link-active"
-      >zum Dashboard</a
-    >
-  </div>
-</section>

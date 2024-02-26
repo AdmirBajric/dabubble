@@ -51,12 +51,17 @@ export class MessageInputComponent implements OnInit {
   @Input() styleHeaderForThread: boolean = false;
   @Output() closeThread: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() messageText: EventEmitter<string> = new EventEmitter<string>();
+  // can be used in 'directMessages', 'channel', 'thread'
+  @Input() usedLocation!: string;
+  @Output() commentData = new EventEmitter<{
+    commentText: string;
+    commentFile: string;
+  }>();
   @ViewChild('userInputField') userInputField!: ElementRef<HTMLInputElement>;
 
   currentChannel: Channel | null = null;
   channelSubscription: Subscription | undefined;
   channelsSubscription: Subscription | undefined;
-
   placeholder: string = 'Nachricht an #Entwicklerteam';
   text: string = '';
   textForFile: string = '';
@@ -328,7 +333,53 @@ export class MessageInputComponent implements OnInit {
           .catch((err: any) => {
             console.log(err);
           });
+        
+  async prepareData() {
+    const channel = this.checkIfChannel();
+    await this.uploadImage(); // saves file within local variable
+    if (this.text.length > 0) {
+      if (channel) {
+        const message = this.packMessageData(channel);
+        const messageToJson = message.toJSON();
+        this.sendMessage(messageToJson);
+      } else if (this.usedLocation === 'thread') {
+        const commentText = this.text;
+        const commentFile = this.uploadedFile;
+        this.commentData.emit({ commentText, commentFile })
       }
+      this.text = '';
+    }
+  }
+
+  sendMessage(messageToJson: Message) {
+    this.firebaseService
+      .addDocument('messages', messageToJson)
+      .then((data: any) => {
+        this.messageId = data.id;
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  }
+
+  packMessageData(channel: boolean) {
+    return new Message({
+      text: this.text,
+      timestamp: new Date(),
+      creator: this.user,
+      channelId: this.currentChannel?.id,
+      isChannelMessage: channel,
+      reactions: [],
+      file: this.uploadedFile,
+    });
+  }
+
+
+  checkIfChannel() {
+    if (this.usedLocation === 'channel') {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -362,8 +413,6 @@ export class MessageInputComponent implements OnInit {
       await uploadBytes(storageRef, this.selectedFile)
         .then(async (snapshot) => {
           this.uploadedFile = await getDownloadURL(storageRef);
-          this.selectedFile = null;
-          this.previewImageUrl = null;
         })
         .catch((error) => {
           console.error('Error uploading file:', error);

@@ -20,7 +20,6 @@ export class DialogUserListComponent implements OnInit {
   selectedUsersList: any[] = []; // array for saving selected users.
 
   ngOnInit() {
-    // console.log(this.users);
   }
   
   /**
@@ -45,7 +44,6 @@ export class DialogUserListComponent implements OnInit {
     const index = this.users.indexOf(selectedUserToDelete);
     if (index !== -1) {
       this.users.splice(index, 1);
-      // console.log('user-list, array of users splitting the selected one', this.users);
     }
   }
 }

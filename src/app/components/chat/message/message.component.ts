@@ -38,11 +38,14 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 export class MessageComponent implements OnInit {
   constructor(
     private navService: chatNavigationService,
+    private elementRef: ElementRef,
     private firebaseService: FirebaseService
   ) {}
-  @Input() message: any;
   @Input() position: string | undefined;
+  @Input() message!: Message;
+  @Input() typeOfMessage!: string; // either 'mainMessage' or 'comment'
   @Input() messageId!: string | undefined;
+  @Input() thread: boolean = false;
   @Output() updatedMessage = new EventEmitter<{
     messageText: string;
     id: string;
@@ -76,11 +79,12 @@ export class MessageComponent implements OnInit {
   }
 
   async searchForComments() {
+    const id = this.getMessageId();
     const querySnapshot = await this.firebaseService.queryDocuments(
       'comments',
       'messageId',
       '==',
-      this.message.id
+      id
     );
     querySnapshot.forEach((doc: any) => {
       let commentData = doc.data();
@@ -89,9 +93,22 @@ export class MessageComponent implements OnInit {
       // this.editedComment = commentData['text'];
     });
   }
+  /**
+   * Gets ID from message for firestore handling and emitting emoji.
+   * @returns {*}
+   */
+  getMessageId() {
+    if (this.message && 'id' in this.message) {
+      return this.message.id;
+    } else {
+      return null;
+    }
+  }
 
   async searchForReactions() {
-    const docRef = this.firebaseService.getDocRef('messages', this.message.id);
+    const id = this.getMessageId() as string;
+    const collection = this.getType() as string;
+    const docRef = this.firebaseService.getDocRef(collection, id);
     this.firebaseService.subscribeToDocumentUpdates(docRef, (docSnapshot) => {
       if (docSnapshot.exists()) {
         const existingReactions =
@@ -127,12 +144,26 @@ export class MessageComponent implements OnInit {
     });
   }
 
+  getType() {
+    if (this.typeOfMessage === 'mainMessage') {
+      return 'messages'
+    } else if (this.typeOfMessage === 'comment') {
+      return 'comments'
+    } else {
+      return;
+    }
+  }
+
   getTimeFromString(dateTimeString: Date): string {
     const dateObject = new Date(dateTimeString);
 
     const stunden = dateObject.getHours();
     const minuten = dateObject.getMinutes();
+
+    // Führende Nullen hinzufügen, wenn die Minuten einstellig sind
     const formatierteMinuten = minuten < 10 ? '0' + minuten : minuten;
+
+    // Das resultierende Zeitformat ist z.B. "10:30"
     const zeitFormat = `${stunden}:${formatierteMinuten}`;
 
     return zeitFormat;
@@ -150,7 +181,7 @@ export class MessageComponent implements OnInit {
     this.answersCount = this.answers.length;
   }
 
-  showAnswersinThread(m: any[]) {
+  showAnswersinThread(m: Message) {
     this.navService.openThread(m);
   }
 
@@ -184,7 +215,8 @@ export class MessageComponent implements OnInit {
    * @param {string} messageText
    * @param {string} id
    */
-  saveEditedMessage(messageText: string, id: string) {
+  saveEditedMessage(messageText: string) {
+    const id = this.getMessageId() as string;
     this.updatedMessage.emit({ messageText, id });
     this.openMessageEdit = false;
     if (this.emoji.length > 0) {
@@ -202,8 +234,27 @@ export class MessageComponent implements OnInit {
     this.closeMessageHoverActions();
   }
 
-  addEmoji() {
-    this.showEmoji = !this.showEmoji;
+  toggleShowActions() {
+    this.showActions = !this.showActions;
+  }
+
+  toggleShowActionsOutside(event: Event): void {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.showActions = false;
+    }
+  }
+
+  checkClickLocation(event: Event) {
+    if (this.elementRef.nativeElement.contains(event.target)) {
+      event.stopPropagation();
+    } else {
+      this.showActions = false;
+    }
+  }
+
+
+  addEmoji(){
+
   }
 
   async emitEmoji(event: any, id: any) {

@@ -15,6 +15,10 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { chatNavigationService } from '../../../services/chat-navigation.service';
 import { MessageComponent } from "../message/message.component";
+import { ChatHeaderComponent } from "../../shared/chat-header/chat-header.component";
+import { User } from '../../../models/user.class';
+import { FirebaseService } from '../../../services/firebase.service';
+import { Comment, Message } from '../../../models/message.class';
 
 @Component({
   selector: 'app-thread',
@@ -27,25 +31,27 @@ import { MessageComponent } from "../message/message.component";
     PickerModule,
     MessageInputComponent,
     WorkspaceHeaderComponent,
-    MessageComponent
+    MessageComponent,
+    ChatHeaderComponent
   ]
 })
 export class ThreadComponent implements OnInit {
   @Input() threadData!: any;
-  currentMessage!: any;
+  currentMessage!: Message;
   private messageSubscription!: Subscription;
   private threadStatusSubscription!: Subscription;
-
-  loggedUser = 'Julius Marecek';
+  user!: User;
   answersCount!: number;
   mobileView!: boolean;
   windowWidth!: number;
+  answers: Comment[] = [];
 
   constructor(
     private renderer: Renderer2,
     private el: ElementRef,
     public router: Router,
-    private navService: chatNavigationService
+    private navService: chatNavigationService,
+    private firebaseService: FirebaseService,
   ) { }
 
   @HostListener('window:resize', ['$event'])
@@ -71,10 +77,15 @@ export class ThreadComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (typeof localStorage !== 'undefined') {
+      const user = localStorage.getItem('loggedInUser');
+      if (user) {
+        this.user = JSON.parse(user);
+      }
+    }
     this.subscribeThreadStatus();
     this.subscribeMessage();
-    // console.log('THREAD', this.currentMessage);
-    this.countAnswers();
+    this.searchForComments();
   }
 
   getTimeFromString(dateTimeString: string): string {
@@ -86,8 +97,72 @@ export class ThreadComponent implements OnInit {
     return zeitFormat;
   }
 
+  async searchForComments() {
+    try {
+      const id = this.getMessageId();
+      const querySnapshot = await this.firebaseService.queryDocuments(
+        'comments',
+        'messageId',
+        '==',
+        id
+      );
+
+      if (querySnapshot) {
+        querySnapshot.forEach((doc: any) => {
+          let commentData = doc.data();
+          commentData['id'] = doc.id;
+          //check if the comment is already in local answers arra to avoid duplicates
+          const commentExists = this.answers.some(answer => answer.id === commentData.id);
+          if (!commentExists) {
+            this.answers.push(commentData);
+          }
+        });
+        this.countAnswers();
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+
   countAnswers() {
-    this.answersCount = this.threadData.answers.length;
+    this.answersCount = this.answers.length;
+  }
+
+  prepareComment(event: { commentText: string, commentFile: string }) {
+    const id = this.getMessageId();
+    const text = event.commentText;
+    const file = event.commentFile;
+    const comment = new Comment({
+      text: text,
+      timestamp: new Date(),
+      creator: this.user,
+      reactions: [],
+      messageId: id,
+      isChannelMessage: false,
+      edited: false,
+      file: file,
+      privateMsg: false //DYNAMISCH ANPASSEN
+    });
+    this.sendComment(comment);
+  }
+
+  getMessageId() {
+    if (this.currentMessage && 'id' in this.currentMessage) {
+      return this.currentMessage.id;
+    } else {
+      return null;
+    }
+  }
+
+  async sendComment(comment: Comment): Promise<void> {
+    try {
+      const commentJSON = comment.toJSON();
+      await this.firebaseService.addDocument('comments', commentJSON);
+      this.searchForComments();
+    } catch (error) {
+      console.error('Error adding comment:', error);
+    }
   }
 
   subscribeMessage() {

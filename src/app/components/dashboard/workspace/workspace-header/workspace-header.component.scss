@@ -3,10 +3,13 @@
 
 .ws-header-container {
     position: relative;
-    
+
     &.justify-unset {
         margin-left: 1rem;
         @include flexbox (flex, unset, unset, center);
+        @media only screen and (max-width: 1099px) {
+            display: none;
+        }
     }
 
     .ws-header-logo {
@@ -38,7 +41,7 @@ button {
     }
 }
 
-@media only screen and (min-width: 1100px) and (min-height: 1100px){
+@media only screen and (min-width: 1100px) and (min-height: 1100px) {
     .ws-header-logo {
         gap: 1rem;
 

@@ -1,7 +1,7 @@
 <div class="inputComp">
   <textarea
     [(ngModel)]="text"
-    class="message-field"
+    class="message-field fs-16"
     matInput
     placeholder="{{ placeholder }}"
     [value]="showUserInput.join(' ')"
@@ -10,6 +10,7 @@
     (input)="onInputChange($event)"
     #userInputField
   ></textarea>
+
   <div>
     <div class="flex between">
       <div class="options">
@@ -56,7 +57,7 @@
         </button>
       </div>
       <button
-        (click)="addMessage(true)"
+        (click)="prepareData()"
         appHoverChange
         [elementsConfig]="[
           {

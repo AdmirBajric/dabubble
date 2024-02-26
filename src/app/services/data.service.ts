@@ -22,18 +22,8 @@ export class DataService {
   private userIdSource = new BehaviorSubject<string | null>(null);
   currentUserId = this.userIdSource.asObservable();
 
-  private channelInfoSource = new BehaviorSubject<{
-    channelName: string;
-    description: string;
-  } | null>(null);
+  private channelInfoSource = new BehaviorSubject<{ channelName: string, description: string } | null>(null);
   currentChannelInfo = this.channelInfoSource.asObservable();
-
-  private scrollToBottomSource = new BehaviorSubject<boolean>(false);
-  scrollToBottomAction = this.scrollToBottomSource.asObservable();
-
-  triggerScrollToBottom() {
-    this.scrollToBottomSource.next(true);
-  }
 
   changeUser(user: User): void {
     this.userSource.next(user);

@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { HoverChangeDirective } from '../../../directives/hover-change.directive';
 import { NgIf } from '@angular/common';
@@ -12,14 +13,17 @@ import { arrayUnion } from '@angular/fire/firestore';
 @Component({
   selector: 'app-message-hover-actions',
   standalone: true,
-  imports: [HoverChangeDirective, MatTooltipModule, NgIf, PickerComponent],
+  imports: [CommonModule, HoverChangeDirective, MatTooltipModule, NgIf, PickerComponent],
   templateUrl: './message-hover-actions.component.html',
   styleUrl: './message-hover-actions.component.scss',
 })
 export class MessageHoverActionsComponent {
   @Input() isYou!: boolean;
-  @Input() position!: string;
-  @Input() currentMessage!: Message[];
+  @Input() thread: boolean = false;
+  @Input() currentMessage!: Message;
+  // ******needed to set Emoji according to type. 
+  // ******Can be 'mainMessage', 'comment'
+  @Input() typeOfMessage!: string;
   @Output() editMessage: EventEmitter<boolean> = new EventEmitter<boolean>();
   messageEditing!: boolean;
   showToolTip: boolean = false;
@@ -41,8 +45,8 @@ export class MessageHoverActionsComponent {
     }
   }
 
-  openEditMessage($event: MouseEvent) {
-    $event.stopPropagation();
+  openEditMessage(event: Event) {
+    event.stopPropagation();
     this.handlingTooltip();
     this.messageEditing = true;
     this.editMessage.emit(this.messageEditing);
@@ -52,36 +56,43 @@ export class MessageHoverActionsComponent {
     this.showToolTip = false;
   }
 
-  openThread() {
-    this.navService.openThread(this.currentMessage);
-    this.active = false;
+  toggleToolTip(event: Event) {
+    event.stopPropagation();
+    this.showToolTip = !this.showToolTip;
   }
 
-  openEmojiMart(event: any, from: string) {
-    if (from === 'mainMessage') {
+  openThread() {
+    this.navService.openThread(this.currentMessage);
+  }
+
+  openEmojiMart(from: string) {
+    if (from === 'mainMessage' && 'comment') {
       this.active = !this.active;
     } else {
       this.activeComment = !this.activeComment;
     }
   }
 
+  // this is only used when it is a main message with given emojis...
   async setEmoji(emoji: string, StringOrId: string) {
+    debugger;
     const id = this.getMessageID() as string;
     if (id && emoji) {
       this.setAndSaveEmoji(id, emoji, StringOrId);
     }
   }
 
-  async emitEmoji(event: any, StringOrId: string) {
+  //StringOrId can be mainMessage oder comment
+  async emitEmoji(event: any, messageType: string) {
     const id = this.getMessageID() as string;
     const emoji = this.getEmojiNative(event);
-    this.openEmojiMart(event, StringOrId);
+    this.openEmojiMart(messageType);
     if (id && emoji) {
-      this.setAndSaveEmoji(id, emoji, StringOrId);
+      this.setAndSaveEmoji(id, emoji, messageType);
     }
   }
 
-  async setAndSaveEmoji(id: string, emoji: string, StringOrId: string) {
+  async setAndSaveEmoji(id: string, emoji: string, messageType: string) {
     try {
       const reaction = new Reaction({
         fullName: this.user.fullName,
@@ -90,50 +101,62 @@ export class MessageHoverActionsComponent {
       });
       const reactionJSON = reaction.toJSON();
 
-      const docSnapshot = await this.firebaseService.getDocument(
-        'messages',
-        id
-      );
-      if (docSnapshot.exists()) {
-        let existingReactions = docSnapshot.data()?.['reactions'] || [];
-
-        const existingReactionIndex = existingReactions.findIndex(
-          (reaction: any) => reaction.userId === this.user.id
+      if (messageType === 'mainMessage') {
+        const docSnapshot = await this.firebaseService.getDocument(
+          'messages',
+          id
         );
-        if (existingReactionIndex !== -1) {
-          existingReactions[existingReactionIndex] = reactionJSON;
-        } else {
-          existingReactions.push(reactionJSON);
-        }
+        if (docSnapshot.exists()) {
+          let existingReactions = docSnapshot.data()?.['reactions'] || [];
 
-        await this.firebaseService.updateDocument('messages', id, {
-          reactions: existingReactions,
-        });
+          const existingReactionIndex = existingReactions.findIndex(
+            (reaction: any) => reaction.userId === this.user.id
+          );
 
-        if (StringOrId !== 'mainMessage') {
-          this.saveReactionComments(reactionJSON, StringOrId);
+          if (existingReactionIndex !== -1) {
+            existingReactions[existingReactionIndex] = reactionJSON;
+          } else {
+            existingReactions.push(reactionJSON);
+          }
+
+          await this.firebaseService.updateDocument('messages', id, {
+            reactions: existingReactions,
+          });
+
         } else {
-          // this.showReactionOnMainChannel();
+          console.error('Document not found');
         }
-      } else {
-        console.error('Document not found');
       }
-    } catch (error) {
-      console.error('Error updating document:', error);
+      else if (messageType === 'comment') {
+        this.saveReactionComments(reactionJSON)
+      }
+    }
+
+    catch (error) {
+      console.error('Error updating document:', error, 'Nachrichtentyp:', messageType);
     }
   }
 
-  async saveReactionComments(
-    reactionJSON: any,
-    StringOrId: string
-  ): Promise<void> {
+  async saveReactionComments(reactionJSON: any): Promise<void> {
+    const id = this.getMessageID() as string;
     const docSnapshot = await this.firebaseService.getDocument(
       'comments',
-      StringOrId
+      id
     );
     if (docSnapshot.exists()) {
       let existingReactions = docSnapshot.data()?.['reactions'] || [];
-      await this.firebaseService.updateDocument('comments', StringOrId, {
+
+      const existingReactionIndex = existingReactions.findIndex(
+        (reaction: any) => reaction.userId === this.user.id
+      );
+
+      if (existingReactionIndex !== -1) {
+        existingReactions[existingReactionIndex] = reactionJSON;
+      } else {
+        existingReactions.push(reactionJSON);
+      }
+
+      await this.firebaseService.updateDocument('comments', id, {
         reactions: arrayUnion(reactionJSON, ...existingReactions),
       });
       // this.showComments();
