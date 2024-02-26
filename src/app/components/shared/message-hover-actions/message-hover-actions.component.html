@@ -1,5 +1,5 @@
 <div class="actions-container" 
-  [ngClass]="thread ? ['thread-size', 'gap-thread'] : ['chat-size', 'gap-chat']"
+   [ngClass]="{ 'thread-size': thread, 'gap-thread': thread, 'chat-size': !thread, 'gap-chat': !thread }"
   [class.user-reaction]="isYou">
   <button *ngIf="!thread"
     appHoverChange
