@@ -6,7 +6,6 @@ import {
   inject,
   Input,
   ElementRef,
-  HostListener,
   ViewChild,
 } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
@@ -17,23 +16,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { HoverChangeDirective } from '../../../directives/hover-change.directive';
 import { FormsModule } from '@angular/forms';
 import { FirebaseService } from '../../../services/firebase.service';
-import { Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Message, Comment, Reaction } from '../../../models/message.class';
+import { FormGroup } from '@angular/forms';
 import { Firestore } from '@angular/fire/firestore';
 import { getApp } from 'firebase/app';
 import { getStorage } from 'firebase/storage';
 import { ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
 import { Channel } from '../../../models/channel.class';
 import { Subscription } from 'rxjs';
-import { ButtonFunctionService } from '../../../services/button-function.service';
-import { MatDialog } from '@angular/material/dialog';
 import { chatNavigationService } from '../../../services/chat-navigation.service';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { fromEvent } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { Message } from '../../../models/message.class';
 
 @Component({
   selector: 'app-message-input',
@@ -80,17 +74,15 @@ export class MessageInputComponent implements OnInit {
   users: any[] = [];
   channels: any[] = [];
   isInputFocused: boolean = false;
+  copyOfChannels: any[] = [];
+  copyOfUsers: any[] = [];
+  filteredUser: any[] = [];
 
   firestore: Firestore = inject(Firestore);
 
   constructor(
     private firebaseService: FirebaseService,
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private btnService: ButtonFunctionService,
-    private dialog: MatDialog,
-    private navService: chatNavigationService,
-    private elementRef: ElementRef
+    private navService: chatNavigationService
   ) {}
 
   ngOnInit(): void {
@@ -109,7 +101,6 @@ export class MessageInputComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    // Unsubscribe from the events to avoid memory leaks
     if (this.channelSubscription) {
       this.channelSubscription.unsubscribe();
     }
@@ -118,9 +109,52 @@ export class MessageInputComponent implements OnInit {
     }
   }
 
-  onInputChange(event: any) {
-    console.log('Textarea value changed:', event.target.value);
+  ngAfterViewInit() {
+    this.userInputField.nativeElement.addEventListener('keydown', (event) => {
+      if (event.key === 'Delete' || event.key === 'Backspace') {
+        this.checkInputAndSyncArrays();
+      }
+    });
+  }
 
+  checkInputAndSyncArrays() {
+    const inputValue = this.userInputField.nativeElement.value;
+    const mentionedUsersChannels = this.extractMentions(inputValue);
+    this.syncArrays(mentionedUsersChannels);
+  }
+
+  extractMentions(input: string) {
+    return input.split(/[@#]/);
+  }
+
+  syncArrays(mentionedUsersChannels: string[]) {
+    const mentionedUserIds: Set<string> = new Set();
+
+    mentionedUsersChannels.forEach((mention) => {
+      this.copyOfUsers.forEach((user) => {
+        if (user.fullName.toLowerCase() === mention.toLowerCase()) {
+          mentionedUserIds.add(user.id);
+        }
+      });
+    });
+
+    const filteredUsers = this.copyOfUsers.filter((user) => {
+      return (
+        mentionedUserIds.has(user.id) ||
+        this.users.some((u) => u.id === user.id)
+      );
+    });
+
+    this.users = [...filteredUsers];
+    console.log(this.users);
+  }
+
+  makeCloneCopy() {
+    this.copyOfChannels = [...this.channels];
+    this.copyOfUsers = [...this.users];
+  }
+
+  onInputChange(event: any) {
     const values = event.target.value.split(' ');
 
     values.forEach((value: string) => {
@@ -141,6 +175,7 @@ export class MessageInputComponent implements OnInit {
   onInputFocus() {
     this.isInputFocused = true;
     this.usersSearch = false;
+    this.channelSearch = false;
     this.showEmoji = false;
   }
 
@@ -148,8 +183,8 @@ export class MessageInputComponent implements OnInit {
     this.isInputFocused = false;
   }
 
-  setUserAndChannels() {
-    this.firebaseService
+  async setUserAndChannels() {
+    await this.firebaseService
       .getAllUsers()
       .then((users: any[]) => {
         this.users = users;
@@ -158,7 +193,7 @@ export class MessageInputComponent implements OnInit {
         console.error('Error fetching users:', error);
       });
 
-    this.firebaseService
+    await this.firebaseService
       .getAllChannels()
       .then((channels: any[]) => {
         this.channels = channels;
@@ -166,6 +201,8 @@ export class MessageInputComponent implements OnInit {
       .catch((error) => {
         console.error('Error fetching channels:', error);
       });
+
+    this.makeCloneCopy();
   }
 
   toggleExpandPanel() {
@@ -185,21 +222,30 @@ export class MessageInputComponent implements OnInit {
 
     if (selectedUserIndex !== -1) {
       const selectedUser = this.users.splice(selectedUserIndex, 1)[0];
-      this.text += '@' + selectedUser.fullName + ' ';
+      const lastCharacterIsAtSymbol = this.text.trim().endsWith('@');
+      if (!lastCharacterIsAtSymbol) {
+        this.text += '@';
+      }
+      this.text += selectedUser.fullName + ' ';
     }
   }
 
   addChannel(channelName: string) {
-    const selectedChannelIndex = this.channels.find(
+    const selectedChannelIndex = this.channels.findIndex(
       (channel) => channel.name === channelName
     );
 
-    if (selectedChannelIndex.name !== -1) {
-      const selectedChannel = this.channels.splice(
-        selectedChannelIndex.name,
-        1
-      )[0];
-      this.text += '#' + selectedChannel.name + ' ';
+    if (this.channels.length === 1) {
+      this.channelSearch = false;
+    }
+
+    if (selectedChannelIndex !== -1) {
+      const selectedChannel = this.channels.splice(selectedChannelIndex, 1)[0];
+      const lastCharacterIsHashSymbol = this.text.trim().endsWith('#');
+      if (!lastCharacterIsHashSymbol) {
+        this.text += '#';
+      }
+      this.text += selectedChannel.name + ' ';
     }
   }
 
@@ -246,6 +292,7 @@ export class MessageInputComponent implements OnInit {
 
   async addMessage(channel: boolean) {
     this.usersSearch = false;
+    this.channelSearch = false;
     this.showEmoji = false;
 
     if (this.userInputField) {
