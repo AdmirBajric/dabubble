@@ -40,8 +40,8 @@ img {
 }
 
 .reverse {
-  flex-direction: row-reverse;
-  justify-content: flex-start;
+  flex-direction: row-reverse !important;
+  justify-content: flex-start !important;
   gap: 2rem;
 }
 
@@ -100,7 +100,7 @@ img {
 }
 
 .first-line {
-  @include flexbox(flex, unset, unset, center);
+  @include flexbox(flex, unset, flex-start, center);
   width: 100%;
 }
 
