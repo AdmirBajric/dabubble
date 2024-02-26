@@ -8,7 +8,6 @@
     top: -2rem; //must be half of height
     border-radius: 2.5rem 2.5rem 0 2.5rem;
     @include flexbox(flex, unset, center, center);
-    gap: 0.5rem;
     border: 0.1rem solid $light-purple-lines;
     right: 1.6rem;
 
@@ -18,6 +17,14 @@
 
     @media only screen and (min-width: 768px) {
         right: 3.2rem;
+    }
+
+    .gap-thread{
+        gap: 0;
+    }
+
+    .gap-chat{
+        gap: 0.5rem;
     }
 
     &.user-reaction {
