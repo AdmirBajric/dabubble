@@ -18,6 +18,7 @@ import { arrayUnion } from '@angular/fire/firestore';
   styleUrl: './message-hover-actions.component.scss',
 })
 export class MessageHoverActionsComponent {
+  @Input() position!: string;
   @Input() isYou!: boolean;
   @Input() thread: boolean = false;
   @Input() currentMessage!: Message;
