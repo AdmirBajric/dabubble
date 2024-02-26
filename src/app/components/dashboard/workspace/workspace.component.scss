@@ -152,9 +152,8 @@ h2 {
   width: 24rem;
 
   a {
-    @include fonts-styles(17px, 400);
     color: black;
-
+   
     &.link-create {
       color: $purple-3;
     }

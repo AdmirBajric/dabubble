@@ -147,6 +147,12 @@ img {
   .reaction-wrapper {
     position: relative;
   }
+
+  @media only screen and (max-width: 768px) and (max-height: 700px){
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: unset !important;
+  }
 }
 
 .reaction-info {
