@@ -38,16 +38,12 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 export class MessageComponent implements OnInit {
   constructor(
     private navService: chatNavigationService,
-
+    private elementRef: ElementRef,
     private firebaseService: FirebaseService
   ) {}
-  @Input() message: any;
   @Input() position: string | undefined;
-
-    private firebaseService: FirebaseService,
-    private elementRef: ElementRef
-  ) { }
-  @Input() message!: Message | Comment;
+  @Input() message!: Message;
+  @Input() typeOfMessage!: string; // either 'mainMessage' or 'comment'
   // @Input() comment!: Comment;
 
   @Input() messageId!: string | undefined;
