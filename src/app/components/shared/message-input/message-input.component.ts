@@ -62,7 +62,7 @@ export class MessageInputComponent implements OnInit {
   currentChannel: Channel | null = null;
   channelSubscription: Subscription | undefined;
   channelsSubscription: Subscription | undefined;
-  placeholder: string = 'Nachricht an #Entwicklerteam';
+  placeholder!: string;
   text: string = '';
   textForFile: string = '';
   form!: FormGroup;
@@ -103,6 +103,7 @@ export class MessageInputComponent implements OnInit {
     this.subscribeChannel();
     this.subscribeChannels();
     this.setUserAndChannels();
+    this.generatePlaceholder();
   }
 
   ngOnDestroy() {
@@ -120,6 +121,19 @@ export class MessageInputComponent implements OnInit {
         this.checkInputAndSyncArrays();
       }
     });
+  }
+
+  generatePlaceholder(){
+    if (this.usedLocation === 'channel') {
+      this.placeholder = this.getChannelPlaceholder();
+    } else if (this.usedLocation === 'thread'){
+      this.placeholder = `Antworten...`;
+    }
+  }
+
+  getChannelPlaceholder(){
+    const name = this.currentChannel?.name;
+    return `Nachricht an #${name}`
   }
 
   checkInputAndSyncArrays() {
