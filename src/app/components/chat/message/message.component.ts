@@ -38,12 +38,19 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 export class MessageComponent implements OnInit {
   constructor(
     private navService: chatNavigationService,
+
+    private firebaseService: FirebaseService
+  ) {}
+  @Input() message: any;
+  @Input() position: string | undefined;
+
     private firebaseService: FirebaseService,
     private elementRef: ElementRef
   ) { }
   @Input() message!: Message;
   @Input() typeOfMessage!: string; // either 'mainMessage' or 'comment'
   // @Input() comment!: Comment;
+
   @Input() messageId!: string | undefined;
   @Input() thread: boolean = false;
   @Output() updatedMessage = new EventEmitter<{
@@ -188,6 +195,13 @@ export class MessageComponent implements OnInit {
    * @param {Message} m
    */
   editMessage(m: Message) {
+
+    m.reactions.forEach((reaction: any) => {
+      if (reaction.userId === this.user.id) {
+        this.emoji = reaction.emoji;
+      }
+    });
+
     this.closeMessageHoverActions();
     this.saveOriginalMessage = m.text;
     this.openMessageEdit = true;
