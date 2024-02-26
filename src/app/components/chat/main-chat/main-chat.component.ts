@@ -17,11 +17,11 @@ import { DataService } from '../../../services/data.service';
 import { send } from 'process';
 
 @Component({
-    selector: 'app-main-chat',
-    standalone: true,
-    templateUrl: './main-chat.component.html',
-    styleUrl: './main-chat.component.scss',
-    imports: [ChatHeaderComponent, CommonModule, HoverChangeDirective, MessageComponent, MessageInputComponent, RouterLink, TimeSeparatorChatComponent],
+  selector: 'app-main-chat',
+  standalone: true,
+  templateUrl: './main-chat.component.html',
+  styleUrl: './main-chat.component.scss',
+  imports: [ChatHeaderComponent, CommonModule, HoverChangeDirective, MessageComponent, MessageInputComponent, RouterLink, TimeSeparatorChatComponent],
 
 })
 export class MainChatComponent implements OnInit, OnDestroy {
@@ -91,6 +91,14 @@ export class MainChatComponent implements OnInit, OnDestroy {
   }
 
   /**
+ * Checks if channel ID is presend and returns a boolean.
+ * @returns {boolean} - true, if: channel id is present; false, if: otherwise
+ */
+  checkIfChannel() {
+    return !!this.channelId;
+  }
+
+  /**
    * Gets the message object and sends it to Firestore database.
    * @param {Message} message
    */
@@ -124,107 +132,119 @@ export class MainChatComponent implements OnInit, OnDestroy {
         edited: true,
       });
     }
+  }
 
-    /**
-     * Searches for messages in a specific channel by its ID. Updates the local messages array.
-     * It sets 'showMessages' to true if at least one message is found.
-     * @async
-     * @param {string} id - ID of the channel
-     * @returns {*}
-     */
-    async searchChannelMessages(id: string) {
-        const querySnapshot = await this.firebaseService.queryDocuments(
-            'messages',
-            'channelId',
-            '==',
-            id
-        )
+  /**
+   * Searches for messages in a specific channel by its ID. Updates the local messages array.
+   * It sets 'showMessages' to true if at least one message is found.
+   * @async
+   * @param {string} id - ID of the channel
+   * @returns {*}
+   */
+  async searchChannelMessages(id: string) {
+    const querySnapshot = await this.firebaseService.queryDocuments(
+      'messages',
+      'channelId',
+      '==',
+      id
+    )
 
-        if (querySnapshot) {
-            querySnapshot.forEach((doc: any) => {
-                let messageData = doc.data();
-                messageData['id'] = doc.id;
-                // Check if the message is already in the local messages array to avoid duplicates.
-                const messageExists = this.messages.some(message => message.id === messageData.id);
-                //if the message does not exist, adds it to the loval messages array.
-                if (!messageExists) {
-                    this.messages.push(messageData);
-                }
-            });
-
-            this.sortMessagesChronologically();
-            // Set 'showMessages' to true indicating that messages are available for display.
-            this.showMessages = true;
+    if (querySnapshot) {
+      querySnapshot.forEach((doc: any) => {
+        let messageData = doc.data();
+        messageData['id'] = doc.id;
+        // Check if the message is already in the local messages array to avoid duplicates.
+        const messageExists = this.messages.some(message => message.id === messageData.id);
+        //if the message does not exist, adds it to the loval messages array.
+        if (!messageExists) {
+          this.messages.push(messageData);
         }
-    }
-    
-    /**
-     * Sorts messages chronologically according to timestamp. 
-     */
-    sortMessagesChronologically() {
-        this.messages.sort((a, b) => {
-            const dateA = new Date(a.timestamp);
-            const dateB = new Date(b.timestamp);
-            return dateA.getTime() - dateB.getTime();
-          });
-    }
+      });
 
-    /**
-     * Subscribes to the observable of current channel from the navigation service.
-     * When a new channel is emitted, it checks if the channel has changed and, if so, prepares data for the new channel.
-     */
-    subscribeToCurrentChannel() {
-        this.currentChannelSubscription = this.navServie.currentChannel.subscribe(channel => {
-            if (channel && 'id' in channel) {
-                if (this.channelChanged(channel.id)) {
-                    this.prepareData(channel.id, channel)
-                }
-            }
-        })
+      this.sortMessagesChronologically();
+      // Set 'showMessages' to true indicating that messages are available for display.
+      this.showMessages = true;
     }
+  }
 
-    /**
-     * Prepares the data according to the given channel. It clears any axisting messages,
-     * sets the current channel, and initiates a search for messages within the channel. 
-     * @date 2/16/2024 - 5:01:56 PM
-     *
-     * @param {string} id - The ID of the channel to prepare data for.
-     * @param {Channel} channel - The channel obkect containing data about the current channel.
-     */
-    prepareData(id: string, channel: Channel) {
-        this.messages = []; // Clears existing messages to prepare for new channel messages
-        this.currentChannel = channel; // Sets the current channel.
-        this.channelId = id; // Stores the channel ID for message search purposes
-        this.searchChannelMessages(id); // Inititates a search for messages.
-    }
+  /**
+   * Sorts messages chronologically according to timestamp. 
+   */
+  sortMessagesChronologically() {
+    this.messages.sort((a, b) => {
+      const dateA = new Date(a.timestamp);
+      const dateB = new Date(b.timestamp);
+      return dateA.getTime() - dateB.getTime();
+    });
+  }
 
-    /**
-     * Checks if the given channel ID is different from the current channel ID,
-     * indicating a channel change.
-     * @param {string} id - The ID of the channel to check against the current channel ID.
-     * @returns {boolean} - Return true if the given channel ID is different from the current channel ID
-     */
-    channelChanged(id: string) {
-        return this.channelId !== id;
-    }
+  /**
+   * Subscribes to the observable of current channel from the navigation service.
+   * When a new channel is emitted, it checks if the channel has changed and, if so, prepares data for the new channel.
+   */
+  subscribeToCurrentChannel() {
+    this.currentChannelSubscription = this.navServie.currentChannel.subscribe(channel => {
+      if (channel && 'id' in channel) {
+        if (this.channelChanged(channel.id)) {
+          this.prepareData(channel.id, channel)
+        }
+      }
+    })
+  }
+
+  /**
+ * Subscribes to the observable 'channelOpenStatus' of the navigation Service.
+ * Subscription is stored in 'channelOpenStatusSubscription' to manage the lifecycle of it.
+ * Updates 'showChannel' based on the latest status of the channel (open or closed).
+ */
+  subscribeChannelStatus() {
+    this.channelOpenStatusSubscription = this.navServie.channelStatus$.subscribe(isOpen => {
+      this.showChannel = isOpen;
+    })
+  }
+
+  /**
+   * Prepares the data according to the given channel. It clears any axisting messages,
+   * sets the current channel, and initiates a search for messages within the channel. 
+   * @date 2/16/2024 - 5:01:56 PM
+   *
+   * @param {string} id - The ID of the channel to prepare data for.
+   * @param {Channel} channel - The channel obkect containing data about the current channel.
+   */
+  prepareData(id: string, channel: Channel) {
+    this.messages = []; // Clears existing messages to prepare for new channel messages
+    this.currentChannel = channel; // Sets the current channel.
+    this.channelId = id; // Stores the channel ID for message search purposes
+    this.searchChannelMessages(id); // Inititates a search for messages.
+  }
+
+  /**
+   * Checks if the given channel ID is different from the current channel ID,
+   * indicating a channel change.
+   * @param {string} id - The ID of the channel to check against the current channel ID.
+   * @returns {boolean} - Return true if the given channel ID is different from the current channel ID
+   */
+  channelChanged(id: string) {
+    return this.channelId !== id;
+  }
 
 
-    /**
-     * Compares the day, month & year of two given messagetimestamps. 
-     * It returns true, if the two messages are sent on different days, 
-     * so the time-separator must be shown.
-     * @param {Date} time0 - timestamp of previous message
-     * @param {Date} time1 - timestamp of message
-     * @returns {boolean}
-    */
-    isDifferentDay(time0: Date, time1: Date) {
-        const previousDate = new Date(time0);
-        const currentDate = new Date(time1);
+  /**
+   * Compares the day, month & year of two given messagetimestamps. 
+   * It returns true, if the two messages are sent on different days, 
+   * so the time-separator must be shown.
+   * @param {Date} time0 - timestamp of previous message
+   * @param {Date} time1 - timestamp of message
+   * @returns {boolean}
+  */
+  isDifferentDay(time0: Date, time1: Date) {
+    const previousDate = new Date(time0);
+    const currentDate = new Date(time1);
 
-        return previousDate.getDate() !== currentDate.getDate() ||
-            previousDate.getMonth() !== currentDate.getMonth() ||
-            previousDate.getFullYear() !== currentDate.getFullYear();
-    }
+    return previousDate.getDate() !== currentDate.getDate() ||
+      previousDate.getMonth() !== currentDate.getMonth() ||
+      previousDate.getFullYear() !== currentDate.getFullYear();
+  }
 
   ngOnDestroy() {
     if (this.channelOpenStatusSubscription) {
