@@ -41,7 +41,7 @@
 
               <ng-container *ngIf="hoveredIndex === i">
                 <div class="reaction-info">
-                  <span>{{ reaction.emoji }}</span>
+                  <span class="fs-18">{{ reaction.emoji }}</span>
                   <ng-container *ngFor="let r of reaction.users; let i = index">
                     <span class="reaction-from">{{ r.fullName }}</span>
                   </ng-container>
@@ -138,7 +138,7 @@
               
               <ng-container *ngIf="hoveredIndex === i">
                 <div class="reaction-info">
-                  <span>{{ reaction.emoji }}</span>
+                  <span class="fs-18">{{ reaction.emoji }}</span>
                   <ng-container *ngFor="let r of reaction.users; let i = index">
                     <span class="reaction-from">{{ r.fullName }}</span>
                   </ng-container>
