@@ -128,6 +128,8 @@ export class MessageInputComponent implements OnInit {
       this.placeholder = this.getChannelPlaceholder();
     } else if (this.usedLocation === 'thread'){
       this.placeholder = `Antworten...`;
+    } else if (this.usedLocation === 'newMessage'){
+      this.placeholder = `Starte eine neue Nachricht`;
     }
   }
 
