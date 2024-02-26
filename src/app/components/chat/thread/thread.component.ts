@@ -21,19 +21,19 @@ import { FirebaseService } from '../../../services/firebase.service';
 import { Comment, Message } from '../../../models/message.class';
 
 @Component({
-    selector: 'app-thread',
-    standalone: true,
-    templateUrl: './thread.component.html',
-    styleUrl: './thread.component.scss',
-    imports: [
-        CommonModule,
-        EmojisComponent,
-        PickerModule,
-        MessageInputComponent,
-        WorkspaceHeaderComponent,
-        MessageComponent,
-        ChatHeaderComponent
-    ]
+  selector: 'app-thread',
+  standalone: true,
+  templateUrl: './thread.component.html',
+  styleUrl: './thread.component.scss',
+  imports: [
+    CommonModule,
+    EmojisComponent,
+    PickerModule,
+    MessageInputComponent,
+    WorkspaceHeaderComponent,
+    MessageComponent,
+    ChatHeaderComponent
+  ]
 })
 export class ThreadComponent implements OnInit {
   @Input() threadData!: any;
@@ -86,7 +86,6 @@ export class ThreadComponent implements OnInit {
     this.subscribeThreadStatus();
     this.subscribeMessage();
     this.searchForComments();
-    this.countAnswers();
   }
 
   getTimeFromString(dateTimeString: string): string {
@@ -114,10 +113,11 @@ export class ThreadComponent implements OnInit {
           commentData['id'] = doc.id;
           //check if the comment is already in local answers arra to avoid duplicates
           const commentExists = this.answers.some(answer => answer.id === commentData.id);
-          if(!commentExists){
+          if (!commentExists) {
             this.answers.push(commentData);
           }
         });
+        this.countAnswers();
       }
     } catch (error) {
       console.error(error)

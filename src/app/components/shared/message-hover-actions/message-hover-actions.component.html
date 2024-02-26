@@ -75,7 +75,7 @@
 
 <div>
   <emoji-mart
-    (emojiClick)="emitEmoji($event, 'mainMessage')"
+    (emojiClick)="emitEmoji($event, typeOfMessage)"
     *ngIf="active"
     title="Pick your emoji…"
     [emojiSize]="16"
