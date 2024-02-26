@@ -216,6 +216,16 @@ export class MainChatComponent implements OnInit, OnDestroy {
     this.currentChannel = channel; // Sets the current channel.
     this.channelId = id; // Stores the channel ID for message search purposes
     this.searchChannelMessages(id); // Inititates a search for messages.
+
+    this.messagesSubscription = this.firebaseService
+      .getMessagesObservable()
+      .subscribe((messages) => {
+        this.messages = messages;
+        this.sortMessagesChronologically();
+        this.showMessages = true;
+      });
+
+    this.firebaseService.searchChannelMessagesRealTime(this.channelId);
   }
 
   /**
