@@ -20,6 +20,10 @@ export class chatNavigationService implements OnInit {
   private channelsUpdatedSubject = new Subject<any[]>();
   channelsUpdated$ = this.channelsUpdatedSubject.asObservable();
 
+  private isNewMessageOpenStatus!: boolean;
+  private isNewMessageOpen$: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
+
   constructor() {
     this.isThreadOpen$.subscribe((value) => {
       this.threadOpenStatus = value;
@@ -28,13 +32,17 @@ export class chatNavigationService implements OnInit {
     this.isChannelOpen$.subscribe((value) => {
       this.channelOpenStatus = value;
     })
+
+    this.isNewMessageOpen$.subscribe((value) => {
+      this.isNewMessageOpenStatus = value;
+    })
   }
 
   updateChannels(channels: any[]) {
     this.channelsUpdatedSubject.next(channels);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   openThread(message: Message) {
     this.currentMessage$.next(message);
@@ -46,15 +54,24 @@ export class chatNavigationService implements OnInit {
     this.isChannelOpen$.next(true);
   }
 
+  openNewMessage() {
+    this.isChannelOpen$.next(false);
+    console.log('navigationsService wird aufgerufen!');
+    this.isNewMessageOpen$.next(true);
+  }
+
   closeThread() {
     this.isThreadOpen$.next(false);
   }
 
+  closeNewMessage(){
+    this.isNewMessageOpen$.next(false);
+  }
   updateChannelStatus(status: boolean) {
     this.isChannelOpen$.next(status);
   }
 
-  closeChat(){
+  closeChat() {
     this.isChannelOpen$.next(false);
   }
 
@@ -82,6 +99,14 @@ export class chatNavigationService implements OnInit {
 
   get channelStatus$() {
     return this.isChannelOpen$.asObservable();
+  }
+
+  get newMessageStatus$() {
+    return this.isNewMessageOpen$.asObservable();
+  }
+
+  get isNewMessageOpen(): boolean {
+    return this.isNewMessageOpenStatus;
   }
 
   get isChannelOpen(): boolean {
