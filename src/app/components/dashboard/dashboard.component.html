@@ -15,6 +15,12 @@
   </div>
 
   <div class="chat border-radius-3">
+    <ng-container *ngIf="!showMessages && !writeNewMessage">
+      <div class="show-start-message">
+        <h1>Welcome to DaBubble</h1>
+        <h2>Please select a Channel or Direct Message to start Conversation!</h2>
+      </div>
+    </ng-container>
     <app-main-chat *ngIf="showMessages" class="border-radius-3"></app-main-chat>
     <app-new-message *ngIf="writeNewMessage" class="border-radius-3"></app-new-message>
   </div>

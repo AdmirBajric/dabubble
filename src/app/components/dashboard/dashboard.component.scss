@@ -84,6 +84,24 @@
     background-color: white;
 }
 
+.show-start-message {
+    width: 100%;
+    height: 4rem;
+    margin-top: 3rem;
+    margin-left: 3rem;
+  
+    h1 {
+      font-size: 2.2rem;
+      color: $purple-1;
+    }
+  
+    h2 {
+      font-size: 1.8rem;
+      margin-top: 2rem;
+      color: $purple-2;
+    }
+  }
+
 // ############################################# MOBILE #################################
 @media only screen and (max-width: 1099px) {
 

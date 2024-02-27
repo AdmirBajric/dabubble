@@ -2,12 +2,6 @@
   [class.no-mobile]="isNotDashboard"
   class="wrapper border-radius-3"
 >
-  <ng-container *ngIf="!showChannel">
-    <div class="show-start-message">
-      <h1>Welcome to DaBubble</h1>
-      <h2>Please select a Channel or Direct Message to start Conversation!</h2>
-    </div>
-  </ng-container>
   <ng-container *ngIf="showChannel">
     <app-chat-header></app-chat-header>
     <div class="content-container scroll" *ngIf="showMessages">

@@ -42,7 +42,7 @@ export class DashboardComponent implements OnInit {
     gridAreaRegulation: string = 'nct';
     selectedMessageForThread: any[] = [];
     activateThreadHeader: boolean = true; // must be set to true, because the default grid style shows all 3 main components of dashboard
-    showMessages: boolean = true; // default
+    showMessages: boolean = false; // default
     writeNewMessage: boolean = false // default
     private threadStatusSubscription!: Subscription;
     windowWidth!: number;
