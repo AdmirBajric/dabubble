@@ -1,31 +1,48 @@
 <div class="chat white wrapper-padding">
-  <section *ngIf="message.creator.fullName != user.fullName" (mouseover)="showActions = true"
-    (mouseleave)="showActions = false">
+  <section
+    *ngIf="message.creator.fullName != user.fullName"
+    (mouseover)="showActions = true"
+    (mouseleave)="showActions = false"
+  >
     <ng-container *ngIf="showActions">
-      <app-message-hover-actions [typeOfMessage]="typeOfMessage" [thread]="thread" *ngIf="message" [isYou]="false"
-        [currentMessage]="message" (editMessage)="editMessage(message)"
-        [position]="'right'"></app-message-hover-actions>
+      <app-message-hover-actions
+        [typeOfMessage]="typeOfMessage"
+        [thread]="thread"
+        *ngIf="message"
+        [isYou]="false"
+        [currentMessage]="message"
+        (editMessage)="editMessage(message)"
+        [position]="'right'"
+      ></app-message-hover-actions>
     </ng-container>
     <div class="flex">
       <img class="flex-img" src="{{ message.creator.avatar }}" alt="" />
       <div>
         <div class="first-line">
-          <h4 class="mr-2">{{message.creator.fullName}}</h4>
-          <span class="time">{{ getTimeFromString(message.timestamp) }} Uhr</span>
+          <h4 class="mr-2">{{ message.creator.fullName }}</h4>
+          <span class="time"
+            >{{ getTimeFromString(message.timestamp) }} Uhr</span
+          >
         </div>
         <div class="message-line fs-16">{{ message.text }}</div>
         <ng-container *ngIf="message.file.length > 0">
           <div class="file">
-            <img [class.thread-size]="thread" class="message-line-img" src="{{ message.file }}" />
+            <img
+              [class.thread-size]="thread"
+              class="message-line-img"
+              src="{{ message.file }}"
+            />
           </div>
         </ng-container>
 
         <div class="reactions-section">
-
           <ng-container *ngIf="!thread">
             <div class="answers-line" *ngIf="answers.length > 0">
-              <span class="answers-count" (click)="showAnswersinThread(message)">{{ answersCount }}
-                <ng-container *ngIf="answersCount === 0; else multipleAnswers">Antwort</ng-container>
+              <span class="answers-count" (click)="showAnswersinThread(message)"
+                >{{ answersCount }}
+                <ng-container *ngIf="answersCount === 0; else multipleAnswers"
+                  >Antwort</ng-container
+                >
                 <ng-template #multipleAnswers>Antworten</ng-template>
               </span>
               <span class="time">Letzte Antwort {{ lastAnswerTime }} Uhr</span>
@@ -33,8 +50,15 @@
           </ng-container>
 
           <div class="emoji-line" *ngIf="reactions.length > 0">
-            <div *ngFor="let reaction of reactions; let i = index" class="reaction-wrapper">
-              <div class="emoji-container" (mouseover)="hoveredIndex = i" (mouseout)="hoveredIndex = null">
+            <div
+              *ngFor="let reaction of reactions; let i = index"
+              class="reaction-wrapper"
+            >
+              <div
+                class="emoji-container"
+                (mouseover)="hoveredIndex = i"
+                (mouseout)="hoveredIndex = null"
+              >
                 <span class="emoji-img">{{ reaction.emoji }}</span>
                 <span class="emoji-count">{{ reaction.count }}</span>
               </div>
@@ -45,41 +69,57 @@
                   <ng-container *ngFor="let r of reaction.users; let i = index">
                     <span class="reaction-from">{{ r.fullName }}</span>
                   </ng-container>
-                  <span *ngIf="reaction.users.length > 1; else singleUserReaction">
+                  <span
+                    *ngIf="reaction.users.length > 1; else singleUserReaction"
+                  >
                     haben reagiert
                   </span>
                   <ng-template #singleUserReaction> hat reagiert </ng-template>
                 </div>
               </ng-container>
-
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </section>
 
-
-
-  <section *ngIf="message.creator.fullName === user.fullName" (mouseover)="showActions = true"
-    (mouseleave)="showActions = false" [class.bigger]="openMessageEdit">
+  <section
+    *ngIf="message.creator.fullName === user.fullName"
+    (mouseover)="showActions = true"
+    (mouseleave)="showActions = false"
+    [class.bigger]="openMessageEdit"
+  >
     <div class="hover-actions" *ngIf="showActions">
-      <app-message-hover-actions [typeOfMessage]="typeOfMessage" (editMessage)="editMessage(message)" [isYou]="true"
-        [currentMessage]="message" [thread]="thread"></app-message-hover-actions>
+      <app-message-hover-actions
+        [typeOfMessage]="typeOfMessage"
+        (editMessage)="editMessage(message)"
+        [isYou]="true"
+        [currentMessage]="message"
+        [thread]="thread"
+      ></app-message-hover-actions>
     </div>
 
     <ng-container *ngIf="openMessageEdit">
       <div class="edit-message-wrapper">
-        <textarea #messageEditInput [(ngModel)]="message.text" autocomplete="off"></textarea>
+        <textarea
+          #messageEditInput
+          [(ngModel)]="message.text"
+          autocomplete="off"
+        ></textarea>
         <div class="btn-edit-wrapper">
-          <button (click)="addEmoji()" class="btn-50" appHoverChange [elementsConfig]="[
+          <button
+            (click)="addEmoji()"
+            class="btn-50"
+            appHoverChange
+            [elementsConfig]="[
               {
                 imageSelector: 'img',
                 defaultSrc: '../../../../assets/img/add_emoji.svg',
                 hoverSrc: '../../../../assets/img/add_emoji_hover.svg'
               }
-            ]">
+            ]"
+          >
             <img src="../../../../assets/img/add_emoji.svg" alt="emoji" />
           </button>
           <ng-container *ngIf="emoji.length > 0">
@@ -87,7 +127,10 @@
           </ng-container>
 
           <div class="btn-edit-2">
-            <button (click)="saveEditedMessage(messageEditInput.value)" class="border-radius-3">
+            <button
+              (click)="saveEditedMessage(messageEditInput.value)"
+              class="border-radius-3"
+            >
               Speichern
             </button>
 
@@ -98,51 +141,83 @@
         </div>
       </div>
 
-      <emoji-mart *ngIf="showEmoji" [emojiSize]="16" [sheetSize]="16" [darkMode]="false" [totalFrequentLines]="0"
-        [enableSearch]="false" (emojiClick)="emitEmoji($event, messageId)" [style]="{
+      <emoji-mart
+        *ngIf="showEmoji"
+        [emojiSize]="16"
+        [sheetSize]="16"
+        [darkMode]="false"
+        [totalFrequentLines]="0"
+        [enableSearch]="false"
+        (emojiClick)="emitEmoji($event, messageId)"
+        [style]="{
           position: 'absolute',
           top: '9.5rem'
-        }"></emoji-mart>
+        }"
+      ></emoji-mart>
     </ng-container>
 
     <div class="flex reverse">
-      <img src="{{ message.creator.avatar }}" alt="" class="user-img flex-img" />
+      <img
+        src="{{ message.creator.avatar }}"
+        alt=""
+        class="user-img flex-img"
+      />
       <div class="message-wrapper">
         <div class="first-line reverse">
           <h4 class="mr-2">{{ message.creator.fullName }}</h4>
-          <span class="time">{{ getTimeFromString(message.timestamp) }} Uhr</span>
+          <span class="time"
+            >{{ getTimeFromString(message.timestamp) }} Uhr</span
+          >
         </div>
         <div class="message-line own fs-16">{{ message.text }}</div>
 
         <ng-container *ngIf="message.file.length > 0">
-          <div class="file" [ngStyle]="{'display': openMessageEdit ? 'none' : 'flex'}" [class.justify-end]="message.creator.fullName === user.fullName">
-            <img [class.thread-size]="thread" class="message-line-img" src="{{ message.file }}" />
+          <div
+            class="file"
+            [ngStyle]="{ display: openMessageEdit ? 'none' : 'flex' }"
+            [class.justify-end]="message.creator.fullName === user.fullName"
+          >
+            <img
+              [class.thread-size]="thread"
+              class="message-line-img"
+              src="{{ message.file }}"
+            />
           </div>
         </ng-container>
 
         <div class="reactions-section">
-
           <ng-container *ngIf="!thread">
             <div class="answers-line" *ngIf="this.answers.length > 0">
-              <span class="answers-count" (click)="showAnswersinThread(message)">{{ answersCount }} Antworten</span>
+              <span class="answers-count" (click)="showAnswersinThread(message)"
+                >{{ answersCount }} Antworten</span
+              >
               <span class="time">Letzte Antwort {{ lastAnswerTime }} Uhr</span>
             </div>
           </ng-container>
 
           <div class="emoji-line" *ngIf="reactions.length > 0">
-            <div *ngFor="let reaction of reactions; let i = index" class="reaction-wrapper">
-              <div class="emoji-container" (mouseover)="hoveredIndex = i" (mouseout)="hoveredIndex = null">
+            <div
+              *ngFor="let reaction of reactions; let i = index"
+              class="reaction-wrapper"
+            >
+              <div
+                class="emoji-container"
+                (mouseover)="hoveredIndex = i"
+                (mouseout)="hoveredIndex = null"
+              >
                 <span class="emoji-img">{{ reaction.emoji }}</span>
                 <span class="emoji-count">{{ reaction.count }}</span>
               </div>
-              
+
               <ng-container *ngIf="hoveredIndex === i">
                 <div class="reaction-info">
                   <span class="fs-18">{{ reaction.emoji }}</span>
                   <ng-container *ngFor="let r of reaction.users; let i = index">
                     <span class="reaction-from">{{ r.fullName }}</span>
                   </ng-container>
-                  <span *ngIf="reaction.users.length > 1; else singleUserReaction">
+                  <span
+                    *ngIf="reaction.users.length > 1; else singleUserReaction"
+                  >
                     haben reagiert
                   </span>
                   <ng-template #singleUserReaction> hat reagiert </ng-template>
@@ -151,7 +226,6 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </section>
