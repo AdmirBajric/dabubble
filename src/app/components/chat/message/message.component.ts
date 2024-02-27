@@ -146,9 +146,9 @@ export class MessageComponent implements OnInit {
 
   getType() {
     if (this.typeOfMessage === 'mainMessage') {
-      return 'messages'
+      return 'messages';
     } else if (this.typeOfMessage === 'comment') {
-      return 'comments'
+      return 'comments';
     } else {
       return;
     }
@@ -219,9 +219,9 @@ export class MessageComponent implements OnInit {
     const id = this.getMessageId() as string;
     this.updatedMessage.emit({ messageText, id });
     this.openMessageEdit = false;
-    if (this.emoji.length > 0) {
-      this.setAndSaveEmoji(this.messageId, this.emoji);
-    }
+    // if (this.emoji.length > 0) {
+    //   this.setAndSaveEmoji(this.messageId, this.emoji);
+    // }
   }
 
   /**
@@ -252,61 +252,65 @@ export class MessageComponent implements OnInit {
     }
   }
 
-
-  addEmoji(){
-
+  toggleEmojiContainer() {
+    this.showEmoji = !this.showEmoji;
   }
 
-  async emitEmoji(event: any, id: any) {
-    const emoji = this.getEmojiNative(event);
-    if (id && emoji) {
-      this.emoji = emoji;
-      this.messageId = id;
-      this.addEmoji();
-    }
+  // async emitEmoji(event: any, id: any) {
+  //   const emoji = this.getEmojiNative(event);
+  //   if (id && emoji) {
+  //     this.emoji = emoji;
+  //     this.messageId = id;
+  //   }
+  // }
+
+  addEmoji(event: any): void {
+    this.emoji = event.emoji.native;
+    this.showEmoji = false;
+    this.message.text += this.emoji;
   }
 
-  async setAndSaveEmoji(id: any, emoji: string) {
-    try {
-      const reaction = new Reaction({
-        fullName: this.user.fullName,
-        userId: this.user.id,
-        emoji: emoji,
-      });
-      const reactionJSON = reaction.toJSON();
+  // async setAndSaveEmoji(id: any, emoji: string) {
+  //   try {
+  //     const reaction = new Reaction({
+  //       fullName: this.user.fullName,
+  //       userId: this.user.id,
+  //       emoji: emoji,
+  //     });
+  //     const reactionJSON = reaction.toJSON();
 
-      const docSnapshot = await this.firebaseService.getDocument(
-        'messages',
-        id
-      );
-      if (docSnapshot.exists()) {
-        let existingReactions = docSnapshot.data()?.['reactions'] || [];
+  //     const docSnapshot = await this.firebaseService.getDocument(
+  //       'messages',
+  //       id
+  //     );
+  //     if (docSnapshot.exists()) {
+  //       let existingReactions = docSnapshot.data()?.['reactions'] || [];
 
-        const existingReactionIndex = existingReactions.findIndex(
-          (reaction: any) => reaction.userId === this.user.id
-        );
-        if (existingReactionIndex !== -1) {
-          existingReactions[existingReactionIndex] = reactionJSON;
-        } else {
-          existingReactions.push(reactionJSON);
-        }
+  //       const existingReactionIndex = existingReactions.findIndex(
+  //         (reaction: any) => reaction.userId === this.user.id
+  //       );
+  //       if (existingReactionIndex !== -1) {
+  //         existingReactions[existingReactionIndex] = reactionJSON;
+  //       } else {
+  //         existingReactions.push(reactionJSON);
+  //       }
 
-        await this.firebaseService.updateDocument('messages', id, {
-          reactions: existingReactions,
-        });
-      } else {
-        console.error('Document not found');
-      }
-    } catch (error) {
-      console.error('Error updating document:', error);
-    }
-  }
+  //       await this.firebaseService.updateDocument('messages', id, {
+  //         reactions: existingReactions,
+  //       });
+  //     } else {
+  //       console.error('Document not found');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error updating document:', error);
+  //   }
+  // }
 
-  getEmojiNative(e: any): string | null {
-    if (e.emoji && 'native') {
-      return e.emoji.native;
-    } else {
-      return null;
-    }
-  }
+  // getEmojiNative(e: any): string | null {
+  //   if (e.emoji && 'native') {
+  //     return e.emoji.native;
+  //   } else {
+  //     return null;
+  //   }
+  // }
 }

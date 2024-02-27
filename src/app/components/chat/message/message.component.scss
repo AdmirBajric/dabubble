@@ -250,3 +250,9 @@ button {
 .selected-emoji {
   font-size: 1.8rem;
 }
+
+// ****************** emoji-mart
+.emoji-selection {
+  z-index: 9999;
+  position: absolute;
+}

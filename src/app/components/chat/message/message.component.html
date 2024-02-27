@@ -109,7 +109,7 @@
         ></textarea>
         <div class="btn-edit-wrapper">
           <button
-            (click)="addEmoji()"
+            (click)="toggleEmojiContainer()"
             class="btn-50"
             appHoverChange
             [elementsConfig]="[
@@ -122,9 +122,9 @@
           >
             <img src="../../../../assets/img/add_emoji.svg" alt="emoji" />
           </button>
-          <ng-container *ngIf="emoji.length > 0">
+          <!-- <ng-container *ngIf="emoji.length > 0">
             <p class="selected-emoji">Your selected emoji: {{ emoji }}</p>
-          </ng-container>
+          </ng-container> -->
 
           <div class="btn-edit-2">
             <button
@@ -139,21 +139,22 @@
             </button>
           </div>
         </div>
+        <ng-container *ngIf="showEmoji">
+          <emoji-mart
+            class="emoji-selection"
+            [emojiSize]="16"
+            [sheetSize]="16"
+            [darkMode]="false"
+            [totalFrequentLines]="0"
+            [enableSearch]="false"
+            (emojiClick)="addEmoji($event)"
+            [style]="{
+              position: 'absolute',
+              top: '9.5rem'
+            }"
+          ></emoji-mart>
+        </ng-container>
       </div>
-
-      <emoji-mart
-        *ngIf="showEmoji"
-        [emojiSize]="16"
-        [sheetSize]="16"
-        [darkMode]="false"
-        [totalFrequentLines]="0"
-        [enableSearch]="false"
-        (emojiClick)="emitEmoji($event, messageId)"
-        [style]="{
-          position: 'absolute',
-          top: '9.5rem'
-        }"
-      ></emoji-mart>
     </ng-container>
 
     <div class="flex reverse">
