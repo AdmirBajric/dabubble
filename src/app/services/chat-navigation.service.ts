@@ -53,6 +53,7 @@ export class chatNavigationService implements OnInit {
     this.currentChannel$.next(channel);
     this.isChannelOpen$.next(true);
     this.isNewMessageOpen$.next(false);
+    this.isThreadOpen$.next(false);
   }
 
   openNewMessage() {
