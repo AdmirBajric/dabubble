@@ -107,6 +107,7 @@ export class MessageInputComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.placeholder = '';
     if (this.channelSubscription) {
       this.channelSubscription.unsubscribe();
     }
@@ -123,19 +124,23 @@ export class MessageInputComponent implements OnInit {
     });
   }
 
-  generatePlaceholder(){
+  generatePlaceholder() {
     if (this.usedLocation === 'channel') {
       this.placeholder = this.getChannelPlaceholder();
-    } else if (this.usedLocation === 'thread'){
+    } else if (this.usedLocation === 'thread') {
       this.placeholder = `Antworten...`;
-    } else if (this.usedLocation === 'newMessage'){
+    } else if (this.usedLocation === 'newMessage') {
       this.placeholder = `Starte eine neue Nachricht`;
     }
   }
 
-  getChannelPlaceholder(){
-    const name = this.currentChannel?.name;
-    return `Nachricht an #${name}`
+  getChannelPlaceholder() {
+    if (this.currentChannel) {
+      const name = this.currentChannel.name;
+      return `Nachricht an #${name}`;
+    } else {
+      return `Schreibe eine Nachricht`;
+    }
   }
 
   checkInputAndSyncArrays() {
@@ -294,6 +299,7 @@ export class MessageInputComponent implements OnInit {
     this.channelSubscription = this.navService.currentChannel.subscribe(
       (channel) => {
         this.currentChannel = channel;
+        this.generatePlaceholder();
       }
     );
   }
@@ -364,7 +370,7 @@ export class MessageInputComponent implements OnInit {
       } else if (this.usedLocation === 'thread') {
         const commentText = this.text;
         const commentFile = this.uploadedFile;
-        this.commentData.emit({ commentText, commentFile })
+        this.commentData.emit({ commentText, commentFile });
       }
       this.text = '';
     }
@@ -392,7 +398,6 @@ export class MessageInputComponent implements OnInit {
       file: this.uploadedFile,
     });
   }
-
 
   checkIfChannel() {
     if (this.usedLocation === 'channel') {
