@@ -14,8 +14,8 @@ import { WorkspaceHeaderComponent } from '../../dashboard/workspace/workspace-he
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { chatNavigationService } from '../../../services/chat-navigation.service';
-import { MessageComponent } from "../message/message.component";
-import { ChatHeaderComponent } from "../../shared/chat-header/chat-header.component";
+import { MessageComponent } from '../message/message.component';
+import { ChatHeaderComponent } from '../../shared/chat-header/chat-header.component';
 import { User } from '../../../models/user.class';
 import { FirebaseService } from '../../../services/firebase.service';
 import { Comment, Message } from '../../../models/message.class';
@@ -32,8 +32,8 @@ import { Comment, Message } from '../../../models/message.class';
     MessageInputComponent,
     WorkspaceHeaderComponent,
     MessageComponent,
-    ChatHeaderComponent
-  ]
+    ChatHeaderComponent,
+  ],
 })
 export class ThreadComponent implements OnInit {
   currentMessage!: Message;
@@ -50,8 +50,8 @@ export class ThreadComponent implements OnInit {
     private el: ElementRef,
     public router: Router,
     private navService: chatNavigationService,
-    private firebaseService: FirebaseService,
-  ) { }
+    private firebaseService: FirebaseService
+  ) {}
 
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
@@ -111,7 +111,9 @@ export class ThreadComponent implements OnInit {
           let commentData = doc.data();
           commentData['id'] = doc.id;
           //check if the comment is already in local answers arra to avoid duplicates
-          const commentExists = this.answers.some(answer => answer.id === commentData.id);
+          const commentExists = this.answers.some(
+            (answer) => answer.id === commentData.id
+          );
           if (!commentExists) {
             this.answers.push(commentData);
           }
@@ -119,16 +121,15 @@ export class ThreadComponent implements OnInit {
         this.countAnswers();
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   }
-
 
   countAnswers() {
     this.answersCount = this.answers.length;
   }
 
-  prepareComment(event: { commentText: string, commentFile: string }) {
+  prepareComment(event: { commentText: string; commentFile: string }) {
     const id = this.getMessageId();
     const text = event.commentText;
     const file = event.commentFile;
@@ -141,7 +142,7 @@ export class ThreadComponent implements OnInit {
       isChannelMessage: false,
       edited: false,
       file: file,
-      privateMsg: false //DYNAMISCH ANPASSEN
+      privateMsg: false, //DYNAMISCH ANPASSEN
     });
     this.sendComment(comment);
   }
@@ -165,19 +166,23 @@ export class ThreadComponent implements OnInit {
   }
 
   subscribeMessage() {
-    this.navService.currentMessage.subscribe(message => {
+    this.navService.currentMessage.subscribe((message) => {
       this.currentMessage = message;
-    })
+    });
   }
 
   subscribeThreadStatus() {
-    this.threadStatusSubscription = this.navService.threadStatus$.subscribe(isOpen => {
-      if (!isOpen) {
-        if (this.messageSubscription) {
-          this.messageSubscription.unsubscribe();
+    this.threadStatusSubscription = this.navService.threadStatus$.subscribe(
+      (isOpen) => {
+        this.answers.length = 0;
+        this.searchForComments();
+        if (!isOpen) {
+          if (this.messageSubscription) {
+            this.messageSubscription.unsubscribe();
+          }
         }
       }
-    })
+    );
   }
 
   ngOnDestroy() {
