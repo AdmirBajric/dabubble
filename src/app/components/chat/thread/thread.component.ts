@@ -36,7 +36,6 @@ import { Comment, Message } from '../../../models/message.class';
   ]
 })
 export class ThreadComponent implements OnInit {
-  @Input() threadData!: any;
   currentMessage!: Message;
   private messageSubscription!: Subscription;
   private threadStatusSubscription!: Subscription;
