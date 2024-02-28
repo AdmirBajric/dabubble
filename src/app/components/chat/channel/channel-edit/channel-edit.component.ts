@@ -49,6 +49,7 @@ export class ChannelEditComponent {
   channelDescriptionOnFocus: boolean = false;
   createdBy: string = '';
   channelDescription: string = '';
+  creatorAvatar: string = '';
   channelId: string = '';
   channelMembers: any[] = [];
 
@@ -98,6 +99,7 @@ export class ChannelEditComponent {
         this.channelNameCopy = channel['name'];
         this.channelName = channel['name'];
         this.createdBy = channel['creator'].fullName;
+        this.creatorAvatar = channel['creator'].avatar;
         this.channelDescription = channel['description'];
 
         channel['members'].forEach((member: any) => {
