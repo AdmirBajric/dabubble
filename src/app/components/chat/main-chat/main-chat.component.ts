@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChatHeaderComponent } from '../../shared/chat-header/chat-header.component';
 import { MessageInputComponent } from '../../shared/message-input/message-input.component';
@@ -29,12 +29,13 @@ import { DataService } from '../../../services/data.service';
     RouterLink,
     TimeSeparatorChatComponent,
   ],
+  encapsulation: ViewEncapsulation.None, // Disable view encapsulation
 })
 export class MainChatComponent implements OnInit, OnDestroy {
   text: string = '';
   messages: Message[] = [];
   showMessages!: boolean;
-  currentChannel!: Channel;
+  currentChannel!: any;
   currentUser!: User;
   channelId!: string;
   userId!: string;
@@ -119,6 +120,7 @@ export class MainChatComponent implements OnInit, OnDestroy {
    * @returns {*}
    */
   async saveEditedMessage(event: { messageText: string; id: string }) {
+    console.log(this.currentChannel);
     const docSnapshot = await this.firebaseService.getDocument(
       'messages',
       event.id
@@ -223,9 +225,9 @@ export class MainChatComponent implements OnInit, OnDestroy {
    */
 
   async prepareData(id: string, channelOrUser: any) {
-    if (channelOrUser.avatar) {
-      this.messages = []; // Clears existing messages to prepare for new channel messages
-      this.currentChannel = channelOrUser; // Sets the current channel.
+    if (channelOrUser.isUser) {
+      this.messages = [];
+      this.currentChannel = channelOrUser;
       this.channelId = id;
 
       this.messagesSubscription = this.firebaseService
@@ -237,9 +239,9 @@ export class MainChatComponent implements OnInit, OnDestroy {
         });
       await this.firebaseService.searchUserMessagesRealTime(id, this.user);
     } else {
-      this.messages = []; // Clears existing messages to prepare for new channel messages
-      this.currentChannel = channelOrUser; // Sets the current channel.
-      this.channelId = id; // Stores the channel ID for message search purposes
+      this.messages = [];
+      this.currentChannel = channelOrUser;
+      this.channelId = id;
       await this.searchChannelMessages(id);
 
       this.messagesSubscription = this.firebaseService
@@ -271,7 +273,7 @@ export class MainChatComponent implements OnInit, OnDestroy {
             return message;
           })
         );
-        console.log(this.messages); // This will log the messages with comments length after all comments are fetched.
+        console.log(this.messages);
       }
     );
   }

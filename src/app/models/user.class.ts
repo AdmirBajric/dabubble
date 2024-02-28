@@ -5,6 +5,7 @@ export class User {
   password: string;
   avatar: string;
   isOnline: boolean;
+  isUser: boolean;
 
   constructor(obj?: any) {
     this.id = obj ? obj.id : undefined;
@@ -13,6 +14,7 @@ export class User {
     this.password = obj ? obj.password : '';
     this.avatar = obj ? obj.avatar : '';
     this.isOnline = obj ? obj.isOnline : false;
+    this.isUser = true;
   }
 
   public toJSON() {
@@ -22,6 +24,7 @@ export class User {
       email: this.email,
       avatar: this.avatar,
       isOnline: this.isOnline,
+      isUser: this.isUser,
     };
 
     if (this.password !== undefined) {

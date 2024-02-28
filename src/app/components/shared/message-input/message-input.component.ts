@@ -53,7 +53,7 @@ export class MessageInputComponent implements OnInit {
   @Output() messageText: EventEmitter<string> = new EventEmitter<string>();
   @ViewChild('userInputField') userInputField!: ElementRef<HTMLInputElement>;
 
-  currentChannel: Channel | null = null;
+  currentChannel: any | null = null;
   channelSubscription: Subscription | undefined;
   channelsSubscription: Subscription | undefined;
 
@@ -291,8 +291,6 @@ export class MessageInputComponent implements OnInit {
   }
 
   async addMessage(channel: boolean) {
-    console.log(this.currentChannel);
-
     this.usersSearch = false;
     this.channelSearch = false;
     this.showEmoji = false;
@@ -301,35 +299,70 @@ export class MessageInputComponent implements OnInit {
       this.text = this.userInputField.nativeElement.value;
     }
 
-    if (this.text.length > 0 || this.selectedFile !== null) {
-      await this.uploadImage();
+    if (this.currentChannel.isUser) {
+      if (this.text.length > 0 || this.selectedFile !== null) {
+        await this.uploadImage();
 
-      if (this.text.length > 0) {
-        const message = new Message({
-          text: this.text,
-          timestamp: new Date(),
-          creator: this.user,
-          channelId: this.currentChannel?.id,
-          isChannelMessage: channel,
-          reactions: [],
-          file: this.uploadedFile,
-        });
-
-        const messageToJson = message.toJSON();
-
-        this.firebaseService
-          .addDocument('messages', messageToJson)
-          .then((data: any) => {
-            this.messageId = data.id;
-            this.text = '';
-            this.textForFile = '';
-            if (this.selectedFile === null) {
-              this.uploadedFile = '';
-            }
-          })
-          .catch((err: any) => {
-            console.log(err);
+        if (this.text.length > 0) {
+          const message = new Message({
+            text: this.text,
+            timestamp: new Date(),
+            creator: this.user,
+            recipient: this.currentChannel,
+            isChannelMessage: false,
+            privateMsg: this.user.id === this.currentChannel.id,
+            reactions: [],
+            file: this.uploadedFile,
           });
+
+          const messageToJson = message.toJSON();
+
+          this.firebaseService
+            .addDocument('messages', messageToJson)
+            .then((data: any) => {
+              this.messageId = data.id;
+              this.text = '';
+              this.textForFile = '';
+              if (this.selectedFile === null) {
+                this.uploadedFile = '';
+              }
+            })
+            .catch((err: any) => {
+              console.log(err);
+            });
+        }
+      }
+    } else {
+      if (this.text.length > 0 || this.selectedFile !== null) {
+        await this.uploadImage();
+
+        if (this.text.length > 0) {
+          const message = new Message({
+            text: this.text,
+            timestamp: new Date(),
+            creator: this.user,
+            channelId: this.currentChannel?.id,
+            isChannelMessage: channel,
+            reactions: [],
+            file: this.uploadedFile,
+          });
+
+          const messageToJson = message.toJSON();
+
+          this.firebaseService
+            .addDocument('messages', messageToJson)
+            .then((data: any) => {
+              this.messageId = data.id;
+              this.text = '';
+              this.textForFile = '';
+              if (this.selectedFile === null) {
+                this.uploadedFile = '';
+              }
+            })
+            .catch((err: any) => {
+              console.log(err);
+            });
+        }
       }
     }
   }

@@ -76,12 +76,13 @@ export class FirebaseService {
     if (user) {
       let queryRef;
 
-      if (user.id !== recipientId) {
+      if (user.id === recipientId) {
         queryRef = query(
           collection(this.firestore, 'messages'),
           where('isChannelMessage', '==', false),
           where('creator.id', '==', user.id),
           where('recipient.id', '==', recipientId),
+          where('privateMsg', '==', true),
           orderBy('timestamp')
         );
       } else {
@@ -90,6 +91,7 @@ export class FirebaseService {
           where('isChannelMessage', '==', false),
           where('creator.id', 'in', [user.id, recipientId]),
           where('recipient.id', 'in', [user.id, recipientId]),
+          where('privateMsg', '==', false),
           orderBy('timestamp')
         );
       }
