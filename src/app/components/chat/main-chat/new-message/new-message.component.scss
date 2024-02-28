@@ -2,22 +2,39 @@
 @import "../../../../colors.scss";
 
 h1 {
-    font-size: 2.4rem;
+  font-size: 2.4rem;
 }
 
 .wrapper {
-    background-color: white;
-    position: relative;
-    height: 96%;
+  background-color: white;
+  position: relative;
+  height: 96%;
+  @include flexbox(flex, column, unset, unset);
+  gap: 5rem;
+  @media only screen and (max-width: 1099px) {
+    height: calc(100vh - 10rem);
+  }
+}
 
-    @media only screen and (max-width: 1099px){
-        height: calc(100vh - 10rem);
-    }
+.content {
+  height: 50%;
 }
 
 .head {
-    @include flexbox(flex, column, unset, unset);
-    gap: 2rem;
-    margin-top: 2rem;
-    height: 8rem;
+  @include flexbox(flex, column, unset, unset);
+  gap: 2rem;
+  margin-top: 2rem;
+  height: 8rem;
+}
+
+.sending-information {
+  height: 100%;
+  @include flexbox(flex, unset, center, center);
+
+  .information-text {
+    font-size: 1.8rem;
+    border: 0.1rem solid $light-purple-lines;
+    padding: 1rem;
+    color: $text-gray;
+  }
 }

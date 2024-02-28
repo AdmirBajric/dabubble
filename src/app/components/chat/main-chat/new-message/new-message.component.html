@@ -1,12 +1,27 @@
-<div class="wrapper wrapper-padding border-radius-3" >
-    <section class="head">
-        <h1>Neue Nachricht</h1>
-        <div class="search">
-           <app-searchbar [showBorder]="true" [showLoupe]="false" [placeholder]="inputPlaceholder"></app-searchbar>
-        </div>
-    </section>
-    <section class="content"></section>
-    <section class="chat-input">
-        <app-message-input [usedLocation]="'newMessage'"></app-message-input>
-    </section>
+<div class="wrapper wrapper-padding border-radius-3">
+  <section class="head">
+    <h1>Neue Nachricht</h1>
+    <div class="search">
+      <app-searchbar
+        #searchBarRef
+        [searchRecipients]="true"
+        [showBorder]="true"
+        [showLoupe]="false"
+        [placeholder]="inputPlaceholder"
+      ></app-searchbar>
+    </div>
+  </section>
+  <section class="content">
+    <ng-container *ngIf="messageSuccess">
+      <section class="sending-information">
+        <span class="information-text border-radius-3">Deine Nachricht wurde gesendet</span>
+      </section>
+    </ng-container>
+  </section>
+  <section class="chat-input">
+    <app-message-input
+      (newMessageData)="handleNewMessage($event)"
+      [usedLocation]="'newMessage'"
+    ></app-message-input>
+  </section>
 </div>
