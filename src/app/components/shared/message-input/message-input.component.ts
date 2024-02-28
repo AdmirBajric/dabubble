@@ -48,15 +48,19 @@ import { Message } from '../../../models/message.class';
   styleUrl: './message-input.component.scss',
 })
 export class MessageInputComponent implements OnInit {
-  @Input() styleHeaderForThread: boolean = false;
   @Output() closeThread: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() messageText: EventEmitter<string> = new EventEmitter<string>();
-  // can be used in 'directMessages', 'channel', 'thread'
-  @Input() usedLocation!: string;
   @Output() commentData = new EventEmitter<{
     commentText: string;
     commentFile: string;
   }>();
+  @Output() newMessageData = new EventEmitter<{
+    text: string;
+    file: string;
+  }>();
+  // can be used in 'directMessages', 'channel', 'thread'
+  @Input() usedLocation!: string;
+  @Input() styleHeaderForThread: boolean = false;
   @ViewChild('userInputField') userInputField!: ElementRef<HTMLInputElement>;
 
   currentChannel: Channel | null = null;
@@ -397,6 +401,17 @@ export class MessageInputComponent implements OnInit {
       reactions: [],
       file: this.uploadedFile,
     });
+  }
+
+  // this is used when user wants to write new message. usedLocation === 'newMessage'
+  async emitText() {
+    await this.uploadImage();
+    if (this.text.length > 0) {
+      const text = this.text;
+      const file = this.uploadedFile;
+      this.newMessageData.emit({ text, file });
+      this.text = '';
+    }
   }
 
   checkIfChannel() {
