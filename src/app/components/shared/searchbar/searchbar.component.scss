@@ -1,103 +1,127 @@
 @import "../../../colors.scss";
+@import "../../../mixins.scss";
 
 .input {
-    width: 100%;
-    height: 7rem;
-    border-radius: 4.2rem;
-    background-color: white;
-    border: none;
-    outline: none;
-    text-indent: 2rem;
-    font-size: 1.8rem;
-    transition: border ease-in-out 200ms;
+  width: 100%;
+  height: 7rem;
+  border-radius: 4.2rem;
+  background-color: white;
+  border: none;
+  outline: none;
+  text-indent: 2rem;
+  font-size: 1.8rem;
+  transition: border ease-in-out 200ms;
 
-    &.hover {
-        &:hover {
-            border: 1px solid #797EF3;
-        }
+  &.hover {
+    &:hover {
+      border: 1px solid #797ef3;
     }
+  }
 
-    // only displayed in /dashboard and NOT in /new-message
-    &.background-image {
-        background-image: url('../../../../assets/img/search.svg');
-        background-repeat: no-repeat;
-        background-position: 95%;
-    }
+  // only displayed in /dashboard and NOT in /new-message
+  &.background-image {
+    background-image: url("../../../../assets/img/search.svg");
+    background-repeat: no-repeat;
+    background-position: 95%;
+  }
 
-    &.border-white {
-        border: 1px solid white;
-    }
+  &.border-white {
+    border: 1px solid white;
+  }
 
-    &.border-light {
-        border: 1px solid $light-purple-lines;
-    }
+  &.border-light {
+    border: 1px solid $light-purple-lines;
+  }
 
-    @media only screen and (max-width: 767px) {
-        height: 5rem;
-        font-size: 1.2rem;
+  @media only screen and (max-width: 767px) {
+    height: 5rem;
+    font-size: 1.2rem;
+  }
+}
+
+.recipients {
+  @include flexbox(flex, column, unset, unset);
+  margin-top: 1rem;
+
+  ul {
+    list-style: none;
+
+    li {
+      @include flexbox(flex, unset, unset,center);
+      font-size: 1.2rem;
+      padding: 0.5rem 1rem;
+      border: 0.1rem solid $light-purple-lines;
+      max-width: fit-content;
+
+      img {
+        font-size: 1rem;
+        height: 3rem;
+        width: 3rem;
+      }
     }
+  }
 }
 
 .searchResults {
-    position: absolute;
-    top: 90%;
-    left: 0;
-    z-index: 999;
-    width: 90%;
-    border-radius: 2rem;
-    background-color: white;
+  position: absolute;
+  left: 0;
+  z-index: 999;
+  width: 90%;
+  border-radius: 2rem;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.8rem 1.6rem;
+  border: 1px solid #797ef3;
+
+  h2 {
+    padding: 0.8rem 0rem;
+    font-size: 1.8rem;
+  }
+
+  ul {
+    max-height: 50rem;
+    overflow-y: scroll;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    padding: 0.8rem 1.6rem;
-    border: 1px solid #797EF3;
+    width: 100%;
+    cursor: pointer;
+  }
 
-    h2 {
-        padding: 0.8rem 0rem;
-        font-size: 1.8rem;
-    }
-
-    ul {
-        max-height: 50rem;
-        overflow-y: scroll;
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        cursor: pointer;
-
-    }
-
-    li {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start !important;
-        font-size: 1.4rem;
-        list-style: none;
-        gap: 8px !important;
-        transition: color 200ms ease-in-out;
-
-        &:hover {
-            color: #535AF1;
-        }
-    }
-
-    p {
-        font-size: 1.6rem !important;
-    }
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start !important;
+    font-size: 1.4rem;
+    list-style: none;
+    gap: 8px !important;
+    transition: color 200ms ease-in-out;
+    margin-bottom: 0.5rem;
 
     &:hover {
-        color: black !important;
+      color: #535af1;
+      font-weight: bold;
     }
+  }
+
+  p {
+    font-size: 1.8rem !important;
+  }
+
+  &:hover {
+    color: black !important;
+  }
 }
 
 .imgHeadline {
-    width: 6.5rem !important;
-    height: 6.5rem;
-    border-radius: 10rem;
-    object-fit: cover;
+  width: 6.5rem !important;
+  height: 6.5rem;
+  border-radius: 10rem;
+  object-fit: cover;
 
-    @media(max-width: 980px) {
-        width: 5rem !important;
-        height: 5rem;
-    }
+  @media (max-width: 980px) {
+    width: 5rem !important;
+    height: 5rem;
+  }
 }

@@ -1,29 +1,76 @@
-<input [class.background-image]="showLoupe" [ngClass]="showBorder ? 'border-light' : 'border-white'" class="input hover"
-    type="text" placeholder="{{placeholder}}" (keyup)="search()" (ngModel)="searchTerm"
-    (input)="onInput($event)">
+<input
+  [class.background-image]="showLoupe"
+  [ngClass]="showBorder ? 'border-light' : 'border-white'"
+  class="input hover"
+  type="text"
+  placeholder="{{ placeholder }}"
+  (keyup)="search()"
+  [(ngModel)]="inputValue"
+  (input)="onInputChange($event)"
+  #searchbarInput
+/>
 
-<!-- ************************************************ only necessary when used in /dashboard desktop-->
-<div class="searchResults" *ngIf="searchTerm">
+<div class="searchResults wrapper-margin" *ngIf="usersSearch || channelSearch">
+  <ng-container *ngIf="usersSearch">
     <h2>Mitglieder</h2>
     <ul>
-        <li *ngFor="let user of filteredUserArray" (click)="selectUserSearchfield(user.fullName)">
-            <img class="imgHeadline" src="{{user.avatar}}" alt="Profile Image">
-            <p>{{ user.fullName }}</p>
-        </li>
-        <li
-            *ngIf="searchTerm && filteredUserArray && filteredUserArray.length === 0 && searchTerm.length >= 1">
-            Kein Mitglied gefunden
-        </li>
+      <li *ngFor="let user of copyOfUsers" (click)="selectUser(user.fullName)">
+        <img class="imgHeadline" src="{{ user.avatar }}" alt="Profile Image" />
+        <p>{{ user.fullName }}</p>
+      </li>
+      <!-- <li
+                *ngIf="searchTerm && users && users.length === 0 && searchTerm.length >= 1">
+                Kein Mitglied gefunden
+            </li> -->
     </ul>
+  </ng-container>
+  <ng-container *ngIf="channelSearch">
     <h2>Channels</h2>
     <ul>
-        <li *ngFor="let channel of filteredChannelsArray"
-            (click)="selectChannelSearchfield(channel.channelName)">
-            <p style="padding-bottom: 0.8rem;">#{{ channel.channelName }}</p>
-        </li>
-        <li
-            *ngIf="searchTerm && filteredChannelsArray && filteredChannelsArray.length === 0 && searchTerm.length >= 1">
-            Kein Kanal gefunden
-        </li>
+      <li *ngFor="let channel of copyOfChannels" (click)="selectChannel(channel.name)">
+        <p># {{ channel.name }}</p>
+      </li>
+      <!-- <li
+        *ngIf="
+          searchTerm &&
+          filteredChannelsArray &&
+          filteredChannelsArray.length === 0 &&
+          searchTerm.length >= 1
+        "
+      >
+        Kein Kanal gefunden
+      </li> -->
     </ul>
+  </ng-container>
 </div>
+
+<ng-container
+  *ngIf="
+    (selectedRecipients.length > 0 && !globalSearch) ||
+    (selectedChannels.length > 0 && !globalSearch)
+  "
+>
+  <section class="recipients">
+    <ul *ngFor="let user of selectedRecipients">
+      <li class="border-radius-3">
+        &#64; {{ user.fullName }}
+        <img
+          (click)="removeRecipient(user.fullName)"
+          src="../../../../assets/img/exit_X.svg"
+          alt="x"
+        />
+      </li>
+    </ul>
+
+    <ul *ngFor="let channel of selectedChannels">
+      <li class="border-radius-3">
+       # {{ channel.name }}
+        <img
+          (click)="removeChannel(channel.name)"
+          src="../../../../assets/img/exit_X.svg"
+          alt="x"
+        />
+      </li>
+    </ul>
+  </section>
+</ng-container>
