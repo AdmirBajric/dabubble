@@ -1,4 +1,10 @@
-<ng-container *ngIf="usedLocation === 'directMessages' || usedLocation === 'channel' || usedLocation === 'thread'">
+<ng-container
+  *ngIf="
+    usedLocation === 'directMessages' ||
+    usedLocation === 'channel' ||
+    usedLocation === 'thread'
+  "
+>
   <div class="inputComp">
     <textarea
       [(ngModel)]="text"
@@ -11,7 +17,7 @@
       (input)="onInputChange($event)"
       #userInputField
     ></textarea>
-  
+
     <div>
       <div class="flex between">
         <div class="options">
@@ -58,7 +64,7 @@
           </button>
         </div>
         <button
-          (click)="prepareData()"
+          (click)="addMessage(true)"
           appHoverChange
           [elementsConfig]="[
             {
@@ -90,7 +96,7 @@
         }"
       ></emoji-mart>
     </div>
-  
+
     <mat-expansion-panel
       *ngIf="usersSearch || channelSearch"
       class="expand-panel"
@@ -107,7 +113,7 @@
           <p>{{ user.fullName }}</p>
         </div>
       </ng-container>
-  
+
       <ng-container *ngIf="channelSearch">
         <div
           (click)="addChannel(channel.name)"
@@ -136,7 +142,10 @@
 
     <div>
       <div class="flex between">
-        <div class="options" [class.justify-unset]="usedLocation === 'newMessage'">
+        <div
+          class="options"
+          [class.justify-unset]="usedLocation === 'newMessage'"
+        >
           <input
             class="upload-hidden"
             type="file"

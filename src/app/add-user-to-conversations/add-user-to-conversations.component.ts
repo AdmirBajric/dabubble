@@ -46,13 +46,13 @@ export class AddUserToConversationsComponent implements OnInit {
       await this.createConversation(this.user, userToAdd);
       await this.createConversation(filteredUser, this.user.id);
     } catch (error: any) {
-      // if (error.message.includes('No document to update')) {
-      //   console.error(
-      //     'Error: Conversation does not exist. Creating a new conversation.'
-      //   );
-      // } else {
-      //   console.error('Error:', error.message);
-      // }
+      if (error.message.includes('No document to update')) {
+        console.error(
+          'Error: Conversation does not exist. Creating a new conversation.'
+        );
+      } else {
+        console.error('Error:', error.message);
+      }
     }
 
     // if (this.user) {

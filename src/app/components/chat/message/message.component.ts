@@ -75,7 +75,6 @@ export class MessageComponent implements OnInit {
     }
     await this.searchForComments();
     await this.searchForReactions();
-    this.TimeToStringAnswer();
   }
 
   async searchForComments() {
@@ -90,6 +89,7 @@ export class MessageComponent implements OnInit {
       let commentData = doc.data();
       commentData['id'] = doc.id;
       this.answers.push(commentData);
+      this.timeToStringAnswer();
       // this.editedComment = commentData['text'];
     });
   }
@@ -107,12 +107,18 @@ export class MessageComponent implements OnInit {
 
   async searchForReactions() {
     const id = this.getMessageId() as string;
-    const collection = this.getType() as string;
+    let collection = await this.getType();
+
+    if (collection === undefined) {
+      collection = 'messages';
+    }
+
     const docRef = this.firebaseService.getDocRef(collection, id);
     this.firebaseService.subscribeToDocumentUpdates(docRef, (docSnapshot) => {
       if (docSnapshot.exists()) {
         const existingReactions =
           (docSnapshot.data()?.['reactions'] as Reaction[]) || [];
+
         this.reactions = existingReactions;
 
         const emojiCountMap = new Map();
@@ -144,7 +150,7 @@ export class MessageComponent implements OnInit {
     });
   }
 
-  getType() {
+  async getType() {
     if (this.typeOfMessage === 'mainMessage') {
       return 'messages';
     } else if (this.typeOfMessage === 'comment') {
@@ -159,17 +165,13 @@ export class MessageComponent implements OnInit {
 
     const stunden = dateObject.getHours();
     const minuten = dateObject.getMinutes();
-
-    // Führende Nullen hinzufügen, wenn die Minuten einstellig sind
     const formatierteMinuten = minuten < 10 ? '0' + minuten : minuten;
-
-    // Das resultierende Zeitformat ist z.B. "10:30"
     const zeitFormat = `${stunden}:${formatierteMinuten}`;
 
     return zeitFormat;
   }
 
-  TimeToStringAnswer() {
+  async timeToStringAnswer() {
     this.countAnswers();
     if (this.answers.length > 0) {
       let time = this.answers[this.answersCount - 1].timestamp;
@@ -219,15 +221,8 @@ export class MessageComponent implements OnInit {
     const id = this.getMessageId() as string;
     this.updatedMessage.emit({ messageText, id });
     this.openMessageEdit = false;
-    // if (this.emoji.length > 0) {
-    //   this.setAndSaveEmoji(this.messageId, this.emoji);
-    // }
   }
 
-  /**
-   * Cancels the message editing by closing the input field for message editing &
-   * returns the original message text.
-   */
   cancelMessageEditing() {
     this.openMessageEdit = false;
     this.message.text = this.saveOriginalMessage;
@@ -256,61 +251,9 @@ export class MessageComponent implements OnInit {
     this.showEmoji = !this.showEmoji;
   }
 
-  // async emitEmoji(event: any, id: any) {
-  //   const emoji = this.getEmojiNative(event);
-  //   if (id && emoji) {
-  //     this.emoji = emoji;
-  //     this.messageId = id;
-  //   }
-  // }
-
   addEmoji(event: any): void {
     this.emoji = event.emoji.native;
     this.showEmoji = false;
     this.message.text += this.emoji;
   }
-
-  // async setAndSaveEmoji(id: any, emoji: string) {
-  //   try {
-  //     const reaction = new Reaction({
-  //       fullName: this.user.fullName,
-  //       userId: this.user.id,
-  //       emoji: emoji,
-  //     });
-  //     const reactionJSON = reaction.toJSON();
-
-  //     const docSnapshot = await this.firebaseService.getDocument(
-  //       'messages',
-  //       id
-  //     );
-  //     if (docSnapshot.exists()) {
-  //       let existingReactions = docSnapshot.data()?.['reactions'] || [];
-
-  //       const existingReactionIndex = existingReactions.findIndex(
-  //         (reaction: any) => reaction.userId === this.user.id
-  //       );
-  //       if (existingReactionIndex !== -1) {
-  //         existingReactions[existingReactionIndex] = reactionJSON;
-  //       } else {
-  //         existingReactions.push(reactionJSON);
-  //       }
-
-  //       await this.firebaseService.updateDocument('messages', id, {
-  //         reactions: existingReactions,
-  //       });
-  //     } else {
-  //       console.error('Document not found');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error updating document:', error);
-  //   }
-  // }
-
-  // getEmojiNative(e: any): string | null {
-  //   if (e.emoji && 'native') {
-  //     return e.emoji.native;
-  //   } else {
-  //     return null;
-  //   }
-  // }
 }

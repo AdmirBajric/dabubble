@@ -97,6 +97,7 @@
         [isYou]="true"
         [currentMessage]="message"
         [thread]="thread"
+        [position]="'left'"
       ></app-message-hover-actions>
     </div>
 
@@ -150,7 +151,7 @@
             (emojiClick)="addEmoji($event)"
             [style]="{
               position: 'absolute',
-              top: '9.5rem'
+              top: '13.5rem'
             }"
           ></emoji-mart>
         </ng-container>

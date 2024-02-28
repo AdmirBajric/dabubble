@@ -16,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ProfileEditComponent } from '../profile-edit/profile-edit.component';
 import { DataService } from '../../../services/data.service';
 import { FirebaseService } from '../../../services/firebase.service';
+import { Conversation } from '../../../models/conversation.class';
 
 @Component({
   selector: 'app-profile-view',
@@ -35,8 +36,9 @@ export class ProfileViewComponent implements OnInit {
   user: any = {};
   mobileView: boolean = false;
   windowWidth: number = 0;
+
   constructor(
-    private firebaseNav: FirebaseService,
+    private firebaseService: FirebaseService,
     private dataService: DataService,
     public dialog: MatDialog,
     private el: ElementRef,
@@ -63,7 +65,7 @@ export class ProfileViewComponent implements OnInit {
   }
 
   async showUserDetails(userId: string) {
-    await this.firebaseNav.getAllUsers().then((users) => {
+    await this.firebaseService.getAllUsers().then((users) => {
       users.forEach((user: any) => {
         this.users.push(user);
       });
@@ -114,5 +116,68 @@ export class ProfileViewComponent implements OnInit {
 
   sendUserId(userId: string): void {
     this.dataService.sendUserId(userId);
+  }
+
+  async addUserToConversations(userToAdd: string) {
+    this.onNoClick();
+    try {
+      if (!this.user) {
+        return;
+      }
+
+      let filteredUser;
+      await this.firebaseService.getAllUsers().then((users) => {
+        users.filter((user) => {
+          if (user['id'] === userToAdd) {
+            filteredUser = user;
+          }
+        });
+      });
+
+      await this.createConversation(this.user, userToAdd);
+      await this.createConversation(filteredUser, this.user.id);
+    } catch (error: any) {
+      if (error.message.includes('No document to update')) {
+        console.error(
+          'Error: Conversation does not exist. Creating a new conversation.'
+        );
+      } else {
+        console.error('Error:', error.message);
+      }
+    }
+  }
+
+  async createConversation(user: any, userToAdd: any) {
+    const conversation = await this.firebaseService.getConversationForUser(
+      user.id
+    );
+
+    if (conversation) {
+      if (conversation.data.creator.id === user.id) {
+        if (!conversation.data.users.includes(userToAdd)) {
+          conversation.data.users.push(userToAdd);
+
+          await this.firebaseService.updateConversation(
+            conversation.id,
+            conversation.data
+          );
+          console.log('User added to conversation successfully.');
+        } else {
+          console.log('User is already in the conversation.');
+        }
+      } else {
+        console.log(
+          'Logged-in user is not the creator of the conversation. Cannot update.'
+        );
+      }
+    } else {
+      const newConversation = new Conversation({
+        creator: user,
+        users: [userToAdd],
+      });
+
+      await this.firebaseService.createConversation(newConversation);
+      console.log('Conversation created successfully.');
+    }
   }
 }

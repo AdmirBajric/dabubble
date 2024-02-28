@@ -43,6 +43,8 @@
   </mat-card-footer>
 
   <mat-card-actions [ngClass]="{ message: ifUserAcc }">
-    <button><mat-icon>mode_comment</mat-icon> Nachricht</button>
+    <button (click)="addUserToConversations(userId)">
+      <mat-icon>mode_comment</mat-icon> Nachricht
+    </button>
   </mat-card-actions>
 </mat-card>

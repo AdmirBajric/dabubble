@@ -362,7 +362,7 @@ export class MessageInputComponent implements OnInit {
             });
         }
       }
-    } else {
+    } else if (this.usedLocation === 'channel') {
       if (this.text.length > 0 || this.selectedFile !== null) {
         await this.uploadImage();
 
@@ -394,47 +394,12 @@ export class MessageInputComponent implements OnInit {
             });
         }
       }
-    }
-  }
-
-  async prepareData() {
-    const channel = this.checkIfChannel();
-    await this.uploadImage(); // saves file within local variable
-    if (this.text.length > 0) {
-      if (channel) {
-        const message = this.packMessageData(channel);
-        const messageToJson = message.toJSON();
-        this.sendMessage(messageToJson);
-      } else if (this.usedLocation === 'thread') {
-        const commentText = this.text;
-        const commentFile = this.uploadedFile;
-        this.commentData.emit({ commentText, commentFile });
-      }
+    } else {
+      const commentText = this.text;
+      const commentFile = this.uploadedFile;
+      this.commentData.emit({ commentText, commentFile });
       this.text = '';
     }
-  }
-
-  sendMessage(messageToJson: Message) {
-    this.firebaseService
-      .addDocument('messages', messageToJson)
-      .then((data: any) => {
-        this.messageId = data.id;
-      })
-      .catch((err: any) => {
-        console.log(err);
-      });
-  }
-
-  packMessageData(channel: boolean) {
-    return new Message({
-      text: this.text,
-      timestamp: new Date(),
-      creator: this.user,
-      channelId: this.currentChannel?.id,
-      isChannelMessage: channel,
-      reactions: [],
-      file: this.uploadedFile,
-    });
   }
 
   // this is used when user wants to write new message. usedLocation === 'newMessage'
