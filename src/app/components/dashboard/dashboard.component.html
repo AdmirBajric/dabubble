@@ -2,7 +2,7 @@
   <div class="logo"><app-logo></app-logo></div>
 
   <div class="searchbar">
-    <app-searchbar [showBorder]="false" [showLoupe]="true" [globalSearch]="true" [potentialMembersSearch]="false"
+    <app-searchbar [showBorder]="false" [showLoupe]="true" [globalSearch]="true"
       [placeholder]="'Code learning durchsuchen'"></app-searchbar>
   </div>
 
@@ -38,7 +38,7 @@
   <app-mobile-header [logoStyling]="mobilePage"></app-mobile-header>
   <div class="mbl-content mbl-padding">
     <div class="mbl-search" *ngIf="mobilePage === 'home'">
-      <app-searchbar [showBorder]="true" [showLoupe]="true" [globalSearch]="true" [potentialMembersSearch]="false"
+      <app-searchbar [showBorder]="true" [showLoupe]="true" [globalSearch]="true"
         [placeholder]="'Gehe zu...'"></app-searchbar>
     </div>
 
