@@ -58,7 +58,7 @@ export class MessageInputComponent implements OnInit {
     text: string;
     file: string;
   }>();
-  // can be used in 'directMessages', 'channel', 'thread'
+  // can be used in 'directMessages', 'channel', 'thread', 'newMessage'
   @Input() usedLocation!: string;
   @Input() styleHeaderForThread: boolean = false;
   @ViewChild('userInputField') userInputField!: ElementRef<HTMLInputElement>;
