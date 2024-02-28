@@ -76,7 +76,6 @@ export class MessageHoverActionsComponent {
 
   // this is only used when it is a main message with given emojis...
   async setEmoji(emoji: string, StringOrId: string) {
-    debugger;
     const id = this.getMessageID() as string;
     if (id && emoji) {
       this.setAndSaveEmoji(id, emoji, StringOrId);
