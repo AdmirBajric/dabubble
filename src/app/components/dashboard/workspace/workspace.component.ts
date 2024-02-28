@@ -27,22 +27,22 @@ import {
 import { FirebaseService } from '../../../services/firebase.service';
 import { Subscription } from 'rxjs';
 import { Conversation } from '../../../models/conversation.class';
-import { MobileHeaderComponent } from "../../shared/mobile-header/mobile-header.component";
+import { MobileHeaderComponent } from '../../shared/mobile-header/mobile-header.component';
 
 @Component({
-    selector: 'app-workspace',
-    standalone: true,
-    templateUrl: './workspace.component.html',
-    styleUrl: './workspace.component.scss',
-    imports: [
-        ChannelListItemComponent,
-        CommonModule,
-        DirectMessageListItemComponent,
-        RouterModule,
-        WorkspaceHeaderComponent,
-        HoverChangeDirective,
-        MobileHeaderComponent
-    ]
+  selector: 'app-workspace',
+  standalone: true,
+  templateUrl: './workspace.component.html',
+  styleUrl: './workspace.component.scss',
+  imports: [
+    ChannelListItemComponent,
+    CommonModule,
+    DirectMessageListItemComponent,
+    RouterModule,
+    WorkspaceHeaderComponent,
+    HoverChangeDirective,
+    MobileHeaderComponent,
+  ],
 })
 export class WorkspaceComponent implements OnInit {
   firestore: Firestore = inject(Firestore);
@@ -122,7 +122,7 @@ export class WorkspaceComponent implements OnInit {
   ngOnInit() {
     this.setUserFromStorage();
     setTimeout(() => {
-    this.checkWindowSize();
+      this.checkWindowSize();
     }, 1500);
   }
 
@@ -161,10 +161,6 @@ export class WorkspaceComponent implements OnInit {
         )
         .forEach((user) => this.users.push(user));
     });
-  }
-
-  sendData(userId: string) {
-    console.log(userId);
   }
 
   openChannels() {
@@ -222,7 +218,7 @@ export class WorkspaceComponent implements OnInit {
     ).ownerDocument.defaultView.innerWidth;
   }
 
-  writeNewMessage(){
+  writeNewMessage() {
     this.channelUpdateService.openNewMessage();
   }
 

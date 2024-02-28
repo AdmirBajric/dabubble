@@ -1,32 +1,69 @@
-<section
-  [class.no-mobile]="isNotDashboard"
-  class="wrapper border-radius-3"
->
+<section [class.no-mobile]="isNotDashboard" class="wrapper border-radius-3">
   <ng-container *ngIf="showChannel">
     <app-chat-header></app-chat-header>
-    <div class="content-container scroll" *ngIf="showMessages">
-      <div *ngFor="let message of messages; let i = index">
-        <ng-container
-          *ngIf="
-            i === 0 ||
-            isDifferentDay(messages[i - 1].timestamp, message.timestamp)
-          "
-        >
-          <app-time-separator-chat
-            [timestamp]="message.timestamp"
-          ></app-time-separator-chat>
-        </ng-container>
-        <app-message
-          [typeOfMessage]="'mainMessage'"
-          (updatedMessage)="saveEditedMessage($event)"
-          [message]="message"
-          [messageId]="message.id"
-        ></app-message>
+    <div
+      class="content-container scroll"
+      *ngIf="showMessages"
+      #scrollContainerRef
+    >
+      <div class="content-container-messages">
+        <div *ngIf="currentChannel.isUser" class="welcome-message">
+          <div class="welcome-message-user">
+            <img src="{{ currentChannel.avatar }}" alt="" />
+            <p>
+              {{ currentChannel.fullName }}
+              {{ currentChannel.id === user.id ? "(Du)" : "" }}
+            </p>
+          </div>
+
+          <div class="welcome-message-info">
+            <p *ngIf="currentChannel.id !== user.id">
+              Diese Unterhaltung findet nur zwischen
+              <span>&#64;{{ currentChannel.fullName }}</span> und dir statt.
+            </p>
+            <p *ngIf="currentChannel.id === user.id">
+              Dieser Raum ist nur für dich da. Mache dir Notizen, liste deine
+              To-dos auf oder bewahre Links und Dateien griffbereit auf. Du
+              kannst hier auch gerne Dinge mit dir selbst besprechen.
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="!currentChannel.isUser" class="welcome-message-channel">
+          <div class="welcome-message-channel-info">
+            <img src="../../../../assets/img/hash.svg" alt="" />
+            <p>{{ currentChannel.name }}</p>
+          </div>
+
+          <div class="welcome-message-info">
+            <p *ngIf="currentChannel.id !== user.id">
+              Du hast diesen Channel heute erstellt. Das ist der Anfang des
+              Channels <span># {{ currentChannel.name }}.</span>
+            </p>
+          </div>
+        </div>
+
+        <div *ngFor="let message of messages; let i = index">
+          <ng-container
+            *ngIf="
+              i === 0 ||
+              isDifferentDay(messages[i - 1].timestamp, message.timestamp)
+            "
+          >
+            <app-time-separator-chat
+              [timestamp]="message.timestamp"
+            ></app-time-separator-chat>
+          </ng-container>
+          <app-message
+            (updatedMessage)="saveEditedMessage($event)"
+            [message]="message"
+            [messageId]="message.id"
+          ></app-message>
+        </div>
       </div>
     </div>
     <div class="chat-input">
-      <app-message-input
-        [usedLocation]="'channel'"
-      ></app-message-input>
+      <app-message-input [usedLocation]="'channel'"></app-message-input>
     </div>
   </ng-container>
+</section>
