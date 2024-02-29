@@ -23,7 +23,7 @@ import { FirebaseService } from '../../../../services/firebase.service';
 export class NewMessageComponent implements OnInit {
   @ViewChild('searchBarRef') searchBar!: SearchbarComponent;
   @Output() inputPlaceholder: string =
-    'An: #channel, oder @jemand oder E-Mail Adresse';
+    'An: #channel oder @jemand';
   user!: User;
   messageText!: string;
   messageFile!: string;
