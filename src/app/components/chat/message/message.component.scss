@@ -161,7 +161,7 @@ img {
 
 .reaction-info {
   position: absolute;
-  top: -10rem;
+  top: -9rem;
   background-color: $purple-1;
   height: 10rem;
   width: 10rem;
@@ -170,6 +170,8 @@ img {
   color: white;
   @include flexbox(flex, column, center, center);
   gap: 1rem;
+  z-index: 10;
+  overflow: visible;
 
   .reaction-from {
     font-weight: bold;
@@ -182,7 +184,7 @@ button {
 
 .bigger {
   height: 15rem;
-  
+
   @media only screen and (max-width: 768px) and (max-height: 700px) {
     height: 10rem;
   }

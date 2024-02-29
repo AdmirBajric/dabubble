@@ -1,7 +1,15 @@
-<div class="actions-container" 
-   [ngClass]="{ 'thread-size': thread, 'gap-thread': thread, 'chat-size': !thread, 'gap-chat': !thread }"
-  [class.user-reaction]="isYou">
-  <button *ngIf="!thread"
+<div
+  class="actions-container"
+  [ngClass]="{
+    'thread-size': thread,
+    'gap-thread': thread,
+    'chat-size': !thread,
+    'gap-chat': !thread
+  }"
+  [class.user-reaction]="isYou"
+>
+  <button
+    *ngIf="!thread"
     appHoverChange
     [elementsConfig]="[
       {
@@ -15,7 +23,8 @@
     <img src="../../../../assets/img/add_emoji_check.svg" alt="ok" />
   </button>
 
-  <button *ngIf="!thread"
+  <button
+    *ngIf="!thread"
     appHoverChange
     [elementsConfig]="[
       {
@@ -43,7 +52,8 @@
     <img src="../../../../assets/img/add_emoji.svg" alt="add reaction" />
   </button>
 
-  <button *ngIf="!thread"
+  <button
+    *ngIf="!thread"
     (click)="openThread()"
     appHoverChange
     [elementsConfig]="[
@@ -57,20 +67,26 @@
     <img src="../../../../assets/img/add_answer.svg" alt="" />
   </button>
 
-    <button (click)="toggleToolTip($event)" class="btn-edit-wrapper">
-        <div *ngIf="isYou" appHoverChange
-            [elementsConfig]="
-            [{imageSelector: 'img', defaultSrc: '../../../../assets/img/edit_message.svg', hoverSrc: '../../../../assets/img/edit_message_hover.svg'}]">
-
-            <img src="../../../../assets/img/edit_message.svg" alt="">
-        </div>
-        <ng-container *ngIf="showToolTip">
-            <div class="tooltip-edit">
-                <span (click)="openEditMessage($event)">Nachricht bearbeiten</span>
-            </div>
-        </ng-container>
-    </button>
-
+  <button (click)="toggleToolTip($event)" class="btn-edit-wrapper">
+    <div
+      *ngIf="isYou"
+      appHoverChange
+      [elementsConfig]="[
+        {
+          imageSelector: 'img',
+          defaultSrc: '../../../../assets/img/edit_message.svg',
+          hoverSrc: '../../../../assets/img/edit_message_hover.svg'
+        }
+      ]"
+    >
+      <img src="../../../../assets/img/edit_message.svg" alt="" />
+    </div>
+    <ng-container *ngIf="showToolTip">
+      <div class="tooltip-edit">
+        <span (click)="openEditMessage($event)">Nachricht bearbeiten</span>
+      </div>
+    </ng-container>
+  </button>
 </div>
 
 <div>
@@ -84,8 +100,11 @@
     [totalFrequentLines]="0"
     [enableSearch]="false"
     [style]="{
+      position: 'absolute',
       zIndex: 999999,
       marginTop: '30px',
+      left: position === 'left' ? '0' : 'auto',
+      right: position === 'right' ? '0' : 'auto'
     }"
   >
   </emoji-mart>

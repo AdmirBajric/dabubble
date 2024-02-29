@@ -4,36 +4,60 @@
     <div class="drawer-container">
       <div class="drawer">
         <div class="drawer-header">
-          <div class="header-left" (click)="openChannels()" appHoverChange [elementsConfig]="[
-          {
-            imageSelector: '.arrow',
-            defaultSrc: './../../assets/img/arrow_drop_down.svg',
-            hoverSrc: './../../assets/img/arrow_down_hover.svg'
-          },
-          {
-            imageSelector: '.channels',
-            defaultSrc: './../../assets/img/workspaces_0_channels.svg',
-            hoverSrc: './../../assets/img/workspaces_0_channels_hover.svg'
-          },
-          {
-            textSelector: 'h2',
-            defaultColor: '#000000',
-            hoverColor: '#797ef3'
-          }
-        ]">
-            <img class="arrow" [class.rotate]="showChannels" src="./../../assets/img/arrow_drop_down.svg"
-              alt="drop down" />
+          <div
+            class="header-left"
+            (click)="openChannels()"
+            appHoverChange
+            [elementsConfig]="[
+              {
+                imageSelector: '.arrow',
+                defaultSrc: './../../assets/img/arrow_drop_down.svg',
+                hoverSrc: './../../assets/img/arrow_down_hover.svg'
+              },
+              {
+                imageSelector: '.channels',
+                defaultSrc: './../../assets/img/workspaces_0_channels.svg',
+                hoverSrc: './../../assets/img/workspaces_0_channels_hover.svg'
+              },
+              {
+                textSelector: 'h2',
+                defaultColor: '#000000',
+                hoverColor: '#797ef3'
+              }
+            ]"
+          >
+            <img
+              class="arrow"
+              [class.rotate]="showChannels"
+              src="./../../assets/img/arrow_drop_down.svg"
+              alt="drop down"
+            />
             <span>
-              <img class="channels" src="./../../assets/img/workspaces_0_channels.svg" alt="channels" />
+              <img
+                class="channels"
+                src="./../../assets/img/workspaces_0_channels.svg"
+                alt="channels"
+              />
               <h2>Channels</h2>
             </span>
           </div>
 
-          <button class="btn-small-create-channel" appHoverChange [elementsConfig]="[{
-              imageSelector: 'img',
-              defaultSrc: defaultImagePath,
-              hoverSrc: './../../assets/img/add_desktop_hover.svg'}]" (click)="openCreateChannel()">
-            <img src="{{ './../../assets/img/add_' + imageFlag + '.svg' }}" alt="adding channel" />
+          <button
+            class="btn-small-create-channel"
+            appHoverChange
+            [elementsConfig]="[
+              {
+                imageSelector: 'img',
+                defaultSrc: defaultImagePath,
+                hoverSrc: './../../assets/img/add_desktop_hover.svg'
+              }
+            ]"
+            (click)="openCreateChannel()"
+          >
+            <img
+              src="{{ './../../assets/img/add_' + imageFlag + '.svg' }}"
+              alt="adding channel"
+            />
           </button>
         </div>
 
@@ -53,7 +77,9 @@
 
     <div class="drawer-container scroll">
       <div class="drawer fixed">
-        <div appHoverChange [elementsConfig]="[
+        <div
+          appHoverChange
+          [elementsConfig]="[
             {
               imageSelector: '.arrow',
               defaultSrc: './../../assets/img/arrow_drop_down.svg',
@@ -69,10 +95,22 @@
               defaultColor: '#000000',
               hoverColor: '#797ef3'
             }
-          ]" class="drawer-header margin-top" (click)="openDirectMsgs()">
-          <img class="arrow" [class.rotate]="showDMs" src="./../../assets/img/arrow_drop_down.svg" alt="drop down" />
+          ]"
+          class="drawer-header margin-top"
+          (click)="openDirectMsgs()"
+        >
+          <img
+            class="arrow"
+            [class.rotate]="showDMs"
+            src="./../../assets/img/arrow_drop_down.svg"
+            alt="drop down"
+          />
           <span>
-            <img class="dms" src="./../../assets/img/workspaces_1_DM.svg" alt="account circle" />
+            <img
+              class="dms"
+              src="./../../assets/img/workspaces_1_DM.svg"
+              alt="account circle"
+            />
             <h2>Direktnachrichten</h2>
           </span>
         </div>
@@ -84,7 +122,6 @@
           <app-direct-message-list-item
             [user]="user"
             id="{{ user.id }}"
-            (click)="sendData(user.id)"
           ></app-direct-message-list-item>
         </ng-container>
       </div>
@@ -93,8 +130,9 @@
   </div>
 
   <button class="mobile-btn-write-dm" (click)="writeNewMessage()">
-    <img src="../../../../assets/img/workspace_2_mobile_write_dm_square.svg" alt="write message" />
+    <img
+      src="../../../../assets/img/workspace_2_mobile_write_dm_square.svg"
+      alt="write message"
+    />
   </button>
 </div>
-
-<!-- [ngStyle]=" {'height': !showChannels ? '5rem' : ''} " -->

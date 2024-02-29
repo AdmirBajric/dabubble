@@ -13,7 +13,13 @@ import { arrayUnion } from '@angular/fire/firestore';
 @Component({
   selector: 'app-message-hover-actions',
   standalone: true,
-  imports: [CommonModule, HoverChangeDirective, MatTooltipModule, NgIf, PickerComponent],
+  imports: [
+    CommonModule,
+    HoverChangeDirective,
+    MatTooltipModule,
+    NgIf,
+    PickerComponent,
+  ],
   templateUrl: './message-hover-actions.component.html',
   styleUrl: './message-hover-actions.component.scss',
 })
@@ -22,7 +28,7 @@ export class MessageHoverActionsComponent {
   @Input() isYou!: boolean;
   @Input() thread: boolean = false;
   @Input() currentMessage!: Message;
-  // ******needed to set Emoji according to type. 
+  // ******needed to set Emoji according to type.
   // ******Can be 'mainMessage', 'comment'
   @Input() typeOfMessage!: string;
   @Output() editMessage: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -83,7 +89,7 @@ export class MessageHoverActionsComponent {
   }
 
   //StringOrId can be mainMessage oder comment
-  async emitEmoji(event: any, messageType: string) {
+  async emitEmoji(event: any, messageType: string = 'mainMessage') {
     const id = this.getMessageID() as string;
     const emoji = this.getEmojiNative(event);
     this.openEmojiMart(messageType);
@@ -93,6 +99,12 @@ export class MessageHoverActionsComponent {
   }
 
   async setAndSaveEmoji(id: string, emoji: string, messageType: string) {
+    this.active = false;
+    console.log(id);
+    console.log(this.user);
+
+    console.log(messageType);
+
     try {
       const reaction = new Reaction({
         fullName: this.user.fullName,
@@ -122,33 +134,34 @@ export class MessageHoverActionsComponent {
           await this.firebaseService.updateDocument('messages', id, {
             reactions: existingReactions,
           });
-
         } else {
           console.error('Document not found');
         }
+      } else if (messageType === 'comment') {
+        this.saveReactionComments(reactionJSON);
       }
-      else if (messageType === 'comment') {
-        this.saveReactionComments(reactionJSON)
-      }
-    }
-
-    catch (error) {
-      console.error('Error updating document:', error, 'Nachrichtentyp:', messageType);
+    } catch (error) {
+      console.error(
+        'Error updating document:',
+        error,
+        'Nachrichtentyp:',
+        messageType
+      );
     }
   }
 
   async saveReactionComments(reactionJSON: any): Promise<void> {
     const id = this.getMessageID() as string;
-    const docSnapshot = await this.firebaseService.getDocument(
-      'comments',
-      id
-    );
+    const docSnapshot = await this.firebaseService.getDocument('comments', id);
+
     if (docSnapshot.exists()) {
       let existingReactions = docSnapshot.data()?.['reactions'] || [];
 
       const existingReactionIndex = existingReactions.findIndex(
         (reaction: any) => reaction.userId === this.user.id
       );
+
+      console.log(existingReactionIndex);
 
       if (existingReactionIndex !== -1) {
         existingReactions[existingReactionIndex] = reactionJSON;
@@ -157,9 +170,8 @@ export class MessageHoverActionsComponent {
       }
 
       await this.firebaseService.updateDocument('comments', id, {
-        reactions: arrayUnion(reactionJSON, ...existingReactions),
+        reactions: existingReactions,
       });
-      // this.showComments();
     } else {
       console.error('Document not found');
     }

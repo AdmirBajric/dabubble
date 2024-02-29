@@ -25,8 +25,7 @@ export class ChannelListItemComponent implements OnInit {
     private navService: chatNavigationService
   ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   displayChannel(channel: Channel) {
     console.log(channel);
