@@ -145,6 +145,8 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
         text: data['text'],
         timestamp: data['timestamp'],
         creator: data['creator'],
+        channelId: data['channelId'],
+        recipient: data['recipient'],
         reactions: data['reactions'],
         isChannelMessage: data['isChannelMessage'],
         edited: data['edited'],
@@ -378,10 +380,26 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     });
   }
 
-  openChannel(channel: Channel){
+  getChannel(id: string) {
+    return this.copyOfChannels.find((channel) => channel.id === id);
+  }
+
+  openChannel(channel: Channel) {
+    this.handleInputSearchbar();
+    this.navService.openChannel(channel);
+  }
+
+  openChannelMessage(message: Message) {
+    this.handleInputSearchbar();
+    const channelID = message.channelId as string;
+    const channel = this.getChannel(channelID);
+    this.navService.openChannel(channel);
+    this.navService.openThread(message);
+  }
+
+  handleInputSearchbar() {
     this.inputValue = '';
     this.isSearchbarEmpty = !this.isSearchbarEmpty;
-    this.navService.openChannel(channel);
   }
 
   resetAll() {

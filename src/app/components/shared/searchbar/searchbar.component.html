@@ -60,7 +60,7 @@
     <ng-container *ngIf="filteredChannelMessagesList.length > 0">
       <h6 class="result-headline">Channelnachrichten</h6>
       <ul *ngFor="let channelM of filteredChannelMessagesList">
-        <li class="message-result">
+        <li class="message-result" (click)="openChannelMessage(channelM)">
           <img src="{{ channelM.creator.avatar }}" alt="image" />
           <div>
             <span class="result-text">{{ channelM.text }}</span>
