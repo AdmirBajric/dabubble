@@ -10,13 +10,13 @@
   #searchbarInput
 />
 
-<div class="testing">
+<!-- <div class="testing">
   <button (click)="logPrivate()">private nachrichten ausloggen</button>
   <button (click)="logBackend()">backend nachrichten ausloggen</button>
   <button (click)="logChannel()">channel nachrichten ausloggen</button>
   <button (click)="logFilteredChannel()">filteredCHannel</button>
   <button (click)="logFilteredDM()">filtered private</button>
-</div>
+</div> -->
 
 <ng-container *ngIf="globalSearch && !isSearchbarEmpty">
   
@@ -24,7 +24,7 @@
     <ng-container *ngIf="filteredChannelsList.length > 0">
       <h6 class="result-headline">Channels</h6>
       <ul *ngFor="let channel of filteredChannelsList">
-        <li class="user-results">
+        <li (click)="openChannel(channel)" class="user-results">
           <img src="../../../../assets/img/hash.svg" alt="#" />
           <p>{{ channel.name }}</p>
         </li>

@@ -17,6 +17,7 @@ import { Channel } from '../../../models/channel.class';
 import { FormsModule } from '@angular/forms';
 import { Message } from '../../../models/message.class';
 import { ButtonFunctionService } from '../../../services/button-function.service';
+import { chatNavigationService } from '../../../services/chat-navigation.service';
 
 @Component({
   selector: 'app-searchbar',
@@ -61,7 +62,8 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
 
   constructor(
     private firebaseService: FirebaseService,
-    private btnService: ButtonFunctionService
+    private btnService: ButtonFunctionService,
+    private navService: chatNavigationService
   ) {}
 
   // logPrivate() {
@@ -374,6 +376,12 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
         this.channelSearch = false;
       }
     });
+  }
+
+  openChannel(channel: Channel){
+    this.inputValue = '';
+    this.isSearchbarEmpty = !this.isSearchbarEmpty;
+    this.navService.openChannel(channel);
   }
 
   resetAll() {
