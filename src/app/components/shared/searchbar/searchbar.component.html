@@ -10,67 +10,147 @@
   #searchbarInput
 />
 
-<div class="searchResults wrapper-margin" *ngIf="usersSearch || channelSearch">
-  <ng-container *ngIf="usersSearch">
-    <h2>Mitglieder</h2>
-    <ul>
-      <li *ngFor="let user of copyOfUsers" (click)="selectUser(user.fullName)">
-        <img class="imgHeadline" src="{{ user.avatar }}" alt="Profile Image" />
-        <p>{{ user.fullName }}</p>
-      </li>
-      <!-- <li
-                *ngIf="searchTerm && users && users.length === 0 && searchTerm.length >= 1">
-                Kein Mitglied gefunden
-            </li> -->
-    </ul>
-  </ng-container>
-  <ng-container *ngIf="channelSearch">
-    <h2>Channels</h2>
-    <ul>
-      <li *ngFor="let channel of copyOfChannels" (click)="selectChannel(channel.name)">
-        <p># {{ channel.name }}</p>
-      </li>
-      <!-- <li
-        *ngIf="
-          searchTerm &&
-          filteredChannelsArray &&
-          filteredChannelsArray.length === 0 &&
-          searchTerm.length >= 1
-        "
-      >
-        Kein Kanal gefunden
-      </li> -->
-    </ul>
-  </ng-container>
+<div class="testing">
+  <button (click)="logPrivate()">private nachrichten ausloggen</button>
+  <button (click)="logBackend()">backend nachrichten ausloggen</button>
+  <button (click)="logChannel()">channel nachrichten ausloggen</button>
+  <button (click)="logFilteredChannel()">filteredCHannel</button>
+  <button (click)="logFilteredDM()">filtered private</button>
 </div>
 
-<ng-container
-  *ngIf="
-    (selectedRecipients.length > 0 && !globalSearch) ||
-    (selectedChannels.length > 0 && !globalSearch)
-  "
->
-  <section class="recipients">
-    <ul *ngFor="let user of selectedRecipients">
-      <li class="border-radius-3">
-        &#64; {{ user.fullName }}
-        <img
-          (click)="removeRecipient(user.fullName)"
-          src="../../../../assets/img/exit_X.svg"
-          alt="x"
-        />
-      </li>
-    </ul>
+<ng-container *ngIf="globalSearch && !isSearchbarEmpty">
+  
+  <div class="globalResults">
+    <ng-container *ngIf="filteredChannelsList.length > 0">
+      <h6 class="result-headline">Channels</h6>
+      <ul *ngFor="let channel of filteredChannelsList">
+        <li class="user-results">
+          <img src="../../../../assets/img/hash.svg" alt="#" />
+          <p>{{ channel.name }}</p>
+        </li>
+      </ul>
+    </ng-container>
 
-    <ul *ngFor="let channel of selectedChannels">
-      <li class="border-radius-3">
-       # {{ channel.name }}
-        <img
-          (click)="removeChannel(channel.name)"
-          src="../../../../assets/img/exit_X.svg"
-          alt="x"
-        />
-      </li>
-    </ul>
-  </section>
+    <ng-container *ngIf="filteredUsersList.length > 0">
+      <h6 class="result-headline">Mitglieder</h6>
+      <ul *ngFor="let user of filteredUsersList">
+        <li class="user-results" (click)="showUserProfile(user.id)">
+          <img src="{{ user.avatar }}" alt="image" />
+          <p>{{ user.fullName }}</p>
+        </li>
+      </ul>
+    </ng-container>
+
+    <ng-container *ngIf="filteredPrivateMessagesList.length > 0">
+      <h6 class="result-headline">Private Nachrichten</h6>
+      <ul *ngFor="let dm of filteredPrivateMessagesList">
+        <li class="message-result">
+          <img src="{{ dm.creator.avatar }}" alt="image" />
+          <div>
+            <span class="result-text">{{ dm.text }}</span>
+            <div class="result-info">
+              <span>{{ dm.creator.fullName }}</span>
+              <span>12.01.2023 22:09</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </ng-container>
+
+    <ng-container *ngIf="filteredChannelMessagesList.length > 0">
+      <h6 class="result-headline">Channelnachrichten</h6>
+      <ul *ngFor="let channelM of filteredChannelMessagesList">
+        <li class="message-result">
+          <img src="{{ channelM.creator.avatar }}" alt="image" />
+          <div>
+            <span class="result-text">{{ channelM.text }}</span>
+            <div class="result-info">
+              <span>{{ channelM.creator.fullName }}</span>
+              <span>12.01.2023 22:09</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </ng-container>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="newMessageSearch">
+  <div
+    class="searchResults wrapper-margin"
+    *ngIf="usersSearch || channelSearch"
+  >
+    <ng-container *ngIf="usersSearch">
+      <h2>Mitglieder</h2>
+      <ul>
+        <li
+          *ngFor="let user of copyOfUsers"
+          (click)="selectUser(user.fullName)"
+        >
+          <img
+            class="imgHeadline"
+            src="{{ user.avatar }}"
+            alt="Profile Image"
+          />
+          <p>{{ user.fullName }}</p>
+        </li>
+        <!-- <li
+                  *ngIf="searchTerm && users && users.length === 0 && searchTerm.length >= 1">
+                  Kein Mitglied gefunden
+              </li> -->
+      </ul>
+    </ng-container>
+    <ng-container *ngIf="channelSearch">
+      <h2>Channels</h2>
+      <ul>
+        <li
+          *ngFor="let channel of copyOfChannels"
+          (click)="selectChannel(channel.name)"
+        >
+          <p># {{ channel.name }}</p>
+        </li>
+        <!-- <li
+          *ngIf="
+            searchTerm &&
+            filteredChannelsArray &&
+            filteredChannelsArray.length === 0 &&
+            searchTerm.length >= 1
+          "
+        >
+          Kein Kanal gefunden
+        </li> -->
+      </ul>
+    </ng-container>
+  </div>
+
+  <ng-container
+    *ngIf="
+      (selectedRecipients.length > 0 && !globalSearch) ||
+      (selectedChannels.length > 0 && !globalSearch)
+    "
+  >
+    <section class="recipients">
+      <ul *ngFor="let user of selectedRecipients">
+        <li class="border-radius-3">
+          &#64; {{ user.fullName }}
+          <img
+            (click)="removeRecipient(user.fullName)"
+            src="../../../../assets/img/exit_X.svg"
+            alt="x"
+          />
+        </li>
+      </ul>
+
+      <ul *ngFor="let channel of selectedChannels">
+        <li class="border-radius-3">
+          # {{ channel.name }}
+          <img
+            (click)="removeChannel(channel.name)"
+            src="../../../../assets/img/exit_X.svg"
+            alt="x"
+          />
+        </li>
+      </ul>
+    </section>
+  </ng-container>
 </ng-container>
