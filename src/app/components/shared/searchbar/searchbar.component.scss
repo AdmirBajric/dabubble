@@ -55,6 +55,8 @@
 .recipients {
   @include flexbox(flex, column, unset, unset);
   margin-top: 1rem;
+  z-index: 99;
+  position: absolute;
 
   ul {
     list-style: none;
