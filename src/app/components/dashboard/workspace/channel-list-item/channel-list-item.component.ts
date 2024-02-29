@@ -11,7 +11,7 @@ import { chatNavigationService } from '../../../../services/chat-navigation.serv
   styleUrl: './channel-list-item.component.scss',
 })
 export class ChannelListItemComponent implements OnInit {
-  @Input() channels: any = []; //workaround due to typing-errors (NG0 Type '' is missing the following properties from type: length, pop, push ANGULAR )
+  @Input() channel: any = []; //workaround due to typing-errors (NG0 Type '' is missing the following properties from type: length, pop, push ANGULAR )
   @Input() user!: {
     channels: Array<{ name: string }>;
   };
@@ -28,7 +28,7 @@ export class ChannelListItemComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  displayChannel(channels: any[]) {
-    this.navService.openChannel(channels);
+  displayChannel(channel: any[]) {
+    this.navService.openChannel(channel);
   }
 }
