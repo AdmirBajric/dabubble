@@ -1,6 +1,8 @@
 import { Injectable, OnInit } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Message } from '../models/message.class';
+import { Channel } from '../models/channel.class';
+import { User } from '../models/user.class';
 
 @Injectable({
   providedIn: 'root',
@@ -49,7 +51,7 @@ export class chatNavigationService implements OnInit {
     this.isThreadOpen$.next(true);
   }
 
-  openChannel(channel: any[]) {
+  openChannel(channel: Channel | User) {
     this.currentChannel$.next(channel);
     this.isChannelOpen$.next(true);
     this.isNewMessageOpen$.next(false);

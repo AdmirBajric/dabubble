@@ -87,6 +87,7 @@ export class Message {
     this.edited = obj ? obj.edited || false : false;
     this.privateMsg = obj?.privateMsg || false;
     this.file = obj?.file || '';
+    this.id = obj?.id || '';
   }
 
   public toJSON() {

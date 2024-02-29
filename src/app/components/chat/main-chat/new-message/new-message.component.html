@@ -4,9 +4,11 @@
     <div class="search">
       <app-searchbar
         #searchBarRef
+        [newMessageSearch]="true"
         [searchRecipients]="true"
         [showBorder]="true"
         [showLoupe]="false"
+        [globalSearch]="false"
         [placeholder]="inputPlaceholder"
       ></app-searchbar>
     </div>
