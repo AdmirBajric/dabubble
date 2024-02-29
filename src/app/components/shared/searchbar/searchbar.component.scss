@@ -84,6 +84,9 @@
 }
 
 .globalResults {
+  height: calc(100vh - 50rem);
+  overflow-y: scroll;
+  min-height: 5rem;
   position: absolute;
   z-index: 999;
   width: 50%;
@@ -136,6 +139,9 @@
 }
 
 .searchResults {
+  max-height: calc(100vh - 50%);
+  overflow-y: scroll;
+  min-height: 5rem;
   position: absolute;
   left: 0;
   z-index: 999;
