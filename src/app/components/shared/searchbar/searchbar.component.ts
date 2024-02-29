@@ -248,7 +248,9 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
 
   checkInputAndSyncArraysMessages(input: string) {
     const lowerCaseInput = input.toLowerCase();
-
+    const userName = this.loggedUser.fullName.toLowerCase();
+    console.log(userName);
+    
     // Filtern der Kanalnachrichten basierend auf dem Input
     const filteredChannelMessages = this.copyOfChannelMessages.filter(
       (message) =>
@@ -363,6 +365,11 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
   openChannel(channel: Channel) {
     this.handleInputSearchbar();
     this.navService.openChannel(channel);
+  }
+
+  openPrivateMessage(user: User) {
+    this.navService.openChannel(user);
+    this.handleInputSearchbar();
   }
 
   openChannelMessage(message: Message) {
