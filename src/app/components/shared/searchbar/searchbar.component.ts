@@ -15,6 +15,8 @@ import { FirebaseService } from '../../../services/firebase.service';
 import { User } from '../../../models/user.class';
 import { Channel } from '../../../models/channel.class';
 import { FormsModule } from '@angular/forms';
+import { Message } from '../../../models/message.class';
+import { ButtonFunctionService } from '../../../services/button-function.service';
 
 @Component({
   selector: 'app-searchbar',
@@ -28,63 +30,164 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
   @Input() showLoupe!: boolean; //****** true if it's in /dashboard; false if it's in /new-message
   @Input() showBorder!: boolean; //******  true if it's in /new-message (.border-light); false if it's in dashboard (.border-white)
   @Input() searchRecipients: boolean = false; //******  only true if used to search for message recipints in new-message
-
-  /**
-   * The following 2 booleans are to regulate the functionality of searchbar.
-   * @type {!boolean}
-   */
   @Input() globalSearch!: boolean; //****** true if searchbar is used globally for channels, members, messages, information
-
-  /**
-   * Sends data as userList to parent component: dialog-add-member-channel to display search results in parent component.
-   * @type {EventEmitter<any[]>}
-   */
-  @Output() userListForAddingChannel: EventEmitter<any[]> = new EventEmitter<
-    any[]
-  >();
-
-  /**
-   * Sends boolean to parent component: dialog-add-member-channel. If the inputfield of this component is empty,
-   * the parent component should not display anything in container.
-   * @type {EventEmitter<boolean>}
-   */
-  @Output() inputChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Input() newMessageSearch!: boolean; //****** true if searchbar is used in new-message.component
   @ViewChild('searchbarInput') searchbarInput!: ElementRef<HTMLInputElement>;
-
-  /**
-   * This boolean brings the information of event (inputChange) to the parent element.
-   * If true = parent element does not display results
-   * if false = parent element displays results
-   * @type {boolean}
-   */
-  isSearchbarEmpty: boolean = true;
-  /* Julius*/
-  searchTerm!: string;
-  filteredUserArray: any[] = [];
-  filteredChannelsArray: any[] = [];
-  /* Julius Ende*/
   users!: User[];
   channels!: Channel[];
+
   copyOfChannels!: any[];
   copyOfUsers!: any[];
+  copyOfChannelMessages: Message[] = [];
+  copyOfPrivateMessages: Message[] = [];
+
   usersSearch: boolean = false;
   channelSearch: boolean = false;
-  selectedRecipients: User[] = [];
-  selectedChannels: Channel[] = [];
   inputValue!: string;
 
-  constructor(private firebaseService: FirebaseService) {}
+  isSearchbarEmpty: boolean = true;
+
+  selectedRecipients: User[] = [];
+  selectedChannels: Channel[] = [];
+  backendMessages: Message[] = [];
+  channelMessages: Message[] = [];
+  privateMessages: Message[] = [];
+  loggedUser!: User;
+
+  filteredChannelsList: Channel[] = [];
+  filteredChannelMessagesList: Message[] = [];
+  filteredUsersList: User[] = [];
+  filteredPrivateMessagesList: Message[] = [];
+
+  constructor(
+    private firebaseService: FirebaseService,
+    private btnService: ButtonFunctionService
+  ) {}
+
+  // logPrivate() {
+  //   console.log(this.privateMessages);
+  // }
+
+  // logBackend() {
+  //   console.log(this.backendMessages);
+  // }
+  // logChannel() {
+  //   console.log(this.channelMessages);
+  // }
+  // logFilteredDM() {
+  //   console.log(this.filteredChannelMessagesList);
+  // }
+  // logFilteredChannel() {
+  //   console.log(this.filteredPrivateMessagesList);
+  // }
 
   ngOnInit() {
-    this.setUserAndChannels();
+    const loggedInUser =
+      typeof localStorage !== 'undefined'
+        ? localStorage.getItem('loggedInUser')
+        : null;
+    if (loggedInUser) {
+      const parsedUser = JSON.parse(loggedInUser);
+      this.loggedUser = parsedUser;
+      this.getData();
+    }
   }
 
   ngAfterViewInit() {
     this.searchbarInput.nativeElement.addEventListener('keydown', (event) => {
       if (event.key === 'Delete' || event.key === 'Backspace') {
-        this.checkInputAndSyncArrays();
+        this.checkInputAndSyncArraysUsersAndChannels();
       }
     });
+  }
+
+  showUserProfile(id: string) {
+    this.btnService.openProfile(id);
+  }
+
+  async getData() {
+    if (this.newMessageSearch) {
+      await this.setUserAndChannels();
+      this.makeCloneCopy('U&C');
+    } else if (this.globalSearch) {
+      await this.setUserAndChannels();
+      await this.setMessages();
+    }
+  }
+
+  async setMessages() {
+    await this.firebaseService
+      .getDocuments('messages')
+      .then((messages) => {
+        const ids = this.getMessageIDs(messages);
+        ids.forEach((id: string) => this.getMessageObjects(id));
+      })
+      .catch((error) => {
+        console.error('Error fetching users:', error);
+      });
+  }
+
+  getMessageIDs(data: any) {
+    return data.map((message: any) => {
+      // console.log(message.id);
+      // console.log(typeof message.id);
+      return message.id;
+    });
+  }
+
+  async getMessageObjects(id: string) {
+    const snapShot = await this.firebaseService.getDocument('messages', id);
+    if (snapShot.exists()) {
+      const data = snapShot.data();
+      const message = new Message({
+        text: data['text'],
+        timestamp: data['timestamp'],
+        creator: data['creator'],
+        reactions: data['reactions'],
+        isChannelMessage: data['isChannelMessage'],
+        edited: data['edited'],
+        privateMsg: data['privateMsg'],
+        id: id,
+        file: data['file'],
+      });
+      this.backendMessages.push(message);
+    }
+    this.sortbackEndMessages();
+  }
+
+  sortbackEndMessages() {
+    this.backendMessages.forEach(async (message) => {
+      await this.categorizeMessage(message);
+    });
+    this.makeCloneCopy('DM&CM');
+  }
+
+  categorizeMessage(message: Message) {
+    if (message.isChannelMessage) {
+      if (!this.channelMessages.find((m) => m.id === message.id)) {
+        this.channelMessages.push(message);
+      }
+    } else if (message.privateMsg) {
+      const personalMessage = this.getPersonalMessages(message) as Message;
+      if (
+        personalMessage &&
+        !this.privateMessages.find((m) => m.id === message.id)
+      ) {
+        this.privateMessages.push(personalMessage);
+      }
+    }
+  }
+
+  getPersonalMessages(message: Message): Message | null {
+    const loggedName = this.loggedUser.fullName;
+    if (
+      message.creator?.fullName === loggedName ||
+      message.recipient?.fullName === loggedName
+    ) {
+      return message;
+    } else {
+      return null; // Gib null zurück, wenn die Bedingungen nicht erfüllt sind
+    }
   }
 
   async setUserAndChannels() {
@@ -104,11 +207,10 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
       .catch((error) => {
         console.error('Error fetching channels:', error);
       });
-
-    this.makeCloneCopy();
+    this.makeCloneCopy('U&C');
   }
 
-  checkInputAndSyncArrays() {
+  checkInputAndSyncArraysUsersAndChannels() {
     const inputValue = this.searchbarInput.nativeElement.value;
     const mentionedUsersChannels = this.getMentions(inputValue);
     this.syncArrays(mentionedUsersChannels);
@@ -137,15 +239,70 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     });
 
     this.users = [...filteredUsers];
-    console.log(this.users);
   }
 
-  makeCloneCopy() {
-    this.copyOfChannels = [...this.channels];
-    this.copyOfUsers = [...this.users];
+  // 'U&C' = users and channels
+  // 'DM&CM' = directMessages and channelMessages
+  makeCloneCopy(typeOfCopy: string) {
+    if (typeOfCopy === 'U&C') {
+      this.copyOfChannels = [...this.channels];
+      this.copyOfUsers = [...this.users];
+    } else if (typeOfCopy === 'DM&CM') {
+      // console.log(typeOfCopy);
+      this.copyOfChannelMessages = [...this.channelMessages];
+      this.copyOfPrivateMessages = [...this.privateMessages];
+      setTimeout(() => {
+        // console.log(this.copyOfChannelMessages);
+        // console.log(this.copyOfPrivateMessages);
+      }, 1500);
+    }
   }
 
-  search() {}
+  search() {
+    if (this.globalSearch) {
+      const inputValue = this.searchbarInput.nativeElement.value;
+      this.isSearchbarEmpty = inputValue.length === 0;
+      this.checkInputAndSyncArraysMessages(inputValue);
+    }
+  }
+
+  checkInputAndSyncArraysMessages(input: string) {
+    const lowerCaseInput = input.toLowerCase();
+
+    // Filtern der Kanalnachrichten basierend auf dem Input
+    const filteredChannelMessages = this.copyOfChannelMessages.filter(
+      (message) =>
+        message.creator.fullName.toLowerCase().includes(lowerCaseInput) ||
+        message.text.toLowerCase().includes(lowerCaseInput)
+    );
+
+    const filteredPrivateMessages = this.copyOfPrivateMessages.filter(
+      (message) =>
+        (message.creator?.fullName.toLowerCase() !==
+          this.loggedUser.fullName.toLowerCase() &&
+          message.creator?.fullName.toLowerCase().includes(lowerCaseInput)) ||
+        (message.recipient &&
+          message.recipient.fullName.toLowerCase() !==
+            this.loggedUser.fullName.toLowerCase() &&
+          message.recipient.fullName.toLowerCase().includes(lowerCaseInput)) ||
+        message.text.toLowerCase().includes(lowerCaseInput)
+    );
+
+    const filteredChannels = this.copyOfChannels.filter(
+      (channel) =>
+        channel.name.toLowerCase().includes(lowerCaseInput) ||
+        channel.description.toLowerCase().includes(lowerCaseInput)
+    );
+
+    const filteredUsers = this.copyOfUsers.filter((user) =>
+      user.fullName.toLowerCase().includes(lowerCaseInput)
+    );
+
+    this.filteredChannelMessagesList = filteredChannelMessages;
+    this.filteredPrivateMessagesList = filteredPrivateMessages;
+    this.filteredChannelsList = filteredChannels;
+    this.filteredUsersList = filteredUsers;
+  }
 
   selectUser(userName: string) {
     this.usersSearch = false;
@@ -154,8 +311,8 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     );
     if (userIndex !== -1) {
       const selectedUser = this.copyOfUsers[userIndex];
-      this.selectedRecipients.push(selectedUser); // saving user in array of potential recipients
-      this.copyOfUsers.splice(userIndex, 1); // removing selected user of array
+      this.selectedRecipients.push(selectedUser);
+      this.copyOfUsers.splice(userIndex, 1);
       this.inputValue = '';
     }
   }
@@ -188,7 +345,7 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     const channelIndex = this.selectedChannels.findIndex(
       (channel) => channel.name === channelName
     );
-    if(channelIndex !== -1){
+    if (channelIndex !== -1) {
       const channel = this.selectedChannels[channelIndex];
       this.copyOfChannels.push(channel);
       this.selectedChannels.splice(channelIndex, 1);
@@ -219,7 +376,7 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     });
   }
 
-  resetAll(){
+  resetAll() {
     this.selectedRecipients = [];
     this.selectedChannels = [];
 
