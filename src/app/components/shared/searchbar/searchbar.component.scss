@@ -1,6 +1,19 @@
 @import "../../../colors.scss";
 @import "../../../mixins.scss";
 
+.testing {
+  display: none;
+  height: 10rem;
+  right: 50rem;
+  width: 10rem;
+  background-color: white;
+  z-index: 999999;
+  position: absolute;
+  button {
+    margin-bottom: 2rem;
+  }
+}
+
 .input {
   width: 100%;
   height: 7rem;
@@ -47,7 +60,7 @@
     list-style: none;
 
     li {
-      @include flexbox(flex, unset, unset,center);
+      @include flexbox(flex, unset, unset, center);
       font-size: 1.2rem;
       padding: 0.5rem 1rem;
       border: 0.1rem solid $light-purple-lines;
@@ -59,6 +72,64 @@
         width: 3rem;
       }
     }
+  }
+}
+
+.result-headline {
+  font-size: 1.2rem;
+  color: $text-gray;
+  margin-bottom: 0.4rem;
+}
+
+.globalResults {
+  position: absolute;
+  z-index: 999;
+  width: 50%;
+  border-radius: 2rem;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.8rem 1.6rem;
+  border: 1px solid #797ef3;
+  font-size: 1.5rem;
+
+  ul {
+    list-style: none;
+  }
+
+  li {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    transition: all 225ms ease-in-out;
+
+    &:hover {
+      color: $purple-2;
+      cursor: pointer;
+      background-color: $bg-color;
+    }
+  }
+}
+.message-result,
+.user-results {
+  @include flexbox(flex, unset, unset, center);
+  gap: 1rem;
+  border-radius: 3rem;
+  padding-right: 1.5rem;
+  width: fit-content;
+  img {
+    height: 5rem;
+    width: 5rem;
+    border-radius: 50%;
+    border: 0.5rem solid white;
+  }
+}
+
+.result-info {
+  color: $text-gray;
+  font-size: 1rem;
+  span:first-child {
+    margin-right: 1rem;
   }
 }
 
@@ -100,6 +171,7 @@
     margin-bottom: 0.5rem;
 
     &:hover {
+      background-color: $bg-color;
       color: #535af1;
       font-weight: bold;
     }
