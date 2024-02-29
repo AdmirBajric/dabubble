@@ -66,23 +66,6 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     private navService: chatNavigationService
   ) {}
 
-  // logPrivate() {
-  //   console.log(this.privateMessages);
-  // }
-
-  // logBackend() {
-  //   console.log(this.backendMessages);
-  // }
-  // logChannel() {
-  //   console.log(this.channelMessages);
-  // }
-  // logFilteredDM() {
-  //   console.log(this.filteredChannelMessagesList);
-  // }
-  // logFilteredChannel() {
-  //   console.log(this.filteredPrivateMessagesList);
-  // }
-
   ngOnInit() {
     const loggedInUser =
       typeof localStorage !== 'undefined'
@@ -131,8 +114,6 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
 
   getMessageIDs(data: any) {
     return data.map((message: any) => {
-      // console.log(message.id);
-      // console.log(typeof message.id);
       return message.id;
     });
   }
@@ -252,13 +233,8 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
       this.copyOfChannels = [...this.channels];
       this.copyOfUsers = [...this.users];
     } else if (typeOfCopy === 'DM&CM') {
-      // console.log(typeOfCopy);
       this.copyOfChannelMessages = [...this.channelMessages];
       this.copyOfPrivateMessages = [...this.privateMessages];
-      setTimeout(() => {
-        // console.log(this.copyOfChannelMessages);
-        // console.log(this.copyOfPrivateMessages);
-      }, 1500);
     }
   }
 

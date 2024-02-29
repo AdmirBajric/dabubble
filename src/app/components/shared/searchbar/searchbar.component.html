@@ -10,14 +10,6 @@
   #searchbarInput
 />
 
-<!-- <div class="testing">
-  <button (click)="logPrivate()">private nachrichten ausloggen</button>
-  <button (click)="logBackend()">backend nachrichten ausloggen</button>
-  <button (click)="logChannel()">channel nachrichten ausloggen</button>
-  <button (click)="logFilteredChannel()">filteredCHannel</button>
-  <button (click)="logFilteredDM()">filtered private</button>
-</div> -->
-
 <ng-container *ngIf="globalSearch && !isSearchbarEmpty">
   
   <div class="globalResults">
@@ -94,10 +86,6 @@
           />
           <p>{{ user.fullName }}</p>
         </li>
-        <!-- <li
-                  *ngIf="searchTerm && users && users.length === 0 && searchTerm.length >= 1">
-                  Kein Mitglied gefunden
-              </li> -->
       </ul>
     </ng-container>
     <ng-container *ngIf="channelSearch">
@@ -109,16 +97,6 @@
         >
           <p># {{ channel.name }}</p>
         </li>
-        <!-- <li
-          *ngIf="
-            searchTerm &&
-            filteredChannelsArray &&
-            filteredChannelsArray.length === 0 &&
-            searchTerm.length >= 1
-          "
-        >
-          Kein Kanal gefunden
-        </li> -->
       </ul>
     </ng-container>
   </div>
