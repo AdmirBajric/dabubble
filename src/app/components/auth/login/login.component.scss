@@ -13,7 +13,7 @@
     gap: 1rem;
     margin-top: 1rem !important;
   }
-  
+
   .card-content {
     margin-top: 1rem !important;
   }
@@ -297,6 +297,7 @@
 }
 
 .purple {
+  font-size: 4rem;
   color: $purple-1;
 }
 
@@ -342,7 +343,7 @@ span {
         border-radius: 1.875rem;
         position: relative;
 
-        @media only screen and (max-width: 450px){
+        @media only screen and (max-width: 450px) {
           width: unset;
         }
 
@@ -421,7 +422,7 @@ span {
     display: flex;
     @include fonts-styles(1.8rem, 700);
 
-    @media only screen and (max-width: 540px){
+    @media only screen and (max-width: 540px) {
       padding: 1.2rem 1.5rem;
     }
   }
