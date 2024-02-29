@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HoverChangeDirective } from '../../../../directives/hover-change.directive';
 import { chatNavigationService } from '../../../../services/chat-navigation.service';
+import { Channel } from '../../../../models/channel.class';
 
 @Component({
   selector: 'app-channel-list-item',
@@ -27,7 +28,9 @@ export class ChannelListItemComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  displayChannel(channel: any[]) {
+  displayChannel(channel: Channel) {
+    console.log(channel);
+    
     this.navService.openChannel(channel);
   }
 }
