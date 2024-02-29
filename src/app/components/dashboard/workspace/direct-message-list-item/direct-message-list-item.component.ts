@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { chatNavigationService } from '../../../../services/chat-navigation.service';
+import { User } from '../../../../models/user.class';
 
 @Component({
   selector: 'app-direct-message-list-item',
@@ -15,7 +16,7 @@ export class DirectMessageListItemComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  displayChannel(user: any[]) {
+  displayChannel(user: User) {
     this.navService.openChannel(user);
     // this.openChannelChat = true;
     // this.openChatChannel.emit(this.openChannelChat);
