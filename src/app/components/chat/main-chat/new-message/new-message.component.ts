@@ -22,17 +22,16 @@ import { FirebaseService } from '../../../../services/firebase.service';
 })
 export class NewMessageComponent implements OnInit {
   @ViewChild('searchBarRef') searchBar!: SearchbarComponent;
-  @Output() inputPlaceholder: string =
-    'An: #channel oder @jemand';
+  @Output() inputPlaceholder: string = 'An: #channel oder @jemand';
   user!: User;
   messageText!: string;
   messageFile!: string;
   channelIds: string[] = [];
   messageSuccess: boolean = false;
   constructor(
-    private routeService: RouteService, 
-    private firebaseService: FirebaseService,
-    ) {}
+    private routeService: RouteService,
+    private firebaseService: FirebaseService
+  ) {}
 
   ngOnInit() {
     const loggedInUser =
@@ -54,12 +53,15 @@ export class NewMessageComponent implements OnInit {
   getRecipientsSearchbar() {
     const channelRecipients = this.searchBar.selectedChannels;
     const userRecipients = this.searchBar.selectedRecipients;
+    console.log(channelRecipients);
+    console.log(userRecipients);
+
     if (channelRecipients.length > 0) {
       this.getChannelIDs(channelRecipients);
       this.prepareChannelMessages();
     }
     if (userRecipients.length > 0) {
-        this.prepareDirectMessages(userRecipients);
+      this.prepareDirectMessages(userRecipients);
     }
   }
 
@@ -72,41 +74,43 @@ export class NewMessageComponent implements OnInit {
     }
   }
 
-  prepareChannelMessages(){
+  prepareChannelMessages() {
     for (let i = 0; i < this.channelIds.length; i++) {
-        const id = this.channelIds[i];
-        const message = new Message({
-            text: this.messageText,
-            timestamp: new Date(),
-            creator: this.user,
-            channelId: id,
-            isChannelMessage: true,
-            reactions: [],
-            file: this.messageFile,
-        });
-        const messageJSON = message.toJSON();
-        this.sendMessage(messageJSON);
+      const id = this.channelIds[i];
+      const message = new Message({
+        text: this.messageText,
+        timestamp: new Date(),
+        creator: this.user,
+        channelId: id,
+        isChannelMessage: true,
+        reactions: [],
+        myMsg: false,
+        file: this.messageFile,
+      });
+      const messageJSON = message.toJSON();
+      this.sendMessage(messageJSON);
     }
   }
 
-  prepareDirectMessages(selectedUsers: User[]){
+  prepareDirectMessages(selectedUsers: User[]) {
     for (let i = 0; i < selectedUsers.length; i++) {
-        const recipient = selectedUsers[i];
-        const message = new Message({
-            text: this.messageText,
-            timestamp: new Date(),
-            creator: this.user,
-            recipient: recipient,
-            reactions: [],
-            privateMsg: true,
-            file: this.messageFile,
-        });
-        const messageJSON = message.toJSON();
-        this.sendMessage(messageJSON);
+      const recipient = selectedUsers[i];
+      const message = new Message({
+        text: this.messageText,
+        timestamp: new Date(),
+        creator: this.user,
+        recipient: recipient,
+        reactions: [],
+        privateMsg: true,
+        myMsg: false,
+        file: this.messageFile,
+      });
+      const messageJSON = message.toJSON();
+      this.sendMessage(messageJSON);
     }
   }
 
-  sendMessage(messageToJson: Message){
+  sendMessage(messageToJson: Message) {
     this.firebaseService
       .addDocument('messages', messageToJson)
       .then((data: any) => {
@@ -129,8 +133,7 @@ export class NewMessageComponent implements OnInit {
     }, 1000);
   }
 
-  showText(){
+  showText() {
     console.log(this.messageText);
-    
   }
 }

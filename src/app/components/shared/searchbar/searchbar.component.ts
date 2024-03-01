@@ -250,7 +250,7 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     const lowerCaseInput = input.toLowerCase();
     const userName = this.loggedUser.fullName.toLowerCase();
     console.log(userName);
-    
+
     // Filtern der Kanalnachrichten basierend auf dem Input
     const filteredChannelMessages = this.copyOfChannelMessages.filter(
       (message) =>

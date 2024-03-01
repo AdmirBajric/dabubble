@@ -42,6 +42,7 @@ export class MainChatComponent implements OnInit, OnDestroy {
   userId!: string;
   user!: User;
   messageId: string = '';
+  usedLocation: string = '';
 
   private channelOpenStatusSubscription!: Subscription;
   private currentChannelSubscription!: Subscription;
@@ -131,7 +132,6 @@ export class MainChatComponent implements OnInit, OnDestroy {
    * @returns {*}
    */
   async saveEditedMessage(event: { messageText: string; id: string }) {
-    console.log(this.currentChannel);
     const docSnapshot = await this.firebaseService.getDocument(
       'messages',
       event.id
@@ -197,13 +197,20 @@ export class MainChatComponent implements OnInit, OnDestroy {
    * When a new channel is emitted, it checks if the channel has changed and, if so, prepares data for the new channel.
    */
   async subscribeToCurrentChannel() {
-    this.navServie.currentChannel.subscribe(async (channelOrUser) => {
-      if (channelOrUser && 'id' in channelOrUser) {
-        if (this.channelChanged(channelOrUser.id)) {
-          await this.prepareData(channelOrUser.id, channelOrUser);
+    this.currentChannelSubscription = this.navServie.currentChannel.subscribe(
+      async (channelOrUser) => {
+        if (channelOrUser && 'id' in channelOrUser) {
+          if (this.channelChanged(channelOrUser.id)) {
+            await this.prepareData(channelOrUser.id, channelOrUser);
+            if (this.currentChannel.isUser) {
+              this.usedLocation = 'directMessages';
+            } else {
+              this.usedLocation = 'channel';
+            }
+          }
         }
       }
-    });
+    );
   }
 
   /**
@@ -240,12 +247,16 @@ export class MainChatComponent implements OnInit, OnDestroy {
           this.sortMessagesChronologically();
           this.showMessages = true;
         });
+      if (this.channelOpenStatusSubscription) {
+        this.channelOpenStatusSubscription.unsubscribe();
+      }
+
+      this.firebaseService.unsubscribeFromChannelMessages();
       await this.firebaseService.searchUserMessagesRealTime(id, this.user);
     } else {
       this.messages = [];
       this.currentChannel = channelOrUser;
       this.channelId = id;
-      await this.searchChannelMessages(id);
 
       this.messagesSubscription = this.firebaseService
         .getMessagesObservable()
@@ -254,7 +265,11 @@ export class MainChatComponent implements OnInit, OnDestroy {
           this.sortMessagesChronologically();
           this.showMessages = true;
         });
+      if (this.channelOpenStatusSubscription) {
+        this.channelOpenStatusSubscription.unsubscribe();
+      }
 
+      this.firebaseService.unsubscribeFromUserMessages();
       await this.firebaseService.searchChannelMessagesRealTime(this.channelId);
     }
   }
@@ -276,7 +291,6 @@ export class MainChatComponent implements OnInit, OnDestroy {
             return message;
           })
         );
-        console.log(this.messages);
       }
     );
   }
@@ -335,7 +349,23 @@ export class MainChatComponent implements OnInit, OnDestroy {
     if (this.messagesSubscription) {
       this.messagesSubscription.unsubscribe();
     }
-    this.firebaseService.unsubscribeFromMessages();
+
+    if (this.currentChannelSubscription) {
+      this.currentChannelSubscription.unsubscribe();
+    }
+    this.subscription.unsubscribe();
+  }
+
+  test() {
+    if (this.channelOpenStatusSubscription) {
+      this.channelOpenStatusSubscription.unsubscribe();
+    }
+    if (this.currentChannelSubscription) {
+      this.currentChannelSubscription.unsubscribe();
+    }
+    if (this.messagesSubscription) {
+      this.messagesSubscription.unsubscribe();
+    }
     this.subscription.unsubscribe();
   }
 }

@@ -1,6 +1,9 @@
 @import "app/colors.scss";
 @import "app/mixins.scss";
 @import "@ctrl/ngx-emoji-mart/picker";
+@import "fonts.scss";
+
+// Any other global styles or imports can go here
 
 $font-family-nunito: "Nunito Sans", sans-serif;
 $font-family-figtree: "Figtree", sans-serif;
@@ -14,7 +17,6 @@ $font-family-figtree: "Figtree", sans-serif;
 }
 
 * {
-
   &::-webkit-scrollbar {
     width: 4px;
   }
@@ -69,7 +71,6 @@ a {
 
 h1 {
   @include fonts-styles(1.8rem, bold);
-
 
   @media only screen and (min-width: 1750px) {
     @include fonts-styles(2rem, bold);

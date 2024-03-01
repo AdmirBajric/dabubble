@@ -38,6 +38,9 @@ export class FirebaseService {
     data: Conversation;
   }>;
 
+  private unsubscribeChannelMessages: any;
+  private unsubscribeUserMessages: any;
+
   private messagesSubject: Subject<any[]> = new Subject<any[]>();
   private unsubscribeMessages: any;
 
@@ -56,14 +59,17 @@ export class FirebaseService {
     const queryRef = query(
       collection(this.firestore, 'messages'),
       where('channelId', '==', id),
+      where('privateMsg', '==', false),
+      where('myMsg', '==', false),
       orderBy('timestamp')
     );
 
-    this.unsubscribeMessages = onSnapshot(queryRef, (snapshot) => {
+    this.unsubscribeChannelMessages = onSnapshot(queryRef, (snapshot) => {
       const messages = snapshot.docs.map((doc) => {
         const data = doc.data();
         return { id: doc.id, ...data };
       });
+
       this.messagesSubject.next(messages);
     });
   }
@@ -83,6 +89,7 @@ export class FirebaseService {
           where('creator.id', '==', user.id),
           where('recipient.id', '==', recipientId),
           where('privateMsg', '==', true),
+          where('myMsg', '==', true),
           orderBy('timestamp')
         );
       } else {
@@ -91,18 +98,31 @@ export class FirebaseService {
           where('isChannelMessage', '==', false),
           where('creator.id', 'in', [user.id, recipientId]),
           where('recipient.id', 'in', [user.id, recipientId]),
-          where('privateMsg', '==', false),
+          where('privateMsg', '==', true),
+          where('myMsg', '==', false),
           orderBy('timestamp')
         );
       }
 
-      this.unsubscribeMessages = onSnapshot(queryRef, (snapshot) => {
+      this.unsubscribeUserMessages = onSnapshot(queryRef, (snapshot) => {
         const messages = snapshot.docs.map((doc) => {
           const data = doc.data();
           return { id: doc.id, ...data };
         });
         this.messagesSubject.next(messages);
       });
+    }
+  }
+
+  unsubscribeFromChannelMessages() {
+    if (this.unsubscribeChannelMessages) {
+      this.unsubscribeChannelMessages();
+    }
+  }
+
+  unsubscribeFromUserMessages() {
+    if (this.unsubscribeUserMessages) {
+      this.unsubscribeUserMessages();
     }
   }
 

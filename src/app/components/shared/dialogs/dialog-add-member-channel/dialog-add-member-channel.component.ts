@@ -102,19 +102,22 @@ export class DialogAddMemberChannelComponent implements OnInit {
   }
 
   searchInUsers() {
+    console.log('searchInUsers');
     this.checkIfUser();
     this.inputOnSearch = true;
     this.search = true;
     this.filteredUsers = [];
 
-    this.channel.members.forEach((member: { id: any }) => {
-      this.users = this.users.filter((user) => user.id !== member.id);
-    });
+    const availableUsers = this.users.filter(
+      (user) =>
+        !this.chosenUsers.some((chosenUser) => chosenUser.id === user.id)
+    );
 
-    this.users.filter((user) => {
+    availableUsers.filter((user) => {
       if (
         user.fullName.toLowerCase().includes(this.userInputValue.toLowerCase())
       ) {
+        console.log('user', user);
         this.filteredUsers.push(user);
       }
     });
@@ -122,15 +125,13 @@ export class DialogAddMemberChannelComponent implements OnInit {
 
   selectedUser(id: string) {
     this.checked = true;
-    const filter = this.filteredUsers.filter((user) => {
-      if (user.id != id) {
-        return user;
-      }
-      this.chosenUsers.push(user);
-    });
-
-    this.filteredUsers = filter;
-    this.users = filter;
+    const userIndex = this.filteredUsers.findIndex((user) => user.id === id);
+    if (userIndex !== -1) {
+      const selectedUser = this.filteredUsers.splice(userIndex, 1)[0];
+      this.chosenUsers.push(selectedUser);
+      this.users.push(selectedUser);
+    }
+    this.searchInUsers();
   }
 
   removeMember(id: string) {

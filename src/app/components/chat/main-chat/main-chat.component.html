@@ -63,7 +63,14 @@
       </div>
     </div>
     <div class="chat-input">
-      <app-message-input [usedLocation]="'channel'"></app-message-input>
+      <app-message-input
+        *ngIf="usedLocation === 'directMessages'"
+        [usedLocation]="'directMessages'"
+      ></app-message-input>
+      <app-message-input
+        *ngIf="usedLocation === 'channel'"
+        [usedLocation]="'channel'"
+      ></app-message-input>
     </div>
   </ng-container>
 </section>

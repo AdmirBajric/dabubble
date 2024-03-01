@@ -35,7 +35,7 @@
             </div>
           </label>
           <button
-            (click)="toggleEmojiContainer(); usersSearch = false"
+            (click)="toggleEmojiContainer(usedLocation); usersSearch = false"
             appHoverChange
             [elementsConfig]="[
               {
@@ -86,13 +86,11 @@
         [sheetSize]="16"
         [darkMode]="false"
         [totalFrequentLines]="0"
-        [enableSearch]="false"
+        [enableSearch]="true"
         (emojiClick)="addEmoji($event)"
         [style]="{
           position: 'absolute',
-          top: '50%',
-          right: '50%',
-          transform: 'translate(50%, -50%)'
+          top: newMsgOrMsg ? '-290%' : '-210%'
         }"
       ></emoji-mart>
     </div>
@@ -160,7 +158,7 @@
             </div>
           </label>
           <button
-            (click)="toggleEmojiContainer(); usersSearch = false"
+            (click)="toggleEmojiContainer(usedLocation); usersSearch = false"
             appHoverChange
             [elementsConfig]="[
               {
@@ -201,9 +199,7 @@
         (emojiClick)="addEmoji($event)"
         [style]="{
           position: 'absolute',
-          top: '50%',
-          right: '50%',
-          transform: 'translate(50%, -50%)'
+          top: '-260%',
         }"
       ></emoji-mart>
     </div>

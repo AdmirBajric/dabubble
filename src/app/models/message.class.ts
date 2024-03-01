@@ -73,6 +73,7 @@ export class Message {
   privateMsg: boolean;
   id?: string;
   file: string;
+  myMsg?: boolean; // Optional variable
 
   constructor(obj?: any) {
     this.text = obj?.text || '';
@@ -88,6 +89,7 @@ export class Message {
     this.privateMsg = obj?.privateMsg || false;
     this.file = obj?.file || '';
     this.id = obj?.id || '';
+    this.myMsg = obj?.myMsg; // Initialize myMsg only if provided
   }
 
   public toJSON() {
@@ -105,6 +107,10 @@ export class Message {
 
     if (this.recipient !== undefined) {
       json.recipient = this.recipient.toJSON();
+    }
+
+    if (this.myMsg !== undefined) {
+      json.myMsg = this.myMsg; // Include myMsg in the JSON output only if defined
     }
 
     return json;

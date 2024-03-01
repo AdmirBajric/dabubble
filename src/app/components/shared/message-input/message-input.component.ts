@@ -86,6 +86,7 @@ export class MessageInputComponent implements OnInit {
   copyOfChannels: any[] = [];
   copyOfUsers: any[] = [];
   filteredUser: any[] = [];
+  newMsgOrMsg: boolean = true;
 
   firestore: Firestore = inject(Firestore);
 
@@ -135,6 +136,8 @@ export class MessageInputComponent implements OnInit {
       this.placeholder = `Antworten...`;
     } else if (this.usedLocation === 'newMessage') {
       this.placeholder = `Starte eine neue Nachricht`;
+    } else if (this.usedLocation === 'directMessages') {
+      this.placeholder = `Nachricht an ${this.currentChannel.fullName}`;
     }
   }
 
@@ -294,7 +297,10 @@ export class MessageInputComponent implements OnInit {
     this.addFreeSpace();
   }
 
-  toggleEmojiContainer() {
+  toggleEmojiContainer(location: string) {
+    if (location === 'thread') {
+      this.newMsgOrMsg = !this.newMsgOrMsg;
+    }
     this.showEmoji = !this.showEmoji;
   }
 
@@ -329,7 +335,7 @@ export class MessageInputComponent implements OnInit {
       this.text = this.userInputField.nativeElement.value;
     }
 
-    if (this.currentChannel.isUser) {
+    if (this.currentChannel.isUser && this.usedLocation === 'directMessages') {
       if (this.text.length > 0 || this.selectedFile !== null) {
         await this.uploadImage();
 
@@ -340,7 +346,8 @@ export class MessageInputComponent implements OnInit {
             creator: this.user,
             recipient: this.currentChannel,
             isChannelMessage: false,
-            privateMsg: this.user.id === this.currentChannel.id,
+            privateMsg: true,
+            myMsg: this.user.id === this.currentChannel.id ? true : false,
             reactions: [],
             file: this.uploadedFile,
           });
@@ -373,6 +380,8 @@ export class MessageInputComponent implements OnInit {
             creator: this.user,
             channelId: this.currentChannel?.id,
             isChannelMessage: channel,
+            privateMsg: false,
+            myMsg: false,
             reactions: [],
             file: this.uploadedFile,
           });

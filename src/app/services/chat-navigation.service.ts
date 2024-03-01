@@ -33,18 +33,18 @@ export class chatNavigationService implements OnInit {
 
     this.isChannelOpen$.subscribe((value) => {
       this.channelOpenStatus = value;
-    })
+    });
 
     this.isNewMessageOpen$.subscribe((value) => {
       this.isNewMessageOpenStatus = value;
-    })
+    });
   }
 
   updateChannels(channels: any[]) {
     this.channelsUpdatedSubject.next(channels);
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   openThread(message: Message) {
     this.currentMessage$.next(message);
@@ -68,7 +68,7 @@ export class chatNavigationService implements OnInit {
     this.isThreadOpen$.next(false);
   }
 
-  closeNewMessage(){
+  closeNewMessage() {
     this.isNewMessageOpen$.next(false);
   }
   updateChannelStatus(status: boolean) {
