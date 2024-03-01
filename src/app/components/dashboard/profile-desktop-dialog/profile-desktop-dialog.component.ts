@@ -25,6 +25,10 @@ export class ProfileDesktopDialogComponent {
     public router: Router
   ) {}
 
+  /**
+   * Opens a dialog to view the user profile and sets flags to manage the dialog and logout states.
+   * It listens for the dialog closure and resets the flags and dismisses the bottom sheet.
+   */
   openProfileDialog() {
     this.profileDialogOpen = true;
     this.logOutActive = false;
@@ -38,10 +42,17 @@ export class ProfileDesktopDialogComponent {
     });
   }
 
+  /**
+   * Dismisses the bottom sheet. This function is typically called when a user action
+   * requires closing the bottom sheet, such as after a logout or when closing a dialog.
+   */
   onNoClick(): void {
     this.dialogRef.close();
   }
 
+  /**
+   * Performs the logout operation, sets flags to manage the logout state, and dismisses the bottom sheet.
+   */
   logOut() {
     this.profileDialogOpen = false;
     this.logOutActive = true;

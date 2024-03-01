@@ -93,6 +93,10 @@ export class LoginComponent implements OnInit {
     this.checkWindowSize();
   }
 
+  /**
+   * Checks the window's width and updates component state based on the width.
+   * Adjusts visibility of certain elements for mobile or desktop view and changes the logo size.
+   */
   private checkWindowSize(): void {
     this.windowWidth = this.renderer.parentNode(
       this.el.nativeElement
@@ -109,6 +113,11 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  /**
+   * Attempts to sign in a user with email and password authentication.
+   * On success, redirects to the dashboard and shows a success animation.
+   * On failure, displays an error message.
+   */
   signIn() {
     if (this.userEmail.length > 5 && this.userPassword.length > 5) {
       signInWithEmailAndPassword(this.auth, this.userEmail, this.userPassword)
@@ -123,6 +132,11 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  /**
+   * Logs in a guest user with predefined credentials.
+   * On success, redirects to the dashboard and shows a success animation.
+   * On failure, logs the error code.
+   */
   guestLogIn() {
     this.errorMessage = false;
     const email = 'guestuser@gmail.com';
@@ -138,6 +152,11 @@ export class LoginComponent implements OnInit {
       });
   }
 
+  /**
+   * Initiates a sign in process using Google authentication.
+   * On success, redirects to the dashboard and shows a success animation.
+   * On failure, logs the error.
+   */
   signInWithGoogle() {
     this.errorMessage = false;
     signInWithPopup(this.auth, new GoogleAuthProvider())
@@ -149,8 +168,12 @@ export class LoginComponent implements OnInit {
       });
   }
 
+  /**
+   * Displays a success animation and redirects to a specified path.
+   * @param {string} path - The path to navigate to after showing the success animation.
+   */
   showSuccessAnimation(path: any) {
     this.loginSuccess = true;
-      this.router.navigate([path]);
+    this.router.navigate([path]);
   }
 }

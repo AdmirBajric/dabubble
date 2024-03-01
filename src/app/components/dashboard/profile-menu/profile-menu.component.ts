@@ -58,6 +58,11 @@ export class ProfileMenuComponent {
   user$ = user(this.auth);
   userSubscription: Subscription;
 
+  /**
+   * Constructs the component with necessary dependencies and initializes the component state.
+   * It checks the window size to adjust the view for mobile or desktop and subscribes to user data changes.
+   * When a user data change is detected, it updates local storage and the database accordingly.
+   */
   constructor(
     private dataService: DataService,
     private el: ElementRef,
@@ -90,11 +95,20 @@ export class ProfileMenuComponent {
     });
   }
 
+  /**
+   * Updates the user's online status in the database.
+   * @param {CollectionReference} userProfileCollection - Firestore collection reference for users.
+   * @param {DocumentSnapshot} userDoc - The document snapshot of the current user.
+   */
   async updateUserInDatabase(userProfileCollection: any, userDoc: any) {
     const userDocRef = doc(userProfileCollection, userDoc.id);
     await updateDoc(userDocRef, { isOnline: true });
   }
 
+  /**
+   * Updates and saves the current user's data to local storage.
+   * @param {Object} userData - The current user's data to save.
+   */
   async updateSaveToLocalStorage(userData: any) {
     this.fullName = userData['fullName'];
     this.userId = userData['id'];
@@ -105,6 +119,11 @@ export class ProfileMenuComponent {
     localStorage.setItem('loggedInUser', JSON.stringify(userData));
   }
 
+  /**
+   * Fetches and saves all users' data to local storage.
+   *
+   * @param {CollectionReference} userProfileCollection - Firestore collection reference for users.
+   */
   async saveUsersToLOcalStorage(userProfileCollection: any) {
     const querySnapshot = await getDocs(userProfileCollection);
     const allUsersData: any[] = [];
@@ -115,20 +134,34 @@ export class ProfileMenuComponent {
     localStorage.setItem('users', JSON.stringify(allUsersData));
   }
 
+  /**
+   * Unsubscribes from the user data subscription on component destruction to prevent memory leaks.
+   */
   ngOnDestroy() {
     this.userSubscription.unsubscribe();
   }
 
+  /**
+   * Checks the window size on browser resize and adjusts the view for mobile or desktop.
+   * @param {Event} event - The window resize event.
+   */
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
     this.checkWindowSize();
   }
 
+  /**
+   * Checks the window size on window load and adjusts the view for mobile or desktop.
+   * @param {Event} event - The window load event.
+   */
   @HostListener('window:load', ['$event'])
   onLoad(event: Event): void {
     this.checkWindowSize();
   }
 
+  /**
+   * Checks the window size to determine if the mobile view should be enabled based on the width threshold.
+   */
   private checkWindowSize(): void {
     this.windowWidth = this.renderer.parentNode(
       this.el.nativeElement
@@ -140,6 +173,10 @@ export class ProfileMenuComponent {
     }
   }
 
+  /**
+   * Opens a dialog for desktop view with a specific position.
+   * @param {string} userId - The ID of the user for whom the profile dialog should be opened.
+   */
   openDesktopDialog(userId: string): void {
     this.dialog.open(ProfileDesktopDialogComponent, {
       position: { top: '7.5rem', right: '2rem' },
@@ -147,10 +184,17 @@ export class ProfileMenuComponent {
     this.sendUserId(userId);
   }
 
+  /**
+   * Sends the user ID to the DataService.
+   * @param {string} userId - The ID of the user to send.
+   */
   sendUserId(userId: string): void {
     this.dataService.sendUserId(userId);
   }
 
+  /**
+   * Opens a bottom sheet component for profiles.
+   */
   openBottomSheet() {
     this._bottomSheet.open(ProfileBottomSheetComponent);
   }

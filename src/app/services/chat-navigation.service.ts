@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Message } from '../models/message.class';
 import { Channel } from '../models/channel.class';
@@ -7,7 +7,7 @@ import { User } from '../models/user.class';
 @Injectable({
   providedIn: 'root',
 })
-export class chatNavigationService implements OnInit {
+export class chatNavigationService {
   private threadOpenStatus!: boolean;
   private isThreadOpen$: BehaviorSubject<boolean> =
     new BehaviorSubject<boolean>(false);
@@ -40,17 +40,30 @@ export class chatNavigationService implements OnInit {
     });
   }
 
+  /**
+   * Notifies subscribers about updates to the channel list.
+   * @param {any[]} channels -An array of channel objects
+   * reflecting the current state of channels available
+   */
   updateChannels(channels: any[]) {
     this.channelsUpdatedSubject.next(channels);
   }
 
-  ngOnInit(): void {}
-
+  /**
+   * Opens a message thread based on the provided message
+   * and sets the state to indicate that the thread is open.
+   * @param {Message} message - Message object to open in the thread view. It should contain all necessary informations to be displayed properly
+   */
   openThread(message: Message) {
     this.currentMessage$.next(message);
     this.isThreadOpen$.next(true);
   }
 
+  /**
+   * Sets the current channel or user as active.
+   * Updates the application state to reflect that a channel or private-message with user is open.
+   * @param {(Channel | User)} channel - The channel or user conversation to be opened.
+   */
   openChannel(channel: Channel | User) {
     this.currentChannel$.next(channel);
     this.isChannelOpen$.next(true);
@@ -58,23 +71,33 @@ export class chatNavigationService implements OnInit {
     this.isThreadOpen$.next(false);
   }
 
+  /**
+   * Opens the interface to create a new message.
+   * Closes the channel interface.
+   */
   openNewMessage() {
     this.isChannelOpen$.next(false);
-    console.log('navigationsService wird aufgerufen!');
     this.isNewMessageOpen$.next(true);
   }
 
+  /**
+   * Closes the interface of thread.
+   */
   closeThread() {
     this.isThreadOpen$.next(false);
   }
 
+  /**
+   * Closes the interface of new-message.component if user clicks on other channel or private message
+   */
   closeNewMessage() {
     this.isNewMessageOpen$.next(false);
   }
-  updateChannelStatus(status: boolean) {
-    this.isChannelOpen$.next(status);
-  }
 
+  /**
+   * Closes chat of channel.
+   * Is being used in mobile view.
+   */
   closeChat() {
     this.isChannelOpen$.next(false);
   }
@@ -89,31 +112,53 @@ export class chatNavigationService implements OnInit {
     return this.isThreadOpen$.asObservable();
   }
 
-  get isThreadOpen(): boolean {
-    return this.threadOpenStatus;
-  }
-
+  /**
+   * Observable to provide current Message.
+   * Is subscribed by thread to
+   *    - get the choosen message
+   *    - being updated if user wants to display another message
+   * @readonly
+   * @type {*}
+   */
   get currentMessage() {
     return this.currentMessage$.asObservable();
   }
 
+  /**
+   * Observable to provide current channel.
+   * Is subscribed to
+   *    - get choosen channel
+   *    - to edit the information of channel (chnannel-edit)
+   *    - to display the information of channel (chat-header, chnannel-edit)
+   *    - to generate placeholder according to channel (message-input)
+   *    - to send message to channel (message-input)
+   * @readonly
+   * @type {*}
+   */
   get currentChannel() {
     return this.currentChannel$.asObservable();
   }
 
+  /**
+   * Observable to provide status of channel (isOpen: boolean).
+   * Is subscribed to
+   *    - regulate UI (dashboard)
+   *    - show channel (main-chat)
+   * @readonly
+   * @type {*}
+   */
   get channelStatus$() {
     return this.isChannelOpen$.asObservable();
   }
 
+  /**
+   * Observable to provide status of new message (isOpen: boolean).
+   * Is subscribed to
+   *    - regulate UI (dashboard). opens the component if user wants to write new message
+   * @readonly
+   * @type {*}
+   */
   get newMessageStatus$() {
     return this.isNewMessageOpen$.asObservable();
-  }
-
-  get isNewMessageOpen(): boolean {
-    return this.isNewMessageOpenStatus;
-  }
-
-  get isChannelOpen(): boolean {
-    return this.channelOpenStatus;
   }
 }

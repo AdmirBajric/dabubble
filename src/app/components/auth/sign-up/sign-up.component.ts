@@ -73,6 +73,10 @@ export class SignUpComponent {
     private el: ElementRef
   ) {}
 
+  /**
+   * Sets the hover state of a component.
+   * @param {boolean} value - The boolean value to set the hover state.
+   */
   setHover(value: boolean): void {
     this.isHovered = value;
   }
@@ -81,16 +85,27 @@ export class SignUpComponent {
     this.checkWindowSize();
   }
 
+  /**
+   * Adjusts component settings based on window size when the window is resized.
+   * @param {Event} event - The resize event.
+   */
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
     this.checkWindowSize();
   }
 
+  /**
+   * Adjusts component settings based on window size when the window is loaded.
+   * @param {Event} event - The load event.
+   */
   @HostListener('window:load', ['$event'])
   onLoad(event: Event): void {
     this.checkWindowSize();
   }
 
+  /**
+   * Checks the window size and sets the `active` state of the component based on the width.
+   */
   private checkWindowSize(): void {
     this.windowWidth = this.renderer.parentNode(
       this.el.nativeElement
@@ -102,6 +117,9 @@ export class SignUpComponent {
     }
   }
 
+  /**
+   * Prepares user data and navigates to another view to complete the registration process.
+   */
   navigateAndSendUser(): void {
     this.user.fullName = this.createFullName(this.user.fullName);
     this.user.email = this.user.email.toLowerCase();
@@ -109,6 +127,11 @@ export class SignUpComponent {
     this.registerUser(userToSend);
   }
 
+  /**
+   * Formats the full name to capitalize the first letter of each name component.
+   * @param {string} fullName - The full name to format.
+   * @returns {string} The formatted full name.
+   */
   createFullName(fullName: string) {
     let firstName = fullName.split(' ')[0];
     let lastName = fullName.split(' ')[1];
@@ -118,6 +141,11 @@ export class SignUpComponent {
     return `${firstName} ${lastName}`;
   }
 
+  /**
+   * Updates validity states for form fields based on field type and validity status.
+   * @param {string} field - The field to check validity for.
+   * @param {boolean} isValid - Whether the field is valid or not.
+   */
   onValidityChanged(field: string, isValid: boolean) {
     this.emailExist = false;
     switch (field) {
@@ -133,10 +161,17 @@ export class SignUpComponent {
     }
   }
 
+  /**
+   * Toggles the position state between 0 and 1.
+   */
   onCheckboxChange() {
     this.position = this.position === 0 ? 1 : 0;
   }
 
+  /**
+   * Evaluates the overall form validity based on individual field validity and additional conditions.
+   * @returns {boolean} The form's overall validity state.
+   */
   isFormValid(): any {
     if (this.windowWidth < 1100) {
       return this.nameValid && this.emailValid && this.passwordValid;
@@ -149,6 +184,10 @@ export class SignUpComponent {
     );
   }
 
+  /**
+   * Registers a new user using Firebase authentication and handles the post-registration process.
+   * @param {Object} userToSend - The user data to send excluding the password.
+   */
   registerUser(userToSend: any) {
     if (this.user && this.user.email && this.user.password) {
       const auth = getAuth();

@@ -33,6 +33,12 @@ export class SendMailPwComponent {
 
   constructor(private router: Router) {}
 
+  /**
+   * Updates the validity state of a specified form field.
+   * In this case, it only checks for the 'email' field to update its validity status.
+   * @param {string} field - The name of the form field whose validity is being updated.
+   * @param {boolean} isValid - The new validity state of the field.
+   */
   onValidityChanged(field: string, isValid: boolean) {
     switch (field) {
       case 'email':
@@ -41,10 +47,19 @@ export class SendMailPwComponent {
     }
   }
 
+  /**
+   * Checks if the form is valid by verifying the validity of the email field.
+   * @returns {boolean} The overall validity of the form, which in this case is determined by the validity of the email field.
+   */
   isFormValid(): any {
     return this.emailValid;
   }
 
+  /**
+   * Sends a password reset email to the user.
+   * Upon successful email dispatch, it sets a flag indicating the email was sent and navigates to the home page after a delay.
+   * If there's an error in sending the email, it logs the error message.
+   */
   sendMail() {
     sendPasswordResetEmail(this.auth, this.email)
       .then(() => {

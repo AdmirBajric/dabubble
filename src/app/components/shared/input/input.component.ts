@@ -40,24 +40,42 @@ export class InputComponent implements OnInit {
   @Output() validityChanged: EventEmitter<boolean> =
     new EventEmitter<boolean>();
 
+  /**
+   * Lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
+   * Sets the initial value of the form control.
+   */
   ngOnInit() {
     this.formControl.setValue(this.initialValue);
   }
 
+  /**
+   * Sets the `isInputActive` flag to true when the input field gains focus, indicating the input is currently active.
+   */
   handleFocus() {
     this.isInputActive = true;
   }
 
+  /**
+   * Resets the `isInputActive` flag to false when the input field loses focus and marks the form control as touched.
+   * Emits the validity state of the form control.
+   */
   handleBlur() {
     this.isInputActive = false;
     this.formControl.markAsTouched();
     this.validityChanged.emit(this.formControl.valid);
   }
 
+  /**
+   * Emits the current validity state of the form control upon any input by the user.
+   */
   handleInput() {
     this.validityChanged.emit(this.formControl.valid);
   }
 
+  /**
+   * Returns a validator to check the value of the form control against a defined pattern.
+   * @returns validator function that returns null if the value matches the pattern or an error object if it does not.
+   */
   private patternValidator(): () => null | { [key: string]: any } {
     return () => {
       if (this.formControl) {
@@ -73,6 +91,11 @@ export class InputComponent implements OnInit {
     };
   }
 
+  /**
+   * Validates the form control's value against the specified pattern.
+   * @param {string} value - value to be validated.
+   * @returns {boolean} - true if the value matches the pattern, false otherwise.
+   */
   private validatePattern(value: string): boolean {
     if (value !== null && value !== undefined) {
       const regex = new RegExp(this.pattern);
@@ -81,6 +104,10 @@ export class InputComponent implements OnInit {
     return false;
   }
 
+  /**
+   * Determines the error message to display based on the type of validation error encountered by the form control.
+   * @returns {string} The appropriate error message for the encountered validation error.
+   */
   getErrorMessage(): string {
     if (this.formControl.hasError('required') && this.formControl.touched) {
       return '*This field is required.';

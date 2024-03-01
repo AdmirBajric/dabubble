@@ -7,12 +7,10 @@ import { HoverChangeDirective } from '../../../../directives/hover-change.direct
 import { InputComponent } from '../../input/input.component';
 import { SearchbarComponent } from '../../searchbar/searchbar.component';
 import { NgIf, CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DialogUserListComponent } from './user-list/user-list.component';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { Router } from '@angular/router';
 import { FirebaseService } from '../../../../services/firebase.service';
 import { Firestore } from '@angular/fire/firestore';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -41,7 +39,6 @@ import { DialogInputComponent } from '../dialog-input/dialog-input.component';
   ],
 })
 export class DialogAddMemberChannelComponent implements OnInit {
-  form!: FormGroup;
   user!: any;
   text: string = '';
   showUserInput: string[] = [];
@@ -66,9 +63,7 @@ export class DialogAddMemberChannelComponent implements OnInit {
    * @param {*} data
    */
   constructor(
-    private formBuilder: FormBuilder,
     private firebaseService: FirebaseService,
-    private router: Router,
     public dialogRef: MatDialogRef<DialogAddMemberChannelComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -86,6 +81,10 @@ export class DialogAddMemberChannelComponent implements OnInit {
     }
   }
 
+  /**
+   * Checks if local array has entries to set noMembers:boolean
+   * to true - if there are no members.
+   */
   checkIfUser(): void {
     if (this.users.length === 0) {
       this.noMembers = true;
@@ -94,6 +93,10 @@ export class DialogAddMemberChannelComponent implements OnInit {
     }
   }
 
+  /**
+   * Calls a method in firebaseService to update channel members.
+   * This function is called then user clicks on button.
+   */
   addMemberToChannel() {
     this.firebaseService.updateDocument('channels', this.channel.id, {
       members: [...this.channel.members, ...this.chosenUsers],
@@ -101,8 +104,12 @@ export class DialogAddMemberChannelComponent implements OnInit {
     this.closeDialog();
   }
 
+  /**
+   * Filters and displays users based on the input value, excluding already chosen members.
+   * It sets the search flags and the filtered users list, then filters users not in `chosenUsers`.
+   * Matching users (by name) are logged and added to `filteredUsers`.
+   */
   searchInUsers() {
-    console.log('searchInUsers');
     this.checkIfUser();
     this.inputOnSearch = true;
     this.search = true;
@@ -117,12 +124,17 @@ export class DialogAddMemberChannelComponent implements OnInit {
       if (
         user.fullName.toLowerCase().includes(this.userInputValue.toLowerCase())
       ) {
-        console.log('user', user);
         this.filteredUsers.push(user);
       }
     });
   }
-
+  /**
+   * Handles user selection from the filtered list.
+   * Marks the user as checked, removes them from the filtered list, and adds them to `chosenUsers` and `users`.
+   * It then refreshes the search to update the filtered users list.
+   *
+   * @param {string} id - The ID of the selected user.
+   */
   selectedUser(id: string) {
     this.checked = true;
     const userIndex = this.filteredUsers.findIndex((user) => user.id === id);
@@ -133,7 +145,11 @@ export class DialogAddMemberChannelComponent implements OnInit {
     }
     this.searchInUsers();
   }
-
+  /**
+   * Removes a member from the selected members list and adds them back to the general users list.
+   *
+   * @param {string} id - The ID of the member to remove.
+   */
   removeMember(id: string) {
     const filter = this.chosenUsers.filter((user) => {
       if (user.id !== id) {
@@ -144,7 +160,11 @@ export class DialogAddMemberChannelComponent implements OnInit {
 
     this.chosenUsers = filter;
   }
-
+  /**
+   * Fetches all users from the database and updates the local array of users.
+   * It then checks for users to determine if `noMembers` should be set.
+   * Errors during fetch are logged to the console.
+   */
   setUser() {
     this.firebaseService
       .getAllUsers()
@@ -156,7 +176,9 @@ export class DialogAddMemberChannelComponent implements OnInit {
         console.error('Error fetching users:', error);
       });
   }
-
+  /**
+   * Closes the current dialog window.
+   */
   closeDialog() {
     this.dialogRef.close();
   }

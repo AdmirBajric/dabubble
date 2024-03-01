@@ -18,7 +18,5 @@ export class DirectMessageListItemComponent implements OnInit {
 
   displayChannel(user: User) {
     this.navService.openChannel(user);
-    // this.openChannelChat = true;
-    // this.openChatChannel.emit(this.openChannelChat);
   }
 }

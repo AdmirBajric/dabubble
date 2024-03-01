@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ChatHeaderComponent } from '../../shared/chat-header/chat-header.component';
 import { MessageInputComponent } from '../../shared/message-input/message-input.component';
 import { MessageComponent } from '../../chat/message/message.component';
-import { RouteService } from '../../../services/route.service';
 import { HoverChangeDirective } from '../../../directives/hover-change.directive';
 import { RouterLink } from '@angular/router';
 import { TimeSeparatorChatComponent } from '../../shared/time-separator-chat/time-separator-chat.component';
@@ -52,7 +51,6 @@ export class MainChatComponent implements OnInit, OnDestroy {
   messagesSubscription: Subscription | undefined;
 
   constructor(
-    private routeService: RouteService,
     private navServie: chatNavigationService,
     private firebaseService: FirebaseService,
     private dataService: DataService
@@ -65,10 +63,6 @@ export class MainChatComponent implements OnInit, OnDestroy {
   clearMainChat() {
     this.messages = [];
     this.showChannel = false;
-  }
-
-  get isNotDashboard() {
-    return !this.routeService.checkRoute('/dashboard');
   }
 
   ngOnInit(): void {
