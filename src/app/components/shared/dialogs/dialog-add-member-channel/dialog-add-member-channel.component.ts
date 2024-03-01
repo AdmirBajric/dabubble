@@ -124,7 +124,6 @@ export class DialogAddMemberChannelComponent implements OnInit {
       if (
         user.fullName.toLowerCase().includes(this.userInputValue.toLowerCase())
       ) {
-        console.log('user', user);
         this.filteredUsers.push(user);
       }
     });
