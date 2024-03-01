@@ -21,7 +21,6 @@ import { Firestore } from '@angular/fire/firestore';
 import { getApp } from 'firebase/app';
 import { getStorage } from 'firebase/storage';
 import { ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
-import { Channel } from '../../../models/channel.class';
 import { Subscription } from 'rxjs';
 import { chatNavigationService } from '../../../services/chat-navigation.service';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
@@ -95,6 +94,10 @@ export class MessageInputComponent implements OnInit {
     private navService: chatNavigationService
   ) {}
 
+  /**
+   * Lifecycle hook that initializes component state by loading the logged-in user from localStorage,
+   * subscribing to channel updates, setting user and channel data, and generating a placeholder based on the context.
+   */
   ngOnInit(): void {
     const loggedInUser =
       typeof localStorage !== 'undefined'
@@ -111,6 +114,10 @@ export class MessageInputComponent implements OnInit {
     this.generatePlaceholder();
   }
 
+  /**
+   * Lifecycle hook that performs cleanup by unsubscribing from any observable subscriptions
+   * and resetting placeholder text to prevent memory leaks.
+   */
   ngOnDestroy() {
     this.placeholder = '';
     if (this.channelSubscription) {
@@ -121,6 +128,10 @@ export class MessageInputComponent implements OnInit {
     }
   }
 
+  /**
+   * Lifecycle hook that adds an event listener to the user input field for handling deletion via keyboard,
+   * syncing user and channel arrays based on the input.
+   */
   ngAfterViewInit() {
     this.userInputField.nativeElement.addEventListener('keydown', (event) => {
       if (event.key === 'Delete' || event.key === 'Backspace') {
@@ -129,6 +140,9 @@ export class MessageInputComponent implements OnInit {
     });
   }
 
+  /**
+   * Generates a context-specific placeholder for the message input field based on the current location.
+   */
   generatePlaceholder() {
     if (this.usedLocation === 'channel') {
       this.placeholder = this.getChannelPlaceholder();
@@ -141,6 +155,10 @@ export class MessageInputComponent implements OnInit {
     }
   }
 
+  /**
+   * Retrieves a channel-specific placeholder, indicating the target channel for the message.
+   * @returns {string} - placeholder string indicating the target channel.
+   */
   getChannelPlaceholder() {
     if (this.currentChannel) {
       const name = this.currentChannel.name;
@@ -150,16 +168,28 @@ export class MessageInputComponent implements OnInit {
     }
   }
 
+  /**
+   * Synchronizes the mentioned users and channels arrays with the current input, ensuring only relevant entities remain.
+   */
   checkInputAndSyncArrays() {
     const inputValue = this.userInputField.nativeElement.value;
     const mentionedUsersChannels = this.extractMentions(inputValue);
     this.syncArrays(mentionedUsersChannels);
   }
 
+  /**
+   * Extracts mentions from the input string based on predefined delimiters (@ for users, # for channels).
+   * @param {string} input - input string from the user.
+   * @returns {string[]} - array of extracted mentions.
+   */
   extractMentions(input: string) {
     return input.split(/[@#]/);
   }
 
+  /**
+   * Updates the users array to include only those mentioned or originally included, based on the latest input.
+   * @param {string[]} mentionedUsersChannels - array of mentioned users or channels in the input.
+   */
   syncArrays(mentionedUsersChannels: string[]) {
     const mentionedUserIds: Set<string> = new Set();
 
@@ -181,11 +211,18 @@ export class MessageInputComponent implements OnInit {
     this.users = [...filteredUsers];
   }
 
+  /**
+   * Creates a deep copy of the channels and users arrays to preserve the original data for reference.
+   */
   makeCloneCopy() {
     this.copyOfChannels = [...this.channels];
     this.copyOfUsers = [...this.users];
   }
 
+  /**
+   * Handles changes in the input field, toggling search modes for users and channels based on specific triggers.
+   * @param {Event} event The input event containing the new value of the field.
+   */
   onInputChange(event: any) {
     const values = event.target.value.split(' ');
 
@@ -204,6 +241,9 @@ export class MessageInputComponent implements OnInit {
     });
   }
 
+  /**
+   * Sets the input focus state to true and resets search indicators and emoji visibility.
+   */
   onInputFocus() {
     this.isInputFocused = true;
     this.usersSearch = false;
@@ -211,10 +251,16 @@ export class MessageInputComponent implements OnInit {
     this.showEmoji = false;
   }
 
+  /**
+   * Resets the input focus state to false when the input field loses focus.
+   */
   onInputBlur() {
     this.isInputFocused = false;
   }
 
+  /**
+   * Fetches all users and channels from the Firebase service and creates a clone copy for reference.
+   */
   async setUserAndChannels() {
     await this.firebaseService
       .getAllUsers()
@@ -237,12 +283,19 @@ export class MessageInputComponent implements OnInit {
     this.makeCloneCopy();
   }
 
+  /**
+   * Toggles the user search panel expansion based on the presence of users.
+   */
   toggleExpandPanel() {
     if (this.users.length > 0) {
       this.usersSearch = !this.usersSearch;
     }
   }
 
+  /**
+   * Adds a user to the input text when selected from the search results, auto-inserting the '@' symbol if necessary.
+   * @param {string} userId - ID of the user to add.
+   */
   addUser(userId: any) {
     const selectedUserIndex = this.users.findIndex(
       (user) => user.id === userId
@@ -262,6 +315,10 @@ export class MessageInputComponent implements OnInit {
     }
   }
 
+  /**
+   * Adds a channel to the input text when selected from the search results, auto-inserting the '#' symbol if necessary.
+   * @param {string} channelName - name of the channel to add.
+   */
   addChannel(channelName: string) {
     const selectedChannelIndex = this.channels.findIndex(
       (channel) => channel.name === channelName
@@ -281,6 +338,9 @@ export class MessageInputComponent implements OnInit {
     }
   }
 
+  /**
+   * Adds a space to the input text and ensures the input field remains focused.
+   */
   addFreeSpace() {
     if (this.userInputField) {
       if (this.text.length > 0) {
@@ -290,6 +350,10 @@ export class MessageInputComponent implements OnInit {
     }
   }
 
+  /**
+   * Adds the selected emoji to the input text and prepares the input field for further typing.
+   * @param {any} event The emoji selection event.
+   */
   addEmoji(event: any): void {
     this.emoji = event.emoji.native;
     this.showEmoji = false;
@@ -297,6 +361,10 @@ export class MessageInputComponent implements OnInit {
     this.addFreeSpace();
   }
 
+  /**
+   * Toggles the visibility of the emoji picker based on the provided context (e.g., thread, new message).
+   * @param {string} location The context in which the emoji picker is being toggled.
+   */
   toggleEmojiContainer(location: string) {
     if (location === 'thread') {
       this.newMsgOrMsg = !this.newMsgOrMsg;
@@ -304,6 +372,9 @@ export class MessageInputComponent implements OnInit {
     this.showEmoji = !this.showEmoji;
   }
 
+  /**
+   * Subscribes to the current channel observable to receive updates and generate a context-specific placeholder.
+   */
   subscribeChannel() {
     this.channelSubscription = this.navService.currentChannel.subscribe(
       (channel) => {
@@ -313,6 +384,9 @@ export class MessageInputComponent implements OnInit {
     );
   }
 
+  /**
+   * Subscribes to the channel updates observable to receive a list of updated channels and refresh the current channel data.
+   */
   subscribeChannels() {
     this.channelsSubscription = this.navService.channelsUpdated$.subscribe(
       (channels) => {
@@ -326,6 +400,10 @@ export class MessageInputComponent implements OnInit {
     );
   }
 
+  /**
+   * Processes and sends the composed message or comment, handling file uploads and resetting the input state.
+   * @param {boolean} channel Indicates whether the message is for a channel or direct message.
+   */
   async addMessage(channel: boolean) {
     this.usersSearch = false;
     this.channelSearch = false;
@@ -411,6 +489,9 @@ export class MessageInputComponent implements OnInit {
     }
   }
 
+  /**
+   * Emits the composed text and any selected file to the parent component when used for composing a new message.
+   */
   // this is used when user wants to write new message. usedLocation === 'newMessage'
   async emitText() {
     await this.uploadImage();
@@ -422,14 +503,10 @@ export class MessageInputComponent implements OnInit {
     }
   }
 
-  checkIfChannel() {
-    if (this.usedLocation === 'channel') {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
+  /**
+   * Handles file selection, updating the UI to reflect the selected file and preparing it for upload.
+   * @param {Event} event The file input change event.
+   */
   onFileSelected(event: any) {
     this.selectedFile = event.target.files?.[0] || null;
 
@@ -448,6 +525,9 @@ export class MessageInputComponent implements OnInit {
     }
   }
 
+  /**
+   * Uploads the selected image file to Firebase storage and updates the `uploadedFile` URL for message attachment.
+   */
   async uploadImage() {
     if (this.selectedFile !== null) {
       const filename = this.user.id + '_' + this.selectedFile.name;
