@@ -46,6 +46,10 @@ export class DialogShowMembersComponent implements OnInit {
   ) {}
   channel = this.data;
 
+  /**
+   * Initializes the component by fetching all users from Firebase and updating the online status of channel members.
+   * It iterates through each user fetched and updates the `isOnline` status of the corresponding member in the `channel.members` array.
+   */
   ngOnInit(): void {
     this.firebaseNav.getAllUsers().then((users) => {
       users.forEach((user) => {
@@ -58,14 +62,24 @@ export class DialogShowMembersComponent implements OnInit {
     });
   }
 
+  /**
+   * Closes the currently open dialog.
+   */
   closeDialog() {
     this.dialogRef.close();
   }
 
+  /**
+   * Triggers the profile view for a given member based on their ID.
+   * @param {string} id The unique identifier of the member whose profile is to be viewed.
+   */
   showMemberProfile(id: string) {
     this.btnService.openProfile(id);
   }
 
+  /**
+   * Closes the current dialog and opens a new dialog to add members to the channel.
+   */
   openDialogAddingMember() {
     this.closeDialog();
     this.btnService.addMemberDialog(this.channel);
