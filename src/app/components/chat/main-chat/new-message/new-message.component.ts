@@ -2,7 +2,6 @@ import { Component, OnInit, Output, ViewChild } from '@angular/core';
 import { MessageInputComponent } from '../../../shared/message-input/message-input.component';
 import { InputComponent } from '../../../shared/input/input.component';
 import { SearchbarComponent } from '../../../shared/searchbar/searchbar.component';
-import { RouteService } from '../../../../services/route.service';
 import { CommonModule } from '@angular/common';
 import { Channel } from '../../../../models/channel.class';
 import { User } from '../../../../models/user.class';
@@ -28,10 +27,7 @@ export class NewMessageComponent implements OnInit {
   messageFile!: string;
   channelIds: string[] = [];
   messageSuccess: boolean = false;
-  constructor(
-    private routeService: RouteService,
-    private firebaseService: FirebaseService
-  ) {}
+  constructor(private firebaseService: FirebaseService) {}
 
   ngOnInit() {
     const loggedInUser =
@@ -120,10 +116,6 @@ export class NewMessageComponent implements OnInit {
       .catch((err: any) => {
         console.log(err);
       });
-  }
-
-  get isNotDashboard() {
-    return !this.routeService.checkRoute('/dashboard');
   }
 
   showMessageSucces() {

@@ -1,5 +1,4 @@
-<div *ngFor="let item of chat" class="wrapper wrapper-padding border-radius-3"
-    [ngStyle]="{'height': isNotDashboard ? '100vh' : '97%'}">
+<div *ngFor="let item of chat" class="wrapper wrapper-padding border-radius-3">
     <section class="head">
         <img class="avatar" [src]="item.member.avatar" alt="member">
         <h1>{{ item.member.fullName}}</h1>
@@ -23,4 +22,3 @@
         <app-message-input></app-message-input>
     </section>
 </div>
-<!-- [ngStyle]="{'height': isNotDashboard ? '100vh' : '97%'}"  -->
