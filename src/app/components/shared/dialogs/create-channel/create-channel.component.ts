@@ -42,6 +42,9 @@ export class CreateChannelComponent {
     this.dialogRef.close();
   }
 
+  /**
+   * Formats and sends channel info to data service. In data service it updates the observable for subscribers (in this case: dialog-add-user.)
+   */
   sendChannelInformation(): void {
     const channelName = `${this.channelName[0].toUpperCase()}${this.channelName
       .slice(1)
@@ -52,6 +55,10 @@ export class CreateChannelComponent {
     this.dataService.sendChannelInfo(channelName, description);
   }
 
+  /**
+   * Closes the dialog and calls `sendChannelInformation()` - to update the Observable
+   * Opens dialog for adding user to channel.
+   */
   createChannel() {
     this.dialogRef.close();
     this.sendChannelInformation();
