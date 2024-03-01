@@ -62,6 +62,10 @@ export class SelectAvatarComponent {
     private router: Router
   ) {}
 
+  /**
+   * Handles the file selection event, sets the image as selected, and reads the selected file to display a preview.
+   * @param {Event} event - The event triggered by selecting a file.
+   */
   onFileSelected(event: any) {
     this.imgSelected = true;
     this.selectedFile = event.target.files?.[0] || null;
@@ -76,6 +80,10 @@ export class SelectAvatarComponent {
     }
   }
 
+  /**
+   * Uploads the selected image file to Firebase storage and updates the user's avatar URL in Firestore.
+   * Falls back to a predefined avatar if no file is selected but an avatar is chosen.
+   */
   async uploadImage() {
     if (this.selectedFile !== null) {
       const filename = this.user.id + '_' + this.selectedFile.name;
@@ -132,6 +140,10 @@ export class SelectAvatarComponent {
     }
   }
 
+  /**
+   * Handles window resize events to adjust UI elements based on the window size.
+   * @param {Event} event - The window resize event.
+   */
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
     this.checkWindowSize();
@@ -142,6 +154,9 @@ export class SelectAvatarComponent {
     this.checkWindowSize();
   }
 
+  /**
+   * Checks the window size and adjusts UI elements accordingly.
+   */
   private checkWindowSize(): void {
     this.windowWidth = this.renderer.parentNode(
       this.el.nativeElement
@@ -155,6 +170,10 @@ export class SelectAvatarComponent {
     }
   }
 
+  /**
+   * Sets the selected avatar image and updates the user's avatar URL accordingly.
+   * @param {number} index - The index of the selected avatar in the avatars array.
+   */
   imageClicked(index: number) {
     this.imgSelected = true;
     this.personImg = this.avatars[index];
@@ -165,6 +184,9 @@ export class SelectAvatarComponent {
     }
   }
 
+  /**
+   * Registers the user by uploading the image and saving user data to Firestore.
+   */
   async registerUser() {
     if (this.user) {
       if (this.user != undefined) {
@@ -174,6 +196,9 @@ export class SelectAvatarComponent {
     }
   }
 
+  /**
+   * Saves the user data to Firestore and navigates to the email verification page upon successful document addition.
+   */
   async saveToFirestore() {
     try {
       const itemCollection = collection(this.firestore, 'users');
@@ -186,6 +211,9 @@ export class SelectAvatarComponent {
     }
   }
 
+  /**
+   * Signs out the current user from Firebase authentication.
+   */
   signOutUser() {
     const auth = getAuth();
 
