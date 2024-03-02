@@ -8,7 +8,6 @@ import { Message, Reaction } from '../../../models/message.class';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { User } from '../../../models/user.class';
 import { FirebaseService } from '../../../services/firebase.service';
-import { arrayUnion } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-message-hover-actions',
@@ -138,11 +137,6 @@ export class MessageHoverActionsComponent {
    */
   async setAndSaveEmoji(id: string, emoji: string, messageType: string) {
     this.active = false;
-    console.log(id);
-    console.log(this.user);
-
-    console.log(messageType);
-
     try {
       const reaction = new Reaction({
         fullName: this.user.fullName,
@@ -202,8 +196,6 @@ export class MessageHoverActionsComponent {
       const existingReactionIndex = existingReactions.findIndex(
         (reaction: any) => reaction.userId === this.user.id
       );
-
-      console.log(existingReactionIndex);
 
       if (existingReactionIndex !== -1) {
         existingReactions[existingReactionIndex] = reactionJSON;

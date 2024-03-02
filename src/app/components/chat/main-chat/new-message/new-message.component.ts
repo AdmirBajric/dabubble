@@ -7,6 +7,9 @@ import { Channel } from '../../../../models/channel.class';
 import { User } from '../../../../models/user.class';
 import { Message } from '../../../../models/message.class';
 import { FirebaseService } from '../../../../services/firebase.service';
+import { Conversation } from '../../../../models/conversation.class';
+import { DataService } from '../../../../services/data.service';
+import { chatNavigationService } from '../../../../services/chat-navigation.service';
 @Component({
   selector: 'app-new-message',
   standalone: true,
@@ -27,7 +30,12 @@ export class NewMessageComponent implements OnInit {
   messageFile!: string;
   channelIds: string[] = [];
   messageSuccess: boolean = false;
-  constructor(private firebaseService: FirebaseService) {}
+
+  constructor(
+    private firebaseService: FirebaseService,
+    private sharedService: DataService,
+    private navService: chatNavigationService
+  ) {}
 
   /**
    * Lifecycle hook that initializes the component.
@@ -61,17 +69,19 @@ export class NewMessageComponent implements OnInit {
   /**
    * Retrieves the selected channel and user recipients from the search bar and prepares messages for sending.
    */
-  getRecipientsSearchbar() {
+  async getRecipientsSearchbar() {
     const channelRecipients = this.searchBar.selectedChannels;
     const userRecipients = this.searchBar.selectedRecipients;
-    console.log(channelRecipients);
-    console.log(userRecipients);
 
     if (channelRecipients.length > 0) {
       this.getChannelIDs(channelRecipients);
       this.prepareChannelMessages();
     }
     if (userRecipients.length > 0) {
+      userRecipients.forEach(async (user) => {
+        await this.addUserToConversations(user.id);
+      });
+
       this.prepareDirectMessages(userRecipients);
     }
   }
@@ -148,6 +158,67 @@ export class NewMessageComponent implements OnInit {
       });
   }
 
+  async addUserToConversations(userToAdd: string) {
+    try {
+      if (!this.user) {
+        return;
+      }
+
+      let filteredUser;
+      await this.firebaseService.getAllUsers().then((users) => {
+        users.filter((user) => {
+          if (user['id'] === userToAdd) {
+            filteredUser = user;
+          }
+        });
+      });
+
+      await this.createConversation(this.user, userToAdd);
+      await this.createConversation(filteredUser, this.user.id);
+    } catch (error: any) {
+      if (error.message.includes('No document to update')) {
+        console.error(
+          'Error: Conversation does not exist. Creating a new conversation.'
+        );
+      } else {
+        console.error('Error:', error.message);
+      }
+    }
+  }
+
+  async createConversation(user: any, userToAdd: any) {
+    const conversation = await this.firebaseService.getConversationForUser(
+      user.id
+    );
+
+    if (conversation) {
+      if (conversation.data.creator.id === user.id) {
+        if (!conversation.data.users.includes(userToAdd)) {
+          conversation.data.users.push(userToAdd);
+
+          await this.firebaseService.updateConversation(
+            conversation.id,
+            conversation.data
+          );
+          this.sharedService.triggerShowUsers.emit();
+          this.navService.openChannel(user);
+        } else {
+          this.navService.openChannel(user);
+        }
+      } else {
+      }
+    } else {
+      const newConversation = new Conversation({
+        creator: user,
+        users: [userToAdd],
+      });
+
+      await this.firebaseService.createConversation(newConversation);
+      this.navService.openChannel(user);
+      this.sharedService.triggerShowUsers.emit();
+    }
+  }
+
   /**
    * Displays a success indicator briefly after a message is successfully sent.
    */
@@ -156,12 +227,5 @@ export class NewMessageComponent implements OnInit {
     setTimeout(() => {
       this.messageSuccess = false;
     }, 1000);
-  }
-
-  /**
-   * Logs the current message text to the console. Primarily for debugging purposes.
-   */
-  showText() {
-    console.log(this.messageText);
   }
 }

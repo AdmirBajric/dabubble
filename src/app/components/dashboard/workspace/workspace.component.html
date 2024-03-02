@@ -1,7 +1,7 @@
 <div *ngIf="isOpen" class="main">
   <div class="workspace-wrapper">
     <app-workspace-header></app-workspace-header>
-    <div class="drawer-container">
+    <div [ngClass]="{ channelheight: channelHeight }" class="drawer-container">
       <div class="drawer">
         <div class="drawer-header">
           <div

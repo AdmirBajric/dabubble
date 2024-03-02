@@ -31,6 +31,7 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
   @Input() searchRecipients: boolean = false; //******  only true if used to search for message recipints in new-message
   @Input() globalSearch!: boolean; //****** true if searchbar is used globally for channels, members, messages, information
   @Input() newMessageSearch!: boolean; //****** true if searchbar is used in new-message.component
+  @Input() comesFrom!: string;
   @ViewChild('searchbarInput') searchbarInput!: ElementRef<HTMLInputElement>;
   users!: User[];
   channels!: Channel[];
@@ -91,6 +92,10 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   showUserProfile(id: string) {
+    this.clearInput();
+    this.usersSearch = false;
+    this.channelSearch = false;
+    this.globalSearch = false;
     this.btnService.openProfile(id);
   }
 
@@ -290,6 +295,12 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   selectUser(userName: string) {
+    this.globalSearch = false;
+    this.clearInput();
+    if (this.inputValue === '') {
+      this.usersSearch = false;
+      this.channelSearch = false;
+    }
     this.usersSearch = false;
     const userIndex = this.copyOfUsers.findIndex(
       (user) => user.fullName === userName
@@ -314,6 +325,7 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   selectChannel(channelName: string) {
+    this.globalSearch = false;
     this.channelSearch = false;
     const channelIndex = this.copyOfChannels.findIndex(
       (channel) => channel.name === channelName
@@ -345,25 +357,40 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
    * @param {*} event
    */
   onInputChange(event: any) {
+    if (this.comesFrom === 'dashboard') {
+      this.globalSearch = true;
+    }
+    this.getData();
     this.search();
     const values = event.target.value.split(' ');
     values.forEach((value: string) => {
       if (value === '@' && this.users.length > 0) {
         this.usersSearch = true;
+        this.globalSearch = true;
       } else {
         this.usersSearch = false;
       }
 
       if (value === '#' && this.channels.length > 0) {
         this.channelSearch = true;
+        this.globalSearch = true;
       } else {
         this.channelSearch = false;
       }
     });
+    if (event.target.value === '') {
+      this.usersSearch = false;
+      this.channelSearch = false;
+      this.globalSearch = false;
+    }
   }
 
   getChannel(id: string) {
     return this.copyOfChannels.find((channel) => channel.id === id);
+  }
+
+  clearInput() {
+    this.inputValue = '';
   }
 
   openChannel(channel: Channel) {
@@ -381,7 +408,6 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     const channelID = message.channelId as string;
     const channel = this.getChannel(channelID);
     this.navService.openChannel(channel);
-    this.navService.openThread(message);
   }
 
   handleInputSearchbar() {

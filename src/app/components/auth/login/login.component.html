@@ -1,5 +1,5 @@
-<div id="start-screen">
-  <ng-container *ngIf="showDesktop">
+<div [ngClass]="{ gradientColor: user.isUser }" id="start-screen">
+  <ng-container *ngIf="showDesktop && user.isUser">
     <img
       [ngClass]="{ 'logo-big': logoBig }"
       class="on-start-logo"
@@ -9,6 +9,7 @@
   </ng-container>
 
   <div
+    *ngIf="user.isUser"
     [ngClass]="{
       'desktop-animation': desktopAnimation,
       'mobile-animation': mobileAnimation

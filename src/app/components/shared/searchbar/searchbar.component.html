@@ -6,6 +6,7 @@
   placeholder="{{ placeholder }}"
   [(ngModel)]="inputValue"
   (input)="onInputChange($event)"
+  (focus)="onInputChange($event)"
   #searchbarInput
 />
 

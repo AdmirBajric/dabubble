@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';

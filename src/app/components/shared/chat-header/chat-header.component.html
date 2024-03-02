@@ -1,4 +1,8 @@
-<section [class.thread]="styleHeaderForThread" [ngClass]="!mobileView ? 'wrapper-padding' : ''" class="wrapper">
+<section
+  [class.thread]="styleHeaderForThread"
+  [ngClass]="!mobileView ? 'wrapper-padding' : ''"
+  class="wrapper"
+>
   <div
     *ngIf="!isUserData"
     [ngClass]="styleHeaderForThread ? 'thread-header' : 'header-left'"

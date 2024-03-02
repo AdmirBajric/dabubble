@@ -6,11 +6,10 @@ import { MessageComponent } from '../../chat/message/message.component';
 import { HoverChangeDirective } from '../../../directives/hover-change.directive';
 import { RouterLink } from '@angular/router';
 import { TimeSeparatorChatComponent } from '../../shared/time-separator-chat/time-separator-chat.component';
-import { Comment, Message } from '../../../models/message.class';
+import { Message } from '../../../models/message.class';
 import { User } from '../../../models/user.class';
 import { chatNavigationService } from '../../../services/chat-navigation.service';
 import { Subscription } from 'rxjs';
-import { Channel } from 'diagnostics_channel';
 import { FirebaseService } from '../../../services/firebase.service';
 import { DataService } from '../../../services/data.service';
 
@@ -300,7 +299,6 @@ export class MainChatComponent implements OnInit, OnDestroy {
       const length = comments.length.toString();
       return length;
     } catch (error) {
-      console.error('Error fetching comments:', error);
       throw error;
     }
   }

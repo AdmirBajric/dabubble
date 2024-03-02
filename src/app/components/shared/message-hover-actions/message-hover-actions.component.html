@@ -53,7 +53,7 @@
   </button>
 
   <button
-    *ngIf="!thread"
+    *ngIf="!thread && currentMessage.isChannelMessage"
     (click)="openThread()"
     appHoverChange
     [elementsConfig]="[
