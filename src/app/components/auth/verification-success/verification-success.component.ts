@@ -14,6 +14,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class VerificationSuccessComponent {
   private auth: Auth = inject(Auth);
 
+  /**
+   * Subscribes to query parameters changes to handle email verification and password reset based on the 'mode' and 'oobCode' query parameters.
+   * @constructor
+   * @param {Router} router
+   * @param {ActivatedRoute} route
+   */
   constructor(private router: Router, private route: ActivatedRoute) {
     this.route.queryParams.subscribe(async (params) => {
       const oobCode = params['oobCode'];
@@ -26,10 +32,20 @@ export class VerificationSuccessComponent {
     });
   }
 
+  /**
+   * Navigates to the password reset page, passing the one-time code (oobCode) as a route parameter.
+   * @param {any} oobCode - The one-time code used for resetting the password.
+   */
   async resetPassword(oobCode: any) {
     this.router.navigate(['/reset-pw', { oobCode: oobCode }]);
   }
 
+  /**
+   * Attempts to verify the user's email using the provided one-time code (oobCode).
+   * If verification is successful or the code is invalid, the user is redirected.
+   * @param {string} oobCode - The one-time code used for email verification.
+   * @returns {Promise<void>} A promise that resolves when the email verification process is complete.
+   */
   async verifyEmail(oobCode: string): Promise<void> {
     try {
       await applyActionCode(this.auth, oobCode);
@@ -43,6 +59,9 @@ export class VerificationSuccessComponent {
     }
   }
 
+  /**
+   * Redirects the user to the home page after a delay.
+   */
   redirectUser() {
     setTimeout(() => {
       this.router.navigate(['']);

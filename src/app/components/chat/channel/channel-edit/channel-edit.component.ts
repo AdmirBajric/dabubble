@@ -12,7 +12,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { InputComponent } from '../../../shared/input/input.component';
 import { FormsModule } from '@angular/forms';
-import { ButtonFunctionService } from '../../../../services/button-function.service';
 import { chatNavigationService } from '../../../../services/chat-navigation.service';
 import { Channel } from '../../../../models/channel.class';
 import { FirebaseService } from '../../../../services/firebase.service';
@@ -62,7 +61,6 @@ export class ChannelEditComponent {
     private elementRef: ElementRef,
     public dialogRef: MatDialogRef<ChannelEditComponent>,
     private renderer: Renderer2,
-    private btnService: ButtonFunctionService,
     private navService: chatNavigationService,
     private firebaseService: FirebaseService,
     private dataService: DataService
@@ -75,6 +73,9 @@ export class ChannelEditComponent {
     await this.channels();
   }
 
+  /**
+   * Loads the logged-in user's data from local storage, if available.
+   */
   async loadUserFromStorage() {
     const loggedInUser =
       typeof localStorage !== 'undefined'
@@ -86,12 +87,18 @@ export class ChannelEditComponent {
     }
   }
 
+  /**
+   * Subscribes to the current channel updates from the navigation service.
+   */
   async subscribeChannel() {
     this.navService.currentChannel.subscribe((channel) => {
       this.channelId = channel.id;
     });
   }
 
+  /**
+   * Fetches all channels from the Firebase service and sets current channel details.
+   */
   async channels() {
     const channels = await this.firebaseService.getAllChannels();
     channels.forEach((channel) => {
@@ -119,16 +126,26 @@ export class ChannelEditComponent {
     });
   }
 
+  /**
+   * Handles window resize events to adjust view settings.
+   * @param {Event} event - The window resize event.
+   */
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
     this.checkWindowSize();
   }
 
+  /**
+   * Checks the window size to determine if the mobile view should be enabled.
+   */
   @HostListener('window:load', ['$event'])
   onLoad(event: Event): void {
     this.checkWindowSize();
   }
 
+  /**
+   * Checks the window size to determine if the mobile view should be enabled.
+   */
   private checkWindowSize(): void {
     this.windowWidth = this.renderer.parentNode(
       this.elementRef.nativeElement
@@ -140,6 +157,10 @@ export class ChannelEditComponent {
     }
   }
 
+  /**
+   * Deletes the specified channel by its ID.
+   * @param {string} id - The ID of the channel to delete.
+   */
   channelDelete(id: string) {
     this.firebaseService
       .deleteChannel(id)
@@ -153,6 +174,10 @@ export class ChannelEditComponent {
       });
   }
 
+  /**
+   * Removes the logged in user from the specified channel by ID.
+   * @param {string} id - ID of the channel to leave.
+   */
   leaveChannel(id: string) {
     console.log(id, this.user.id);
 
@@ -167,6 +192,10 @@ export class ChannelEditComponent {
       });
   }
 
+  /**
+   * Toggles the edit state for the channel name
+   * Focuses the input field.
+   */
   editName() {
     this.channelNameToggle = !this.channelNameToggle;
     this.channelNameOnFocus = true;
@@ -178,6 +207,10 @@ export class ChannelEditComponent {
     }
   }
 
+  /**
+   * Saves the edited channel name to the database.
+   * @param {string} id - The ID of the channel being updated.
+   */
   saveName(id: string) {
     this.channelNameOnFocus = false;
     this.channelNameToggle = !this.channelNameToggle;
@@ -188,6 +221,9 @@ export class ChannelEditComponent {
     });
   }
 
+  /**
+   * Toggles the edit state for the channel description and focuses the input field.
+   */
   editDescription() {
     this.channelDescriptionToggle = !this.channelDescriptionToggle;
     this.channelDescriptionOnFocus = true;
@@ -199,6 +235,10 @@ export class ChannelEditComponent {
     }
   }
 
+  /**
+   * Saves the edited channel description to the database.
+   * @param {string} id - The ID of the channel being updated.
+   */
   saveDescription(id: string) {
     this.channelDescriptionOnFocus = false;
     this.channelDescriptionToggle = !this.channelDescriptionToggle;
@@ -207,6 +247,9 @@ export class ChannelEditComponent {
     });
   }
 
+  /**
+   * Closes the dialog.
+   */
   onNoClick() {
     this.dialogRef.close();
   }

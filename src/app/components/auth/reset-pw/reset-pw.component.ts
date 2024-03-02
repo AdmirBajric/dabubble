@@ -44,10 +44,19 @@ export class ResetPwComponent {
     });
   }
 
+  /**
+   * Checks if the entered password and the confirmation password match.
+   * @returns {boolean} True if passwords do not match, false otherwise.
+   */
   ifPasswordsMatch() {
     return this.password != this.confirmPassword;
   }
 
+  /**
+   * Handles changes to the input fields, specifically checking if the password and confirmation password match
+   * and are longer than 5 characters. Updates the component state based on these conditions.
+   * @param {Event} event - The input event containing the new value of the field.
+   */
   onInputChange(event: any): void {
     if (
       this.password === this.confirmPassword &&
@@ -61,6 +70,11 @@ export class ResetPwComponent {
     }
   }
 
+  /**
+   * Updates the validity state for a specified form field.
+   * @param {string} field - The name of the form field whose validity is being updated.
+   * @param {boolean} isValid - The new validity state of the field.
+   */
   onValidityChanged(field: string, isValid: boolean) {
     switch (field) {
       case 'password':
@@ -69,6 +83,10 @@ export class ResetPwComponent {
     }
   }
 
+  /**
+   * Attempts to reset the user's password using Firebase authentication,
+   * navigating to the home page upon successful password reset.
+   */
   async resetPW() {
     try {
       const auth = this.auth; // Ensure 'this.auth' is properly injected and available

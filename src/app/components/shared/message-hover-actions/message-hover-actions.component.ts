@@ -43,6 +43,9 @@ export class MessageHoverActionsComponent {
     private firebaseService: FirebaseService
   ) {}
 
+  /**
+   * Initializes the component by retrieving and parsing the 'loggedInUser' from localStorage, if available.
+   */
   ngOnInit() {
     if (typeof localStorage !== 'undefined') {
       const user = localStorage.getItem('loggedInUser');
@@ -52,6 +55,11 @@ export class MessageHoverActionsComponent {
     }
   }
 
+  /**
+   * Stops the propagation of the click event and initiates the process of editing a message.
+   * It also emits the message editing status to the parent component.
+   * @param {Event} event - The DOM event triggered by the user interaction.
+   */
   openEditMessage(event: Event) {
     event.stopPropagation();
     this.handlingTooltip();
@@ -59,19 +67,33 @@ export class MessageHoverActionsComponent {
     this.editMessage.emit(this.messageEditing);
   }
 
+  /**
+   * Hides the tooltip by setting `showToolTip` to false.
+   */
   handlingTooltip() {
     this.showToolTip = false;
   }
 
+  /**
+   * Toggles the visibility of the tooltip and stops the event from bubbling up.
+   * @param {Event} event - The DOM event triggered by the user interaction.
+   */
   toggleToolTip(event: Event) {
     event.stopPropagation();
     this.showToolTip = !this.showToolTip;
   }
 
+  /**
+   * Uses the navigation service to open a thread related to the current message.
+   */
   openThread() {
     this.navService.openThread(this.currentMessage);
   }
 
+  /**
+   * Toggles the state of the emoji picker based on the context (main message or comment).
+   * @param {string} from - The context from which the emoji picker is being opened.
+   */
   openEmojiMart(from: string) {
     if (from === 'mainMessage' && 'comment') {
       this.active = !this.active;
@@ -80,6 +102,11 @@ export class MessageHoverActionsComponent {
     }
   }
 
+  /**
+   * Sets an emoji for a main message with given emojis and saves it.
+   * @param {string} emoji - The emoji to be set.
+   * @param {string} StringOrId - The context (mainMessage or comment).
+   */
   // this is only used when it is a main message with given emojis...
   async setEmoji(emoji: string, StringOrId: string) {
     const id = this.getMessageID() as string;
@@ -88,6 +115,11 @@ export class MessageHoverActionsComponent {
     }
   }
 
+  /**
+   * Emits an emoji based on the user selection and saves it.
+   * @param {any} event - The emoji selection event.
+   * @param {string} [messageType='mainMessage'] - The context of the message (mainMessage or comment).
+   */
   //StringOrId can be mainMessage oder comment
   async emitEmoji(event: any, messageType: string = 'mainMessage') {
     const id = this.getMessageID() as string;
@@ -98,6 +130,12 @@ export class MessageHoverActionsComponent {
     }
   }
 
+  /**
+   * Saves the selected emoji for the message and updates the Firestore document.
+   * @param {string} id - The ID of the message or comment.
+   * @param {string} emoji - The selected emoji.
+   * @param {string} messageType - The context (mainMessage or comment).
+   */
   async setAndSaveEmoji(id: string, emoji: string, messageType: string) {
     this.active = false;
     console.log(id);
@@ -150,6 +188,10 @@ export class MessageHoverActionsComponent {
     }
   }
 
+  /**
+   * Saves the reaction to a comment in Firestore and updates the document.
+   * @param {any} reactionJSON - The reaction object to be saved.
+   */
   async saveReactionComments(reactionJSON: any): Promise<void> {
     const id = this.getMessageID() as string;
     const docSnapshot = await this.firebaseService.getDocument('comments', id);
@@ -189,6 +231,11 @@ export class MessageHoverActionsComponent {
     }
   }
 
+  /**
+   * Extracts the native representation of an emoji from an event.
+   * @param {any} e - The event containing the emoji selection.
+   * @returns {string | null} The native string representation of the emoji, if available.
+   */
   getEmojiNative(e: any): string | null {
     if (e.emoji && 'native') {
       return e.emoji.native;

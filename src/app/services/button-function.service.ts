@@ -26,16 +26,18 @@ interface Member {
 export class ButtonFunctionService {
   constructor(public dialog: MatDialog, private dataService: DataService) {}
 
-  openDialog() {
-    this.dialog.open(ProfileViewComponent);
-  }
-
+  /**
+   * Opens the dialog for editing channel information
+   */
   openChannelDialog() {
     this.dialog.open(ChannelEditComponent, {
       autoFocus: false,
     });
   }
 
+  /**
+   * Opens the dialog for creating a channel.
+   */
   openCreateChannel() {
     this.dialog.open(CreateChannelComponent, {
       autoFocus: false,
@@ -44,34 +46,30 @@ export class ButtonFunctionService {
 
   /**
    * Opening a dialog with a list of all channel members.
-   * @param {Member[]} members
+   * @param {channel} channel - The channel object which contains information like members, id ect.
    */
   showChannelMembers(channel: Channel) {
     this.dialog.open(DialogShowMembersComponent, {
       data: channel,
     });
   }
-
   /**
-   * Opens dialog with all necessary details of member. Member can be user or contacts of user.
-   * @param {Member[]} user
+   *Opens profile with all necessary details of member.
+   * @param {string} id
    */
   openProfile(id: string) {
     this.dataService.sendUserId(id);
     this.dialog.open(ProfileViewComponent);
   }
 
-  /****************************************************adding member to channel with firestore ID */
+  /**
+   * Opens dialog for adding member to channel
+   * @param {Channel} channel
+   */
   addMemberDialog(channel: Channel) {
     this.dialog.open(DialogAddMemberChannelComponent, {
       data: channel,
       position: { top: '7.5rem', right: '2rem' },
     });
   }
-
-  // userListDialog(userList: Member[]){
-  //   this.dialog.open(DialogUserListComponent, {
-  //     data: userList
-  //   })
-  // }
 }

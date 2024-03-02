@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MessageInputComponent } from "../../../shared/message-input/message-input.component";
 import { NgIf, NgFor } from '@angular/common';
 import { MessageComponent } from "../../message/message.component";
-import { RouteService } from '../../../../services/route.service';
 
 @Component({
   selector: 'app-direct-message',
@@ -13,7 +12,6 @@ import { RouteService } from '../../../../services/route.service';
   imports: [CommonModule, NgIf, NgFor, MessageInputComponent, MessageComponent]
 })
 export class DirectMessageComponent implements OnInit {
-  constructor(private routeService: RouteService) { }
   chatEmpty: boolean = true;
   chat: any[] = [
     {
@@ -43,7 +41,4 @@ export class DirectMessageComponent implements OnInit {
     // iterate through chat array to see if messages is empty. If yes: set boolean to true; If no: set boolean to false && display chat via app-message
   }
 
-  get isNotDashboard() {
-    return !this.routeService.checkRoute('/dashboard');
-  }
 }

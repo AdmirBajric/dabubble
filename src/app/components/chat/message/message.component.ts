@@ -77,6 +77,10 @@ export class MessageComponent implements OnInit {
     await this.searchForReactions();
   }
 
+  /**
+   * Searches for comments associated with the current message and updates the component state with these comments.
+   * Converts the timestamp of the last comment to a string for display purposes.
+   */
   async searchForComments() {
     const id = this.getMessageId();
     const querySnapshot = await this.firebaseService.queryDocuments(
@@ -105,6 +109,10 @@ export class MessageComponent implements OnInit {
     }
   }
 
+  /**
+   * Searches for reactions associated with the current message
+   * Processes reactions to aggregate counts for each emoji and the users who reacted with them.
+   */
   async searchForReactions() {
     const id = this.getMessageId() as string;
     let collection = await this.getType();
@@ -150,6 +158,10 @@ export class MessageComponent implements OnInit {
     });
   }
 
+  /**
+   * Determines the Firestore collection type based on the message type.
+   * @returns {string|undefined} The collection type as a string or undefined if the type doesn't match known values.
+   */
   async getType() {
     if (this.typeOfMessage === 'mainMessage') {
       return 'messages';
@@ -160,6 +172,11 @@ export class MessageComponent implements OnInit {
     }
   }
 
+  /**
+   * Converts a date and time string to a formatted time string.
+   * @param {Date} dateTimeString The date and time string to format.
+   * @returns {string} The formatted time string.
+   */
   getTimeFromString(dateTimeString: Date): string {
     const dateObject = new Date(dateTimeString);
 
@@ -171,6 +188,9 @@ export class MessageComponent implements OnInit {
     return zeitFormat;
   }
 
+  /**
+   * Updates the last answer time for the most recent comment.
+   */
   async timeToStringAnswer() {
     this.countAnswers();
     if (this.answers.length > 0) {
@@ -179,10 +199,17 @@ export class MessageComponent implements OnInit {
     }
   }
 
+  /**
+   * Counts the number of answers (comments) and updates the component state.
+   */
   countAnswers() {
     this.answersCount = this.answers.length;
   }
 
+  /**
+   * Opens the thread view for a given message.
+   * @param {Message} m The message for which the thread view should be opened.
+   */
   showAnswersinThread(m: Message) {
     this.navService.openThread(m);
   }
@@ -207,6 +234,9 @@ export class MessageComponent implements OnInit {
     this.openMessageEdit = true;
   }
 
+  /**
+   * Closes message hover actions, resetting related component state.
+   */
   closeMessageHoverActions() {
     this.showActions = false;
   }
@@ -223,22 +253,36 @@ export class MessageComponent implements OnInit {
     this.openMessageEdit = false;
   }
 
+  /**
+   * Cancels the message editing process, restoring the original message text and closing hover actions.
+   */
   cancelMessageEditing() {
     this.openMessageEdit = false;
     this.message.text = this.saveOriginalMessage;
     this.closeMessageHoverActions();
   }
 
+  /**
+   * Toggles the visibility of message actions (like, edit, delete).
+   */
   toggleShowActions() {
     this.showActions = !this.showActions;
   }
 
+  /**
+   * Toggles the visibility of message actions when clicking outside the message component.
+   * @param {Event} event The DOM event triggered by clicking outside the message component.
+   */
   toggleShowActionsOutside(event: Event): void {
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.showActions = false;
     }
   }
 
+  /**
+   * Checks the click location to determine whether to stop event propagation or close message actions.
+   * @param {Event} event The DOM event triggered by clicking.
+   */
   checkClickLocation(event: Event) {
     if (this.elementRef.nativeElement.contains(event.target)) {
       event.stopPropagation();
@@ -247,10 +291,17 @@ export class MessageComponent implements OnInit {
     }
   }
 
+  /**
+   * Toggles the visibility of the emoji picker container.
+   */
   toggleEmojiContainer() {
     this.showEmoji = !this.showEmoji;
   }
 
+  /**
+   * Adds an emoji to the message text and hides the emoji picker.
+   * @param {any} event The emoji selection event containing the selected emoji.
+   */
   addEmoji(event: any): void {
     this.emoji = event.emoji.native;
     this.showEmoji = false;
