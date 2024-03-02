@@ -119,16 +119,16 @@
         </div>
       </div>
 
-      @if (showDMs) {
       <div class="dm-list-container">
+        @if (showDMs) {
         <ng-container *ngFor="let user of users">
           <app-direct-message-list-item
             [user]="user"
             id="{{ user.id }}"
           ></app-direct-message-list-item>
         </ng-container>
+        }
       </div>
-      }
     </div>
   </div>
 
