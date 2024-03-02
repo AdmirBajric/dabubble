@@ -98,11 +98,9 @@
               <button (click)="guestLogIn()">Gäste-Login</button>
             </div>
 
-            <ng-container *ngIf="errorMessage">
-              <div class="error-message">
-                <p>Invalid email or password.</p>
-              </div>
-            </ng-container>
+            <div class="error-message">
+              <p *ngIf="errorMessage">Invalid email or password.</p>
+            </div>
           </form>
           <div
             [ngClass]="{ 'login-opacity': loginSuccess }"
