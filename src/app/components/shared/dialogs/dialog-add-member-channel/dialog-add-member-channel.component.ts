@@ -1,4 +1,11 @@
-import { Component, Inject, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  inject,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -85,8 +92,8 @@ export class DialogAddMemberChannelComponent implements OnInit {
    * Checks if local array has entries to set noMembers:boolean
    * to true - if there are no members.
    */
-  checkIfUser(): void {
-    if (this.users.length === 0) {
+  checkIfUser(availableUsers: any): void {
+    if (availableUsers.length === 0) {
       this.noMembers = true;
     } else {
       this.noMembers = false;
@@ -97,10 +104,17 @@ export class DialogAddMemberChannelComponent implements OnInit {
    * Calls a method in firebaseService to update channel members.
    * This function is called then user clicks on button.
    */
-  addMemberToChannel() {
-    this.firebaseService.updateDocument('channels', this.channel.id, {
-      members: [...this.channel.members, ...this.chosenUsers],
+  async addMemberToChannel() {
+    const channelDoc = await this.firebaseService.getDocument(
+      'channels',
+      this.channel.id
+    );
+
+    const existingMembers = channelDoc.data()?.['members'] ?? [];
+    await this.firebaseService.updateDocument('channels', this.channel.id, {
+      members: [...existingMembers, ...this.chosenUsers],
     });
+
     this.closeDialog();
   }
 
@@ -110,24 +124,27 @@ export class DialogAddMemberChannelComponent implements OnInit {
    * Matching users (by name) are logged and added to `filteredUsers`.
    */
   searchInUsers() {
-    this.checkIfUser();
     this.inputOnSearch = true;
     this.search = true;
     this.filteredUsers = [];
 
-    const availableUsers = this.users.filter(
-      (user) =>
-        !this.chosenUsers.some((chosenUser) => chosenUser.id === user.id)
-    );
+    const availableUsers: any[] = [];
 
-    availableUsers.filter((user) => {
-      if (
-        user.fullName.toLowerCase().includes(this.userInputValue.toLowerCase())
-      ) {
-        this.filteredUsers.push(user);
+    this.users.forEach((user) => {
+      const matchingMember = this.channel.members.find(
+        (member: { id: any }) => member.id === user.id
+      );
+      if (!matchingMember) {
+        availableUsers.push(user);
       }
     });
+    this.checkIfUser(availableUsers);
+
+    this.filteredUsers = availableUsers.filter((user: any) =>
+      user.fullName.toLowerCase().includes(this.userInputValue.toLowerCase())
+    );
   }
+
   /**
    * Handles user selection from the filtered list.
    * Marks the user as checked, removes them from the filtered list, and adds them to `chosenUsers` and `users`.
@@ -141,10 +158,16 @@ export class DialogAddMemberChannelComponent implements OnInit {
     if (userIndex !== -1) {
       const selectedUser = this.filteredUsers.splice(userIndex, 1)[0];
       this.chosenUsers.push(selectedUser);
-      this.users.push(selectedUser);
+
+      // Remove the selected user from this.users array
+      const userToRemoveIndex = this.users.findIndex((user) => user.id === id);
+      if (userToRemoveIndex !== -1) {
+        this.users.splice(userToRemoveIndex, 1);
+      }
     }
     this.searchInUsers();
   }
+
   /**
    * Removes a member from the selected members list and adds them back to the general users list.
    *
@@ -170,7 +193,6 @@ export class DialogAddMemberChannelComponent implements OnInit {
       .getAllUsers()
       .then((users: any[]) => {
         this.users = users;
-        this.checkIfUser();
       })
       .catch((error) => {
         console.error('Error fetching users:', error);

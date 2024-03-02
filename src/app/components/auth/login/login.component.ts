@@ -23,6 +23,8 @@ import {
   GoogleAuthProvider,
 } from '@angular/fire/auth';
 import { FormsModule } from '@angular/forms';
+import { DataService } from '../../../services/data.service';
+import { User } from '../../../models/user.class';
 
 @Component({
   selector: 'app-login',
@@ -46,7 +48,12 @@ export class LoginComponent implements OnInit {
   renderer: any = Renderer2;
   el: any = ElementRef;
 
-  constructor(private router: Router, renderer: Renderer2, el: ElementRef) {
+  constructor(
+    private router: Router,
+    renderer: Renderer2,
+    el: ElementRef,
+    private dataService: DataService
+  ) {
     this.renderer = renderer;
     this.el = el;
 
@@ -124,10 +131,6 @@ export class LoginComponent implements OnInit {
         .then((userCredential) => {
           this.errorMessage = false;
           const user = userCredential.user;
-
-          // Set loggedInUser in localStorage
-          localStorage.setItem('loggedInUser', JSON.stringify(user));
-
           this.showSuccessAnimation('/dashboard');
         })
         .catch((error) => {
@@ -148,10 +151,6 @@ export class LoginComponent implements OnInit {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-
-        // Set loggedInUser in localStorage
-        localStorage.setItem('loggedInUser', JSON.stringify(user));
-
         this.showSuccessAnimation('/dashboard');
       })
       .catch((error) => {
@@ -170,10 +169,6 @@ export class LoginComponent implements OnInit {
     signInWithPopup(this.auth, new GoogleAuthProvider())
       .then((userCredential) => {
         const user = userCredential.user;
-
-        // Set loggedInUser in localStorage
-        localStorage.setItem('loggedInUser', JSON.stringify(user));
-
         this.showSuccessAnimation('/dashboard');
       })
       .catch((error) => {

@@ -20,6 +20,7 @@ import { NewMessageComponent } from '../chat/main-chat/new-message/new-message.c
 import { chatNavigationService } from '../../services/chat-navigation.service';
 import { Subscription } from 'rxjs';
 import { MobileHeaderComponent } from '../shared/mobile-header/mobile-header.component';
+import { User } from '../../models/user.class';
 
 @Component({
   selector: 'app-dashboard',
