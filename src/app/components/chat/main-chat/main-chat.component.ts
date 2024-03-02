@@ -14,7 +14,6 @@ import { Subscription } from 'rxjs';
 import { Channel } from 'diagnostics_channel';
 import { FirebaseService } from '../../../services/firebase.service';
 import { DataService } from '../../../services/data.service';
-import { send } from 'process';
 
 @Component({
   selector: 'app-main-chat',
@@ -72,14 +71,14 @@ export class MainChatComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscribeToCurrentChannel();
-    this.subscribeChannelStatus();
     if (typeof localStorage !== 'undefined') {
       const user = localStorage.getItem('loggedInUser');
       if (user) {
         this.user = JSON.parse(user);
       }
     }
+    this.subscribeToCurrentChannel();
+    this.subscribeChannelStatus();
   }
 
   /**
@@ -251,8 +250,8 @@ export class MainChatComponent implements OnInit, OnDestroy {
         this.channelOpenStatusSubscription.unsubscribe();
       }
 
-      this.firebaseService.unsubscribeFromChannelMessages();
       await this.firebaseService.searchUserMessagesRealTime(id, this.user);
+      this.firebaseService.unsubscribeFromChannelMessages();
     } else {
       this.messages = [];
       this.currentChannel = channelOrUser;
@@ -269,8 +268,8 @@ export class MainChatComponent implements OnInit, OnDestroy {
         this.channelOpenStatusSubscription.unsubscribe();
       }
 
-      this.firebaseService.unsubscribeFromUserMessages();
       await this.firebaseService.searchChannelMessagesRealTime(this.channelId);
+      this.firebaseService.unsubscribeFromUserMessages();
     }
   }
 

@@ -17,6 +17,7 @@ import { ProfileEditComponent } from '../profile-edit/profile-edit.component';
 import { DataService } from '../../../services/data.service';
 import { FirebaseService } from '../../../services/firebase.service';
 import { Conversation } from '../../../models/conversation.class';
+import { chatNavigationService } from '../../../services/chat-navigation.service';
 
 @Component({
   selector: 'app-profile-view',
@@ -43,7 +44,9 @@ export class ProfileViewComponent implements OnInit {
     public dialog: MatDialog,
     private el: ElementRef,
     private renderer: Renderer2,
-    public dialogRef: MatDialogRef<ProfileViewComponent>
+    public dialogRef: MatDialogRef<ProfileViewComponent>,
+    private navService: chatNavigationService,
+    private sharedService: DataService
   ) {}
 
   ngOnInit(): void {
@@ -161,9 +164,10 @@ export class ProfileViewComponent implements OnInit {
             conversation.id,
             conversation.data
           );
-          console.log('User added to conversation successfully.');
+          this.sharedService.triggerShowUsers.emit();
+          this.navService.openChannel(user);
         } else {
-          console.log('User is already in the conversation.');
+          this.navService.openChannel(user);
         }
       } else {
         console.log(
@@ -177,7 +181,8 @@ export class ProfileViewComponent implements OnInit {
       });
 
       await this.firebaseService.createConversation(newConversation);
-      console.log('Conversation created successfully.');
+      this.navService.openChannel(user);
+      this.sharedService.triggerShowUsers.emit();
     }
   }
 }

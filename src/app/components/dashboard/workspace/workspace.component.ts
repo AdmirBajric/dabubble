@@ -28,6 +28,7 @@ import { FirebaseService } from '../../../services/firebase.service';
 import { Subscription } from 'rxjs';
 import { Conversation } from '../../../models/conversation.class';
 import { MobileHeaderComponent } from '../../shared/mobile-header/mobile-header.component';
+import { DataService } from '../../../services/data.service';
 
 @Component({
   selector: 'app-workspace',
@@ -58,7 +59,6 @@ export class WorkspaceComponent implements OnInit {
   usersSnapshotUnsubscribe: (() => void) | undefined;
   conversationsSubscription: Subscription | undefined;
   conversations: any[] = [];
-  conversationUpdateSubscription: Subscription;
   @Input() isOpen: boolean = true;
   // ********************** redirecting input event as output boolean to parent component
   showChannelContent!: boolean;
@@ -72,36 +72,11 @@ export class WorkspaceComponent implements OnInit {
     private btnService: ButtonFunctionService,
     private renderer: Renderer2,
     private firebaseService: FirebaseService,
-    private channelUpdateService: chatNavigationService
+    private channelUpdateService: chatNavigationService,
+    private sharedService: DataService
   ) {
     this.checkImageFlag();
     this.setUserFromStorage();
-    this.conversationUpdateSubscription = this.firebaseService
-      .subscribeToConversationUpdates()
-      .subscribe((update) => {
-        if (update !== null) {
-          const existingIndex = this.conversations.findIndex(
-            (conv) => conv.id === update.id
-          );
-          if (existingIndex !== -1) {
-            const data = update.data.users;
-            this.conversations = [];
-            data.forEach((user) => {
-              this.conversations.push(user);
-            });
-            this.showUsers();
-          } else {
-            const data = update.data.users;
-            this.conversations = [];
-            data.forEach((user) => {
-              this.conversations.push(user);
-            });
-            this.showUsers();
-          }
-        } else {
-          // Handle deletion of conversation
-        }
-      });
   }
 
   setUserFromStorage() {
@@ -124,12 +99,21 @@ export class WorkspaceComponent implements OnInit {
     setTimeout(() => {
       this.checkWindowSize();
     }, 1500);
+
+    this.sharedService.triggerShowUsers.subscribe(() => {
+      this.openDirectMsgs('');
+    });
   }
 
-  async openDirectMsgs() {
+  async openDirectMsgs(fromTrigger?: string) {
     this.setUserFromStorage();
 
-    this.showDMs = !this.showDMs;
+    if (fromTrigger === 'workSpace') {
+      this.showDMs = !this.showDMs;
+    } else {
+      this.showDMs = true;
+    }
+
     await this.firebaseService
       .getConversationForUser(this.user.id)
       .then((data) => {
@@ -147,12 +131,10 @@ export class WorkspaceComponent implements OnInit {
     await this.firebaseService.getAllUsers().then((users) => {
       const loggedInUser = users.find((user) => user['id'] === this.user.id);
       this.users = [];
-
       if (loggedInUser) {
         loggedInUser['loggedInUser'] = true;
         this.users.push(loggedInUser);
       }
-
       users
         .filter(
           (user) =>

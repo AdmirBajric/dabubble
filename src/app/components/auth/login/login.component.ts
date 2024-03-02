@@ -8,7 +8,7 @@ import {
   Renderer2,
   inject,
 } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { NavigationExtras, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -115,6 +115,10 @@ export class LoginComponent implements OnInit {
         .then((userCredential) => {
           this.errorMessage = false;
           const user = userCredential.user;
+
+          // Set loggedInUser in localStorage
+          localStorage.setItem('loggedInUser', JSON.stringify(user));
+
           this.showSuccessAnimation('/dashboard');
         })
         .catch((error) => {
@@ -130,6 +134,10 @@ export class LoginComponent implements OnInit {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
+
+        // Set loggedInUser in localStorage
+        localStorage.setItem('loggedInUser', JSON.stringify(user));
+
         this.showSuccessAnimation('/dashboard');
       })
       .catch((error) => {
@@ -141,7 +149,12 @@ export class LoginComponent implements OnInit {
   signInWithGoogle() {
     this.errorMessage = false;
     signInWithPopup(this.auth, new GoogleAuthProvider())
-      .then((user) => {
+      .then((userCredential) => {
+        const user = userCredential.user;
+
+        // Set loggedInUser in localStorage
+        localStorage.setItem('loggedInUser', JSON.stringify(user));
+
         this.showSuccessAnimation('/dashboard');
       })
       .catch((error) => {
@@ -151,6 +164,9 @@ export class LoginComponent implements OnInit {
 
   showSuccessAnimation(path: any) {
     this.loginSuccess = true;
-      this.router.navigate([path]);
+    const navigationExtras: NavigationExtras = {
+      skipLocationChange: false, // Setting this to false will force a reload
+    };
+    this.router.navigate([path], navigationExtras);
   }
 }

@@ -63,8 +63,11 @@
 
         @if (showChannels) {
         <ng-container *ngFor="let channel of channels">
-          <app-channel-list-item id="{{ channel.id }}" [channel]="channel"
-            (openChatChannel)="showChannelChat()"></app-channel-list-item>
+          <app-channel-list-item
+            id="{{ channel.id }}"
+            [channel]="channel"
+            (openChatChannel)="showChannelChat()"
+          ></app-channel-list-item>
         </ng-container>
 
         <button (click)="openCreateChannel()" class="btn-create-channel">
@@ -97,7 +100,7 @@
             }
           ]"
           class="drawer-header margin-top"
-          (click)="openDirectMsgs()"
+          (click)="openDirectMsgs('workSpace')"
         >
           <img
             class="arrow"

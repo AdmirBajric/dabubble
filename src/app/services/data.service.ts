@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { User } from '../models/user.class';
 
@@ -8,10 +8,13 @@ import { User } from '../models/user.class';
 export class DataService {
   private triggerFunctionSubject = new Subject<void>();
   triggerFunction$ = this.triggerFunctionSubject.asObservable();
+  triggerShowUsers: EventEmitter<void> = new EventEmitter<void>();
 
   triggerFunction() {
     this.triggerFunctionSubject.next();
   }
+
+  showUsers(): void {}
 
   private userSource = new BehaviorSubject<User | null>(null);
   currentUser = this.userSource.asObservable();
@@ -22,7 +25,10 @@ export class DataService {
   private userIdSource = new BehaviorSubject<string | null>(null);
   currentUserId = this.userIdSource.asObservable();
 
-  private channelInfoSource = new BehaviorSubject<{ channelName: string, description: string } | null>(null);
+  private channelInfoSource = new BehaviorSubject<{
+    channelName: string;
+    description: string;
+  } | null>(null);
   currentChannelInfo = this.channelInfoSource.asObservable();
 
   changeUser(user: User): void {

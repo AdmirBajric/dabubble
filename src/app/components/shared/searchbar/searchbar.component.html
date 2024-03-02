@@ -11,7 +11,6 @@
 />
 
 <ng-container *ngIf="globalSearch && !isSearchbarEmpty">
-  
   <div class="globalResults">
     <ng-container *ngIf="filteredChannelsList.length > 0">
       <h6 class="result-headline">Channels</h6>
@@ -36,7 +35,14 @@
     <ng-container *ngIf="filteredPrivateMessagesList.length > 0">
       <h6 class="result-headline">Private Nachrichten</h6>
       <ul *ngFor="let dm of filteredPrivateMessagesList">
-        <li (click)="openPrivateMessage(dm.creator)" class="message-result">
+        <li
+          (click)="
+            openPrivateMessage(
+              dm.creator.id === loggedUser.id ? dm.recipient! : dm.creator!
+            )
+          "
+          class="message-result"
+        >
           <img src="{{ dm.creator.avatar }}" alt="image" />
           <div>
             <span class="result-text">{{ dm.text }}</span>

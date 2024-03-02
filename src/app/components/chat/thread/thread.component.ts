@@ -44,6 +44,7 @@ export class ThreadComponent implements OnInit {
   mobileView!: boolean;
   windowWidth!: number;
   answers: Comment[] = [];
+  private commentsListenerUnsubscribe: any;
 
   constructor(
     private renderer: Renderer2,
@@ -85,6 +86,22 @@ export class ThreadComponent implements OnInit {
     this.subscribeThreadStatus();
     this.subscribeMessage();
     this.searchForComments();
+    this.listenForRealTimeComments();
+  }
+
+  listenForRealTimeComments() {
+    const id = this.getMessageId();
+
+    // Replace 'this.currentMessage.id' with the actual message ID you want to listen for comments
+    this.commentsListenerUnsubscribe =
+      this.firebaseService.listenForRealTimeComments(
+        this.currentMessage.id ?? '',
+        (comments) => {
+          // Update comments in the component when real-time updates occur
+          this.answers = comments;
+          this.countAnswers(); // Update answers count as well
+        }
+      );
   }
 
   getTimeFromString(dateTimeString: string): string {
@@ -191,6 +208,9 @@ export class ThreadComponent implements OnInit {
     }
     if (this.messageSubscription) {
       this.messageSubscription.unsubscribe();
+    }
+    if (this.commentsListenerUnsubscribe) {
+      this.commentsListenerUnsubscribe();
     }
   }
 }

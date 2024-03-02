@@ -64,6 +64,7 @@ export class DialogShowMembersComponent implements OnInit {
 
   showMemberProfile(id: string) {
     this.btnService.openProfile(id);
+    this.closeDialog();
   }
 
   openDialogAddingMember() {
