@@ -8,7 +8,11 @@
   box-shadow: none !important;
 }
 
-.cdk-overlay-pane {
+::ng-deep .cdk-overlay-pane {
+  @media only screen and (max-width: 1100px) {
+    width: 100vw !important;
+    max-width: unset !important;
+  }
   overflow: auto;
   &::-webkit-scrollbar {
     width: 0rem;
@@ -188,10 +192,6 @@
 }
 
 @media only screen and (max-width: 1100px) {
-  .cdk-overlay-pane {
-    max-width: 100% !important;
-  }
-
   .mat-mdc-dialog-container,
   .mdc-dialog__surface {
     width: 100% !important;
@@ -200,6 +200,8 @@
 
   #channel-edition {
     width: 100vw !important;
+    height: 100vh;
+    max-width: unset !important;
   }
 
   .channel-edition-header {
