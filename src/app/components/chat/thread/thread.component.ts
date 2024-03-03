@@ -53,16 +53,27 @@ export class ThreadComponent implements OnInit {
     private firebaseService: FirebaseService
   ) {}
 
+  /**
+   * Host listener for window resize events to adjust views based on window size.
+   * @param {Event} event - window resize event.
+   */
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
     this.checkWindowSize();
   }
 
+  /**
+   * Host listener for window load events to set initial view based on window size.
+   * @param {Event} event - window load event.
+   */
   @HostListener('window:load', ['$event'])
   onLoad(event: Event): void {
     this.checkWindowSize();
   }
 
+  /**
+   * Checks the window size and sets the mobile view state accordingly.
+   */
   private checkWindowSize(): void {
     this.windowWidth = this.renderer.parentNode(
       this.el.nativeElement
@@ -75,6 +86,9 @@ export class ThreadComponent implements OnInit {
     }
   }
 
+  /**
+   * Lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
+   */
   ngOnInit() {
     if (typeof localStorage !== 'undefined') {
       const user = localStorage.getItem('loggedInUser');
@@ -88,6 +102,9 @@ export class ThreadComponent implements OnInit {
     this.listenForRealTimeComments();
   }
 
+  /**
+   * Subscribes to real-time updates of comments for the current message.
+   */
   listenForRealTimeComments() {
     const id = this.getMessageId();
 
@@ -103,6 +120,11 @@ export class ThreadComponent implements OnInit {
       );
   }
 
+  /**
+   * Converts a date-time string to a formatted time string (HH:MM).
+   * @param {string} dateTimeString - date-time string to format.
+   * @returns {string} - formatted time string.
+   */
   getTimeFromString(dateTimeString: string): string {
     const dateObject = new Date(dateTimeString);
     const stunden = dateObject.getHours();
@@ -112,6 +134,9 @@ export class ThreadComponent implements OnInit {
     return zeitFormat;
   }
 
+  /**
+   * Fetches comments for the current message and updates the local state.
+   */
   async searchForComments() {
     try {
       const id = this.getMessageId();
@@ -141,10 +166,17 @@ export class ThreadComponent implements OnInit {
     }
   }
 
+  /**
+   * Updates the count of answers/comments.
+   */
   countAnswers() {
     this.answersCount = this.answers.length;
   }
 
+  /**
+   * Prepares a new comment based on user input and sends it.
+   * @param {{ commentText: string; commentFile: string }} event - user input event containing comment text and file.
+   */
   prepareComment(event: { commentText: string; commentFile: string }) {
     const id = this.getMessageId();
     const text = event.commentText;
@@ -163,6 +195,10 @@ export class ThreadComponent implements OnInit {
     this.sendComment(comment);
   }
 
+  /**
+   * Retrieves the ID of the current message.
+   * @returns {string | null} - ID of the current message, or null if not available.
+   */
   getMessageId() {
     if (this.currentMessage && 'id' in this.currentMessage) {
       return this.currentMessage.id;
@@ -171,6 +207,10 @@ export class ThreadComponent implements OnInit {
     }
   }
 
+  /**
+   * Sends a new comment to the server.
+   * @param {Comment} comment - comment object to send.
+   */
   async sendComment(comment: Comment): Promise<void> {
     try {
       const commentJSON = comment.toJSON();
@@ -179,12 +219,18 @@ export class ThreadComponent implements OnInit {
     } catch (error) {}
   }
 
+  /**
+   * Subscribes to the current message updates.
+   */
   subscribeMessage() {
     this.navService.currentMessage.subscribe((message) => {
       this.currentMessage = message;
     });
   }
 
+  /**
+   * Subscribes to thread status updates to manage comment subscriptions.
+   */
   subscribeThreadStatus() {
     this.threadStatusSubscription = this.navService.threadStatus$.subscribe(
       (isOpen) => {
@@ -199,6 +245,9 @@ export class ThreadComponent implements OnInit {
     );
   }
 
+  /**
+   * Cleans up subscriptions and listeners when the component is destroyed.
+   */
   ngOnDestroy() {
     if (this.threadStatusSubscription) {
       this.threadStatusSubscription.unsubscribe();

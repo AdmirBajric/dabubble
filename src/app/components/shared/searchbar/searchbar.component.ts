@@ -83,6 +83,10 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     checkLocalStorage();
   }
 
+  /**
+   * Adds an event listener to the searchbar input
+   * to handle specific key events after the view initializes.
+   */
   ngAfterViewInit() {
     this.searchbarInput.nativeElement.addEventListener('keydown', (event) => {
       if (event.key === 'Delete' || event.key === 'Backspace') {
@@ -91,6 +95,10 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Displays the user profile based on the provided user ID.
+   * @param {string} id
+   */
   showUserProfile(id: string) {
     this.clearInput();
     this.usersSearch = false;
@@ -99,6 +107,9 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     this.btnService.openProfile(id);
   }
 
+  /**
+   * Fetches data from the server based on the search context (new message or global search).
+   */
   async getData() {
     if (this.newMessageSearch) {
       await this.setUserAndChannels();
@@ -109,6 +120,9 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Fetches message documents from Firebase and processes their IDs to retrieve individual message objects.
+   */
   async setMessages() {
     await this.firebaseService
       .getDocuments('messages')
@@ -121,12 +135,21 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
       });
   }
 
+  /**
+   * Extracts and returns the IDs from the provided message data.
+   * @param {any} data - message data from which to extract IDs.
+   * @returns {string[]} - array of message IDs.
+   */
   getMessageIDs(data: any) {
     return data.map((message: any) => {
       return message.id;
     });
   }
 
+  /**
+   * Retrieves and processes a message object based on its ID.
+   * @param {string} id - unique identifier of the message to retrieve.
+   */
   async getMessageObjects(id: string) {
     const snapShot = await this.firebaseService.getDocument('messages', id);
     if (snapShot.exists()) {
@@ -149,6 +172,9 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     this.sortbackEndMessages();
   }
 
+  /**
+   * Sorts messages and categorizes them based on their type (direct message or channel message).
+   */
   sortbackEndMessages() {
     this.backendMessages.forEach(async (message) => {
       await this.categorizeMessage(message);
@@ -156,6 +182,10 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     this.makeCloneCopy('DM&CM');
   }
 
+  /**
+   * Categorizes a message as either a channel message or a private message.
+   * @param {Message} message - message object to categorize.
+   */
   categorizeMessage(message: Message) {
     if (message.isChannelMessage) {
       if (!this.channelMessages.find((m) => m.id === message.id)) {
@@ -172,6 +202,11 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Retrieves a personal message if the logged user is either the creator or the recipient.
+   * @param {Message} message - message to evaluate.
+   * @returns {(Message | null)} message if it's a personal message for the logged user, or null otherwise.
+   */
   getPersonalMessages(message: Message): Message | null {
     const loggedName = this.loggedUser.fullName;
     if (
@@ -184,6 +219,9 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Fetches and sets the user and channel data from Firebase.
+   */
   async setUserAndChannels() {
     await this.firebaseService
       .getAllUsers()
@@ -204,16 +242,28 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     this.makeCloneCopy('U&C');
   }
 
+  /**
+   * Checks the input value of the search bar and synchronizes the arrays of users and channels based on mentions.
+   */
   checkInputAndSyncArraysUsersAndChannels() {
     const inputValue = this.searchbarInput.nativeElement.value;
     const mentionedUsersChannels = this.getMentions(inputValue);
     this.syncArrays(mentionedUsersChannels);
   }
 
+  /**
+   * Extracts mentions from the given input value.
+   * @param {string} inputValue - input value to parse for mentions.
+   * @returns {string[]} - array of mentioned users or channels.
+   */
   getMentions(inputValue: string) {
     return inputValue.split(/[@#]/);
   }
 
+  /**
+   * Synchronizes the user and channel arrays based on mentioned user IDs.
+   * @param {string[]} mentionedUsersChannels -  array of mentioned users or channels.
+   */
   syncArrays(mentionedUsersChannels: string[]) {
     const mentionedUserIds: Set<string> = new Set();
 
@@ -235,8 +285,11 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     this.users = [...filteredUsers];
   }
 
-  // 'U&C' = users and channels
-  // 'DM&CM' = directMessages and channelMessages
+  /**
+   * Creates a clone copy of users and channels or direct and channel messages, based on the type of copy specified.
+   * @param {string} typeOfCopy - type of copy to make ('U&C' for users and channels,
+   *                              'DM&CM' for direct messages and channel messages).
+   */
   makeCloneCopy(typeOfCopy: string) {
     if (typeOfCopy === 'U&C') {
       this.copyOfChannels = [...this.channels];
@@ -247,6 +300,9 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Triggers a search operation based on the input value in the search bar if global search is enabled.
+   */
   search() {
     if (this.globalSearch) {
       const inputValue = this.searchbarInput.nativeElement.value;
@@ -255,6 +311,10 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Filters messages, channels, and users based on the given input and updates the respective filtered lists.
+   * @param {string} input - search input to filter the data.
+   */
   checkInputAndSyncArraysMessages(input: string) {
     const lowerCaseInput = input.toLowerCase();
     const userName = this.loggedUser.fullName.toLowerCase();
@@ -294,6 +354,10 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     this.filteredUsersList = filteredUsers;
   }
 
+  /**
+   * Selects a user from the search result and updates the selected recipients list.
+   * @param {string} userName - full name of the selected user.
+   */
   selectUser(userName: string) {
     this.globalSearch = false;
     this.clearInput();
@@ -313,6 +377,10 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Removes a selected recipient from the list.
+   * @param {string} userName - full name of the recipient to remove.
+   */
   removeRecipient(userName: string) {
     const recipientIndex = this.selectedRecipients.findIndex(
       (recipient) => recipient.fullName === userName
@@ -324,6 +392,10 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Selects a channel from the search result and updates the selected channels list.
+   * @param {string} channelName - name of the channel to select.
+   */
   selectChannel(channelName: string) {
     this.globalSearch = false;
     this.channelSearch = false;
@@ -338,6 +410,10 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Removes a selected channel from the list.
+   * @param {string} channelName - name of the channel to remove.
+   */
   removeChannel(channelName: string) {
     const channelIndex = this.selectedChannels.findIndex(
       (channel) => channel.name === channelName
@@ -385,24 +461,44 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Retrieves a channel object by its ID.
+   * @param {string} id - unique identifier of the channel.
+   * @returns {Channel | undefined} - channel object if found, otherwise undefined.
+   */
   getChannel(id: string) {
     return this.copyOfChannels.find((channel) => channel.id === id);
   }
 
+  /**
+   * Clears the input value in the search bar.
+   */
   clearInput() {
     this.inputValue = '';
   }
 
+  /**
+   * Opens the specified channel in the application's navigation.
+   * @param {Channel} channel - channel to open.
+   */
   openChannel(channel: Channel) {
     this.handleInputSearchbar();
     this.navService.openChannel(channel);
   }
 
+  /**
+   * Opens a private message chat with the specified user.
+   * @param {User} user - user with whom to open a private message chat.
+   */
   openPrivateMessage(user: User) {
     this.navService.openChannel(user);
     this.handleInputSearchbar();
   }
 
+  /**
+   * Opens the channel associated with the given message.
+   * @param {Message} message - message whose associated channel is to be opened.
+   */
   openChannelMessage(message: Message) {
     this.handleInputSearchbar();
     const channelID = message.channelId as string;
@@ -410,11 +506,17 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     this.navService.openChannel(channel);
   }
 
+  /**
+   * Toggles the empty state of the search bar input.
+   */
   handleInputSearchbar() {
     this.inputValue = '';
     this.isSearchbarEmpty = !this.isSearchbarEmpty;
   }
 
+  /**
+   * Resets all component state to initial values, clearing any selected items and search results.
+   */
   resetAll() {
     this.selectedRecipients = [];
     this.selectedChannels = [];
@@ -426,6 +528,9 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
     this.copyOfChannels = [];
   }
 
+  /**
+   * Performs necessary cleanup tasks when the component is destroyed, such as resetting component state.
+   */
   ngOnDestroy() {
     this.resetAll();
   }
