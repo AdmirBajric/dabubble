@@ -208,7 +208,7 @@ export class ProfileViewComponent implements OnInit {
         }
       } else {
         console.log(
-          'Logged-in user is not the creator of the conversation. Cannot update.'
+          // 'Logged-in user is not the creator of the conversation. Cannot update.'
         );
       }
     } else {

@@ -10,6 +10,6 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 })
 export class EmojisComponent {
   addEmoji(event: any): void {
-    console.log(event.emoji);
+    // console.log(event.emoji);
   }
 }

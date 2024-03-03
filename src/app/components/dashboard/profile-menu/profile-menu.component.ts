@@ -87,7 +87,7 @@ export class ProfileMenuComponent {
           await this.updateSaveToLocalStorage(userData);
           await this.updateUserInDatabase(userProfileCollection, userDoc);
         } else {
-          console.log('User with ID not found');
+          // console.log('User with ID not found');
         }
       } catch (error) {
         console.error('Error retrieving user documents:', error);
