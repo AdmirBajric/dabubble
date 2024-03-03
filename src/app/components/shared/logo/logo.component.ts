@@ -10,8 +10,8 @@ import { CommonModule } from '@angular/common';
 export class LogoComponent {
   position: number = 1;
   img = [
-    '../../assets/img/logo-mobile.svg',
-    '../../assets/img/logo-desktop.svg',
+    './assets/img/logo-mobile.svg',
+    './assets/img/logo-desktop.svg',
   ];
 
   windowWidth: number = 0;
