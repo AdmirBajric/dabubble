@@ -35,7 +35,7 @@ export class LogoutService {
     await this.setUserOffline(auth.currentUser?.uid);
     signOut(auth)
       .then(() => {
-        console.log('Benutzer abgemeldet');
+        // console.log('Benutzer abgemeldet');
         localStorage.removeItem('loggedInUser');
         this.router.navigateByUrl('/', { replaceUrl: true }).then(() => {
           window.location.reload();
@@ -64,7 +64,7 @@ export class LogoutService {
         const userDocRef = doc(userProfileCollection, userDoc.id);
         await updateDoc(userDocRef, { isOnline: false });
       } else {
-        console.log('User with ID not found');
+        // console.log('User with ID not found');
       }
     } catch (error) {
       console.error('Error retrieving user documents:', error);

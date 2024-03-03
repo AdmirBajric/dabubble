@@ -6,16 +6,13 @@ import { LoginComponent } from './components/auth/login/login.component';
 import { ImpressumComponent } from './components/legal/impressum/impressum.component';
 import { SendMailPwComponent } from './components/auth/send-mail-pw/send-mail-pw.component';
 import { ResetPwComponent } from './components/auth/reset-pw/reset-pw.component';
-import { WorkspaceComponent } from './components/dashboard/workspace/workspace.component';
 import { AuthGuard } from '../app/guards/auth.guard';
 import { CreateChannelComponent } from './components/shared/dialogs/create-channel/create-channel.component';
 import { VerifyEmailComponent } from './components/auth/verify-email/verify-email.component';
 import { VerificationSuccessComponent } from './components/auth/verification-success/verification-success.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileMenuComponent } from './components/dashboard/profile-menu/profile-menu.component';
-import { ThreadComponent } from './components/chat/thread/thread.component';
 import { MainChatComponent } from './components/chat/main-chat/main-chat.component';
-import { NewMessageComponent } from './components/chat/main-chat/new-message/new-message.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -30,11 +27,6 @@ export const routes: Routes = [
   { path: 'verify-email', component: VerifyEmailComponent },
   { path: 'verification-success', component: VerificationSuccessComponent },
   {
-    path: 'workspace',
-    component: WorkspaceComponent,
-    canActivate: [AuthGuard],
-  },
-  {
     path: 'create-channel',
     component: CreateChannelComponent,
     canActivate: [AuthGuard],
@@ -47,7 +39,5 @@ export const routes: Routes = [
   { path: 'privacy-policy', component: PrivacyPolicyComponent },
   { path: 'impressum', component: ImpressumComponent },
   { path: 'profile', component: ProfileMenuComponent },
-  { path: 'thread', component: ThreadComponent },
   { path: 'main-chat', component: MainChatComponent },
-  { path: 'new-message', component: NewMessageComponent },
 ];

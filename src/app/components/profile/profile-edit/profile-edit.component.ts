@@ -64,6 +64,10 @@ export class ProfileEditComponent implements AfterViewInit {
     });
   }
 
+  /**
+   * Displays user details based on the provided user ID.Description placeholder
+   * @param {string} userId - unique identifier for the user.
+   */
   showUserDetails(userId: string) {
     const allUsers = localStorage.getItem('users');
     if (allUsers) {
@@ -78,6 +82,11 @@ export class ProfileEditComponent implements AfterViewInit {
     }
   }
 
+  /**
+   * Updates the validity state of form fields.
+   * @param {string} field -  name of the form field ('name', 'email').
+   * @param {boolean} isValid - validity state of the field.
+   */
   onValidityChanged(field: string, isValid: boolean) {
     switch (field) {
       case 'name':
@@ -89,6 +98,11 @@ export class ProfileEditComponent implements AfterViewInit {
     }
   }
 
+  /**
+   * Saves the current user details to local storage and Firebase.
+   * @async
+   * @returns {*}
+   */
   async saveUser() {
     const newFullName = this.createFullName(this.userFullName);
     const newEmail = this.userEmail.toLowerCase();
@@ -126,6 +140,13 @@ export class ProfileEditComponent implements AfterViewInit {
     }, 500);
   }
 
+  /**
+   * Updates or creates a user document in Firebase.
+   * @async
+   * @param {*} id - unique identifier for the user in Firebase
+   * @param {*} user - user object containing updated details.
+   * @returns {*}
+   */
   async saveUserToFirebase(id: any, user: any) {
     const userProfileCollection = collection(this.firestore, 'users');
     const q = query(userProfileCollection, where('id', '==', id));
@@ -147,13 +168,18 @@ export class ProfileEditComponent implements AfterViewInit {
         localStorage.setItem('users', JSON.stringify(allUsersData));
         this.onNoClick();
       } else {
-        console.log('User with ID not found');
+        // console.log('User with ID not found');
       }
     } catch (error) {
       console.error('Error retrieving user documents:', error);
     }
   }
 
+  /**
+   * Formats a full name by capitalizing the first letter of each name.
+   * @param {string} fullName - full name to format.
+   * @returns {string} - formatted full name.
+   */
   createFullName(fullName: string) {
     let firstName = fullName.split(' ')[0];
     let lastName = fullName.split(' ')[1];
@@ -163,6 +189,9 @@ export class ProfileEditComponent implements AfterViewInit {
     return `${firstName} ${lastName}`;
   }
 
+  /**
+   * Closes the current dialog.
+   */
   onNoClick() {
     this.dialogRef.close();
   }

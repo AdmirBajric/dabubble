@@ -219,7 +219,7 @@ export class SelectAvatarComponent {
 
     signOut(auth)
       .then(() => {
-        console.log('Benutzer abgemeldet');
+        // console.log('Benutzer abgemeldet');
       })
       .catch((error) => {
         console.error('Fehler beim Abmelden des Benutzers', error);

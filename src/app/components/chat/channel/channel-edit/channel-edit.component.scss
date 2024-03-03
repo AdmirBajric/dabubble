@@ -6,6 +6,10 @@
   border-radius: 3rem !important;
   border-top-left-radius: 0rem !important;
   box-shadow: none !important;
+
+  @media only screen and (max-width: 1100px) {
+    height: 100vh;
+  }
 }
 
 .cdk-overlay-pane {
@@ -400,6 +404,7 @@
 
   #channel-edition {
     width: 100vw !important;
+    height: 100vh !important;
   }
 
   .channel-edition-header {
