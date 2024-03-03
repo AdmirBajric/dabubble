@@ -4,7 +4,6 @@ import { ProfileViewComponent } from '../components/profile/profile-view/profile
 import { ChannelEditComponent } from '../components/chat/channel/channel-edit/channel-edit.component';
 import { CreateChannelComponent } from '../components/shared/dialogs/create-channel/create-channel.component';
 import { DialogShowMembersComponent } from '../components/shared/dialogs/dialog-show-members/dialog-show-members.component';
-import { DialogAddUserComponent } from '../components/shared/dialogs/dialog-add-user/dialog-add-user.component';
 import { DialogAddMemberChannelComponent } from '../components/shared/dialogs/dialog-add-member-channel/dialog-add-member-channel.component';
 import { Channel } from '../models/channel.class';
 import { DataService } from './data.service';

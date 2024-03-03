@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   Firestore,
   collection,
@@ -12,15 +12,13 @@ import {
   QuerySnapshot,
   onSnapshot,
   orderBy,
-  setDoc,
   deleteDoc,
   DocumentReference,
-  DocumentData,
   DocumentSnapshot,
 } from '@angular/fire/firestore';
 import { User } from '../models/user.class';
 import { Conversation } from '../models/conversation.class';
-import { Subject, Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 
 interface ConversationData {
   id: string;

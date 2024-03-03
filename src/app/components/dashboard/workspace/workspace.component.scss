@@ -61,7 +61,6 @@ h2 {
     height: calc(100vh - 18rem);
   }
 
-
   @media only screen and (min-width: 1750px) {
     padding: 2rem 1rem;
   }
@@ -69,6 +68,7 @@ h2 {
 
 .drawer-container {
   width: 100%;
+  overflow: auto;
 
   &.scroll {
     overflow: scroll;
@@ -138,6 +138,11 @@ h2 {
   }
 }
 
+.channelheight {
+  min-height: 10%;
+  max-height: 50%;
+}
+
 .dm-list-container {
   margin-top: 6rem;
 }
@@ -153,7 +158,7 @@ h2 {
 
   a {
     color: black;
-   
+
     &.link-create {
       color: $purple-3;
     }

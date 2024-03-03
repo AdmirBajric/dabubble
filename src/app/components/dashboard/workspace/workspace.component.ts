@@ -17,13 +17,7 @@ import { ButtonFunctionService } from '../../../services/button-function.service
 import { HoverChangeDirective } from '../../../directives/hover-change.directive';
 import { EventEmitter } from '@angular/core';
 import { chatNavigationService } from '../../../services/chat-navigation.service';
-import {
-  Firestore,
-  collection,
-  getDocs,
-  onSnapshot,
-  query,
-} from '@angular/fire/firestore';
+import { Firestore, collection, onSnapshot } from '@angular/fire/firestore';
 import { FirebaseService } from '../../../services/firebase.service';
 import { Subscription } from 'rxjs';
 import { MobileHeaderComponent } from '../../shared/mobile-header/mobile-header.component';
@@ -58,6 +52,7 @@ export class WorkspaceComponent implements OnInit {
   usersSnapshotUnsubscribe: (() => void) | undefined;
   conversationsSubscription: Subscription | undefined;
   conversations: any[] = [];
+  channelHeight: boolean = false;
   @Input() isOpen: boolean = true;
   // ********************** redirecting input event as output boolean to parent component
   showChannelContent!: boolean;
@@ -166,6 +161,7 @@ export class WorkspaceComponent implements OnInit {
    * Toggles channels view and sets up a listener for changes in channels collection.
    */
   openChannels() {
+    this.channelHeight = !this.channelHeight;
     try {
       const channelsCollection = collection(this.firestore, 'channels');
       this.unsubscribeSnapshot = onSnapshot(
@@ -176,7 +172,6 @@ export class WorkspaceComponent implements OnInit {
             data['id'] = doc.id;
             return data;
           });
-          // Emit the updated channels data
           this.channelUpdateService.updateChannels(this.channels);
         },
         (error) => {

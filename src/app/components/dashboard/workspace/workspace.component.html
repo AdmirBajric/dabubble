@@ -1,7 +1,7 @@
 <div *ngIf="isOpen" class="main">
   <div class="workspace-wrapper">
     <app-workspace-header></app-workspace-header>
-    <div class="drawer-container">
+    <div [ngClass]="{ channelheight: channelHeight }" class="drawer-container">
       <div class="drawer">
         <div class="drawer-header">
           <div
@@ -119,16 +119,16 @@
         </div>
       </div>
 
-      @if (showDMs) {
       <div class="dm-list-container">
+        @if (showDMs) {
         <ng-container *ngFor="let user of users">
           <app-direct-message-list-item
             [user]="user"
             id="{{ user.id }}"
           ></app-direct-message-list-item>
         </ng-container>
+        }
       </div>
-      }
     </div>
   </div>
 

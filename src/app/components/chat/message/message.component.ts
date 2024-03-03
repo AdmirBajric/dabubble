@@ -5,7 +5,6 @@ import {
   Input,
   OnInit,
   Output,
-  ViewChild,
 } from '@angular/core';
 import { NgIf, NgFor } from '@angular/common';
 import { ProfileViewComponent } from '../../profile/profile-view/profile-view.component';

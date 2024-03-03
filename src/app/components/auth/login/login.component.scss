@@ -97,7 +97,7 @@
 
 @media only screen and (min-width: 1100px) and (min-height: 800px) {
   .card-content {
-    height: 66rem !important;
+    height: 67rem !important;
   }
 
   .legalContentContainer {
@@ -152,7 +152,6 @@
 #start-screen {
   width: 100%;
   height: 100vh;
-  background: $welcome-screen-gradient;
   @include flex-center();
   position: relative;
   @include animation(changeBackground, 0.5s, 2.4s, 1);
@@ -232,6 +231,10 @@
       left: -47rem;
     }
   }
+}
+
+.gradientColor {
+  background: $welcome-screen-gradient;
 }
 
 @keyframes showBigLogo {

@@ -8,7 +8,7 @@ import {
   Renderer2,
   inject,
 } from '@angular/core';
-import { NavigationExtras, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -47,6 +47,21 @@ import { User } from '../../../models/user.class';
 export class LoginComponent implements OnInit {
   renderer: any = Renderer2;
   el: any = ElementRef;
+  showDesktop: boolean = false;
+  showMobile: boolean = false;
+  windowWidth: number = 0;
+  logoBig: boolean = false;
+  desktopAnimation: boolean = false;
+  mobileAnimation: boolean = false;
+  userEmail: string = '';
+  userPassword: string = '';
+  show: boolean = false;
+  loginSuccess: boolean = false;
+  errorMessage: boolean = false;
+  user: User = new User();
+  @ViewChild('animationContainer') animationContainer!: ElementRef;
+
+  private auth: Auth = inject(Auth);
 
   constructor(
     private router: Router,
@@ -75,21 +90,14 @@ export class LoginComponent implements OnInit {
       this.showDesktop = true;
       this.showMobile = false;
     }
-  }
-  showDesktop: boolean = false;
-  showMobile: boolean = false;
-  windowWidth: number = 0;
-  logoBig: boolean = false;
-  desktopAnimation: boolean = false;
-  mobileAnimation: boolean = false;
-  userEmail: string = '';
-  userPassword: string = '';
-  show: boolean = false;
-  loginSuccess: boolean = false;
-  errorMessage: boolean = false;
-  @ViewChild('animationContainer') animationContainer!: ElementRef;
 
-  private auth: Auth = inject(Auth);
+    if (typeof localStorage !== 'undefined') {
+      const user = localStorage.getItem('loggedInUser');
+      if (user) {
+        this.user = JSON.parse(user);
+      }
+    }
+  }
 
   ngOnInit(): void {
     this.logoBig = true;
@@ -155,7 +163,6 @@ export class LoginComponent implements OnInit {
       })
       .catch((error) => {
         const errorCode = error.code;
-        console.log(errorCode);
       });
   }
 

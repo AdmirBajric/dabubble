@@ -2,7 +2,6 @@ import {
   Component,
   ElementRef,
   HostListener,
-  Input,
   OnInit,
   Renderer2,
 } from '@angular/core';
@@ -177,9 +176,7 @@ export class ThreadComponent implements OnInit {
       const commentJSON = comment.toJSON();
       await this.firebaseService.addDocument('comments', commentJSON);
       this.searchForComments();
-    } catch (error) {
-      console.error('Error adding comment:', error);
-    }
+    } catch (error) {}
   }
 
   subscribeMessage() {

@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  AfterViewInit,
-  Input,
-  inject,
-} from '@angular/core';
+import { Component, ElementRef, AfterViewInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
@@ -128,6 +122,7 @@ export class ProfileEditComponent implements AfterViewInit {
 
     setTimeout(() => {
       this.onNoClick();
+      location.reload();
     }, 500);
   }
 

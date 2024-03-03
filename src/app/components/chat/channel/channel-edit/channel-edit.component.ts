@@ -165,7 +165,6 @@ export class ChannelEditComponent {
     this.firebaseService
       .deleteChannel(id)
       .then(() => {
-        console.log('Channel deleted');
         this.dataService.triggerFunction();
         this.onNoClick();
       })
@@ -179,12 +178,9 @@ export class ChannelEditComponent {
    * @param {string} id - ID of the channel to leave.
    */
   leaveChannel(id: string) {
-    console.log(id, this.user.id);
-
     this.firebaseService
       .removeMemberFromChannel(id, this.user.id)
       .then(() => {
-        console.log('Memeber removed from channel');
         this.onNoClick();
       })
       .catch((error) => {
