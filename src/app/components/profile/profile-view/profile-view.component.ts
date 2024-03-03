@@ -67,6 +67,12 @@ export class ProfileViewComponent implements OnInit {
     this.checkWindowSize();
   }
 
+  /**
+   * Retrieves and displays user details from Firebase based on the provided user ID.
+   * @async
+   * @param {string} userId - unique identifier for the user.
+   * @returns {*}
+   */
   async showUserDetails(userId: string) {
     await this.firebaseService.getAllUsers().then((users) => {
       users.forEach((user: any) => {
@@ -86,16 +92,27 @@ export class ProfileViewComponent implements OnInit {
     });
   }
 
+  /**
+   * HostListener for window resize event to adjust views accordingly.
+   * @param {Event} event - resize event object
+   */
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
     this.checkWindowSize();
   }
 
+  /**
+   * HostListener for window load event to check the window size on load.
+   * @param {Event} event - load event object.
+   */
   @HostListener('window:load', ['$event'])
   onLoad(event: Event): void {
     this.checkWindowSize();
   }
 
+  /**
+   * Checks the window size to toggle mobile view.
+   */
   private checkWindowSize(): void {
     this.windowWidth = this.renderer.parentNode(
       this.el.nativeElement
@@ -107,20 +124,35 @@ export class ProfileViewComponent implements OnInit {
     }
   }
 
+  /**
+   * Closes the currently open dialog.
+   */
   onNoClick() {
     this.dialogRef.close();
   }
 
+  /**
+   * Initiates editing the account by opening the profile edit component.
+   * @param {string} userId - unique identifier for the useraccount
+   */
   editAccount(userId: string) {
     this.onNoClick();
     this.dialog.open(ProfileEditComponent);
     this.sendUserId(userId);
   }
 
+  /**
+   * Sends the user ID to another component via a shared data service.
+   * @param {string} userId - unique identifier for the user.
+   */
   sendUserId(userId: string): void {
     this.dataService.sendUserId(userId);
   }
 
+  /**
+   * Adds a user to conversations, creating new conversations if necessary.
+   * @param {string} userToAdd - The ID of the user to add to the conversation.
+   */
   async addUserToConversations(userToAdd: string) {
     this.onNoClick();
     try {
@@ -150,6 +182,11 @@ export class ProfileViewComponent implements OnInit {
     }
   }
 
+  /**
+   * Creates or updates a conversation for the given user with another user.
+   * @param {any} user - user object initiating the conversation.
+   * @param {any} userToAdd -  ID of the user to be added to the conversation.
+   */
   async createConversation(user: any, userToAdd: any) {
     const conversation = await this.firebaseService.getConversationForUser(
       user.id
