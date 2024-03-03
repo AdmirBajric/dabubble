@@ -1,15 +1,15 @@
 <div class="justify-unset ws-header-container"> 
     <section>
         <div class="ws-header-logo">
-            <img src="./../../assets/img/workspace_3_desktop_logo.svg" alt="logo learning">
+            <img src="./assets/img/workspace_3_desktop_logo.svg" alt="logo learning">
             <h1>Code learning</h1>
         </div>
     </section>
 
     <button *ngIf="router.url !== '/thread'" appHoverChange
-        [elementsConfig]=" [ { imageSelector: 'img', defaultSrc: './../../assets/img/workspace_4_desktop_write_square_black.svg', hoverSrc: './../../assets/img/workspace_4_desktop_write_square_black_hover.svg'}]"
+        [elementsConfig]=" [ { imageSelector: 'img', defaultSrc: './assets/img/workspace_4_desktop_write_square_black.svg', hoverSrc: './assets/img/workspace_4_desktop_write_square_black_hover.svg'}]"
         (click)="writeNewMessage()">
-        <img src="./../../assets/img/workspace_4_desktop_write_square_black.svg" alt="write new message">
+        <img src="./assets/img/workspace_4_desktop_write_square_black.svg" alt="write new message">
     </button>
 
 </div>

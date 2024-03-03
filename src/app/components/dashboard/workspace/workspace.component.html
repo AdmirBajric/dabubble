@@ -11,13 +11,13 @@
             [elementsConfig]="[
               {
                 imageSelector: '.arrow',
-                defaultSrc: './../../assets/img/arrow_drop_down.svg',
-                hoverSrc: './../../assets/img/arrow_down_hover.svg'
+                defaultSrc: './assets/img/arrow_drop_down.svg',
+                hoverSrc: './assets/img/arrow_down_hover.svg'
               },
               {
                 imageSelector: '.channels',
-                defaultSrc: './../../assets/img/workspaces_0_channels.svg',
-                hoverSrc: './../../assets/img/workspaces_0_channels_hover.svg'
+                defaultSrc: './assets/img/workspaces_0_channels.svg',
+                hoverSrc: './assets/img/workspaces_0_channels_hover.svg'
               },
               {
                 textSelector: 'h2',
@@ -29,13 +29,13 @@
             <img
               class="arrow"
               [class.rotate]="showChannels"
-              src="./../../assets/img/arrow_drop_down.svg"
+              src="./assets/img/arrow_drop_down.svg"
               alt="drop down"
             />
             <span>
               <img
                 class="channels"
-                src="./../../assets/img/workspaces_0_channels.svg"
+                src="./assets/img/workspaces_0_channels.svg"
                 alt="channels"
               />
               <h2>Channels</h2>
@@ -49,13 +49,13 @@
               {
                 imageSelector: 'img',
                 defaultSrc: defaultImagePath,
-                hoverSrc: './../../assets/img/add_desktop_hover.svg'
+                hoverSrc: './assets/img/add_desktop_hover.svg'
               }
             ]"
             (click)="openCreateChannel()"
           >
             <img
-              src="{{ './../../assets/img/add_' + imageFlag + '.svg' }}"
+              src="{{ './assets/img/add_' + imageFlag + '.svg' }}"
               alt="adding channel"
             />
           </button>
@@ -71,7 +71,7 @@
         </ng-container>
 
         <button (click)="openCreateChannel()" class="btn-create-channel">
-          <img src="./../../assets/img/add_border.svg" alt="add" />
+          <img src="./assets/img/add_border.svg" alt="add" />
           <a class="link-create">Channel hinzufügen</a>
         </button>
         }
@@ -85,13 +85,13 @@
           [elementsConfig]="[
             {
               imageSelector: '.arrow',
-              defaultSrc: './../../assets/img/arrow_drop_down.svg',
-              hoverSrc: './../../assets/img/arrow_down_hover.svg'
+              defaultSrc: './assets/img/arrow_drop_down.svg',
+              hoverSrc: './assets/img/arrow_down_hover.svg'
             },
             {
               imageSelector: '.dms',
-              defaultSrc: './../../assets/img/workspaces_1_DM.svg',
-              hoverSrc: './../../assets/img/workspaces_1_DM_hover.svg'
+              defaultSrc: './assets/img/workspaces_1_DM.svg',
+              hoverSrc: './assets/img/workspaces_1_DM_hover.svg'
             },
             {
               textSelector: 'h2',
@@ -105,13 +105,13 @@
           <img
             class="arrow"
             [class.rotate]="showDMs"
-            src="./../../assets/img/arrow_drop_down.svg"
+            src="./assets/img/arrow_drop_down.svg"
             alt="drop down"
           />
           <span>
             <img
               class="dms"
-              src="./../../assets/img/workspaces_1_DM.svg"
+              src="./assets/img/workspaces_1_DM.svg"
               alt="account circle"
             />
             <h2>Direktnachrichten</h2>
@@ -134,7 +134,7 @@
 
   <button class="mobile-btn-write-dm" (click)="writeNewMessage()">
     <img
-      src="../../../../assets/img/workspace_2_mobile_write_dm_square.svg"
+      src="./assets/img/workspace_2_mobile_write_dm_square.svg"
       alt="write message"
     />
   </button>

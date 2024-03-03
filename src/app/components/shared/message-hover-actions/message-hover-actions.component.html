@@ -14,13 +14,13 @@
     [elementsConfig]="[
       {
         imageSelector: 'img',
-        defaultSrc: '../../../../assets/img/add_emoji_check.svg',
-        hoverSrc: '../../../../assets/img/add_emoji_check_hover.svg'
+        defaultSrc: './assets/img/add_emoji_check.svg',
+        hoverSrc: './assets/img/add_emoji_check_hover.svg'
       }
     ]"
     (click)="setEmoji('✅', 'mainMessage')"
   >
-    <img src="../../../../assets/img/add_emoji_check.svg" alt="ok" />
+    <img src="./assets/img/add_emoji_check.svg" alt="ok" />
   </button>
 
   <button
@@ -29,13 +29,13 @@
     [elementsConfig]="[
       {
         imageSelector: 'img',
-        defaultSrc: '../../../../assets/img/add_emoji_handsUP.svg',
-        hoverSrc: '../../../../assets/img/add_emoji_handsUP_hover.svg'
+        defaultSrc: './assets/img/add_emoji_handsUP.svg',
+        hoverSrc: './assets/img/add_emoji_handsUP_hover.svg'
       }
     ]"
     (click)="setEmoji('🙌', 'mainMessage')"
   >
-    <img src="../../../../assets/img/add_emoji_handsUP.svg" alt="bravo" />
+    <img src="./assets/img/add_emoji_handsUP.svg" alt="bravo" />
   </button>
 
   <button
@@ -43,13 +43,13 @@
     [elementsConfig]="[
       {
         imageSelector: 'img',
-        defaultSrc: '../../../../assets/img/add_emoji.svg',
-        hoverSrc: '../../../../assets/img/add_emoji_hover.svg'
+        defaultSrc: './assets/img/add_emoji.svg',
+        hoverSrc: './assets/img/add_emoji_hover.svg'
       }
     ]"
     (click)="openEmojiMart('mainMessage')"
   >
-    <img src="../../../../assets/img/add_emoji.svg" alt="add reaction" />
+    <img src="./assets/img/add_emoji.svg" alt="add reaction" />
   </button>
 
   <button
@@ -59,12 +59,12 @@
     [elementsConfig]="[
       {
         imageSelector: 'img',
-        defaultSrc: '../../../../assets/img/add_answer.svg',
-        hoverSrc: '../../../../assets/img/add_answer_hover.svg'
+        defaultSrc: './assets/img/add_answer.svg',
+        hoverSrc: './assets/img/add_answer_hover.svg'
       }
     ]"
   >
-    <img src="../../../../assets/img/add_answer.svg" alt="" />
+    <img src="./assets/img/add_answer.svg" alt="" />
   </button>
 
   <button (click)="toggleToolTip($event)" class="btn-edit-wrapper">
@@ -74,12 +74,12 @@
       [elementsConfig]="[
         {
           imageSelector: 'img',
-          defaultSrc: '../../../../assets/img/edit_message.svg',
-          hoverSrc: '../../../../assets/img/edit_message_hover.svg'
+          defaultSrc: './assets/img/edit_message.svg',
+          hoverSrc: './assets/img/edit_message_hover.svg'
         }
       ]"
     >
-      <img src="../../../../assets/img/edit_message.svg" alt="" />
+      <img src="./assets/img/edit_message.svg" alt="" />
     </div>
     <ng-container *ngIf="showToolTip">
       <div class="tooltip-edit">

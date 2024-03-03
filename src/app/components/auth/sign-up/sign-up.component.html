@@ -9,7 +9,7 @@
             <img
               routerLink=""
               class="sign-up-content-header-img"
-              src="../../assets/img/arrow_back.svg"
+              src="./assets/img/arrow_back.svg"
               alt="Arrow back img"
             />
             <h2 class="sign-up-content-header-des">Konto erstellen</h2>
@@ -30,7 +30,7 @@
             ngDefaultControl
             pattern="^[A-Za-z]+ [A-Za-z]+$"
             inputType="text"
-            img="../../assets/img/person_filled.svg"
+            img="./assets/img/person_filled.svg"
             placeholder="Name und Nachname"
             (validityChanged)="onValidityChanged('name', $event)"
           ></app-input>
@@ -42,7 +42,7 @@
             ngDefaultControl
             pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
             inputType="email"
-            img="../../assets/img/mail.svg"
+            img="./assets/img/mail.svg"
             placeholder="beispielname@email.com"
             (validityChanged)="onValidityChanged('email', $event)"
           ></app-input>
@@ -53,7 +53,7 @@
             ngDefaultControl
             pattern="^[A-Za-z\d]{6,}$"
             inputType="password"
-            img="../../assets/img/lock.svg"
+            img="./assets/img/lock.svg"
             placeholder="Passwort"
             (validityChanged)="onValidityChanged('password', $event)"
           ></app-input>
