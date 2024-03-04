@@ -33,7 +33,7 @@ import { Router } from '@angular/router';
   styleUrl: './profile-edit.component.scss',
 })
 export class ProfileEditComponent implements AfterViewInit {
-  userImg: string = '../../assets/img/person.svg';
+  userImg: string = './assets/img/person.svg';
   userFullName: string = '';
   userEmail: string = '';
   nameValid: boolean = false;

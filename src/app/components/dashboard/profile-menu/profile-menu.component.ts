@@ -51,7 +51,7 @@ export class ProfileMenuComponent {
   windowWidth: number = 0;
   fullName: string = '';
   userId: string = '';
-  img: string = '../../../../assets/img/person.svg';
+  img: string = './assets/img/person.svg';
 
   private auth: Auth = inject(Auth);
   private firestore: Firestore = inject(Firestore);
