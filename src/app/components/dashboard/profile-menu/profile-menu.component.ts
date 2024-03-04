@@ -195,7 +195,8 @@ export class ProfileMenuComponent {
   /**
    * Opens a bottom sheet component for profiles.
    */
-  openBottomSheet() {
+  openBottomSheet(userId: string): void {
     this._bottomSheet.open(ProfileBottomSheetComponent);
+    this.sendUserId(userId);
   }
 }
