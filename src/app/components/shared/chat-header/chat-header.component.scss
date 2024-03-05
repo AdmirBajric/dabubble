@@ -10,9 +10,24 @@ h1 {
   width: 2rem;
 }
 
+.hash {
+  @media only screen and (max-width: 1099px){
+    height: 2rem;
+    width: 2rem;
+  }
+}
+
+.thread-font{
+  font-size: 1.3rem;
+}
+
 .header-right {
   @include flexbox(flex, unset, unset, center);
   gap: 2rem;
+
+  @media only screen and (max-width: 1099px){
+    gap: 0;
+  }
 }
 
 .btn-wrapper {
@@ -32,6 +47,10 @@ h1 {
     gap: 2rem;
     border-radius: 100px;
     transition: all 225ms;
+
+    @media only screen and (max-width: 1099px){
+      gap: 0;
+    }
 
     &:hover {
       background-color: $bg-color;

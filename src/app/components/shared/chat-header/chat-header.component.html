@@ -36,7 +36,7 @@
         src="../../../../assets/img/hash_hover.svg"
         alt="#"
       />
-      <h2 [ngStyle]="{ 'font-size': styleHeaderForThread ? '1.3rem' : '2rem' }">
+      <h2 [class.thread-font]="styleHeaderForThread">
         {{ currentChannel?.name }}
       </h2>
     </div>
