@@ -26,6 +26,10 @@
   justify-content: flex-end;
   overflow: hidden;
 
+  @media only screen and (max-height: 620px) {
+    height: 60%;
+  }
+
   .content-container-messages {
     overflow: auto;
 
@@ -78,6 +82,10 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+
+      @media only screen and (max-width: 767px) {
+        display: none;
+      }
 
       .welcome-message-channel-info {
         width: 100%;
