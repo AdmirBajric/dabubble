@@ -9,6 +9,7 @@
   </ng-container>
 
   <div
+    *ngIf="areVariablesLoaded"
     [ngClass]="{
       'desktop-animation': desktopAnimation,
       'mobile-animation': mobileAnimation
