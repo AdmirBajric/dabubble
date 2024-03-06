@@ -1,5 +1,5 @@
-<div [ngClass]="{ gradientColor: user.isUser }" id="start-screen">
-  <ng-container *ngIf="showDesktop && user.isUser">
+<div id="start-screen">
+  <ng-container *ngIf="showDesktop">
     <img
       [ngClass]="{ 'logo-big': logoBig }"
       class="on-start-logo"
@@ -9,7 +9,6 @@
   </ng-container>
 
   <div
-    *ngIf="user.isUser"
     [ngClass]="{
       'desktop-animation': desktopAnimation,
       'mobile-animation': mobileAnimation
@@ -98,9 +97,11 @@
               <button (click)="guestLogIn()">Gäste-Login</button>
             </div>
 
-            <div class="error-message">
-              <p *ngIf="errorMessage">Invalid email or password.</p>
-            </div>
+            <ng-container *ngIf="errorMessage">
+              <div class="error-message">
+                <p>Invalid email or password.</p>
+              </div>
+            </ng-container>
           </form>
           <div
             [ngClass]="{ 'login-opacity': loginSuccess }"

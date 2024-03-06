@@ -56,9 +56,11 @@ export class MessageInputComponent implements OnInit {
   @Output() newMessageData = new EventEmitter<{
     text: string;
     file: string;
+    error: boolean;
   }>();
   // can be used in 'directMessages', 'channel', 'thread', 'newMessage'
   @Input() usedLocation!: string;
+  @Input() id!: string;
   @Input() styleHeaderForThread: boolean = false;
   @ViewChild('userInputField') userInputField!: ElementRef<HTMLInputElement>;
 
@@ -86,12 +88,14 @@ export class MessageInputComponent implements OnInit {
   copyOfUsers: any[] = [];
   filteredUser: any[] = [];
   newMsgOrMsg: boolean = true;
+  noInput: boolean = false;
 
   firestore: Firestore = inject(Firestore);
 
   constructor(
     private firebaseService: FirebaseService,
-    private navService: chatNavigationService
+    private navService: chatNavigationService,
+    private elementRef: ElementRef
   ) {}
 
   /**
@@ -112,6 +116,8 @@ export class MessageInputComponent implements OnInit {
     this.subscribeChannels();
     this.setUserAndChannels();
     this.generatePlaceholder();
+
+    console.log(this.id);
   }
 
   /**
@@ -225,6 +231,7 @@ export class MessageInputComponent implements OnInit {
    */
   onInputChange(event: any) {
     const values = event.target.value.split(' ');
+    this.noInput = false;
 
     values.forEach((value: string) => {
       if (value === '@' && this.users.length > 0) {
@@ -405,87 +412,101 @@ export class MessageInputComponent implements OnInit {
    * @param {boolean} channel Indicates whether the message is for a channel or direct message.
    */
   async addMessage(channel: boolean) {
-    this.usersSearch = false;
-    this.channelSearch = false;
-    this.showEmoji = false;
-
-    if (this.userInputField) {
-      this.text = this.userInputField.nativeElement.value;
-    }
-
-    if (this.currentChannel.isUser && this.usedLocation === 'directMessages') {
-      if (this.text.length > 0 || this.selectedFile !== null) {
-        await this.uploadImage();
-
-        if (this.text.length > 0) {
-          const message = new Message({
-            text: this.text,
-            timestamp: new Date(),
-            creator: this.user,
-            recipient: this.currentChannel,
-            isChannelMessage: false,
-            privateMsg: true,
-            myMsg: this.user.id === this.currentChannel.id ? true : false,
-            reactions: [],
-            file: this.uploadedFile,
-          });
-
-          const messageToJson = message.toJSON();
-
-          this.firebaseService
-            .addDocument('messages', messageToJson)
-            .then((data: any) => {
-              this.messageId = data.id;
-              this.text = '';
-              this.textForFile = '';
-              if (this.selectedFile === null) {
-                this.uploadedFile = '';
-              }
-            })
-            .catch((err: any) => {
-              console.log(err);
-            });
-        }
-      }
-    } else if (this.usedLocation === 'channel') {
-      if (this.text.length > 0 || this.selectedFile !== null) {
-        await this.uploadImage();
-
-        if (this.text.length > 0) {
-          const message = new Message({
-            text: this.text,
-            timestamp: new Date(),
-            creator: this.user,
-            channelId: this.currentChannel?.id,
-            isChannelMessage: channel,
-            privateMsg: false,
-            myMsg: false,
-            reactions: [],
-            file: this.uploadedFile,
-          });
-
-          const messageToJson = message.toJSON();
-
-          this.firebaseService
-            .addDocument('messages', messageToJson)
-            .then((data: any) => {
-              this.messageId = data.id;
-              this.text = '';
-              this.textForFile = '';
-              if (this.selectedFile === null) {
-                this.uploadedFile = '';
-              }
-            })
-            .catch((err: any) => {
-              console.log(err);
-            });
-        }
-      }
+    if (this.text.length === 0 && this.selectedFile === null) {
+      this.noInput = true;
     } else {
-      const commentText = this.text;
-      const commentFile = this.uploadedFile;
-      this.commentData.emit({ commentText, commentFile });
-      this.text = '';
+      this.noInput = false;
+
+      this.usersSearch = false;
+      this.channelSearch = false;
+      this.showEmoji = false;
+
+      if (this.userInputField) {
+        this.text = this.userInputField.nativeElement.value;
+      }
+
+      if (
+        this.currentChannel.isUser &&
+        this.usedLocation === 'directMessages'
+      ) {
+        if (this.text.length > 0 || this.selectedFile !== null) {
+          await this.uploadImage();
+
+          if (this.text.length > 0) {
+            const message = new Message({
+              text: this.text,
+              timestamp: new Date(),
+              creator: this.user,
+              recipient: this.currentChannel,
+              isChannelMessage: false,
+              privateMsg: true,
+              myMsg: this.user.id === this.currentChannel.id ? true : false,
+              reactions: [],
+              file: this.uploadedFile,
+            });
+
+            const messageToJson = message.toJSON();
+
+            this.firebaseService
+              .addDocument('messages', messageToJson)
+              .then((data: any) => {
+                this.messageId = data.id;
+                this.text = '';
+                this.textForFile = '';
+                if (this.selectedFile === null) {
+                  this.uploadedFile = '';
+                }
+              })
+              .catch((err: any) => {
+                console.log(err);
+              });
+          }
+        }
+      } else if (this.usedLocation === 'channel') {
+        if (this.text.length > 0 || this.selectedFile !== null) {
+          await this.uploadImage();
+
+          if (this.text.length > 0) {
+            const message = new Message({
+              text: this.text,
+              timestamp: new Date(),
+              creator: this.user,
+              channelId: this.currentChannel?.id,
+              isChannelMessage: channel,
+              privateMsg: false,
+              myMsg: false,
+              reactions: [],
+              file: this.uploadedFile,
+            });
+
+            const messageToJson = message.toJSON();
+
+            this.firebaseService
+              .addDocument('messages', messageToJson)
+              .then((data: any) => {
+                this.messageId = data.id;
+                this.text = '';
+                this.textForFile = '';
+                if (this.selectedFile === null) {
+                  this.uploadedFile = '';
+                }
+              })
+              .catch((err: any) => {
+                console.log(err);
+              });
+          }
+        }
+      } else if (
+        this.usedLocation === 'newMessage' ||
+        this.usedLocation === 'thread'
+      ) {
+        if (this.text.length > 0 || this.selectedFile !== null) {
+          const commentText = this.text;
+          const commentFile = this.uploadedFile;
+          this.commentData.emit({ commentText, commentFile });
+          this.text = '';
+        }
+      }
     }
   }
 
@@ -498,8 +519,14 @@ export class MessageInputComponent implements OnInit {
     if (this.text.length > 0) {
       const text = this.text;
       const file = this.uploadedFile;
-      this.newMessageData.emit({ text, file });
+      const error = false;
+      this.newMessageData.emit({ text, file, error });
       this.text = '';
+    } else {
+      const text = '';
+      const file = '';
+      const error = true;
+      this.newMessageData.emit({ text, file, error });
     }
   }
 
@@ -507,21 +534,20 @@ export class MessageInputComponent implements OnInit {
    * Handles file selection, updating the UI to reflect the selected file and preparing it for upload.
    * @param {Event} event The file input change event.
    */
+  selectedInputElement: HTMLInputElement | null = null;
+
   onFileSelected(event: any) {
-    this.selectedFile = event.target.files?.[0] || null;
+    const selectedInputElement = event.target;
+    this.selectedFile = selectedInputElement.files?.[0] || null;
 
     if (this.selectedFile) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.previewImageUrl = e.target.result;
+        selectedInputElement.previewImageUrl = e.target.result;
       };
       reader.readAsDataURL(this.selectedFile);
-
-      // Set the text to indicate that a file has been added
-      this.textForFile = 'File added';
     } else {
-      // Set the text to indicate that no file has been added
-      this.textForFile = 'No file selected';
+      selectedInputElement.noInput = true;
     }
   }
 

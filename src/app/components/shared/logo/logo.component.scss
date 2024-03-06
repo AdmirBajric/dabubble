@@ -2,10 +2,11 @@
 @import "./../../../mixins.scss";
 
 .sign-up-header {
-  width: 20.4rem;
+  width: 24.4rem;
   height: 5.6rem;
   display: flex;
   align-items: center;
+  justify-content: center;
 
   .sign-up-header-logo-image {
     width: 100%;

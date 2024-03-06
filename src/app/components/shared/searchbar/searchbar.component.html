@@ -12,6 +12,16 @@
 
 <ng-container *ngIf="globalSearch && !isSearchbarEmpty">
   <div class="globalResults">
+    <ng-container
+      *ngIf="
+        filteredChannelsList.length === 0 &&
+        filteredPrivateMessagesList.length === 0 &&
+        filteredChannelMessagesList.length === 0
+      "
+    >
+      <h3 class="no-result-headline">No results !</h3>
+    </ng-container>
+
     <ng-container *ngIf="filteredChannelsList.length > 0">
       <h6 class="result-headline">Channels</h6>
       <ul *ngFor="let channel of filteredChannelsList">

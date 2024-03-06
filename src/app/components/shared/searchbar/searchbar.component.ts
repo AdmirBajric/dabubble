@@ -433,27 +433,29 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
    * @param {*} event
    */
   onInputChange(event: any) {
-    if (this.comesFrom === 'dashboard') {
+    if (this.comesFrom === 'dashboard' || this.comesFrom === 'mobileView') {
       this.globalSearch = true;
     }
     this.getData();
     this.search();
-    const values = event.target.value.split(' ');
-    values.forEach((value: string) => {
-      if (value === '@' && this.users.length > 0) {
-        this.usersSearch = true;
-        this.globalSearch = true;
-      } else {
-        this.usersSearch = false;
-      }
+    if (this.comesFrom !== 'dashboard') {
+      const values = event.target.value.split(' ');
+      values.forEach((value: string) => {
+        if (value === '@' && this.users.length > 0) {
+          this.usersSearch = true;
+          this.globalSearch = true;
+        } else {
+          this.usersSearch = false;
+        }
 
-      if (value === '#' && this.channels.length > 0) {
-        this.channelSearch = true;
-        this.globalSearch = true;
-      } else {
-        this.channelSearch = false;
-      }
-    });
+        if (value === '#' && this.channels.length > 0) {
+          this.channelSearch = true;
+          this.globalSearch = true;
+        } else {
+          this.channelSearch = false;
+        }
+      });
+    }
     if (event.target.value === '') {
       this.usersSearch = false;
       this.channelSearch = false;

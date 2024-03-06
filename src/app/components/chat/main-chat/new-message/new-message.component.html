@@ -16,8 +16,25 @@
   <section class="content">
     <ng-container *ngIf="messageSuccess">
       <section class="sending-information">
-        <span class="information-text border-radius-3"
+        <span class="information-text success border-radius-3"
           >Deine Nachricht wurde gesendet</span
+        >
+      </section>
+    </ng-container>
+
+    <ng-container *ngIf="errorMessage">
+      <section class="sending-information">
+        <span class="information-text border-radius-3">
+          Bitte wählen Sie einen #channel oder &#64;jemanden aus.</span
+        >
+      </section>
+    </ng-container>
+
+    <ng-container *ngIf="errorNoTxtNoFile">
+      <section class="sending-information">
+        <span class="information-text border-radius-3">
+          Bitte geben Sie einen Text ein oder wählen Sie eine Datei aus, um
+          fortzufahren.</span
         >
       </section>
     </ng-container>

@@ -49,9 +49,15 @@ export class CreateChannelComponent {
     const channelName = `${this.channelName[0].toUpperCase()}${this.channelName
       .slice(1)
       .toLowerCase()}`;
-    const description = `${this.description[0].toUpperCase()}${this.description
-      .slice(1)
-      .toLowerCase()}`;
+    let description;
+    if (this.description.length > 0) {
+      description = `${this.description[0].toUpperCase()}${this.description
+        .slice(1)
+        .toLowerCase()}`;
+    } else {
+      description = '';
+    }
+
     this.dataService.sendChannelInfo(channelName, description);
   }
 
