@@ -61,6 +61,7 @@ export class MessageInputComponent implements OnInit {
   // can be used in 'directMessages', 'channel', 'thread', 'newMessage'
   @Input() usedLocation!: string;
   @Input() id!: string;
+  @Input() fromThread!: string;
   @Input() styleHeaderForThread: boolean = false;
   @ViewChild('userInputField') userInputField!: ElementRef<HTMLInputElement>;
 
@@ -112,6 +113,7 @@ export class MessageInputComponent implements OnInit {
       this.user = parsedUser;
     }
 
+    this.selectedFile = null;
     this.subscribeChannel();
     this.subscribeChannels();
     this.setUserAndChannels();
@@ -451,6 +453,8 @@ export class MessageInputComponent implements OnInit {
                 this.messageId = data.id;
                 this.text = '';
                 this.textForFile = '';
+                this.uploadedFile = '';
+                this.selectedFile = null;
                 if (this.selectedFile === null) {
                   this.uploadedFile = '';
                 }
@@ -484,6 +488,8 @@ export class MessageInputComponent implements OnInit {
               this.messageId = data.id;
               this.text = '';
               this.textForFile = '';
+              this.uploadedFile = '';
+              this.selectedFile = null;
               if (this.selectedFile === null) {
                 this.uploadedFile = '';
               }
@@ -497,10 +503,16 @@ export class MessageInputComponent implements OnInit {
         this.usedLocation === 'thread'
       ) {
         if (this.text.length > 0 || this.selectedFile !== null) {
+          if (this.selectedFile !== null) {
+            await this.uploadImage();
+          }
+
           const commentText = this.text;
           const commentFile = this.uploadedFile;
           this.commentData.emit({ commentText, commentFile });
           this.text = '';
+          this.uploadedFile = '';
+          this.selectedFile = null;
         }
       }
     }
@@ -537,8 +549,10 @@ export class MessageInputComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.previewImageUrl = e.target.result;
+        this.uploadedFile = e.target.result;
       };
       reader.readAsDataURL(this.selectedFile);
+    } else {
     }
   }
 
