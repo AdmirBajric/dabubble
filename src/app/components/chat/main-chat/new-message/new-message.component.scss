@@ -33,8 +33,12 @@ h1 {
 
   .information-text {
     font-size: 1.8rem;
-    border: 0.1rem solid $light-purple-lines;
+    border: 0.1rem solid $rosa-error;
     padding: 1rem;
     color: $text-gray;
+  }
+
+  .success {
+    border: 0.1rem solid $light-purple-lines;
   }
 }

@@ -69,6 +69,8 @@ export class InputComponent implements OnInit {
    * Emits the current validity state of the form control upon any input by the user.
    */
   handleInput() {
+    this.isInputActive = false;
+    this.formControl.markAsTouched();
     this.validityChanged.emit(this.formControl.valid);
   }
 
