@@ -78,7 +78,9 @@
           <img src="./assets/img/send_message.svg" alt="" />
         </button>
       </div>
-      <p class="text-for-file">{{ textForFile }}</p>
+      <p *ngIf="noInput" class="error-msg">
+        Bitte geben Sie einen Text ein oder wählen Sie eine Datei aus.
+      </p>
     </div>
     <div *ngIf="showEmoji" id="emoji">
       <emoji-mart
@@ -149,6 +151,7 @@
             type="file"
             id="actual-btn"
             (change)="onFileSelected($event)"
+            #fileInput1
           />
           <label class="upload" for="actual-btn">
             <div class="upload-container">

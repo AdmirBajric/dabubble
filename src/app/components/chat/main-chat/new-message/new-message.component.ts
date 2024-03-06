@@ -10,6 +10,7 @@ import { FirebaseService } from '../../../../services/firebase.service';
 import { Conversation } from '../../../../models/conversation.class';
 import { DataService } from '../../../../services/data.service';
 import { chatNavigationService } from '../../../../services/chat-navigation.service';
+import e from 'express';
 @Component({
   selector: 'app-new-message',
   standalone: true,
@@ -30,6 +31,8 @@ export class NewMessageComponent implements OnInit {
   messageFile!: string;
   channelIds: string[] = [];
   messageSuccess: boolean = false;
+  errorMessage: boolean = false;
+  errorNoTxtNoFile: boolean = false;
 
   constructor(
     private firebaseService: FirebaseService,
@@ -60,10 +63,17 @@ export class NewMessageComponent implements OnInit {
    * @param {string} e.text - The text of the message.
    * @param {string} e.file - The file attached to the message, if any.
    */
-  handleNewMessage(e: { text: string; file: string }) {
-    this.messageText = e.text;
-    this.messageFile = e.file;
-    this.getRecipientsSearchbar();
+  handleNewMessage(e: { text: string; file: string; error: boolean }) {
+    if (e.error) {
+      this.errorNoTxtNoFile = true;
+      setTimeout(() => {
+        this.errorNoTxtNoFile = false;
+      }, 2500);
+    } else {
+      this.messageText = e.text;
+      this.messageFile = e.file;
+      this.getRecipientsSearchbar();
+    }
   }
 
   /**
@@ -73,16 +83,23 @@ export class NewMessageComponent implements OnInit {
     const channelRecipients = this.searchBar.selectedChannels;
     const userRecipients = this.searchBar.selectedRecipients;
 
-    if (channelRecipients.length > 0) {
-      this.getChannelIDs(channelRecipients);
-      this.prepareChannelMessages();
-    }
-    if (userRecipients.length > 0) {
-      userRecipients.forEach(async (user) => {
-        await this.addUserToConversations(user.id);
-      });
+    if (channelRecipients.length === 0 && userRecipients.length === 0) {
+      this.errorMessage = true;
+      setTimeout(() => {
+        this.errorMessage = false;
+      }, 2500);
+    } else {
+      if (channelRecipients.length > 0) {
+        this.getChannelIDs(channelRecipients);
+        this.prepareChannelMessages();
+      }
+      if (userRecipients.length > 0) {
+        userRecipients.forEach(async (user) => {
+          await this.addUserToConversations(user.id);
+        });
 
-      this.prepareDirectMessages(userRecipients);
+        this.prepareDirectMessages(userRecipients);
+      }
     }
   }
 

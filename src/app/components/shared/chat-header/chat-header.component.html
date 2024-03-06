@@ -36,7 +36,10 @@
         src="./assets/img/hash_hover.svg"
         alt="#"
       />
-      <h2 [class.thread-font]="styleHeaderForThread">
+      <h2
+        *ngIf="windowWidth > 500"
+        [ngStyle]="{ 'font-size': styleHeaderForThread ? '1.3rem' : '2rem' }"
+      >
         {{ currentChannel?.name }}
       </h2>
     </div>
@@ -95,7 +98,7 @@
         ]"
         (click)="currentChannel && showMembers(currentChannel)"
       >
-        <div class="channel-avatars">
+        <div *ngIf="windowWidth > 500" class="channel-avatars">
           <ng-container
             *ngFor="let members of currentChannel?.members; let i = index"
           >
@@ -108,7 +111,9 @@
             </span>
           </ng-container>
         </div>
-        <div class="members-count">{{ countMembersRoom }}</div>
+        <div *ngIf="windowWidth > 500" class="members-count">
+          {{ countMembersRoom }}
+        </div>
       </div>
 
       <div class="btn-wrapper">

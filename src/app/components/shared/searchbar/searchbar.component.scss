@@ -84,13 +84,14 @@
 }
 
 .globalResults {
-  height: calc(100vh - 50rem);
+  min-height: 5rem;
+  max-height: calc(100vh - 50rem);
   overflow-y: scroll;
   min-height: 5rem;
   position: absolute;
   z-index: 999;
   width: 50%;
-  border-radius: 2rem;
+  border-radius: 0.5rem;
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -98,6 +99,7 @@
   padding: 0.8rem 1.6rem;
   border: 1px solid #797ef3;
   font-size: 1.5rem;
+  margin-top: 0.5rem;
 
   ul {
     list-style: none;
@@ -204,4 +206,10 @@
     width: 5rem !important;
     height: 5rem;
   }
+}
+
+.no-result-headline {
+  font-size: 1.8rem;
+  margin-top: 0.5rem;
+  color: $rosa-error;
 }

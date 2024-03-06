@@ -55,6 +55,7 @@
             ></app-time-separator-chat>
           </ng-container>
           <app-message
+            class="message"
             (updatedMessage)="saveEditedMessage($event)"
             [message]="message"
             [messageId]="message.id"
@@ -66,10 +67,12 @@
       <app-message-input
         *ngIf="usedLocation === 'directMessages'"
         [usedLocation]="'directMessages'"
+        [id]="'directMessage'"
       ></app-message-input>
       <app-message-input
         *ngIf="usedLocation === 'channel'"
         [usedLocation]="'channel'"
+        [id]="'channel'"
       ></app-message-input>
     </div>
   </ng-container>

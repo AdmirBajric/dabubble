@@ -29,7 +29,7 @@
 .inputComp {
   min-width: 15rem;
   max-width: 100%;
-  height: fit-content;
+  height: 15rem;
   padding: 1.5rem;
   border: 0.1rem solid rgba(178, 181, 219, 0.8);
   border-radius: 2rem;
@@ -106,6 +106,11 @@
 
 .text-for-file {
   color: $purple-1;
+}
+
+.error-msg {
+  color: $rosa-error;
+  font-size: 1.2rem;
 }
 
 .expand-panel {

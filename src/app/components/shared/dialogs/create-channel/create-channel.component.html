@@ -3,8 +3,8 @@
     <div class="channel-edition-name">
       <mat-card-title>Channel erstellen</mat-card-title>
       <span class="creation-info">
-        Channels dienen deinem Team zur Kommunikation. <br /> Am besten sollten sie
-        themenbezogen sein.<br />
+        Channels dienen deinem Team zur Kommunikation. <br />
+        Am besten sollten sie themenbezogen sein.<br />
         #marketing zum Beispiel
       </span>
     </div>
@@ -42,7 +42,7 @@
 
   <mat-card-actions>
     <button
-      [disabled]="channelName.length === 0 || description.length === 0"
+      [disabled]="channelName.length === 0"
       class="channel-create"
       (click)="createChannel()"
     >
