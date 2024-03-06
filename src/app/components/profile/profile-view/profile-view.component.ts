@@ -207,9 +207,6 @@ export class ProfileViewComponent implements OnInit {
           this.navService.openChannel(user);
         }
       } else {
-        console.log(
-          // 'Logged-in user is not the creator of the conversation. Cannot update.'
-        );
       }
     } else {
       const newConversation = new Conversation({

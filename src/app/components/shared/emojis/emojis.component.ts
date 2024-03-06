@@ -9,7 +9,5 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
   styleUrl: './emojis.component.scss',
 })
 export class EmojisComponent {
-  addEmoji(event: any): void {
-    // console.log(event.emoji);
-  }
+  addEmoji(event: any): void {}
 }

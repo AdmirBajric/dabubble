@@ -128,8 +128,6 @@ export class ThreadComponent implements OnInit {
    * @returns {*}
    */
   async saveEditedMessage(event: { messageText: string; id: string }) {
-    console.log(event.messageText, event.id);
-
     const docSnapshot = await this.firebaseService.getDocument(
       'comments',
       event.id
@@ -201,8 +199,6 @@ export class ThreadComponent implements OnInit {
    * @param {{ commentText: string; commentFile: string }} event - user input event containing comment text and file.
    */
   prepareComment(event: { commentText: string; commentFile: string }) {
-    console.log(event.commentText, event.commentFile);
-
     const id = this.getMessageId();
     const text = event.commentText;
     const file = event.commentFile;
