@@ -252,7 +252,7 @@ export class WorkspaceComponent implements OnInit {
    * @returns {string} The path to the default image.
    */
   get defaultImagePath() {
-    return `./../../assets/img/add_${this.imageFlag}.svg`;
+    return `./assets/img/add_${this.imageFlag}.svg`;
   }
 
   /**
@@ -260,7 +260,7 @@ export class WorkspaceComponent implements OnInit {
    * @returns {string} The path to the hover image.
    */
   get hoverImagePath() {
-    return `./../../assets/img/add_${this.imageFlag}_hover.svg`;
+    return `./assets/img/add_${this.imageFlag}_hover.svg`;
   }
 
   /**

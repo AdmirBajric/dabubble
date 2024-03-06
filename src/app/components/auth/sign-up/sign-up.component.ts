@@ -40,8 +40,8 @@ export class SignUpComponent {
   @Output() inputChange = new EventEmitter<any>();
 
   images = [
-    '../../assets/img/checkbox-empty.svg',
-    '../../assets/img/checkbox-checked.svg',
+    './assets/img/checkbox-empty.svg',
+    './assets/img/checkbox-checked.svg',
   ];
   position: number = 0;
   fullName: any = '';
