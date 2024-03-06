@@ -464,35 +464,33 @@ export class MessageInputComponent implements OnInit {
         if (this.text.length > 0 || this.selectedFile !== null) {
           await this.uploadImage();
 
-          if (this.text.length > 0) {
-            const message = new Message({
-              text: this.text,
-              timestamp: new Date(),
-              creator: this.user,
-              channelId: this.currentChannel?.id,
-              isChannelMessage: channel,
-              privateMsg: false,
-              myMsg: false,
-              reactions: [],
-              file: this.uploadedFile,
+          const message = new Message({
+            text: this.text.length > 0 ? this.text : '',
+            timestamp: new Date(),
+            creator: this.user,
+            channelId: this.currentChannel?.id,
+            isChannelMessage: channel,
+            privateMsg: false,
+            myMsg: false,
+            reactions: [],
+            file: this.uploadedFile,
+          });
+
+          const messageToJson = message.toJSON();
+
+          this.firebaseService
+            .addDocument('messages', messageToJson)
+            .then((data: any) => {
+              this.messageId = data.id;
+              this.text = '';
+              this.textForFile = '';
+              if (this.selectedFile === null) {
+                this.uploadedFile = '';
+              }
+            })
+            .catch((err: any) => {
+              console.log(err);
             });
-
-            const messageToJson = message.toJSON();
-
-            this.firebaseService
-              .addDocument('messages', messageToJson)
-              .then((data: any) => {
-                this.messageId = data.id;
-                this.text = '';
-                this.textForFile = '';
-                if (this.selectedFile === null) {
-                  this.uploadedFile = '';
-                }
-              })
-              .catch((err: any) => {
-                console.log(err);
-              });
-          }
         }
       } else if (
         this.usedLocation === 'newMessage' ||
@@ -532,20 +530,15 @@ export class MessageInputComponent implements OnInit {
    * Handles file selection, updating the UI to reflect the selected file and preparing it for upload.
    * @param {Event} event The file input change event.
    */
-  selectedInputElement: HTMLInputElement | null = null;
-
-  onFileSelected(event: any) {
-    const selectedInputElement = event.target;
-    this.selectedFile = selectedInputElement.files?.[0] || null;
+  onFileSelected(event: any, location: string) {
+    this.selectedFile = event.target.files?.[0] || null;
 
     if (this.selectedFile) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        selectedInputElement.previewImageUrl = e.target.result;
+        this.previewImageUrl = e.target.result;
       };
       reader.readAsDataURL(this.selectedFile);
-    } else {
-      selectedInputElement.noInput = true;
     }
   }
 

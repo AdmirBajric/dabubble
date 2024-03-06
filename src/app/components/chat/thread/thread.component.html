@@ -29,7 +29,9 @@
     <div class="answers-details">
       <div *ngFor="let answer of answers">
         <app-message
+          class="messageThread"
           [typeOfMessage]="'comment'"
+          (updatedMessage)="saveEditedMessage($event)"
           [thread]="true"
           [message]="answer"
         ></app-message>

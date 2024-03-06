@@ -121,6 +121,29 @@ export class ThreadComponent implements OnInit {
   }
 
   /**
+   * Is being called when event is emited.
+   * Saves the edited message and marks is as edited in Firestore database.
+   * @async
+   * @param {{messageText: string, id: string}} event - An object containing the edited text and the message id.
+   * @returns {*}
+   */
+  async saveEditedMessage(event: { messageText: string; id: string }) {
+    console.log(event.messageText, event.id);
+
+    const docSnapshot = await this.firebaseService.getDocument(
+      'comments',
+      event.id
+    );
+
+    if (docSnapshot.exists()) {
+      await this.firebaseService.updateDocument('comments', event.id, {
+        text: event.messageText,
+        edited: true,
+      });
+    }
+  }
+
+  /**
    * Converts a date-time string to a formatted time string (HH:MM).
    * @param {string} dateTimeString - date-time string to format.
    * @returns {string} - formatted time string.
@@ -178,6 +201,8 @@ export class ThreadComponent implements OnInit {
    * @param {{ commentText: string; commentFile: string }} event - user input event containing comment text and file.
    */
   prepareComment(event: { commentText: string; commentFile: string }) {
+    console.log(event.commentText, event.commentFile);
+
     const id = this.getMessageId();
     const text = event.commentText;
     const file = event.commentFile;
