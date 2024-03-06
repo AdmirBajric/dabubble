@@ -311,6 +311,52 @@ export class FirebaseService {
     }
   }
 
+  async removeReactions(
+    collectionName: string,
+    collectionId: string,
+    userId: string
+  ): Promise<void> {
+    try {
+      if (!this.firestore) {
+        throw new Error('Firestore is not initialized.');
+      }
+
+      // Get the comment document
+      const commentRef = doc(
+        collection(this.firestore, collectionName),
+        collectionId
+      );
+      const commentSnapshot = await getDoc(commentRef);
+
+      if (!commentSnapshot.exists()) {
+        throw new Error('Comment not found.');
+      }
+
+      const commentData = commentSnapshot.data();
+      if (!commentData || !Array.isArray(commentData['reactions'])) {
+        throw new Error('Invalid comment data.');
+      }
+
+      // Find the index of the user in the reactions array
+      const reactionIndex = commentData['reactions'].findIndex(
+        (reaction: any) => reaction.userId === userId
+      );
+
+      if (reactionIndex === -1) {
+        throw new Error('User not found in reactions of the comment.');
+      }
+
+      // Remove the user from the reactions array
+      commentData['reactions'].splice(reactionIndex, 1);
+
+      // Update the comment document in Firestore
+      await updateDoc(commentRef, { reactions: commentData['reactions'] });
+    } catch (error) {
+      console.error('Error removing user from comment reactions:', error);
+      throw error; // Optionally handle or rethrow the error
+    }
+  }
+
   async queryDocuments(
     collectionName: string,
     field: string,

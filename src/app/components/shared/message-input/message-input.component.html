@@ -24,10 +24,11 @@
           <input
             class="upload-hidden"
             type="file"
-            id="actual-btn"
-            (change)="onFileSelected($event)"
+            id="actual-button"
+            (change)="onFileSelected($event, usedLocation)"
+            #fileInput1
           />
-          <label class="upload" for="actual-btn">
+          <label class="upload" for="actual-button">
             <div class="upload-container">
               <div class="icon">
                 <mat-icon class="input-btn">add</mat-icon>
@@ -149,11 +150,11 @@
           <input
             class="upload-hidden"
             type="file"
-            id="actual-btn"
-            (change)="onFileSelected($event)"
+            id="actual-button"
+            (change)="onFileSelected($event, usedLocation)"
             #fileInput1
           />
-          <label class="upload" for="actual-btn">
+          <label class="upload" for="actual-button">
             <div class="upload-container">
               <div class="icon">
                 <mat-icon class="input-btn">add</mat-icon>

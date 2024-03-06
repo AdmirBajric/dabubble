@@ -164,9 +164,13 @@
 
 .thread-main-container {
   width: 100%;
-  height: 70%;
+  height: 60%;
   overflow: auto;
-  @media only screen and (max-height: 800px) and (max-width: 1099px){
+  @media only screen and (max-height: 800px) and (max-width: 1099px) {
     height: 60%;
   }
+}
+
+.messageThread:last-child {
+  margin-bottom: 2rem;
 }

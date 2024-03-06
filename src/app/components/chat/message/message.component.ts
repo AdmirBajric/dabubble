@@ -108,6 +108,27 @@ export class MessageComponent implements OnInit {
     }
   }
 
+  async removeEmoji(message: Message) {
+    let collectionName = '';
+    const collectionId = message.id || '';
+
+    if (message.isChannelMessage) {
+      collectionName = 'messages';
+    } else {
+      collectionName = 'comments';
+    }
+
+    message.reactions.filter(async (reaction) => {
+      if (reaction.userId === this.user.id) {
+        await this.firebaseService.removeReactions(
+          collectionName,
+          collectionId,
+          this.user.id
+        );
+      }
+    });
+  }
+
   /**
    * Searches for reactions associated with the current message
    * Processes reactions to aggregate counts for each emoji and the users who reacted with them.
@@ -248,6 +269,7 @@ export class MessageComponent implements OnInit {
    */
   saveEditedMessage(messageText: string) {
     const id = this.getMessageId() as string;
+
     this.updatedMessage.emit({ messageText, id });
     this.openMessageEdit = false;
   }

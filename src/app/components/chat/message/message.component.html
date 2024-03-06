@@ -55,6 +55,7 @@
               class="reaction-wrapper"
             >
               <div
+                (click)="removeEmoji(message)"
                 class="emoji-container"
                 (mouseover)="hoveredIndex = i"
                 (mouseout)="hoveredIndex = null"
@@ -68,6 +69,7 @@
                   <span class="fs-18">{{ reaction.emoji }}</span>
                   <ng-container *ngFor="let r of reaction.users; let i = index">
                     <span class="reaction-from">{{ r.fullName }}</span>
+                    <span *ngIf="r.userId === user.id">Click to remove</span>
                   </ng-container>
                   <span
                     *ngIf="reaction.users.length > 1; else singleUserReaction"
@@ -167,7 +169,9 @@
             >{{ getTimeFromString(message.timestamp) }} Uhr</span
           >
         </div>
-        <div class="message-line own fs-18">{{ message.text }}</div>
+        <div *ngIf="message.text.length > 0" class="message-line own fs-18">
+          {{ message.text }}
+        </div>
 
         <ng-container *ngIf="message.file.length > 0">
           <div
@@ -199,6 +203,7 @@
               class="reaction-wrapper"
             >
               <div
+                (click)="removeEmoji(message)"
                 class="emoji-container"
                 (mouseover)="hoveredIndex = i"
                 (mouseout)="hoveredIndex = null"
@@ -212,6 +217,7 @@
                   <span class="fs-18">{{ reaction.emoji }}</span>
                   <ng-container *ngFor="let r of reaction.users; let i = index">
                     <span class="reaction-from">{{ r.fullName }}</span>
+                    <span *ngIf="r.userId === user.id">Click to remove</span>
                   </ng-container>
                   <span
                     *ngIf="reaction.users.length > 1; else singleUserReaction"
