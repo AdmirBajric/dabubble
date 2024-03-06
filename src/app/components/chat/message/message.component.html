@@ -24,7 +24,7 @@
             >{{ getTimeFromString(message.timestamp) }} Uhr</span
           >
         </div>
-        <div class="message-line fs-16">{{ message.text }}</div>
+        <div class="message-line fs-18">{{ message.text }}</div>
         <ng-container *ngIf="message.file.length > 0">
           <div class="file">
             <img
@@ -167,7 +167,7 @@
             >{{ getTimeFromString(message.timestamp) }} Uhr</span
           >
         </div>
-        <div class="message-line own fs-16">{{ message.text }}</div>
+        <div class="message-line own fs-18">{{ message.text }}</div>
 
         <ng-container *ngIf="message.file.length > 0">
           <div

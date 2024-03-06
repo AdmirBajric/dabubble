@@ -58,7 +58,7 @@
             <span class="result-text">{{ dm.text }}</span>
             <div class="result-info">
               <span>{{ dm.creator.fullName }}</span>
-              <span>12.01.2023 22:09</span>
+              <span>{{ getDateTimeFromString(dm.timestamp) }}</span>
             </div>
           </div>
         </li>
@@ -74,7 +74,7 @@
             <span class="result-text">{{ channelM.text }}</span>
             <div class="result-info">
               <span>{{ channelM.creator.fullName }}</span>
-              <span>12.01.2023 22:09</span>
+              <span>{{ getDateTimeFromString(channelM.timestamp) }}</span>
             </div>
           </div>
         </li>

@@ -11,6 +11,10 @@ a {
   padding: 2rem;
   border-radius: 3rem;
   cursor: pointer;
+
+  @media only screen and (max-width: 1099px){
+    width: unset;
+  }
   span {
     @include fonts-styles(17px, 400);
     color: black;

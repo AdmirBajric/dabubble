@@ -409,6 +409,28 @@ export class SearchbarComponent implements AfterViewInit, OnInit, OnDestroy {
       this.inputValue = '';
     }
   }
+  /**
+   * Converts a Date object or date-time string into a formatted date-time string.
+   * The resulting format is `Day.Month.Year Hours:Minutes`, with minutes formatted with a leading zero if necessary.
+   *
+   * @param {Date|string} dateTimeString -  date and time as a Date object or string to be formatted.
+   * @returns {string} - string representing the date and time in the format `Day.Month.Year Hours:Minutes`.
+   */
+
+  getDateTimeFromString(dateTimeString: Date): string {
+    const dateObject = new Date(dateTimeString);
+
+    const tag = dateObject.getDate();
+    const monat = dateObject.getMonth() + 1;
+    const jahr = dateObject.getFullYear();
+    const stunden = dateObject.getHours();
+    const minuten = dateObject.getMinutes();
+    const formatierteMinuten = minuten < 10 ? '0' + minuten : minuten;
+    const datumFormat = `${tag}.${monat}.${jahr}`;
+    const zeitFormat = `${stunden}:${formatierteMinuten}`;
+
+    return `${datumFormat} ${zeitFormat}`;
+  }
 
   /**
    * Removes a selected channel from the list.
