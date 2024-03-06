@@ -116,8 +116,6 @@ export class MessageInputComponent implements OnInit {
     this.subscribeChannels();
     this.setUserAndChannels();
     this.generatePlaceholder();
-
-    console.log(this.id);
   }
 
   /**
