@@ -7,6 +7,7 @@ import {
   HostListener,
   Renderer2,
   inject,
+  AfterViewInit,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -58,6 +59,7 @@ export class LoginComponent implements OnInit {
   show: boolean = false;
   loginSuccess: boolean = false;
   errorMessage: boolean = false;
+  areVariablesLoaded: boolean = false;
   user: User = new User();
   @ViewChild('animationContainer') animationContainer!: ElementRef;
 
@@ -106,6 +108,11 @@ export class LoginComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event: Event): void {
     this.checkWindowSize();
+  }
+
+  @HostListener('window:load', ['$event'])
+  onLoad(event: Event): void {
+    this.areVariablesLoaded = true;
   }
 
   /**

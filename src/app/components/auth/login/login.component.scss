@@ -70,7 +70,7 @@
     justify-content: space-between;
     align-items: center;
     opacity: 0;
-    @include animation(showLoginContainer, 0.5s, 2.4s, 1);
+    @include animation(showLoginContainer, 0.5s, 3s, 1);
     margin-bottom: 3rem;
     margin-top: 3rem;
 
@@ -103,7 +103,7 @@
   .legalContentContainer {
     bottom: 2rem;
     opacity: 0;
-    @include animation(showLoginContainer, 0.5s, 2.4s, 1);
+    @include animation(showLoginContainer, 0.5s, 3s, 1);
   }
 }
 
@@ -155,7 +155,7 @@
   background: $welcome-screen-gradient;
   @include flex-center();
   position: relative;
-  @include animation(changeBackground, 0.5s, 2.4s, 1);
+  @include animation(changeBackground, 0.5s, 3s, 1);
   overflow: auto;
 
   #start-screen::-webkit-scrollbar {
@@ -175,7 +175,7 @@
     position: absolute;
     top: 7.5rem;
     left: 7.5rem;
-    @include animation(showLogo, 0.5s, 2.4s, 1);
+    @include animation(showLogo, 0.5s, 3.1s, 1);
   }
 
   .on-start-logo {
@@ -185,11 +185,11 @@
   }
 
   .desktop-animation {
-    @include animation(startAnimationDesktop, 0.5s, 2s, 1);
+    @include animation(startAnimationDesktop, 0.5s, 2.4s, 1);
   }
 
   .mobile-animation {
-    @include animation(startAnimationMobile, 0.5s, 2s, 1);
+    @include animation(startAnimationMobile, 0.5s, 2.4s, 1);
   }
 
   .animation-container {
@@ -331,7 +331,7 @@ span {
     @include flex-direction-column;
     justify-content: center;
     align-items: center;
-    @include animation(showLoginContainer, 0.5s, 2.4s, 1);
+    @include animation(showLoginContainer, 0.5s, 3s, 1);
 
     .card-container {
       .card-content {
