@@ -207,7 +207,7 @@ button {
 
   @media only screen and (max-width: 1099px) {
     bottom: 0;
-    left: 0.3rem;
+    /*left: 0.3rem;  */
     right: 5.2rem;
   }
 
@@ -258,14 +258,14 @@ button {
       width: unset !important;
     }
   }
-}
 
-.selected-emoji {
-  font-size: 1.8rem;
-}
+  .selected-emoji {
+    font-size: 1.8rem;
+  }
 
-// ****************** emoji-mart
-.emoji-selection {
-  z-index: 9999;
-  position: absolute;
+  // ****************** emoji-mart
+  .emoji-selection {
+    z-index: 9999;
+    position: absolute;
+  }
 }
