@@ -2,7 +2,6 @@
 @import "./../../../mixins.scss";
 
 .sign-up-header {
-  width: 24.4rem;
   height: 5.6rem;
   display: flex;
   align-items: center;
@@ -18,7 +17,6 @@
 
     @media only screen and (max-width: 1000px) {
       height: 42px;
-      margin-top: 3rem;
     }
   }
 }
