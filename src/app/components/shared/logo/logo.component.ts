@@ -1,5 +1,6 @@
 import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-logo',
   standalone: true,
@@ -8,6 +9,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './logo.component.scss',
 })
 export class LogoComponent {
+  constructor(public router: Router) {}
   position: number = 1;
   img = [
     '../../assets/img/logo-mobile.svg',
