@@ -203,6 +203,10 @@ h4 {
 
 .mbl-padding {
   padding: 0 1.7rem;
+
+  @media only screen and (min-width: 768px) {
+    padding: 0 3.2rem;
+  }
 }
 
 .btn-50 {
