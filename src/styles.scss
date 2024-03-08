@@ -48,10 +48,6 @@ body {
   font-family: $font-family-nunito;
   color: $black;
   position: relative;
-
-  @media only screen and (max-width: 1099px) {
-    background-color: white;
-  }
 }
 
 img,
