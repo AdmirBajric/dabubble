@@ -5,14 +5,11 @@
   height: 5.6rem;
   display: flex;
   align-items: center;
-   justify-content: center;
   @media only screen and (max-height: 600px) {
     margin-top: 5rem;
   }
 
   .sign-up-header-logo-image {
-    width: 100%;
-
     height: 48px;
 
     @media only screen and (max-width: 1000px) {
@@ -22,7 +19,9 @@
 }
 
 .margin-bottom {
-  @media only screen and (max-height: 600px) {
-    margin-bottom: 4rem;
-  }
+  margin-bottom: 4rem;
+}
+
+.justify-center {
+  justify-content: center;
 }
