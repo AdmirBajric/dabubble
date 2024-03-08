@@ -170,6 +170,10 @@
             line-height: normal;
             margin-bottom: 3rem;
             align-self: flex-end;
+
+            &:disabled {
+              cursor: not-allowed;
+            }
           }
 
           .checkbox {
