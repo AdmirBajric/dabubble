@@ -185,9 +185,9 @@ export class LoginComponent implements OnInit {
         const user = userCredential.user;
         this.showSuccessAnimation('/dashboard');
       })
-      .catch((error) => {
+     /*  .catch((error) => {
         console.log(error);
-      });
+      }); */
   }
 
   /**

@@ -47,7 +47,7 @@
             Arbeit verwendest.</span
           >
 
-          <form class="login-form d-flex flex-column align-center">
+          <form class="login-form d-flex flex-column align-center" #loginForm="ngForm">
             <app-input
               required
               [(ngModel)]="userEmail"
@@ -94,7 +94,7 @@
             </div>
 
             <div class="form-btn-container">
-              <button (click)="signIn()">Anmelden</button>
+              <button class="sing-in" [disabled]="loginForm.invalid" (click)="signIn()">Anmelden</button>
               <button (click)="guestLogIn()">Gäste-Login</button>
             </div>
 

@@ -50,7 +50,7 @@
     height: 66rem !important;
     width: 60.6rem !important;
     justify-content: unset !important;
-    gap: 4rem !important;
+    gap: 3rem !important;
   }
 
   .form-btn-container {
@@ -233,6 +233,12 @@
     }
   }
 }
+.sing-in{
+  &:disabled {
+    background-color: $text-gray !important;
+    cursor: not-allowed;
+  }
+}
 
 @keyframes showBigLogo {
   100% {
@@ -335,7 +341,7 @@ span {
 
     .card-container {
       .card-content {
-        height: 56rem;
+        height: 58rem;
         padding: 1.25rem;
         justify-content: space-evenly;
         @include flex-center;
