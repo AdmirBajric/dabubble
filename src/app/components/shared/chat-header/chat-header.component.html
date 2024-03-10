@@ -11,14 +11,13 @@
     [elementsConfig]="[
       {
         imageSelector: '.arrow',
-        defaultSrc: '../../../../assets/img/arrow_down_unfilled_chatHeader.svg',
-        hoverSrc:
-          '../../../../assets/img/arrow_down_unfilled_chatHeader_hover.svg'
+        defaultSrc: './assets/img/arrow_down_unfilled_chatHeader.svg',
+        hoverSrc: './assets/img/arrow_down_unfilled_chatHeader_hover.svg'
       },
       {
         imageSelector: '.hash',
-        defaultSrc: '../../../../assets/img/hash.svg',
-        hoverSrc: '../../../../assets/img/hash_hover.svg'
+        defaultSrc: './assets/img/hash.svg',
+        hoverSrc: './assets/img/hash_hover.svg'
       }
     ]"
   >
@@ -27,13 +26,13 @@
       <img
         *ngIf="!styleHeaderForThread"
         class="hash"
-        src="../../../../assets/img/hash.svg"
+        src="./assets/img/hash.svg"
         alt="#"
       />
       <img
         *ngIf="styleHeaderForThread"
         class="small"
-        src="../../../../assets/img/hash_hover.svg"
+        src="./assets/img/hash_hover.svg"
         alt="#"
       />
       <h2
@@ -47,7 +46,7 @@
     <img
       class="arrow"
       *ngIf="!styleHeaderForThread"
-      src="../../../../assets/img/arrow_down_unfilled_chatHeader.svg"
+      src="./assets/img/arrow_down_unfilled_chatHeader.svg"
       alt="drop down"
     />
 
@@ -58,12 +57,12 @@
       [elementsConfig]="[
         {
           imageSelector: '.X',
-          defaultSrc: '../../../../assets/img/exit_X.svg',
-          hoverSrc: '../../../../assets/img/exit_X_hover.svg'
+          defaultSrc: './assets/img/exit_X.svg',
+          hoverSrc: './assets/img/exit_X_hover.svg'
         }
       ]"
     >
-      <img class="X" src="../../../../assets/img/exit_X.svg" alt="exit" />
+      <img class="X" src="./assets/img/exit_X.svg" alt="exit" />
     </button>
   </div>
 
@@ -123,16 +122,13 @@
           [elementsConfig]="[
             {
               imageSelector: 'img',
-              defaultSrc: '../../../../assets/img/add_member_black.svg',
-              hoverSrc: '../../../../assets/img/add_member_hover.svg'
+              defaultSrc: './assets/img/add_member_black.svg',
+              hoverSrc: './assets/img/add_member_hover.svg'
             }
           ]"
           (click)="currentChannel && addMember(currentChannel)"
         >
-          <img
-            src="../../../../assets/img/add_member_black.svg"
-            alt="add-member"
-          />
+          <img src="./assets/img/add_member_black.svg" alt="add-member" />
         </button>
       </div>
     </div>

@@ -34,7 +34,7 @@ export class SelectAvatarComponent {
   user: any;
   createdUser: any;
   fullName: string = '';
-  personImg = '../../assets/img/person.svg';
+  personImg = './assets/img/person.svg';
   showParagraph: boolean = true;
   windowWidth: number = 0;
   isGerman: boolean = false;
@@ -45,12 +45,12 @@ export class SelectAvatarComponent {
   downloadURL: string | null = null;
   previewImageUrl: any;
   avatars = [
-    '../../assets/img/avatar1.svg',
-    '../../assets/img/avatar2.svg',
-    '../../assets/img/avatar3.svg',
-    '../../assets/img/avatar4.svg',
-    '../../assets/img/avatar5.svg',
-    '../../assets/img/avatar6.svg',
+    './assets/img/avatar1.svg',
+    './assets/img/avatar2.svg',
+    './assets/img/avatar3.svg',
+    './assets/img/avatar4.svg',
+    './assets/img/avatar5.svg',
+    './assets/img/avatar6.svg',
   ];
 
   firestore: Firestore = inject(Firestore);

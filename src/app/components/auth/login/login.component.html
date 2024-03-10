@@ -3,7 +3,7 @@
     <img
       [ngClass]="{ 'logo-big': logoBig }"
       class="on-start-logo"
-      src="../../assets/img/logo-desktop.svg"
+      src="./assets/img/logo-desktop.svg"
       alt="Logo big"
     />
   </ng-container>
@@ -20,14 +20,14 @@
     <div [style.width.rem]="show ? 40 : 31" class="animation-left-container">
       <img
         [style.width.rem]="show ? 19 : 6"
-        src="../../assets/img/logo.svg"
+        src="./assets/img/logo.svg"
         alt="Logo big image"
       />
     </div>
     <div [style.width.rem]="show ? 83 : 79" class="animation-right-container">
       <img
         [style.width.rem]="show ? 43 : 15"
-        src="../../assets/img/logo-name.svg"
+        src="./assets/img/logo-name.svg"
         alt="Logo name big"
       />
     </div>
@@ -47,7 +47,10 @@
             Arbeit verwendest.</span
           >
 
-          <form class="login-form d-flex flex-column align-center" #loginForm="ngForm">
+          <form
+            class="login-form d-flex flex-column align-center"
+            #loginForm="ngForm"
+          >
             <app-input
               required
               [(ngModel)]="userEmail"
@@ -57,7 +60,7 @@
               pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
               placeholder="beispielname@email.com"
               inputType="email"
-              img="../../assets/img/mail.svg"
+              img="./assets/img/mail.svg"
             ></app-input>
 
             <app-input
@@ -68,7 +71,7 @@
               type="password"
               pattern="^[A-Za-z\d]{6,}$"
               placeholder="Passwort"
-              img="../../assets/img/lock.svg"
+              img="./assets/img/lock.svg"
               inputType="password"
             >
             </app-input>
@@ -86,15 +89,18 @@
             </div>
 
             <div (click)="signInWithGoogle()" class="google-log-in">
-              <img
-                src="../../../../assets/img/google-desktop.svg"
-                alt="Google image"
-              />
+              <img src="./assets/img/google-desktop.svg" alt="Google image" />
               <p>Anmelden mit Google</p>
             </div>
 
             <div class="form-btn-container">
-              <button class="sing-in" [disabled]="loginForm.invalid" (click)="signIn()">Anmelden</button>
+              <button
+                class="sing-in"
+                [disabled]="loginForm.invalid"
+                (click)="signIn()"
+              >
+                Anmelden
+              </button>
               <button (click)="guestLogIn()">Gäste-Login</button>
             </div>
 

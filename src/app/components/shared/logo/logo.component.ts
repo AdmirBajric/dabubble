@@ -11,10 +11,7 @@ import { Router } from '@angular/router';
 export class LogoComponent {
   constructor(public router: Router) {}
   position: number = 1;
-  img = [
-    '../../assets/img/logo-mobile.svg',
-    '../../assets/img/logo-desktop.svg',
-  ];
+  img = ['./assets/img/logo-mobile.svg', './assets/img/logo-desktop.svg'];
 
   windowWidth: number = 0;
 

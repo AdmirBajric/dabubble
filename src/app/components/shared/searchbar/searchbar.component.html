@@ -26,7 +26,7 @@
       <h6 class="result-headline">Channels</h6>
       <ul *ngFor="let channel of filteredChannelsList">
         <li (click)="openChannel(channel)" class="user-results">
-          <img src="../../../../assets/img/hash.svg" alt="#" />
+          <img src="./assets/img/hash.svg" alt="#" />
           <p>{{ channel.name }}</p>
         </li>
       </ul>
@@ -129,7 +129,7 @@
           &#64; {{ user.fullName }}
           <img
             (click)="removeRecipient(user.fullName)"
-            src="../../../../assets/img/exit_X.svg"
+            src="./assets/img/exit_X.svg"
             alt="x"
           />
         </li>
@@ -140,7 +140,7 @@
           # {{ channel.name }}
           <img
             (click)="removeChannel(channel.name)"
-            src="../../../../assets/img/exit_X.svg"
+            src="./assets/img/exit_X.svg"
             alt="x"
           />
         </li>

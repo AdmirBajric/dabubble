@@ -29,7 +29,7 @@ import { chatNavigationService } from '../../../services/chat-navigation.service
 export class ProfileViewComponent implements OnInit {
   isActiveUser: boolean = true;
   ifUserAcc: boolean = true;
-  userImg: string = '../../assets/img/person.svg';
+  userImg: string = './assets/img/person.svg';
   userFullName: string = '';
   userEmail: string = '';
   userId: string = '';
