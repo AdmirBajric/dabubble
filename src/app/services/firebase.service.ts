@@ -239,6 +239,28 @@ export class FirebaseService {
     });
   }
 
+  async doesNameExistInChannels(nameToSearch: string): Promise<boolean> {
+    try {
+      const nameToSearchLowercase = nameToSearch.toLowerCase();
+      const collectionRef = collection(this.firestore, 'channels');
+      const snapshot = await getDocs(collectionRef);
+
+      for (const doc of snapshot.docs) {
+        const data = doc.data();
+        const nameFromFirestoreLowercase = data['name'].toLowerCase();
+
+        if (nameFromFirestoreLowercase === nameToSearchLowercase) {
+          return true;
+        }
+      }
+
+      return false;
+    } catch (error) {
+      console.error('Error checking name existence in channels:', error);
+      return false;
+    }
+  }
+
   async updateDocument(
     collectionName: string,
     documentId: string,

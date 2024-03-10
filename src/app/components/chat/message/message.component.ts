@@ -112,7 +112,13 @@ export class MessageComponent implements OnInit {
     let collectionName = '';
     const collectionId = message.id || '';
 
-    if (message.isChannelMessage) {
+    if (message.isChannelMessage && !message.privateMsg && message.channelId) {
+      collectionName = 'messages';
+    } else if (
+      !message.isChannelMessage &&
+      message.privateMsg &&
+      !this.thread
+    ) {
       collectionName = 'messages';
     } else {
       collectionName = 'comments';

@@ -56,6 +56,13 @@
 
   <mat-card-actions>
     <button class="abort" (click)="onNoClick()">Abbrechen</button>
-    <button class="save" (click)="saveUser()">Speichern</button>
+    <button
+      [ngClass]="{ 'not-allowed': !isFormValid() }"
+      class="save"
+      (click)="saveUser()"
+      [disabled]="!isFormValid()"
+    >
+      Speichern
+    </button>
   </mat-card-actions>
 </mat-card>

@@ -1,4 +1,11 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -18,4 +25,17 @@ export class DialogInputComponent {
   @Input() Tag!: Boolean;
 
   @ViewChild('inputField') inputField!: ElementRef;
+
+  @Output() focusEvent: EventEmitter<void> = new EventEmitter<void>();
+
+  @Output() valueChanged: EventEmitter<string> = new EventEmitter<string>();
+
+  onFocus(): void {
+    this.focusEvent.emit();
+  }
+
+  onInputChange(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.valueChanged.emit(value);
+  }
 }

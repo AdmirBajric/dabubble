@@ -29,7 +29,7 @@
             #fileInput1
           />
           <label class="upload" for="actual-button-{{ id }}">
-            <div class="upload-container">
+            <div matTooltip="Add image" class="upload-container">
               <div class="icon">
                 <mat-icon class="input-btn">add</mat-icon>
               </div>
@@ -47,7 +47,11 @@
             ]"
             class="input-btn"
           >
-            <img src="../../assets/img/add_message_emoji.svg" alt="add-emoji" />
+            <img
+              matTooltip="Add emoji"
+              src="../../assets/img/add_message_emoji.svg"
+              alt="add-emoji"
+            />
           </button>
           <button
             (click)="toggleExpandPanel(); showEmoji = false"
@@ -61,7 +65,11 @@
             ]"
             class="input-btn"
           >
-            <img src="../../assets/img/add_message_@.svg" alt="@" />
+            <img
+              matTooltip="Add user"
+              src="../../assets/img/add_message_@.svg"
+              alt="@"
+            />
           </button>
         </div>
         <button
@@ -76,11 +84,21 @@
           ]"
           class="input-btn send"
         >
-          <img src="../../assets/img/send_message.svg" alt="" />
+          <img
+            matTooltip="Send"
+            src="../../assets/img/send_message.svg"
+            alt=""
+          />
         </button>
       </div>
       <p *ngIf="noInput" class="error-msg">
         Bitte geben Sie einen Text ein oder wählen Sie eine Datei aus.
+      </p>
+      <p *ngIf="notValid" class="error-msg">
+        Please select a valid image file (jpg, jpeg, or png).
+      </p>
+      <p *ngIf="fileSelected" class="success-msg">
+        File is ready for uploading.
       </p>
     </div>
     <div *ngIf="showEmoji" id="emoji">
@@ -188,7 +206,11 @@
           ]"
           class="input-btn send"
         >
-          <img src="../../assets/img/send_message.svg" alt="" />
+          <img
+            matTooltip="Send"
+            src="../../assets/img/send_message.svg"
+            alt=""
+          />
         </button>
       </div>
       <p class="text-for-file">{{ textForFile }}</p>

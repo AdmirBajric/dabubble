@@ -64,6 +64,14 @@ export class ProfileEditComponent implements AfterViewInit {
     });
   }
 
+  isFormValid(): boolean {
+    // Check if both inputs meet their respective patterns
+    return (
+      /^[A-Za-z]+ [A-Za-z]+$/.test(this.userFullName) &&
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.userEmail)
+    );
+  }
+
   /**
    * Displays user details based on the provided user ID.Description placeholder
    * @param {string} userId - unique identifier for the user.

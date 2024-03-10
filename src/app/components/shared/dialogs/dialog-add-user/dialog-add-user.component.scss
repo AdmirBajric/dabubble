@@ -250,3 +250,13 @@
     }
   }
 }
+
+.not-allowed {
+  background-color: #686868 !important;
+  cursor: not-allowed;
+}
+
+.channel-error-msg {
+  color: $rosa-error;
+  font-size: 1.4rem;
+}

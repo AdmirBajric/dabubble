@@ -27,11 +27,13 @@
         <div class="message-line fs-18">{{ message.text }}</div>
         <ng-container *ngIf="message.file.length > 0">
           <div class="file">
-            <img
-              [class.thread-size]="thread"
-              class="message-line-img"
-              src="{{ message.file }}"
-            />
+            <a [href]="message.file" download target="_blank">
+              <img
+                [src]="message.file"
+                class="message-line-img"
+                [class.thread-size]="thread"
+              />
+            </a>
           </div>
         </ng-container>
 
@@ -179,11 +181,13 @@
             [ngStyle]="{ display: openMessageEdit ? 'none' : 'flex' }"
             [class.justify-end]="message.creator.fullName === user.fullName"
           >
-            <img
-              [class.thread-size]="thread"
-              class="message-line-img"
-              src="{{ message.file }}"
-            />
+            <a [href]="message.file" download target="_blank">
+              <img
+                [src]="message.file"
+                class="message-line-img"
+                [class.thread-size]="thread"
+              />
+            </a>
           </div>
         </ng-container>
 

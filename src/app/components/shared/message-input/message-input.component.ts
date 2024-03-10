@@ -27,6 +27,9 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Message } from '../../../models/message.class';
+import { ImagePreviewComponent } from '../dialogs/image-preview/image-preview.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-message-input',
@@ -42,6 +45,7 @@ import { Message } from '../../../models/message.class';
     PickerComponent,
     CommonModule,
     MatExpansionModule,
+    MatTooltipModule,
   ],
   templateUrl: './message-input.component.html',
   styleUrl: './message-input.component.scss',
@@ -90,13 +94,16 @@ export class MessageInputComponent implements OnInit {
   filteredUser: any[] = [];
   newMsgOrMsg: boolean = true;
   noInput: boolean = false;
+  notValid: boolean = false;
+  fileSelected: boolean = false;
 
   firestore: Firestore = inject(Firestore);
 
   constructor(
     private firebaseService: FirebaseService,
     private navService: chatNavigationService,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    public dialog: MatDialog
   ) {}
 
   /**
@@ -416,6 +423,8 @@ export class MessageInputComponent implements OnInit {
       this.noInput = true;
     } else {
       this.noInput = false;
+      this.notValid = false;
+      this.fileSelected = false;
 
       this.usersSearch = false;
       this.channelSearch = false;
@@ -432,37 +441,35 @@ export class MessageInputComponent implements OnInit {
         if (this.text.length > 0 || this.selectedFile !== null) {
           await this.uploadImage();
 
-          if (this.text.length > 0) {
-            const message = new Message({
-              text: this.text,
-              timestamp: new Date(),
-              creator: this.user,
-              recipient: this.currentChannel,
-              isChannelMessage: false,
-              privateMsg: true,
-              myMsg: this.user.id === this.currentChannel.id ? true : false,
-              reactions: [],
-              file: this.uploadedFile,
-            });
+          const message = new Message({
+            text: this.text,
+            timestamp: new Date(),
+            creator: this.user,
+            recipient: this.currentChannel,
+            isChannelMessage: false,
+            privateMsg: true,
+            myMsg: this.user.id === this.currentChannel.id ? true : false,
+            reactions: [],
+            file: this.uploadedFile,
+          });
 
-            const messageToJson = message.toJSON();
+          const messageToJson = message.toJSON();
 
-            this.firebaseService
-              .addDocument('messages', messageToJson)
-              .then((data: any) => {
-                this.messageId = data.id;
-                this.text = '';
-                this.textForFile = '';
+          this.firebaseService
+            .addDocument('messages', messageToJson)
+            .then((data: any) => {
+              this.messageId = data.id;
+              this.text = '';
+              this.textForFile = '';
+              this.uploadedFile = '';
+              this.selectedFile = null;
+              if (this.selectedFile === null) {
                 this.uploadedFile = '';
-                this.selectedFile = null;
-                if (this.selectedFile === null) {
-                  this.uploadedFile = '';
-                }
-              })
-              .catch((err: any) => {
-                console.log(err);
-              });
-          }
+              }
+            })
+            .catch((err: any) => {
+              console.log(err);
+            });
         }
       } else if (this.usedLocation === 'channel') {
         if (this.text.length > 0 || this.selectedFile !== null) {
@@ -543,17 +550,42 @@ export class MessageInputComponent implements OnInit {
    * @param {Event} event The file input change event.
    */
   onFileSelected(event: any, location: string) {
-    this.selectedFile = event.target.files?.[0] || null;
+    const file = event.target.files[0];
+    const fileName = file.name;
+    const fileExtension = fileName.split('.').pop()?.toLowerCase();
 
-    if (this.selectedFile) {
+    if (
+      fileExtension &&
+      (fileExtension === 'jpg' ||
+        fileExtension === 'jpeg' ||
+        fileExtension === 'png')
+    ) {
+      this.notValid = false;
+      this.selectedFile = event.target.files?.[0];
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.previewImageUrl = e.target.result;
         this.uploadedFile = e.target.result;
+        this.openImagePreviewDialog(this.previewImageUrl);
       };
-      reader.readAsDataURL(this.selectedFile);
+      if (this.selectedFile) {
+        reader.readAsDataURL(this.selectedFile);
+        this.fileSelected = true;
+        this.noInput = false;
+      }
     } else {
+      this.fileSelected = false;
+      this.notValid = true;
     }
+  }
+
+  openImagePreviewDialog(imageUrl: string): void {
+    const dialogRef = this.dialog.open(ImagePreviewComponent, {
+      width: 'auto',
+      data: { imageUrl: imageUrl }, // Pass the image URL to the dialog
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {});
   }
 
   /**

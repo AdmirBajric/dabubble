@@ -23,7 +23,15 @@
         ngDefaultControl
         [(ngModel)]="channelName"
         [placeholder]="placeholderName"
+        (focusEvent)="checkInput()"
+        (valueChanged)="onInputChange($event)"
       ></app-dialog-input>
+      <p class="dialog-input-error-msg" *ngIf="inputCheck">
+        Please add a Channel name.
+      </p>
+      <p class="dialog-input-error-msg" *ngIf="channelExist">
+        Channel name already exists.
+      </p>
 
       <div class="description">
         <h2>Beschreibung</h2>
@@ -42,6 +50,7 @@
 
   <mat-card-actions>
     <button
+      [ngClass]="{ 'not-allowed': !isFormValid() }"
       [disabled]="channelName.length === 0"
       class="channel-create"
       (click)="createChannel()"

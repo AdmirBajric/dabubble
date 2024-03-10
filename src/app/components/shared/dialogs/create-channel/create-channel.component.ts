@@ -11,6 +11,8 @@ import { DialogAddUserComponent } from '../dialog-add-user/dialog-add-user.compo
 import { DataService } from '../../../../services/data.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FirebaseService } from '../../../../services/firebase.service';
+import e from 'express';
 
 @Component({
   selector: 'app-create-channel',
@@ -31,15 +33,39 @@ export class CreateChannelComponent {
   description: string = '';
   placeholderName: string = 'z.B Kooperationsprojekte';
   placeholderDescription: string = 'Dein Text hier';
+  inputCheck: boolean = false;
+  channelExist: boolean = false;
 
   constructor(
     private dataService: DataService,
     public dialog: MatDialog,
-    public dialogRef: MatDialogRef<CreateChannelComponent>
+    public dialogRef: MatDialogRef<CreateChannelComponent>,
+    private firebaseNav: FirebaseService
   ) {}
 
   onNoClick() {
     this.dialogRef.close();
+  }
+
+  checkInput() {
+    if (this.channelName.length === 0) {
+      this.inputCheck = true;
+    } else {
+      this.inputCheck = false;
+    }
+  }
+
+  onInputChange(value: string) {
+    this.channelExist = false;
+    if (value.length === 0) {
+      this.inputCheck = true;
+    } else {
+      this.inputCheck = false;
+    }
+  }
+
+  isFormValid(): boolean {
+    return /^[A-Za-z0-9_\s]+$/.test(this.channelName);
   }
 
   /**
@@ -65,11 +91,20 @@ export class CreateChannelComponent {
    * Closes the dialog and calls `sendChannelInformation()` - to update the Observable
    * Opens dialog for adding user to channel.
    */
-  createChannel() {
-    this.dialogRef.close();
-    this.sendChannelInformation();
-    this.dialog.open(DialogAddUserComponent, {
-      autoFocus: false,
-    });
+  async createChannel() {
+    const result = await this.firebaseNav.doesNameExistInChannels(
+      this.channelName
+    );
+
+    if (result) {
+      this.channelExist = true;
+    } else {
+      this.channelExist = false;
+      this.dialogRef.close();
+      this.sendChannelInformation();
+      this.dialog.open(DialogAddUserComponent, {
+        autoFocus: false,
+      });
+    }
   }
 }

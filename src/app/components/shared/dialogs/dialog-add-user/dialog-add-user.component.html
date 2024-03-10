@@ -2,6 +2,9 @@
   <mat-card-header class="channel-edition-header">
     <div class="channel-edition-name">
       <mat-card-title>Leute hinzufügen</mat-card-title>
+      <p class="channel-error-msg" *ngIf="!checked">
+        Bitte wählen Sie Mitglieder aus!
+      </p>
     </div>
     <mat-icon class="channel-edition-img-close" (click)="onNoClick()"
       >close</mat-icon
@@ -59,6 +62,7 @@
 
   <mat-card-actions>
     <button
+      [ngClass]="{ 'not-allowed': !checked }"
       class="channel-create"
       (click)="createChannel()"
       [disabled]="!checked"

@@ -5,6 +5,8 @@
     class="message-field"
     matInput
     placeholder="{{ placeholder }}"
+    (focus)="onFocus()"
+    (input)="onInputChange($event)"
     #inputField
   />
 </div>

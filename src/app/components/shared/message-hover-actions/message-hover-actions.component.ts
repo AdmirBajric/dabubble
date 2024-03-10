@@ -8,6 +8,7 @@ import { Message, Reaction } from '../../../models/message.class';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { User } from '../../../models/user.class';
 import { FirebaseService } from '../../../services/firebase.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-message-hover-actions',
@@ -36,10 +37,12 @@ export class MessageHoverActionsComponent {
   user!: User;
   activeComment: boolean = false;
   active: boolean = false;
+  imageSrc: string = '';
 
   constructor(
     private navService: chatNavigationService,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private http: HttpClient
   ) {}
 
   /**
@@ -52,6 +55,8 @@ export class MessageHoverActionsComponent {
         this.user = JSON.parse(user);
       }
     }
+
+    this.imageSrc = this.currentMessage?.file;
   }
 
   /**

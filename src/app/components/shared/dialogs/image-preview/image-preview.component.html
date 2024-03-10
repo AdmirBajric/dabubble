@@ -1,0 +1,9 @@
+<div id="image-preview">
+  <div class="image-preview-header">
+    <p>Your selected image.</p>
+    <mat-icon (click)="onNoClick()">close</mat-icon>
+  </div>
+  <div class="image-preview-img-container">
+    <img [src]="data.imageUrl" alt="Selected Image" />
+  </div>
+</div>
