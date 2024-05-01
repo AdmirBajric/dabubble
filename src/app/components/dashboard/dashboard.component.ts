@@ -20,6 +20,7 @@ import { NewMessageComponent } from '../chat/main-chat/new-message/new-message.c
 import { chatNavigationService } from '../../services/chat-navigation.service';
 import { Subscription } from 'rxjs';
 import { MobileHeaderComponent } from '../shared/mobile-header/mobile-header.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-dashboard',
@@ -40,6 +41,7 @@ import { MobileHeaderComponent } from '../shared/mobile-header/mobile-header.com
     MainChatComponent,
     NewMessageComponent,
     MobileHeaderComponent,
+    MatTooltipModule,
   ],
 })
 export class DashboardComponent implements OnInit {
